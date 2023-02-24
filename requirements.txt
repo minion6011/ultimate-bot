@@ -4,4 +4,3 @@ psutil
 requests
 aiohttp
 py-cord
-sys
