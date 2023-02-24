@@ -1,0 +1,8 @@
+discord
+discord-together~=1.2.2
+psutil
+requests
+aiohttp
+py-cord
+sys
+os
