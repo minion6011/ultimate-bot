@@ -718,7 +718,7 @@ async def get_message_id(ctx, message: discord.Message):  # message commands ret
 @commands.guild_only()
 async def help(ctx):
 	prefix = data["command_prefix"]
-	embed = discord.Embed(title="Mod Commands 🔐", color=discord.Color.gold())
+	embed = discord.Embed(title="Mod Commands :closed_lock_with_key:", color=discord.Color.gold())
 	embed.add_field(name=f"{prefix}nuke", value=f"Delete messages in the chat where it is used", inline=True)
 	embed.add_field(name=f"{prefix}kick user_id reason", value=f"Kick a member from the server", inline=True)
 	embed.add_field(name=f"{prefix}ban user_id reason", value=f"Ban a member from the server", inline=True)
