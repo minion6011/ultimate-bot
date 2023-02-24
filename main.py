@@ -159,7 +159,7 @@ async def on_member_update(before, after):
 	embed.add_field(name = 'Nome:', value=f"Prima: `{before.name}`, Dopo: `{after.name}`", inline = False)
 	embed.add_field(name = 'Avatar:', value=f"Prima: [Url]({before.avatar}), Dopo: [Url]({after.avatar})", inline = False) 
 	embed.add_field(name = 'Attività:', value=f"Prima: `{before.activity}`, Dopo: `{after.activity}`", inline = False)
-	embed.add_field(name = 'Avvertenza:', value=f"⚠ se Alcune informazioni non cambiano ⚠\n⚠ Significa che sono le stesse ⚠", inline = False)
+	embed.add_field(name = 'Avvertenza:', value=f":warning: se Alcune informazioni non cambiano :warning:\n:warning: Significa che sono le stesse :warning:", inline = False)
 	await channel.send(embed=embed)
 
 @client.event
@@ -188,7 +188,7 @@ async def on_guild_role_update(before, after):
 	channel = client.get_channel(stalkid)
 	embed = discord.Embed(title=f"**[Stalker]**\nUpdate ruolo\nServer: `{before.guild.name}`", color=discord.Color.gold())
 	embed.add_field(name = 'Nome:', value=f"Prima: `{before.name}` Dopo:  `{after.name}`", inline = False)
-	embed.add_field(name = 'Avvertenza:', value=f"⚠ se il nome non cambio sono i permessi ⚠\n⚠ per mancata voglia non sono stati inseriti ⚠", inline = True)
+	embed.add_field(name = 'Avvertenza:', value=f":warning: se il nome non cambio sono i permessi :warning:\n:warning: per mancata voglia non sono stati inseriti :warning:", inline = True)
 	await channel.send(embed=embed)
 
 @client.event
@@ -210,16 +210,16 @@ async def userinfo(ctx, *, user: discord.Member = None):
 	if role == "@everyone":
 		role = "N/A"
 	embed = discord.Embed(title=f"***User*** - Info", color=discord.Colour.blue())
-	embed.add_field(name='🆔 - User ID', value=f"{user.id}", inline=False)
-	embed.add_field(name='👤 - User Name', value=f"{user.name}#{user.discriminator}", inline=False)
-	#embed.add_field(name='👤 - User Nick', value=f"{user.display_name}", inline=False)
-	#embed.add_field(name='🔘 - User Status', value=f"**{user.status}**", inline=False)
-	#embed.add_field(name='🎮 - User Game', value=f"**{user.activity}**", inline=False)
-	embed.add_field(name='🤖 - Robot?', value=f"**{user.bot}**", inline=False)
-	embed.add_field(name='🔊  - Is in voice', value=f"**In:** **{voice_state}**", inline=False)
-	embed.add_field(name='🔘  - Highest Role', value=f"**{role}**", inline=False)
-	embed.add_field(name='📆 - Account Created', value=user.created_at.__format__('***Date:*** %A, %d. %B %Y ***Time:*** %H:%M:%S'), inline=False)
-	embed.add_field(name='📆 - Join Server Date', value=user.joined_at.__format__('***Date:*** %A, %d. %B %Y ***Time:*** %H:%M:%S'), inline=False)
+	embed.add_field(name=':id: - User ID', value=f"{user.id}", inline=False)
+	embed.add_field(name=':bust_in_silhouette: - User Name', value=f"{user.name}#{user.discriminator}", inline=False)
+	#embed.add_field(name=':bust_in_silhouette: - User Nick', value=f"{user.display_name}", inline=False)
+	#embed.add_field(name=':radio_button: - User Status', value=f"**{user.status}**", inline=False)
+	#embed.add_field(name=':video_game: - User Game', value=f"**{user.activity}**", inline=False)
+	embed.add_field(name=':robot: - Robot?', value=f"**{user.bot}**", inline=False)
+	embed.add_field(name=':loud_sound:  - Is in voice', value=f"**In:** **{voice_state}**", inline=False)
+	embed.add_field(name=':radio_button:  - Highest Role', value=f"**{role}**", inline=False)
+	embed.add_field(name=':calendar: - Account Created', value=user.created_at.__format__('***Date:*** %A, %d. %B %Y ***Time:*** %H:%M:%S'), inline=False)
+	embed.add_field(name=':calendar: - Join Server Date', value=user.joined_at.__format__('***Date:*** %A, %d. %B %Y ***Time:*** %H:%M:%S'), inline=False)
 	embed.set_thumbnail(url=user.avatar)
 	await ctx.send(embed=embed)
 
@@ -234,8 +234,8 @@ async def userinfo(ctx, *, user: discord.Member = None):
 @commands.has_permissions(manage_channels = True)
 async def lockdown(ctx):
 	await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=False, view_channel=False)
-	await ctx.send(ctx.channel.mention + " ***is now in lockdown.*** 🔒")   
-    #embed = discord.Embed(title=ctx.channel.mention + " ***is now in lockdown.*** 🔒", color=discord.Color.red())
+	await ctx.send(ctx.channel.mention + " ***is now in lockdown.*** :lock:")   
+    #embed = discord.Embed(title=ctx.channel.mention + " ***is now in lockdown.*** :lock:", color=discord.Color.red())
     #await ctx.send(embed)
 
 @client.command()
@@ -243,8 +243,8 @@ async def lockdown(ctx):
 @commands.has_permissions(manage_channels=True)
 async def unlock(ctx):
 	await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=True, view_channel=True)
-	await ctx.send(ctx.channel.mention + " ***has been unlocked.*** 🔓")   
-	#embed = discord.Embed(title=ctx.channel.mention + " ***has been unlocked.*** 🔓", color=discord.Color.red())
+	await ctx.send(ctx.channel.mention + " ***has been unlocked.*** :unlock:")   
+	#embed = discord.Embed(title=ctx.channel.mention + " ***has been unlocked.*** :unlock:", color=discord.Color.red())
 	#await ctx.send(embed)
 
 
@@ -328,15 +328,15 @@ async def activity(ctx, id=None):
 @commands.guild_only()
 async def serverinfo(ctx):
 	embed = discord.Embed(title=f"***{ctx.guild.name}*** - Info", description="Information of this Server", color=discord.Colour.blue())
-	embed.add_field(name='📄 - Name', value=f'{str(ctx.guild.name)} Server Name', inline=False)
-	embed.add_field(name='📑 - Description', value=f'{str(ctx.guild.description)} Server Description', inline=False)
-	embed.add_field(name='🆔 - Server ID', value=f"{ctx.guild.id}", inline=False)
-	embed.add_field(name='📆 - Created On', value=ctx.guild.created_at.strftime("%b %d %Y"), inline=False)
-	embed.add_field(name='👑 - Owner', value=f"<@{ctx.guild.owner_id}>", inline=False)
-	embed.add_field(name='👥 - Members', value=f'{ctx.guild.member_count} Members', inline=False)
-	embed.add_field(name='💬 - Channels', value=f'{len(ctx.guild.text_channels)} Text | {len(ctx.guild.voice_channels)} Voice | {len(ctx.guild.forum_channels)} Forum', inline=False)
-	embed.add_field(name='📂 - Category', value=f'{len(ctx.guild.categories)} Category', inline=False)
-	embed.add_field(name='👤 - Role', value=f'{len(ctx.guild.roles)} Role count', inline=False)
+	embed.add_field(name=':page_facing_up: - Name', value=f'{str(ctx.guild.name)} Server Name', inline=False)
+	embed.add_field(name=':bookmark_tabs: - Description', value=f'{str(ctx.guild.description)} Server Description', inline=False)
+	embed.add_field(name=':id: - Server ID', value=f"{ctx.guild.id}", inline=False)
+	embed.add_field(name=':calendar: - Created On', value=ctx.guild.created_at.strftime("%b %d %Y"), inline=False)
+	embed.add_field(name=':crown: - Owner', value=f"<@{ctx.guild.owner_id}>", inline=False)
+	embed.add_field(name=':busts_in_silhouette: - Members', value=f'{ctx.guild.member_count} Members', inline=False)
+	embed.add_field(name=':speech_balloon: - Channels', value=f'{len(ctx.guild.text_channels)} Text | {len(ctx.guild.voice_channels)} Voice | {len(ctx.guild.forum_channels)} Forum', inline=False)
+	embed.add_field(name=':open_file_folder: - Category', value=f'{len(ctx.guild.categories)} Category', inline=False)
+	embed.add_field(name=':bust_in_silhouette: - Role', value=f'{len(ctx.guild.roles)} Role count', inline=False)
 	embed.set_footer(text=footer_testo)    
 	await ctx.send(embed=embed)
 
@@ -492,12 +492,12 @@ async def mute(ctx, user: discord.Member = None, reason = None):
 @has_permissions(kick_members=True)
 async def kick(ctx, member : discord.Member, *, reason = None):
 	if member == None:
-		embed = discord.Embed(title="⚠ Please write the member's ID ⚠", color=discord.Color.red())
+		embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)  
 		await ctx.send(embed=embed)
 	elif reason == None:
 		if member == None:
-			embed = discord.Embed(title="⚠ Please write the member's ID ⚠", color=discord.Color.red())
+			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)  
 			await ctx.send(embed=embed)
 		else:
@@ -505,7 +505,7 @@ async def kick(ctx, member : discord.Member, *, reason = None):
 			#embed2.set_footer(text=footer_testo)
 			#await member.send(embed2)
 			await member.send(f"You have been kicked from the server: {ctx.guild.name}")
-			embed = discord.Embed(title="⚠ Member was kicked ⚠", color=discord.Color.red())
+			embed = discord.Embed(title=":warning: Member was kicked :warning:", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)  
 			await ctx.send(embed=embed)
 			await member.kick(reason=f"You have been banned from the server: {ctx.guild.name}")
@@ -514,7 +514,7 @@ async def kick(ctx, member : discord.Member, *, reason = None):
 		#embed2.set_footer(text=footer_testo)
 		#await member.send(embed2)
 		await member.send(f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'")
-		embed = discord.Embed(title="⚠ Member was kicked ⚠", color=discord.Color.red())
+		embed = discord.Embed(title=":warning: Member was kicked :warning:", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)  
 		await ctx.send(embed=embed)
 		await member.kick(reason=f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'")
@@ -524,12 +524,12 @@ async def kick(ctx, member : discord.Member, *, reason = None):
 @has_permissions(ban_members=True)
 async def ban(ctx, member : discord.Member, *, reason = None):
 	if member == None:
-		embed = discord.Embed(title="⚠ Please write the member's ID ⚠", color=discord.Color.red())
+		embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)  
 		await ctx.send(embed=embed)
 	elif reason == None:
 		if member == None:
-			embed = discord.Embed(title="⚠ Please write the member's ID ⚠", color=discord.Color.red())
+			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)  
 			await ctx.send(embed=embed)
 		else:
@@ -537,7 +537,7 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 			#embed2.set_footer(text=footer_testo)
 			#await member.send(embed2)
 			await member.send(f"You have been banned from the server: {ctx.guild.name}")
-			embed = discord.Embed(title="⚠ Member was banned ⚠", color=discord.Color.red())
+			embed = discord.Embed(title=":warning: Member was banned :warning:", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)  
 			await ctx.send(embed=embed)
 			await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}")
@@ -546,7 +546,7 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 		#embed2.set_footer(text=footer_testo)
 		#await member.send(embed2)
 		await member.send(f"You have been banned from the server: {ctx.guild.name}/nFor: '{reason}'")
-		embed = discord.Embed(title="⚠ Member was banned ⚠", color=discord.Color.red())
+		embed = discord.Embed(title=":warning: Member was banned :warning:", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)  
 		await ctx.send(embed=embed)
 		await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}, For: '{reason}'")
@@ -567,14 +567,14 @@ async def delchannel(ctx):
 @has_permissions(ban_members=True)
 async def unban(ctx, user: discord.User):
 	await ctx.guild.unban(user)
-	embed = discord.Embed(title=f"⚠ {user.mention} has been unbanned ⚠", color=discord.Color.red())
+	embed = discord.Embed(title=f":warning: {user.mention} has been unbanned :warning:", color=discord.Color.red())
 	embed.set_footer(text=footer_testo)  
 	await ctx.send(embed=embed)
 
 @client.command()
 @commands.guild_only()
 async def casual(ctx):
-	list1 = ["yes", "nof"]
+	list1 = ["yes", "no"]
 	r = random.choice(list1)
 	embed = discord.Embed(title=f"{r}", color=discord.Color.blue())
 	embed.set_footer(text=footer_testo)  
@@ -583,7 +583,7 @@ async def casual(ctx):
 @client.command()
 @commands.guild_only()
 async def coinflip(ctx):
-	coin = ['heads  🪙','tails  🪙']
+	coin = ['heads  :coin:','tails  :coin:']
 	r = random.choice(coin)
 	link = 'https://i.pinimg.com/originals/d7/49/06/d74906d39a1964e7d07555e7601b06ad.gif'
 	#link = 'https://cdn-icons-png.flaticon.com/512/1540/1540515.png'
@@ -686,11 +686,11 @@ async def cayo(ctx):
 async def test(ctx):
 	embed = discord.Embed(title="Reloading system...", color=0x2c2f33)
 	embed.set_image(url="https://support.discord.com/hc/en-us/article_attachments/206303208/eJwVyksOwiAQANC7sJfp8Ke7Lt15A0MoUpJWGmZcGe-ubl_eW7zGLmaxMZ80A6yNch-rJO4j1SJr73Uv6Wwkcz8gMae8HeXJBOjC5NEap42dokUX_4SotI8GVfBaYYDldr3n3y_jomRtD_H5ArCeI9g.zGz1JSL-9DXgpkX_SkmMDM8NWGg.gif")
-	embed.add_field(name = '**System info**', value = f'⚙️', inline = False)
-	embed.add_field(name = '💻 **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
-	embed.add_field(name = '💾 **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
-	embed.add_field(name = '💾 **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
-	embed.add_field(name = '🌐 **Ping**', value = f'{round(client.latency * 1000)}ms')
+	embed.add_field(name = '**System info**', value = f':gear:', inline = False)
+	embed.add_field(name = ':computer: **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
+	embed.add_field(name = ':floppy_disk: **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
+	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
+	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
 	await ctx.send(embed=embed, delete_after=7)
 	exit()
 
@@ -698,10 +698,10 @@ async def test(ctx):
 @commands.guild_only()
 async def infobot(ctx):
 	embed = discord.Embed(title = 'System Resource Usage', description = 'See CPU and memory usage of the system.', color=discord.Color.blue())
-	embed.add_field(name = '💻 **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
-	embed.add_field(name = '💾 **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
-	embed.add_field(name = '💾 **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
-	embed.add_field(name = '🌐 **Ping**', value = f'{round(client.latency * 1000)}ms')
+	embed.add_field(name = ':computer: **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
+	embed.add_field(name = ':floppy_disk: **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
+	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
+	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
 	await ctx.send(embed = embed)
 
 #applicationcommand
@@ -731,7 +731,7 @@ async def help(ctx):
 	embed.set_footer(text=footer_testo)  
 	await ctx.send(embed=embed)
 	await asyncio.sleep(1*1)
-	embedt = discord.Embed(title="Utilty 📉", color=discord.Color.green())
+	embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
 	embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
 	embedt.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
 	embedt.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
@@ -740,7 +740,7 @@ async def help(ctx):
 	embedt.set_footer(text=footer_testo)  
 	await ctx.send(embed=embedt)
 	await asyncio.sleep(1*1)
-	embedd = discord.Embed(title="Info Server/user Commands 📜", color=discord.Color.blurple())
+	embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
 	embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
 	embedd.add_field(name=f"{prefix}user user_id", value="Send the User info", inline=True)
 	embedd.set_footer(text=footer_testo)
