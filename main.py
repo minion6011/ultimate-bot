@@ -691,14 +691,10 @@ async def chat_gpt(ctx, prompt):
 	completion = openai.Completion.create(
 		engine=model_engine,
 		prompt=prompt,
-		max_tokens=1024,
-		n=1,
-		stop=None,
-		temperature=0.5,
 	)
 	response = completion.choices[0].text
 	embed = discord.Embed(title="Chat-GPT", description = f'Request: {prompt} ', color=discord.Color.blue())
-	embed.add_field(name = 'Result:', value = '`{response}`', inline = False)
+	embed.add_field(name = 'Result:', value = f'`{response}`', inline = False)
 	await ctx.send(embed=embed)
 
 @client.command()
