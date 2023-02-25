@@ -697,8 +697,8 @@ async def chat_gpt(ctx, prompt):
 		temperature=0.5,
 	)
 	response = completion.choices[0].text
-	embed = discord.Embed(title="Chat-GPT", description = 'Request: {prompt} ', color=discord.Color.blue())
-	embed.add_field(name = 'Result:', value = f'/n`{response}`', inline = False)
+	embed = discord.Embed(title="Chat-GPT", description = f'Request: {prompt} ', color=discord.Color.blue())
+	embed.add_field(name = 'Result:', value = '`{response}`', inline = False)
 	await ctx.send(embed=embed)
 
 @client.command()
