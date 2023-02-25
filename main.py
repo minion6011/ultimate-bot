@@ -680,10 +680,31 @@ async def cayo(ctx):
 		embed.set_footer(text=footer_testo)  
 		await ctx.send(embed=embed)
 '''
+import openai
+
+openai.api_key = data["GPT-KEY"]
+
+@client.command()
+@commands.guild_only()
+async def chat_gpt(ctx, prompt):
+	model_engine = "text-davinci-003"
+	completion = openai.Completion.create(
+		engine=model_engine,
+		prompt=prompt,
+		max_tokens=1024,
+		n=1,
+		stop=None,
+		temperature=0.5,
+	)
+	response = completion.choices[0].text
+	embed = discord.Embed(title="Chat-GPT", description = 'Request: {prompt} ', color=purple)
+	embed.add_field(name = 'Result:', value = f'/n`{response}`', inline = False)
+	await ctx.send(embed=embed)
+
 @client.command()
 @commands.guild_only()
 @is_me #solo se è il mio id
-async def test(ctx):
+async def update(ctx):
 	embed = discord.Embed(title="Reloading system...", color=0x2c2f33)
 	embed.set_image(url="https://support.discord.com/hc/en-us/article_attachments/206303208/eJwVyksOwiAQANC7sJfp8Ke7Lt15A0MoUpJWGmZcGe-ubl_eW7zGLmaxMZ80A6yNch-rJO4j1SJr73Uv6Wwkcz8gMae8HeXJBOjC5NEap42dokUX_4SotI8GVfBaYYDldr3n3y_jomRtD_H5ArCeI9g.zGz1JSL-9DXgpkX_SkmMDM8NWGg.gif")
 	embed.add_field(name = '**System info**', value = f':gear:', inline = False)
