@@ -4,4 +4,4 @@ psutil
 requests
 aiohttp
 py-cord
-open-ai
+openai
