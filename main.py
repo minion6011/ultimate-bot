@@ -688,25 +688,7 @@ async def cayo(ctx):
 		embed.set_footer(text=footer_testo)  
 		await ctx.send(embed=embed)
 '''
-#test   
-import openai
 
-openai.api_key = data["GPT-KEY"]
-
-@client.command()
-@commands.guild_only()
-async def chat_gpt(ctx, prompt):
-	model_engine = "text-davinci-003"
-	completion = openai.Completion.create(
-		engine=model_engine,
-		prompt=prompt,
-	)
-	response = completion.choices[0].text
-	embed = discord.Embed(title="Chat-GPT", description = f'Request: {prompt} ', color=discord.Color.blue())
-	embed.add_field(name = 'Result:', value = f'`{response}`', inline = False)
-	await ctx.send(embed=embed)
-
-#test
 
 @client.command()
 @commands.guild_only()
@@ -737,6 +719,26 @@ async def infobot(ctx):
 @client.message_command(name="Get Message ID")  # creates a global message command. use guild_ids=[] to create guild-specific commands.
 async def get_message_id(ctx, message: discord.Message):  # message commands return the message
     await ctx.respond(f"Message ID: `{message.id}`")
+
+#chat-gòt start
+import openai
+
+openai.api_key = data["GPT-KEY"]
+
+@client.command()
+@client.message_command(name="Chat-GPT this Message")
+async def chat_gpt(ctx, prompt: discord.Message):
+	model_engine = "text-davinci-003"
+	completion = openai.Completion.create(
+		engine=model_engine,
+		prompt=prompt,
+	)
+	response = completion.choices[0].text
+	embed = discord.Embed(title="Chat-GPT", description = f'Request: {prompt} ', color=discord.Color.blue())
+	embed.add_field(name = 'Result:', value = f'`{response}`', inline = False)
+	await ctx.respond(embed=embed)
+
+#chat-gpt end
 
 
 #applicationcommand end
