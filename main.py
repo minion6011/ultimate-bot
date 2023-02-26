@@ -727,7 +727,7 @@ openai.api_key = data["GPT-KEY"]
 
 @client.message_command(name="Chat-GPT this Message")
 async def chat_gpt(ctx, message: discord.Message):
-	test2 = message
+	test2 = message.content
 	model_engine = "text-davinci-003"
 	completion = openai.Completion.create(
 		engine=model_engine,
