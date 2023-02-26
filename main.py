@@ -727,15 +727,16 @@ openai.api_key = data["GPT-KEY"]
 
 @client.message_command(name="Chat-GPT this Message")
 async def chat_gpt(ctx, message: discord.Message):
+	test2 = message
 	model_engine = "text-davinci-003"
 	completion = openai.Completion.create(
 		engine=model_engine,
-		prompt=f"{message}",
+		prompt=test2,
 	)
 	response = completion.choices[0].text
 	embed = discord.Embed(title="Chat-GPT", description = f'Request: {prompt} ', color=discord.Color.blue())
 	embed.add_field(name = 'Result:', value = f'`{response}`', inline = False)
-	await ctx.respond(embed=embed, ephemeral=True)
+	await ctx.respond(embed=embed)
 
 #chat-gpt end
 
