@@ -732,10 +732,25 @@ async def chat_gpt(ctx, message: discord.Message):
 	completion = openai.Completion.create(
 		engine=model_engine,
 		prompt=test2,
+		max_tokens=150,
+		temperature=0.9,
 	)
 	response = completion.choices[0].text
 	embed = discord.Embed(title="Chat-GPT", description = f'Request: {test2} ', color=discord.Color.blue())
 	embed.add_field(name = 'Result:', value = f'`{response}`', inline = False)
+	await ctx.respond(embed=embed)
+
+@client.message_command(name="Make image with this Message")
+async def ai_image(ctx, message: discord.Message):
+	test2 = message.content
+	response = openai.Image.create(
+		prompt=test2,
+		n=1,
+		size="1024x1024"
+	)
+	image_url = response['data'][0]['url']
+	embed = discord.Embed(title="Image", description = f'Request: {test2} ', color=discord.Color.blue())
+	embed.set_image(url=image_url)
 	await ctx.respond(embed=embed)
 
 #chat-gpt end
