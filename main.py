@@ -732,7 +732,6 @@ async def chat_gpt(ctx, message: discord.Message):
 	completion = openai.Completion.create(
 		engine=model_engine,
 		prompt=test2,
-		max_tokens=150,
 	)
 	response = completion.choices[0].text
 	embed = discord.Embed(title="Chat-GPT", description = f'Request: {test2} ', color=discord.Color.blue())
@@ -744,8 +743,6 @@ async def ai_image(ctx, message: discord.Message):
 	test2 = message.content
 	response = openai.Image.create(
 		prompt=test2,
-		n=1,
-		size="1024x1024"
 	)
 	image_url = response['data'][0]['url']
 	embed = discord.Embed(title="Image", description = f'Request: {test2} ', color=discord.Color.blue())
