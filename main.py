@@ -720,38 +720,7 @@ async def infobot(ctx):
 async def get_message_id(ctx, message: discord.Message):  # message commands return the message
     await ctx.respond(f"Message ID: `{message.id}`", ephemeral=True)
 
-#chat-gpt start
-'''
-import openai
 
-openai.api_key = data["GPT-KEY"]
-
-@client.message_command(name="Chat-GPT this Message")
-async def chat_gpt(ctx, message: discord.Message):
-	test2 = message.content
-	model_engine = "text-davinci-003"
-	completion = openai.Completion.create(
-		engine=model_engine,
-		prompt=test2,
-	)
-	response = completion.choices[0].text
-	embed = discord.Embed(title="Chat-GPT", description = f'Request: {test2} ', color=discord.Color.blue())
-	embed.add_field(name = 'Result:', value = f'`{response}`', inline = False)
-	await ctx.respond(embed=embed)
-
-@client.message_command(name="Make image with this Message")
-async def ai_image(ctx, message: discord.Message):
-	test2 = message.content
-	response = openai.Image.create(
-		prompt=test2,
-	)
-	image_url = response['data'][0]['url']
-	embed = discord.Embed(title="Image", description = f'Request: {test2} ', color=discord.Color.blue())
-	embed.add_field(name = 'Result:', value = f'`{image_url}`', inline = False)
-	await ctx.respond(embed=embed)
-
-#chat-gpt end
-'''
 
 #applicationcommand end
 
