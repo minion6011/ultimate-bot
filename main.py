@@ -720,7 +720,8 @@ async def infobot(ctx):
 async def get_message_id(ctx, message: discord.Message):  # message commands return the message
     await ctx.respond(f"Message ID: `{message.id}`", ephemeral=True)
 
-#chat-gòt start
+#chat-gpt start
+'''
 import openai
 
 openai.api_key = data["GPT-KEY"]
@@ -750,7 +751,7 @@ async def ai_image(ctx, message: discord.Message):
 	await ctx.respond(embed=embed)
 
 #chat-gpt end
-
+'''
 
 #applicationcommand end
 
