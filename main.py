@@ -733,7 +733,6 @@ async def chat_gpt(ctx, message: discord.Message):
 		engine=model_engine,
 		prompt=test2,
 		max_tokens=150,
-		temperature=0.9,
 	)
 	response = completion.choices[0].text
 	embed = discord.Embed(title="Chat-GPT", description = f'Request: {test2} ', color=discord.Color.blue())
@@ -750,7 +749,7 @@ async def ai_image(ctx, message: discord.Message):
 	)
 	image_url = response['data'][0]['url']
 	embed = discord.Embed(title="Image", description = f'Request: {test2} ', color=discord.Color.blue())
-	embed.set_image(url=image_url)
+	embed.add_field(name = 'Result:', value = f'`{image_url}`', inline = False)
 	await ctx.respond(embed=embed)
 
 #chat-gpt end
