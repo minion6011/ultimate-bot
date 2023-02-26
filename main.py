@@ -71,7 +71,7 @@ async def on_message(message):
 		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
 		embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
 		await channel.send(embed=embed)
-		await client.process_commands(message) 
+		await client.process_commands(message)
 
 
 @client.event
@@ -221,6 +221,7 @@ async def userinfo(ctx, *, user: discord.Member = None):
 	embed.add_field(name=':calendar: - Account Created', value=user.created_at.__format__('***Date:*** %A, %d. %B %Y ***Time:*** %H:%M:%S'), inline=False)
 	embed.add_field(name=':calendar: - Join Server Date', value=user.joined_at.__format__('***Date:*** %A, %d. %B %Y ***Time:*** %H:%M:%S'), inline=False)
 	embed.set_thumbnail(url=user.avatar)
+	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed)
 
 
@@ -257,7 +258,7 @@ async def nuke(ctx, amount=100):
         embed = discord.Embed(title=f"{amount} messages deleted", color=discord.Color.red())
         embed.set_image(url="https://www.19fortyfive.com/wp-content/uploads/2021/10/Nuclear-Weapons-Test.jpg")
         await ctx.channel.purge(limit=amount + 1)
-        embed.set_footer(text=footer_testo)    
+        embed.set_footer(text=footer_testo)  
         await ctx.send(embed=embed, delete_after=4)
 
 @client.command()
@@ -403,11 +404,13 @@ async def unmute(ctx, user: discord.Member = None):
 	if ctx.message.author.guild_permissions.administrator:
 		if user == None:
 			embed = discord.Embed(title="Please send the user id", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
 		else:
 			role = discord.utils.get(ctx.guild.roles, name="mute")
 			await user.remove_roles(role)
 			embed = discord.Embed(title = 'I unmuted', description = f'{user}', color=discord.Color.blue())
+			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
 	else:
 		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
@@ -422,6 +425,7 @@ async def mute(ctx, user: discord.Member = None, reason = None):
         permissions = discord.Permissions(send_messages=False, read_messages=True, speak=False)
         if user == None:
             embed = discord.Embed(title="Please send the user id", color=discord.Color.red())
+            embed.set_footer(text=footer_testo)
             await ctx.send(embed=embed)
         else:
                 guild = ctx.guild
@@ -434,6 +438,7 @@ async def mute(ctx, user: discord.Member = None, reason = None):
                             await channel.set_permissions(role, overwrite=permissions)
                         await user.add_roles(role)
                         embed = discord.Embed(title = 'I muted', description = f'{user}', color=discord.Color.blue())
+			embed.set_footer(text=footer_testo)
                         await ctx.send(embed=embed)
                         name = str(ctx.guild.name)
                         await user.send(f"You have been muted in the server: **{name}**")
@@ -447,6 +452,7 @@ async def mute(ctx, user: discord.Member = None, reason = None):
                             await channel.set_permissions(role, overwrite=permissions)
                         await user.add_roles(role)
                         embed = discord.Embed(title = f'I muted {user}', description = f'For reason: {reason}', color=discord.Color.blue())
+			embed.set_footer(text=footer_testo)
                         await ctx.send(embed=embed)
                         name = str(ctx.guild.name)
                         await user.send(f"You have been muted in the server: **{name}** because:\n{reason}")
@@ -463,6 +469,7 @@ async def mute(ctx, user: discord.Member = None, reason = None):
                             await channel.set_permissions(role, overwrite=permissions)
                         await user.add_roles(role)
                         embed = discord.Embed(title = 'I muted', description = f'{user}', color=discord.Color.blue())
+			embed.set_footer(text=footer_testo)
                         await ctx.send(embed=embed)
                         name = str(ctx.guild.name)
                         await user.send(f"You have been muted in the server: **{name}**")
@@ -477,6 +484,7 @@ async def mute(ctx, user: discord.Member = None, reason = None):
                             await channel.set_permissions(role, overwrite=permissions)
                         await user.add_roles(role)
                         embed = discord.Embed(title = f'I muted {user}', description = f'For reason: {reason}', color=discord.Color.blue())
+			embed.set_footer(text=footer_testo)
                         await ctx.send(embed=embed)
                         name = str(ctx.guild.name)
                         await user.send(f"You have been muted in the server: **{name}** because:\n{reason}")
@@ -680,6 +688,7 @@ async def cayo(ctx):
 		embed.set_footer(text=footer_testo)  
 		await ctx.send(embed=embed)
 '''
+#test   
 import openai
 
 openai.api_key = data["GPT-KEY"]
@@ -696,6 +705,8 @@ async def chat_gpt(ctx, prompt):
 	embed = discord.Embed(title="Chat-GPT", description = f'Request: {prompt} ', color=discord.Color.blue())
 	embed.add_field(name = 'Result:', value = f'`{response}`', inline = False)
 	await ctx.send(embed=embed)
+
+#test
 
 @client.command()
 @commands.guild_only()
@@ -754,7 +765,8 @@ async def help(ctx):
 	embedt.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
 	embedt.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
 	embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
-	embedt.set_footer(text=footer_testo)  
+	embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
+	embedt.set_footer(text=footer_testo)
 	await ctx.send(embed=embedt)
 	await asyncio.sleep(1*1)
 	embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
