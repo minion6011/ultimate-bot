@@ -718,7 +718,7 @@ async def infobot(ctx):
 
 @client.message_command(name="Get Message ID")  # creates a global message command. use guild_ids=[] to create guild-specific commands.
 async def get_message_id(ctx, message: discord.Message):  # message commands return the message
-    await ctx.respond(f"Message ID: `{message.id}`")
+    await ctx.respond(f"Message ID: `{message.id}`", ephemeral=True)
 
 #chat-gòt start
 import openai
@@ -736,7 +736,7 @@ async def chat_gpt(ctx, prompt: discord.Message):
 	response = completion.choices[0].text
 	embed = discord.Embed(title="Chat-GPT", description = f'Request: {prompt} ', color=discord.Color.blue())
 	embed.add_field(name = 'Result:', value = f'`{response}`', inline = False)
-	await ctx.respond(embed=embed)
+	await ctx.respond(embed=embed, ephemeral=True)
 
 #chat-gpt end
 
