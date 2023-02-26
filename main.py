@@ -438,7 +438,7 @@ async def mute(ctx, user: discord.Member = None, reason = None):
                             await channel.set_permissions(role, overwrite=permissions)
                         await user.add_roles(role)
                         embed = discord.Embed(title = 'I muted', description = f'{user}', color=discord.Color.blue())
-			embed.set_footer(text=footer_testo)
+                        embed.set_footer(text=footer_testo)
                         await ctx.send(embed=embed)
                         name = str(ctx.guild.name)
                         await user.send(f"You have been muted in the server: **{name}**")
