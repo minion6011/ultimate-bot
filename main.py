@@ -720,7 +720,14 @@ async def infobot(ctx):
 async def get_message_id(ctx, message: discord.Message):  # message commands return the message
     await ctx.respond(f"Message ID: `{message.id}`", ephemeral=True)
 
+#modal start
 
+@client.message_command(name="Suggestion")
+async def test(ctx):
+    modal = MyModal(title="test")
+    await ctx.send_modal(modal)
+
+#modal end
 
 #applicationcommand end
 
