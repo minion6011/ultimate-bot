@@ -729,20 +729,23 @@ class MyModal(discord.ui.Modal):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-        self.add_item(discord.ui.InputText(label="Short Input"))
-        self.add_item(discord.ui.InputText(label="Long Input", style=discord.InputTextStyle.long))
+        self.add_item(discord.ui.InputText(label="Command name"))
+        self.add_item(discord.ui.InputText(label="Description of the command / its functions", style=discord.InputTextStyle.long))
 
     async def callback(self, interaction: discord.Interaction):
-        embed = discord.Embed(title="Modal Results")
-        embed.add_field(name="Short Input", value=self.children[0].value)
-        embed.add_field(name="Long Input", value=self.children[1].value)
-        await interaction.response.send_message(embeds=[embed])
+	channel = client.get_channel(1079859774344134686)
+        embed = discord.Embed(title="Suggestion Modal Results")
+        embed.add_field(name="Command name", value=self.children[0].value)
+        embed.add_field(name="Description of the command / its functions", value=self.children[1].value)
+	embed.add_field(name="Utente:", value=f"`{message.author.display_name}#{message.author.discriminator}`")
+        await channel.send_message(embeds=[embed])
+	embed1 = discord.Embed(title="Suggestion sent", color=discord.Color.green())
+	await interaction.response.send_message(embeds=[embed1])
 
-@client.slash_command(name="suggestion")
+@client.slash_command(name="suggestion", description="Suggest a command for Ultimate-Bot")
 async def suggestion(ctx: discord.ApplicationContext):
-	modal = MyModal(title="test")
+	modal = MyModal(title="Suggest a command")
 	await ctx.send_modal(modal)
-	await ctx.respond("ciao")
 
 #modal end
 
