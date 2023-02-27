@@ -732,15 +732,15 @@ class MyModal(discord.ui.Modal):
         self.add_item(discord.ui.InputText(label="Command name"))
         self.add_item(discord.ui.InputText(label="Description of the command / its functions", style=discord.InputTextStyle.long))
 
-	async def callback(self, interaction: discord.Interaction):
-		channel = client.get_channel(1079859774344134686)
-		embed = discord.Embed(title="Suggestion Modal Results")
-		embed.add_field(name="Command name", value=self.children[0].value)
-		embed.add_field(name="Description of the command / its functions", value=self.children[1].value)
-		embed.add_field(name="Utente:", value=f"`{message.author.display_name}#{message.author.discriminator}`")
-		await channel.send_message(embeds=[embed])
-		embed1 = discord.Embed(title="Suggestion sent", color=discord.Color.green())
-		await interaction.response.send_message(embeds=[embed1])
+    async def callback(self, interaction: discord.Interaction):
+        channel = client.get_channel(1079859774344134686)
+        embed = discord.Embed(title="Suggestion Modal Results")
+        embed.add_field(name="Command name", value=self.children[0].value)
+        embed.add_field(name="Description of the command / its functions", value=self.children[1].value)
+        embed.add_field(name="Utente:", value=f"`{message.author.display_name}#{message.author.discriminator}`")
+        await channel.send_message(embeds=[embed])
+        embed1 = discord.Embed(title="Suggestion sent", color=discord.Color.green())
+        await interaction.response.send_message(embeds=[embed1])
 
 @client.slash_command(name="suggestion", description="Suggest a command for Ultimate-Bot")
 async def suggestion(ctx: discord.ApplicationContext):
