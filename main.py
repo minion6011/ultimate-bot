@@ -724,8 +724,8 @@ async def get_message_id(ctx, message: discord.Message):  # message commands ret
 
 #modal start
 
-@client.slash_command(name="Suggestion")
-async def test(ctx: discord.ApplicationContext):
+@client.slash_command(name="suggestion")
+async def suggestion(ctx: discord.ApplicationContext):
 	modal = MyModal(title="test")
 	await ctx.send_modal(modal)
 	await ctx.respond("ciao")
