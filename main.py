@@ -738,7 +738,7 @@ class MyModal(discord.ui.Modal):
         embed.add_field(name="Command name", value=self.children[0].value)
         embed.add_field(name="Description of the command / its functions", value=self.children[1].value)
         #embed.add_field(name="Utente:", value=f"`{interaction.author.display_name}#{message.author.discriminator}`")
-        await channel.send_message(embeds=[embed])
+        await channel.send(embed=embed)
         embed1 = discord.Embed(title="Suggestion sent", color=discord.Color.green())
         await interaction.response.send_message(embeds=[embed1])
 
