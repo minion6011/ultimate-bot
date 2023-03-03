@@ -716,7 +716,6 @@ async def infobot(ctx):
 
 #applicationcommand
 
-math = discord.SlashCommandGroup("math", "Math related commands")
 
 @client.message_command(name="Get Message ID")  # creates a global message command. use guild_ids=[] to create guild-specific commands.
 async def get_message_id(ctx, message: discord.Message):  # message commands return the message
