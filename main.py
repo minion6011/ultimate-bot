@@ -715,7 +715,7 @@ async def infobot(ctx):
 	await ctx.send(embed = embed)
 
 #applicationcommand
-
+'''
 
 @client.message_command(name="Get Message ID")  # creates a global message command. use guild_ids=[] to create guild-specific commands.
 async def get_message_id(ctx, message: discord.Message):  # message commands return the message
@@ -747,7 +747,7 @@ async def suggestion(ctx: discord.ApplicationContext):
 	await ctx.send_modal(modal)
 
 #modal end
-
+'''
 #applicationcommand end
 
 
