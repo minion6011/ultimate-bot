@@ -3,6 +3,10 @@ from discord.ext import commands, tasks
 from discord_together import DiscordTogether
 from random import choice
 
+#discord py slash
+from discord import app_commands
+#end
+
 from discord.utils import get
 from discord.ext.commands import has_permissions, CheckFailure, NoPrivateMessage
 import random
@@ -48,6 +52,7 @@ errorchannel = 1046796347870826496
 async def on_ready():
 	change_status.start()
 	#client.sync_commands(force=True)
+	synced = client.tree.sync()
 	print(f"Bot logged into {client.user}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json)
@@ -750,8 +755,15 @@ async def suggestion(ctx: discord.ApplicationContext):
 #applicationcommand Pycord (old) end
 
 #apllication command discord.py
+
+
+
+@client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #Add the guild ids in which the slash command will appear. If it should be in all, remove the argument, but note that it will take some time (up to an hour) to register the command if it's for all guilds.
+async def suggestion(interaction: discord.Interaction):
+    await interaction.response.send_message("Hello!")
+
+
 '''
-from discord import app_commands
 
 slash = app_commands.CommandTree(client)
 slash.sync_commands(force=True)
