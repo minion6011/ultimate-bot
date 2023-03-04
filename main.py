@@ -757,8 +757,8 @@ async def suggestion(ctx: discord.ApplicationContext):
 #apllication command discord.py
 
 @client.tree.context_menu(name="Get Message ID") #message contex command
-async def getmessageid(ctx, message: discord.Message):
-    await ctx.response(f"***Message ID: ***`{message.id}`", ephemeral=True)
+async def getmessageid(interaction: discord.Interaction, message: discord.Message):
+    await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
 
 @client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #slash command
 async def suggestion(interaction: discord.Interaction):
