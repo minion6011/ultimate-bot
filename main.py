@@ -47,7 +47,7 @@ errorchannel = 1046796347870826496
 @client.event
 async def on_ready():
 	change_status.start()
-	client.sync_commands(force=True)
+	#client.sync_commands(force=True)
 	print(f"Bot logged into {client.user}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json)
@@ -714,9 +714,8 @@ async def infobot(ctx):
 	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
 	await ctx.send(embed = embed)
 
-#applicationcommand
+#applicationcommand Pycord (old)
 '''
-
 @client.message_command(name="Get Message ID")  # creates a global message command. use guild_ids=[] to create guild-specific commands.
 async def get_message_id(ctx, message: discord.Message):  # message commands return the message
     await ctx.respond(f"Message ID: `{message.id}`", ephemeral=True)
@@ -748,8 +747,26 @@ async def suggestion(ctx: discord.ApplicationContext):
 
 #modal end
 '''
-#applicationcommand end
+#applicationcommand Pycord (old) end
 
+#apllication command discord.py
+from discord import app_commands
+
+slash = app_commands.CommandTree(client)
+slash.sync_commands(force=True)
+
+
+
+@slash.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #Add the guild ids in which the slash command will appear. If it should be in all, remove the argument, but note that it will take some time (up to an hour) to register the command if it's for all guilds.
+async def suggestion(interaction):
+    await interaction.response.send_message("Hello!")
+
+
+
+
+
+
+#application command discord.py end
 
 @client.command()
 @commands.guild_only()
