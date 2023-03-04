@@ -756,7 +756,7 @@ async def suggestion(ctx: discord.ApplicationContext):
 
 #apllication command discord.py
 
-@client.tree.context_menu("ID") #message contex command
+@client.tree.context_menu(name="Get message ID") #message contex command
 async def get_message_id(interaction: discord.Interaction, message=discord.Message):
     await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
 
