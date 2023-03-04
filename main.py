@@ -52,7 +52,7 @@ errorchannel = 1046796347870826496
 async def on_ready():
 	change_status.start()
 	#client.tree.sync(force=True)
-	synced = client.tree.sync(force=true)
+	synced = client.tree.sync(force)
 	print(f"Bot logged into {client.user}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json)
@@ -756,7 +756,7 @@ async def suggestion(ctx: discord.ApplicationContext):
 
 #apllication command discord.py
 
-@client.tree.context_menu(name="Get message ID") #message contex command
+@client.tree.context_menu(name="Get Message ID") #message contex command
 async def getmessageid(ctx, message: discord.Message):
     await ctx.response(f"***Message ID: ***`{message.id}`", ephemeral=True)
 
