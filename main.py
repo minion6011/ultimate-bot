@@ -750,6 +750,7 @@ async def suggestion(ctx: discord.ApplicationContext):
 #applicationcommand Pycord (old) end
 
 #apllication command discord.py
+'''
 from discord import app_commands
 
 slash = app_commands.CommandTree(client)
@@ -765,7 +766,7 @@ async def suggestion(interaction):
 
 
 
-
+'''
 #application command discord.py end
 
 @client.command()
