@@ -51,8 +51,8 @@ errorchannel = 1046796347870826496
 @client.event
 async def on_ready():
 	change_status.start()
-	#client.sync_commands(force=True)
-	synced = client.tree.sync()
+	#client.tree.sync(force=True)
+	synced = client.tree.sync(force=true)
 	print(f"Bot logged into {client.user}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json)
