@@ -756,29 +756,15 @@ async def suggestion(ctx: discord.ApplicationContext):
 
 #apllication command discord.py
 
+@client.tree.context_menu("Get message ID") #message contex command
+async def get_message_id(interaction: discord.Interaction, message=discord.Message):
+    await interaction.response.send_message(f"***Message ID: ***`{message.id}`",ephemeral=True)
 
-
-@client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #Add the guild ids in which the slash command will appear. If it should be in all, remove the argument, but note that it will take some time (up to an hour) to register the command if it's for all guilds.
+@client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #slash command
 async def suggestion(interaction: discord.Interaction):
-    await interaction.response.send_message("Hello!")
+    await interaction.response.send_message("error")
 
 
-'''
-
-slash = app_commands.CommandTree(client)
-slash.sync_commands(force=True)
-
-
-
-@slash.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #Add the guild ids in which the slash command will appear. If it should be in all, remove the argument, but note that it will take some time (up to an hour) to register the command if it's for all guilds.
-async def suggestion(interaction):
-    await interaction.response.send_message("Hello!")
-
-
-
-
-
-'''
 #application command discord.py end
 
 @client.command()
