@@ -366,7 +366,7 @@ async def meme(ctx):
     meme = discord.Embed(title=f"{data['title']}", Color = discord.Colour.green().set_image(url=f"{data['url']}"))
     await ctx.send(embed=meme)
 '''
-
+'''
 @client.event
 async def on_reaction_add(reaction, user):
 	ctx = reaction
@@ -390,15 +390,21 @@ async def on_reaction_add(reaction, user):
 			await reaction.user.add_roles(role)
 	else:
 		print("errore")
+'''
+
+@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
+async def VerifyButton(self, interaction: discord.Interaction, button=discord.ui.Button):
+	await interaction.response.send_message("Test", ephereal=True)
+
 
 
 @client.command()
 async def verify(ctx):
 	#reactions = ['✅'] # add more later if u want idk
-	embed = discord.Embed(title="Click the button with <:checkmark_2714fe0f:1073342463995023433> to verify", color=discord.Color.green())
+	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
 	embed.set_footer(text=footer_testo)
-	message = await ctx.send(embed=embed)
-	await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
+	message = await ctx.send(embed=embed, view=VerifyButton)
+	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
 
