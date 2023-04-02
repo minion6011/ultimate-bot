@@ -785,8 +785,11 @@ class Button(discord.ui.View):
 			await guild.create_role(name="verify", colour=discord.Colour(0x00ff00), permissions=permissions)
 			role = discord.utils.get(ctx.guild.roles, name="verify")
 			for channel in ctx.guild.channels:
-				permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
+				permissions = discord.PermissionOverwrite(send_messages=True, read_messages=True, speak=True)
 				await channel.set_permissions(role, overwrite=permissions)
+				role1 = discord.utils.get(ctx.guild.roles, name="@everyone")
+				permissions1 = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
+				await channel.set_permissions(role1, overwrite=permissions1)
 			await ctx.user.add_roles(role)
 
 @client.command()
@@ -795,7 +798,7 @@ async def verify(ctx):
 	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
 	embed.set_footer(text=footer_testo)
 	#View=VerifyButton()
-	await ctx.reply(embed=embed, view=Button())
+	await ctx.send(embed=embed, view=Button())
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
