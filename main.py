@@ -399,7 +399,7 @@ async def VerifyButton(self, interaction: discord.Interaction, button=discord.ui
 
 from discord import ui
 
-class VerifyButton(discord.ui.View):
+class Button(discord.ui.View):
 	def __init__(self):
 		super().__init__()
 		self.value=None
@@ -411,10 +411,10 @@ class VerifyButton(discord.ui.View):
 @client.command()
 async def verify(ctx):
 	#reactions = ['✅'] # add more later if u want idk
-	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
-	embed.set_footer(text=footer_testo)
+	#embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
+	#embed.set_footer(text=footer_testo)
 	View=VerifyButton()
-	await ctx.reply(embed=embed, View=View)
+	await ctx.reply(View=Button)
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
@@ -784,7 +784,7 @@ from discord import ui
 
 
 
-class SuggestionModal(ui.Modal, title=':envelope: Suggest a command :envelope:'):
+class SuggestionModal(ui.Modal, title='Suggest a command'):
     name = ui.TextInput(label='Command name')
     answer = ui.TextInput(label='Description of the command / its functions', style=discord.TextStyle.paragraph)
 
