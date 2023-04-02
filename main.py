@@ -801,6 +801,12 @@ async def suggestion(interaction: discord.Interaction):
 	modal = SuggestionModal
 	await interaction.response.send_modal(SuggestionModal())
 
+
+@client.tree.command(name = "embed", description = "Send a custom embed") #slash command
+async def embed(interaction: discord.Interaction, title: None, description: None):
+	embed = discord.Embed(title=title, description=description)
+	await interaction.send_message(embed=embed)
+
 #application command discord.py end
 
 @client.command()
