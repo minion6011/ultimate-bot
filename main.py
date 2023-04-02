@@ -771,9 +771,9 @@ class Button(discord.ui.View):
 	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
 	async def Button1(self, interaction: discord.Interaction, button: discord.ui.Button):
 		ctx=interaction
-		if discord.utils.get(ctx.guild.roles, name="verify")
+		if discord.utils.get(ctx.guild.roles, name="verify"):
 			#if get(message.guild.roles, name="verify"):
-			role = discord.utils.get(ctx.guild.roles, name="verify")
+			role = discord.utils.get(ctx.guild.roles, name="verify"):
 			pearson = interaction.user
 			await pearson.add_roles(role)
 			embed_verify=discord.Embed(title=f"You are now verify")
@@ -783,7 +783,7 @@ class Button(discord.ui.View):
 			permissions = discord.Permissions(send_messages=True, read_messages=True)
 			guild = interaction.guild
 			await guild.create_role(name="verify", colour=discord.Colour(0x00ff00), permissions=permissions)
-			role = discord.utils.get(ctx.guild.roles, name="verify")
+			role = discord.utils.get(ctx.guild.roles, name="verify"):
 			for channel in ctx.guild.channels:
 				permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
 				await channel.set_permissions(role, overwrite=permissions)
