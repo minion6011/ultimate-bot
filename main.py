@@ -406,7 +406,7 @@ class Button(discord.ui.View):
 
 	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
 	async def Button1(self, button: discord.ui.Button, interaction: discord.Interaction):
-		await interaction.message.send_message("Test", ephereal=True)
+		await self.send_message("Test", ephereal=True)
 
 @client.command()
 async def verify(ctx):
