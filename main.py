@@ -816,7 +816,7 @@ class SuggestionModal(ui.Modal, title='Suggest a command'):
         #embed.add_field(name="Utente:", value=f"`{interaction.author.display_name}#{message.author.discriminator}`")
         await channel.send(embed=embed)
         embed1 = discord.Embed(title="Suggestion sent", color=discord.Color.green())
-        await interaction.response.send_message(embeds=[embed1])
+        await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
 @client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #slash command
