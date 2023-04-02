@@ -774,14 +774,14 @@ class Button(discord.ui.View):
 		if discord.utils.get(ctx.guild.roles, name="verify"):
 			#if get(message.guild.roles, name="verify"):
 			role = discord.utils.get(ctx.guild.roles, name="verify")
-			pearson = reaction.user
+			pearson = interaction.user
 			await pearson.add_roles(role)
 			embed_verify=discord.Embed(title=f"You are now verify")
 			embed_verify.set_footer(text=footer_testo)  
 			await pearson.send(embed=embed_verify)
 		else:
 			permissions = discord.Permissions(send_messages=True, read_messages=True)
-			guild = ctx.guild
+			guild = ctx.user.guild
 			await guild.create_role(name="verify", colour=discord.Colour(0x00ff00), permissions=permissions)
 			role = discord.utils.get(ctx.guild.roles, name="verify")
 			for channel in ctx.guild.channels:
