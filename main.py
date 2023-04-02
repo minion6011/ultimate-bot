@@ -391,19 +391,20 @@ async def on_reaction_add(reaction, user):
 	else:
 		print("errore")
 '''
-
+'''
 @discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
 async def VerifyButton(self, interaction: discord.Interaction, button=discord.ui.Button):
 	await interaction.response.send_message("Test", ephereal=True)
+'''
 
-
+class discord.ui.Button(*, style=success, label="Verify", disabled=False, custom_id=None, url=None, emoji=None, row=None)
 
 @client.command()
 async def verify(ctx):
 	#reactions = ['✅'] # add more later if u want idk
 	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
 	embed.set_footer(text=footer_testo)
-	message = await ctx.send(embed=embed, View=VerifyButton)
+	message = await ctx.send(embed=embed, View=discord.ui.Button)
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
@@ -766,10 +767,33 @@ async def suggestion(ctx: discord.ApplicationContext):
 async def getmessageid(interaction: discord.Interaction, message: discord.Message):
     await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
 
+
+
+
+from discord import ui
+
+
+
+class SuggestionModal(ui.Modal, title=':envelope: Suggest a command :envelope:'):
+    name = ui.TextInput(label='Command name')
+    answer = ui.TextInput(label='Description of the command / its functions', style=discord.TextStyle.paragraph)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        channel = client.get_channel(1079859774344134686)
+        embed = discord.Embed(title="Suggestion Modal Results")
+        embed.add_field(name="Command name", value=name)
+        embed.add_field(name="Description of the command / its functions", value=answer)
+        #embed.add_field(name="Utente:", value=f"`{interaction.author.display_name}#{message.author.discriminator}`")
+        await channel.send(embed=embed)
+        embed1 = discord.Embed(title="Suggestion sent", color=discord.Color.green())
+        await interaction.response.send_message(embeds=[embed1])
+
+
 @client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #slash command
 async def suggestion(interaction: discord.Interaction):
-    await interaction.response.send_message("error")
-
+	await interaction.response.send_message("error")
+	modal = SuggestionModal
+	await interaction.send_modal(modal)
 
 #application command discord.py end
 
