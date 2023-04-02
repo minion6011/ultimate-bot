@@ -397,25 +397,7 @@ async def VerifyButton(self, interaction: discord.Interaction, button=discord.ui
 	await interaction.response.send_message("Test", ephereal=True)
 '''
 
-from discord import ui
 
-class Button(discord.ui.View):
-	def __init__(self):
-		super().__init__()
-		self.value = None
-
-	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
-	async def Button1(self, button: discord.ui.Button, interaction: discord.Interaction):
-		await self.send_message("Test", ephereal=True)
-
-@client.command()
-async def verify(ctx):
-	#reactions = ['✅'] # add more later if u want idk
-	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
-	embed.set_footer(text=footer_testo)
-	#View=VerifyButton()
-	await ctx.reply(embed=embed, view=Button())
-	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
 
@@ -781,6 +763,40 @@ async def getmessageid(interaction: discord.Interaction, message: discord.Messag
     await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
 
 
+class Button(discord.ui.View):
+	def __init__(self):
+		super().__init__()
+		self.value = None
+
+	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
+	async def Button1(self, button: discord.ui.Button, interaction: discord.Interaction):
+		ctx=interaction
+		if discord.utils.get(ctx.guild.roles, name="verify"):
+			#if get(message.guild.roles, name="verify"):
+			role = discord.utils.get(ctx.guild.roles, name="verify")
+			pearson = reaction.user
+			await pearson.add_roles(role)
+			embed_verify=discord.Embed(title=f"You are now verify")
+			embed_verify.set_footer(text=footer_testo)  
+			await pearson.send(embed=embed_verify)
+		else:
+			permissions = discord.Permissions(send_messages=True, read_messages=True)
+			guild = ctx.guild
+			await guild.create_role(name="verify", colour=discord.Colour(0x00ff00), permissions=permissions)
+			role = discord.utils.get(ctx.guild.roles, name="verify")
+			for channel in ctx.guild.channels:
+				permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
+				await channel.set_permissions(role, overwrite=permissions)
+			await reaction.user.add_roles(role)
+
+@client.command()
+async def verify(ctx):
+	#reactions = ['✅'] # add more later if u want idk
+	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
+	embed.set_footer(text=footer_testo)
+	#View=VerifyButton()
+	await ctx.reply(embed=embed, view=Button())
+	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
 
