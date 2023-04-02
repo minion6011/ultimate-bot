@@ -769,7 +769,7 @@ class Button(discord.ui.View):
 		self.value = None
 
 	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
-	async def Button1(self, button: discord.ui.Button, interaction: discord.Interaction):
+	async def Button1(self, interaction: discord.Interaction, button: discord.ui.Button):
 		ctx=interaction
 		if ctx.guild.get_role(name="verify"):
 			#if get(message.guild.roles, name="verify"):
