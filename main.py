@@ -798,7 +798,6 @@ class SuggestionModal(ui.Modal, title=':envelope: Suggest a command :envelope:')
 
 @client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #slash command
 async def suggestion(interaction: discord.Interaction):
-	await interaction.response.send_message("error")
 	modal = SuggestionModal
 	await interaction.response.send_modal(SuggestionModal())
 
