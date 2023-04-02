@@ -401,16 +401,16 @@ from discord import ui
 
 class Button(discord.ui.View):
 	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
-	async def Button1(self, button: discord.ui.Button, interaction: discord.Interaction, ctx):
-		await ctx.send("test")
+	async def Button1(self, button: discord.ui.Button, interaction: discord.Interaction):
+		await interaction.response.send_message("Test", ephereal=True)
 
 @client.command()
 async def verify(ctx):
 	#reactions = ['✅'] # add more later if u want idk
-	#embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
-	#embed.set_footer(text=footer_testo)
+	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
+	embed.set_footer(text=footer_testo)
 	#View=VerifyButton()
-	await ctx.reply(view=Button())
+	await ctx.reply(embed=embed, view=Button())
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
