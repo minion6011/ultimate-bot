@@ -396,7 +396,7 @@ async def on_reaction_add(reaction, user):
 async def VerifyButton(self, interaction: discord.Interaction, button=discord.ui.Button):
 	await interaction.response.send_message("Test", ephereal=True)
 '''
-
+'''
 from discord import ui
 
 class VerifyButton(discord.ui.view):
@@ -407,7 +407,7 @@ class VerifyButton(discord.ui.view):
 	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
 	async def VerifyButton1(self, button: discord.ui.Button, interaction: discord.Interaction):
 		await interaction.response.send_message("test")
-
+'''
 @client.command()
 async def verify(ctx):
 	#reactions = ['✅'] # add more later if u want idk
