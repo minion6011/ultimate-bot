@@ -397,10 +397,13 @@ async def VerifyButton(self, interaction: discord.Interaction, button=discord.ui
 	await interaction.response.send_message("Test", ephereal=True)
 '''
 
+from discord import ui
+
 class VerifyButton(discord.ui.view):
 	def __init__(self):
 		super().__init__()
 		self.value=None
+
 	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
 	async def VerifyButton1(self, button: discord.ui.Button, interaction: discord.Interaction):
 		await interaction.response.send_message("test")
