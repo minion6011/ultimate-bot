@@ -776,9 +776,9 @@ class Button(discord.ui.View):
 			role = discord.utils.get(ctx.guild.roles, name="verify")
 			pearson = interaction.user
 			await pearson.add_roles(role)
-			embed_verify=discord.Embed(title=f"You are now verify")
+			embed_verify=discord.Embed(title=f"You are now verify", color=discord.Color.green())
 			embed_verify.set_footer(text=footer_testo)  
-			await pearson.send(embed=embed_verify)
+			await interaction.response.send_message(embed=embed_verify, ephemeral=True)
 		else:
 			permissions = discord.Permissions(send_messages=True, read_messages=True)
 			guild = interaction.guild
