@@ -403,7 +403,7 @@ async def verify(ctx):
 	#reactions = ['✅'] # add more later if u want idk
 	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
 	embed.set_footer(text=footer_testo)
-	message = await ctx.send(embed=embed, view=VerifyButton)
+	message = await ctx.send(embed=embed, View=VerifyButton)
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
