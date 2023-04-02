@@ -793,7 +793,7 @@ class SuggestionModal(ui.Modal, title=':envelope: Suggest a command :envelope:')
 async def suggestion(interaction: discord.Interaction):
 	await interaction.response.send_message("error")
 	modal = SuggestionModal
-	await interaction.send_modal(modal)
+	await interaction.response.send_modal(SuggestionModal())
 
 #application command discord.py end
 
