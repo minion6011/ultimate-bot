@@ -409,7 +409,7 @@ async def verify(ctx):
 	#reactions = ['✅'] # add more later if u want idk
 	#embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
 	#embed.set_footer(text=footer_testo)
-	View=VerifyButton()
+	#View=VerifyButton()
 	await ctx.reply(view=Button())
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
@@ -787,8 +787,8 @@ class SuggestionModal(ui.Modal, title='Suggest a command'):
     async def on_submit(self, interaction: discord.Interaction):
         channel = client.get_channel(1079859774344134686)
         embed = discord.Embed(title="Suggestion Modal Results")
-        embed.add_field(name="Command name", value=name)
-        embed.add_field(name="Description of the command / its functions", value=answer)
+        embed.add_field(name="Command name", value=self.children[0].value)
+        embed.add_field(name="Description of the command / its functions", value=self.children[1].value)
         #embed.add_field(name="Utente:", value=f"`{interaction.author.display_name}#{message.author.discriminator}`")
         await channel.send(embed=embed)
         embed1 = discord.Embed(title="Suggestion sent", color=discord.Color.green())
