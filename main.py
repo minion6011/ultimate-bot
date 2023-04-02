@@ -401,8 +401,8 @@ from discord import ui
 
 class Button(discord.ui.View):
 	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
-	async def Button1(self, button: discord.ui.Button, interaction: discord.Interaction):
-		await interaction.response.send_message("test")
+	async def Button1(self, button: discord.ui.Button, interaction: discord.Interaction, ctx):
+		await ctx.send("test")
 
 @client.command()
 async def verify(ctx):
@@ -769,14 +769,15 @@ async def suggestion(ctx: discord.ApplicationContext):
 
 #apllication command discord.py
 
+from discord import ui
+
+
 @client.tree.context_menu(name="Get Message ID") #message contex command
 async def getmessageid(interaction: discord.Interaction, message: discord.Message):
     await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
 
 
 
-
-from discord import ui
 
 
 
