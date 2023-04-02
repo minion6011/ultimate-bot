@@ -397,14 +397,21 @@ async def VerifyButton(self, interaction: discord.Interaction, button=discord.ui
 	await interaction.response.send_message("Test", ephereal=True)
 '''
 
-#class discord.ui.Button(*, style=success, label="Verify")
+class VerifyButton(discord.ui.view):
+	def __init__(self):
+		super().__init__()
+		self.value=None
+	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
+	async def VerifyButton1(self, button: discord.ui.Button, interaction: discord.Interaction):
+		await interaction.response.send_message("test")
 
 @client.command()
 async def verify(ctx):
 	#reactions = ['✅'] # add more later if u want idk
 	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
 	embed.set_footer(text=footer_testo)
-	message = await ctx.send(embed=embed, View=discord.ui.Button)
+	View=VerifyButton()
+	await ctx.reply(embed=embed, View=View)
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
