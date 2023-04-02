@@ -397,7 +397,7 @@ async def VerifyButton(self, interaction: discord.Interaction, button=discord.ui
 	await interaction.response.send_message("Test", ephereal=True)
 '''
 
-class discord.ui.Button(*, style=success, label="Verify", disabled=False, custom_id=None, url=None, emoji=None, row=None)
+class discord.ui.Button(*, style=success, label="Verify")
 
 @client.command()
 async def verify(ctx):
