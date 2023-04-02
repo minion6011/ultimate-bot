@@ -59,7 +59,7 @@ async def on_ready():
 
 
 #messaggi inizio
-
+'''
 @client.event
 async def on_message(message):
 	if message.author.bot:
@@ -113,7 +113,7 @@ async def on_message_edit(before, after):
 		await channel.send(embed=embed)
 		await client.process_commands(after)
 
-
+'''
 
 #messaggi fine
 
@@ -155,7 +155,7 @@ async def on_member_join(member):
 
 
 
-
+'''
 @client.event
 async def on_member_update(before, after):
 	channel = client.get_channel(stalkid)
@@ -166,6 +166,7 @@ async def on_member_update(before, after):
 	embed.add_field(name = 'Attività:', value=f"Prima: `{before.activity}`, Dopo: `{after.activity}`", inline = False)
 	embed.add_field(name = 'Avvertenza:', value=f":warning: se Alcune informazioni non cambiano :warning:\n:warning: Significa che sono le stesse :warning:", inline = False)
 	await channel.send(embed=embed)
+'''
 
 @client.event
 async def on_voice_state_update(member, before, after):
