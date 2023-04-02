@@ -400,12 +400,8 @@ async def VerifyButton(self, interaction: discord.Interaction, button=discord.ui
 from discord import ui
 
 class Button(discord.ui.View):
-	def __init__(self):
-		super().__init__()
-		self.value=None
-
 	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
-	async def VerifyButton1(self, button: discord.ui.Button, interaction: discord.Interaction):
+	async def Button1(self, button: discord.ui.Button, interaction: discord.Interaction):
 		await interaction.response.send_message("test")
 
 @client.command()
@@ -414,7 +410,7 @@ async def verify(ctx):
 	#embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
 	#embed.set_footer(text=footer_testo)
 	View=VerifyButton()
-	await ctx.reply(View=Button)
+	await ctx.reply(view=Button())
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
