@@ -580,7 +580,7 @@ async def delchannel(ctx):
 @has_permissions(ban_members=True)
 async def unban(ctx, user: discord.User):
 	await ctx.guild.unban(user)
-	embed = discord.Embed(title=f":warning: {user.mention} has been unbanned :warning:", color=discord.Color.red())
+	embed = discord.Embed(title=f":warning: <@{user}> has been unbanned :warning:", color=discord.Color.red())
 	embed.set_footer(text=footer_testo)  
 	await ctx.send(embed=embed)
 
