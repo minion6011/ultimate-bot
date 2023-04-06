@@ -850,6 +850,18 @@ async def suggestion(interaction: discord.Interaction):
 
 #application command discord.py end
 
+#traslate
+
+from googletrans import Translator
+
+@client.command()
+async def translate(ctx, message):
+	translator = Translator()
+	translated = translator.translate(message)
+	await ctx.send(translated.text)
+
+#traslate
+
 @client.command()
 @commands.guild_only()
 @is_me #solo se è il mio id
@@ -859,6 +871,7 @@ async def slash_sync(ctx):
 	await client.tree.sync(guild=discord.Object(id=1031812528226967603))
 	embed = discord.Embed(title="Reloading slash...", color=0x2c2f33)
 	await ctx.send(embed=embed, delete_after=7)
+
 
 @client.command()
 @commands.guild_only()
