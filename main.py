@@ -855,8 +855,8 @@ async def suggestion(interaction: discord.Interaction):
 @commands.guild_only()
 async def giveaway(ctx, prize):
 	embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
-	results = [ member for member in ctx.guild.members if not member.bot]
-	winner = random.choice(result)
+	results = [member for member in ctx.guild.members if not member.bot]
+	winner = random.choice(results)
 	embed.add_field(name="Winner user:", value=f"`{winner}`")
 	await ctx.send(embed=embed)
 
