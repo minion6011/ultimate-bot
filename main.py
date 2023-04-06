@@ -764,7 +764,7 @@ class BugModal(ui.Modal, title='Report Bug'):
         channel = client.get_channel(1043931423360430190)
         embed = discord.Embed(title=":bug: Bug report :bug:")
         embed.add_field(name="Bugged Command name", value=self.children[0].value)
-        embed.add_field(name="Type of bug", value=self.children[1].value)
+        #embed.add_field(name="Type of bug", value=self.children[1].value)
         embed.add_field(name="Description of the bug", value=self.children[2].value)
         embed.add_field(name="User:", value=f"`{interaction.user}`")
         await channel.send(embed=embed)
@@ -774,7 +774,7 @@ class BugModal(ui.Modal, title='Report Bug'):
 
 @client.tree.command(name="reportbug", description="Report a bug of a Ultimate-Bot command") #slash command
 async def report_bug(interaction: discord.Interaction):
-	#modal = BugModal
+	modal = BugModal
 	await interaction.response.send_modal(BugModal())
 
 
@@ -852,6 +852,11 @@ async def suggestion(interaction: discord.Interaction):
 
 #traslate
 
+@client.command()
+async def translate(ctx, *args):
+    await ctx.send("".join([MAP.get(x, x) for x in "".join([x for x in " ".join(args)])]))
+
+'''
 from googletrans import Translator
 
 @client.command()
@@ -859,7 +864,7 @@ async def translate(ctx, message):
 	translator = Translator()
 	translated = translator.translate(f'{message}')
 	await ctx.send(f"{translated.text}")
-
+'''
 #traslate
 
 @client.command()
