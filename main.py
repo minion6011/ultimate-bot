@@ -146,12 +146,19 @@ async def on_member_remove(member):
 
 @client.event
 async def on_member_join(member):
-	channel = client.get_channel(stalkid)
-	embed = discord.Embed(title=f"**[Stalker]**\nNuovo utente nel server\nUtente: `{member.display_name}#{member.discriminator}`\n Server: `{member.guild.name}`", color=discord.Color.orange())
-	await channel.send(embed=embed)
-	await member.create_dm()
-	embed = discord.Embed(title=f"Hi {member.name}, welcome to {member.guild}!", color=discord.Color.orange())
-	await member.dm_channel.send(embed=embed)
+	try:
+		channel = client.get_channel(stalkid)
+		embed = discord.Embed(title=f"**[Stalker]**\nNuovo utente nel server\nUtente: `{member.display_name}#{member.discriminator}`\n Server: `{member.guild.name}`", color=discord.Color.orange())
+		await channel.send(embed=embed)
+		await member.create_dm()
+		embed = discord.Embed(title=f"Hi {member.name}, welcome to {member.guild}!", color=discord.Color.orange())
+		await member.dm_channel.send(embed=embed)
+	except:
+		channel = client.get_channel(errorchannel)
+		embed = discord.Embed(title=f"**[Errore]**\nOn_Member_Join error (private user)", color=discord.Color.red())
+		await channel.send(embed=embed)
+	
+	
 
 
 
@@ -759,6 +766,31 @@ async def suggestion(ctx: discord.ApplicationContext):
 from discord import ui
 
 
+
+class BugModal(ui.Modal, title='Report Bug'):
+    bug_name = ui.TextInput(label='Bugged Command name')
+    type_of_bug = ui.Select(min_values=1, max_values=1, options=[discord.SelectOption(label='Slash Bug', emoji=" :keyboard:"), discord.SelectOption(label='Message components Bug',emoji=":speech_balloon:"), discord.SelectOption(label='Command Bug', emoji=":grey_question:")])
+    answer = ui.TextInput(label='Description of the bug', style=discord.TextStyle.paragraph)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        channel = client.get_channel(1043931423360430190)
+        embed = discord.Embed(title=":bug: Bug report :bug:")
+        embed.add_field(name="Bugged Command name", value=self.children[0].value)
+        embed.add_field(name="Type of bug", value=self.children[1].value)
+        embed.add_field(name="Description of the bug", value=self.children[2].value)
+        embed.add_field(name="User:", value=f"`{interaction.user}`")
+        await channel.send(embed=embed)
+        embed1 = discord.Embed(title="Bug report sent", color=discord.Color.red())
+        await interaction.response.send_message(embeds=[embed1], ephemeral=True)
+
+
+@client.tree.command(name="ReportBug", description="Report a bug of a Ultimate-Bot command") #slash command
+async def report_bug(interaction: discord.Interaction):
+	#modal = BugModal
+	await interaction.response.send_modal(BugModal())
+
+
+
 @client.tree.context_menu(name="Get Message ID") #message contex command
 async def getmessageid(interaction: discord.Interaction, message: discord.Message):
     await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
@@ -822,31 +854,10 @@ class SuggestionModal(ui.Modal, title='Suggest a command'):
 
 @client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #slash command
 async def suggestion(interaction: discord.Interaction):
-	modal = SuggestionModal
+	#modal = SuggestionModal
 	await interaction.response.send_modal(SuggestionModal())
 
 
-class BugModal(ui.Modal, title='Report Bug'):
-    bug_name = ui.TextInput(label='Bugged Command name')
-    type_of_bug = ui.Select(min_values=1, max_values=1, options=[discord.SelectOption(label='Slash Bug', emoji=" :keyboard:"), discord.SelectOption(label='Message components Bug',emoji=":speech_balloon:"), discord.SelectOption(label='Command Bug', emoji=":grey_question:")])
-    answer = ui.TextInput(label='Description of the bug', style=discord.TextStyle.paragraph)
-
-    async def on_submit(self, interaction: discord.Interaction):
-        channel = client.get_channel(1043931423360430190)
-        embed = discord.Embed(title=":bug: Bug report :bug:")
-        embed.add_field(name="Bugged Command name", value=self.children[0].value)
-        embed.add_field(name="Type of bug", value=self.children[1].value)
-        embed.add_field(name="Description of the bug", value=self.children[2].value)
-        embed.add_field(name="User:", value=f"`{interaction.user}`")
-        await channel.send(embed=embed)
-        embed1 = discord.Embed(title="Bug report sent", color=discord.Color.red())
-        await interaction.response.send_message(embeds=[embed1], ephemeral=True)
-
-
-@client.tree.command(name = "report_bug", description = "Report a bug of a Ultimate-Bot command") #slash command
-async def report_bug(interaction: discord.Interaction):
-	modal = BugModal
-	await interaction.response.send_modal(BugModal())
 
 
 #application command discord.py end
