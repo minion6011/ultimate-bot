@@ -757,7 +757,8 @@ from discord import ui
 
 class BugModal(ui.Modal, title='Report Bug'):
     bug_name = ui.TextInput(label='Bugged Command name')
-    type_of_bug = ui.Select(placeholder="Bug Type", min_values=1, max_values=1, options=[discord.SelectOption(label='Slash Bug'), discord.SelectOption(label='Message components Bug'), discord.SelectOption(label='Command Bug'), discord.SelectOption(label='ghost puzza')])
+    #options = [discord.SelectOption(discord.SelectOption(label='Slash Bug')), discord.SelectOption(label='Message components Bug')), discord.SelectOption(label='Command Bug'))]
+    #type_of_bug = ui.Select(placeholder="Bug Type", min_values=1, max_values=1, options=options)
     answer = ui.TextInput(label='Description of the bug', style=discord.TextStyle.paragraph)
 
     async def on_submit(self, interaction: discord.Interaction):
@@ -765,7 +766,7 @@ class BugModal(ui.Modal, title='Report Bug'):
         embed = discord.Embed(title=":bug: Bug report :bug:")
         embed.add_field(name="Bugged Command name", value=self.children[0].value)
         #embed.add_field(name="Type of bug", value=self.children[1].value)
-        embed.add_field(name="Description of the bug", value=self.children[2].value)
+        embed.add_field(name="Description of the bug", value=self.children[1].value)
         embed.add_field(name="User:", value=f"`{interaction.user}`")
         await channel.send(embed=embed)
         embed1 = discord.Embed(title="Bug report sent", color=discord.Color.red())
