@@ -826,6 +826,28 @@ async def suggestion(interaction: discord.Interaction):
 	await interaction.response.send_modal(SuggestionModal())
 
 
+class BugModal(ui.Modal, title='Report Bug'):
+    bug_name = ui.TextInput(label='Bugged Command name')
+    type_of_bug = ui.Select(min_values=1, max_values=1, options=[discord.SelectOption(label='Slash Bug', emoji=" :keyboard:"), discord.SelectOption(label='Message components Bug',emoji=":speech_balloon:"), discord.SelectOption(label='Command Bug', emoji=":grey_question:")])
+    answer = ui.TextInput(label='Description of the bug', style=discord.TextStyle.paragraph)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        channel = client.get_channel(1043931423360430190)
+        embed = discord.Embed(title=":bug: Bug report :bug:")
+        embed.add_field(name="Bugged Command name", value=self.children[0].value)
+        embed.add_field(name="Type of bug", value=self.children[1].value)
+        embed.add_field(name="Description of the bug", value=self.children[2].value)
+        embed.add_field(name="User:", value=f"`{interaction.user}`")
+        await channel.send(embed=embed)
+        embed1 = discord.Embed(title="Bug report sent", color=discord.Color.red())
+        await interaction.response.send_message(embeds=[embed1], ephemeral=True)
+
+
+@client.tree.command(name = "report_bug", description = "Report a bug of a Ultimate-Bot command") #slash command
+async def report_bug(interaction: discord.Interaction):
+	modal = BugModal
+	await interaction.response.send_modal(BugModal())
+
 
 #application command discord.py end
 
