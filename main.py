@@ -41,6 +41,8 @@ intents.reactions = True
 pre = data["command_prefix"]
 client = commands.Bot(command_prefix=(pre), intents=intents, case_insensitive=True)
 client.remove_command('help')
+tree = app_commands.CommandTree(client)
+
 
 #dati generali
 footer_testo = data["footer_embed"]
@@ -51,7 +53,7 @@ errorchannel = 1046796347870826496
 @client.event
 async def on_ready():
 	change_status.start()
-	#client.tree.sync(force=True)
+	tree.sync(force=True)
 	#synced = client.tree.sync()
 	print(f"Bot logged into {client.user}.")
 	token_json = data["discord_token"]
