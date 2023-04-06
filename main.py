@@ -851,22 +851,15 @@ async def suggestion(interaction: discord.Interaction):
 
 #application command discord.py end
 
-#traslate
-
 @client.command()
-async def translate(ctx, *args):
-    await ctx.send("".join([MAP.get(x, x) for x in "".join([x for x in " ".join(args)])]))
+@commands.guild_only()
+async def giveaway(ctx, prize):
+	embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
+	for member in guild.members:
+		winner = random.choice(member)
+        	embed.add_field(name="Winner user:", value=f"`{winner}`")
+		await ctx.send(embed=embed)
 
-'''
-from googletrans import Translator
-
-@client.command()
-async def translate(ctx, message):
-	translator = Translator()
-	translated = translator.translate(f'{message}')
-	await ctx.send(f"{translated.text}")
-'''
-#traslate
 
 @client.command()
 @commands.guild_only()
