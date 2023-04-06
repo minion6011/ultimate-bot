@@ -41,7 +41,7 @@ intents.reactions = True
 pre = data["command_prefix"]
 client = commands.Bot(command_prefix=(pre), intents=intents, case_insensitive=True)
 client.remove_command('help')
-tree = app_commands.CommandTree(client)
+#tree = app_commands.CommandTree(client)
 
 
 #dati generali
@@ -53,8 +53,8 @@ errorchannel = 1046796347870826496
 @client.event
 async def on_ready():
 	change_status.start()
-	tree.sync(force=True)
-	#synced = client.tree.sync()
+	#tree.sync(force=True)
+	synced = client.tree.sync()
 	print(f"Bot logged into {client.user}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json)
@@ -706,20 +706,6 @@ async def cayo(ctx):
 
 @client.command()
 @commands.guild_only()
-@is_me #solo se è il mio id
-async def update(ctx):
-	embed = discord.Embed(title="Reloading system...", color=0x2c2f33)
-	embed.set_image(url="https://support.discord.com/hc/en-us/article_attachments/206303208/eJwVyksOwiAQANC7sJfp8Ke7Lt15A0MoUpJWGmZcGe-ubl_eW7zGLmaxMZ80A6yNch-rJO4j1SJr73Uv6Wwkcz8gMae8HeXJBOjC5NEap42dokUX_4SotI8GVfBaYYDldr3n3y_jomRtD_H5ArCeI9g.zGz1JSL-9DXgpkX_SkmMDM8NWGg.gif")
-	embed.add_field(name = '**System info**', value = f':gear:', inline = False)
-	embed.add_field(name = ':computer: **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
-	embed.add_field(name = ':floppy_disk: **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
-	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
-	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
-	await ctx.send(embed=embed, delete_after=7)
-	exit()
-
-@client.command()
-@commands.guild_only()
 async def infobot(ctx):
 	embed = discord.Embed(title = 'System Resource Usage', description = 'See CPU and memory usage of the system.', color=discord.Color.blue())
 	embed.add_field(name = ':computer: **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
@@ -866,6 +852,31 @@ async def suggestion(interaction: discord.Interaction):
 
 @client.command()
 @commands.guild_only()
+@is_me #solo se è il mio id
+async def slash_sync(ctx):
+	await client.tree.sync()
+	await client.tree.sync(guild=discord.Object(id=1043925344312381550))
+	await client.tree.sync(guild=discord.Object(id=1031812528226967603))
+	embed = discord.Embed(title="Reloading slash...", color=0x2c2f33)
+	await ctx.send(embed=embed, delete_after=7)
+
+@client.command()
+@commands.guild_only()
+@is_me #solo se è il mio id
+async def update(ctx):
+	embed = discord.Embed(title="Reloading system...", color=0x2c2f33)
+	embed.set_image(url="https://support.discord.com/hc/en-us/article_attachments/206303208/eJwVyksOwiAQANC7sJfp8Ke7Lt15A0MoUpJWGmZcGe-ubl_eW7zGLmaxMZ80A6yNch-rJO4j1SJr73Uv6Wwkcz8gMae8HeXJBOjC5NEap42dokUX_4SotI8GVfBaYYDldr3n3y_jomRtD_H5ArCeI9g.zGz1JSL-9DXgpkX_SkmMDM8NWGg.gif")
+	embed.add_field(name = '**System info**', value = f':gear:', inline = False)
+	embed.add_field(name = ':computer: **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
+	embed.add_field(name = ':floppy_disk: **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
+	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
+	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
+	await ctx.send(embed=embed, delete_after=7)
+	exit()
+
+
+@client.command()
+@commands.guild_only()
 async def help(ctx):
 	prefix = data["command_prefix"]
 	embed = discord.Embed(title="Mod Commands :closed_lock_with_key:", color=discord.Color.gold())
@@ -896,6 +907,13 @@ async def help(ctx):
 	embedd.add_field(name=f"{prefix}user user_id", value="Send the User info", inline=True)
 	embedd.set_footer(text=footer_testo)
 	await ctx.send(embed=embedd)
+	if ctx.author.id == my_id:
+		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.black())
+		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
+		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
+		admin_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=admin_embed)
+		
 
 
 
