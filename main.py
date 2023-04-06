@@ -757,7 +757,7 @@ from discord import ui
 
 class BugModal(ui.Modal, title='Report Bug'):
     bug_name = ui.TextInput(label='Bugged Command name')
-    type_of_bug = ui.Select(min_values=1, max_values=1, options=[discord.SelectOption(label='Slash Bug'), discord.SelectOption(label='Message components Bug'), discord.SelectOption(label='Command Bug'), discord.SelectOption(label='ghost puzza')])
+    type_of_bug = ui.Select(placeholder="Bug Type", min_values=1, max_values=1, options=[discord.SelectOption(label='Slash Bug'), discord.SelectOption(label='Message components Bug'), discord.SelectOption(label='Command Bug'), discord.SelectOption(label='ghost puzza')])
     answer = ui.TextInput(label='Description of the bug', style=discord.TextStyle.paragraph)
 
     async def on_submit(self, interaction: discord.Interaction):
