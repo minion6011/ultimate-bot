@@ -857,8 +857,8 @@ from googletrans import Translator
 @client.command()
 async def translate(ctx, message):
 	translator = Translator()
-	translated = translator.translate(message)
-	await ctx.send(translated.text)
+	translated = translator.translate(f'{message}')
+	await ctx.send(f"{translated.text}")
 
 #traslate
 
