@@ -857,7 +857,8 @@ async def giveaway(ctx, prize):
 	embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
 	results = [member for member in ctx.guild.members if not member.bot]
 	winner = random.choice(results)
-	embed.add_field(name="Winner user:", value=f"`{winner}`")
+	embed.add_field(name="Winner user:", value=f":confetti_ball:`{winner}`:confetti_ball:")
+	embed.add_field(name="Prize", value=f":gift:***{prize}***:gift:")
 	await ctx.send(embed=embed)
 
 
