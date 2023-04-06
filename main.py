@@ -784,7 +784,7 @@ class BugModal(ui.Modal, title='Report Bug'):
         await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
-@client.tree.command(name="ReportBug", description="Report a bug of a Ultimate-Bot command") #slash command
+@client.tree.command(name="reportbug", description="Report a bug of a Ultimate-Bot command") #slash command
 async def report_bug(interaction: discord.Interaction):
 	#modal = BugModal
 	await interaction.response.send_modal(BugModal())
