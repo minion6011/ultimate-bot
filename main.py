@@ -926,7 +926,7 @@ async def help(ctx):
 	embedd.set_footer(text=footer_testo)
 	await ctx.send(embed=embedd)
 	if ctx.author.id == my_id:
-		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.black())
+		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
 		admin_embed.set_footer(text=footer_testo)
