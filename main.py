@@ -30,8 +30,7 @@ with open("config.json") as f:
         exit(1)
 
 my_id = 598119406731657216
-is_me = commands.check(lambda ctx: ctx.author.id == my_id) else: ctx.send(embed=discord.Embed(title="Error, You are not an admin"))
-
+is_me = commands.check(lambda ctx: ctx.author.id == my_id)
 
 
 
