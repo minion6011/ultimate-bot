@@ -30,7 +30,10 @@ with open("config.json") as f:
         exit(1)
 
 my_id = 598119406731657216
-is_me = commands.check(lambda ctx: ctx.author.id == my_id)
+is_me = commands.check(lambda ctx: ctx.author.id == my_id) else: ctx.send(embed=discord.Embed(title="Error, You are not an admin", color=discord.Color.red()), delete_after=7)
+
+
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -886,6 +889,9 @@ async def update(ctx):
 	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
 	await ctx.send(embed=embed, delete_after=7)
 	exit()
+
+	
+
 
 
 @client.command()
