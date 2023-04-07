@@ -893,15 +893,8 @@ async def update(ctx):
 
 class HelpDropdown(discord.ui.Select):
 	def __init__(self):
-	
-	
-	options = [
-		discord.SelectOption(label='Mod Commands', emoji='🟥', value="value1"),
-		discord.SelectOption(label='Utilty', emoji='🟩', value="value2"),
-		discord.SelectOption(label='Info Server/user Commands', emoji='🟦', value="value3")
-	]
-	
-	super().__init__(placeholder='Choose help section...', min_values=1, max_values=1, options=options)
+		options = [discord.SelectOption(label='Mod Commands', emoji='🟥', value="value1"), discord.SelectOption(label='Utilty', emoji='🟩', value="value2"), discord.SelectOption(label='Info Server/user Commands', emoji='🟦', value="value3")]
+		super().__init__(placeholder='Choose help section...', min_values=1, max_values=1, options=options)
 
 	async def callback(self, interaction: discord.Interaction):
 		if interaction.values[0] == "value1":
