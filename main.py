@@ -946,7 +946,7 @@ async def help(ctx):
 	await asyncio.sleep(1*1)
 	embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
 	embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
-	embedd.add_field(name=f"{prefix}user user_id", value="Send the User info", inline=True)
+	embedd.add_field(name=f"{prefix}userinfo user_id", value="Send the User info", inline=True)
 	embedd.set_footer(text=footer_testo)
 	await ctx.send(embed=embedd)
 	if ctx.author.id == my_id:
