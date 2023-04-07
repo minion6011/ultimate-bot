@@ -892,40 +892,37 @@ async def update(ctx):
 	
 
 class HelpDropdown(discord.ui.Select):
-    def __init__(self):
+	def __init__(self):
+	
+	
+	options = [
+		discord.SelectOption(label='Mod Commands', emoji='🟥', value="value1"),
+		discord.SelectOption(label='Utilty', emoji='🟩', value="value2"),
+		discord.SelectOption(label='Info Server/user Commands', emoji='🟦', value="value3")
+	]
+	
+	super().__init__(placeholder='Choose help section...', min_values=1, max_values=1, options=options)
 
-        # Set the options that will be presented inside the dropdown
-        options = [
-            discord.SelectOption(label='Mod Commands', emoji='🟥', value="value1"),
-            discord.SelectOption(label='Utilty', emoji='🟩', value="value2"),
-            discord.SelectOption(label='Info Server/user Commands', emoji='🟦', value="value3")
-        ]
-
-        # The placeholder is what will be shown when no option is chosen
-        # The min and max values indicate we can only pick one of the three options
-        # The options parameter defines the dropdown options. We defined this above
-        super().__init__(placeholder='Choose help section...', min_values=1, max_values=1, options=options)
-
-    async def callback(self, interaction: discord.Interaction):
-    if interaction.values[0] == "value1":
-	await interaction.response.send_message(f'Your favourite colour is {self.values[0]}')
-    elif interaction.values[0] == "value2":
-	await interaction.response.send_message(f'Your favourite colour is {self.values[0]}')
-    elif interaction.values[0] == "value3":
-	await interaction.response.send_message(f'Your favourite colour is {self.values[0]}')
+	async def callback(self, interaction: discord.Interaction):
+		if interaction.values[0] == "value1":
+			await interaction.response.send_message(f'Your favourite colour is {self.values[0]}')
+		elif interaction.values[0] == "value2":
+			await interaction.response.send_message(f'Your favourite colour is {self.values[0]}')
+		elif interaction.values[0] == "value3":
+			await interaction.response.send_message(f'Your favourite colour is {self.values[0]}')
 
 
 class HelpDropdownView(discord.ui.View):
-    def __init__(self):
-        super().__init__()
-        self.add_item(HelpDropdown())
+	def __init__(self):
+		super().__init__()
+		self.add_item(HelpDropdown())
 
 @client.command()
 @commands.guild_only()
 @is_me
 async def help2(ctx):
 	view = HelpDropdownView()
-	await ctx.send('Pick your favourite colour:', view=view)
+	await ctx.send('Select the help command section:', view=view)
 
 @client.command()
 @commands.guild_only()
