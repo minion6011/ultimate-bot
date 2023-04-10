@@ -879,7 +879,7 @@ class HelpDropdownView(discord.ui.View):
 
 
 
-@client.tree.command(name="Help", description = "Show the list of command for Ultimate-Bot")
+@client.tree.command(name="help", description = "Show the list of command for Ultimate-Bot")
 async def help(interaction: discord.Interaction):
 	#view = HelpDropdownView()
 	prefix = data["command_prefix"]
