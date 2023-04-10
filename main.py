@@ -821,7 +821,49 @@ class SuggestionModal(ui.Modal, title='Suggest a command'):
 			
 
 
-class HelpDropdown(discord.ui.Select):
+class class HelpDropdown(discord.ui.Select):
+	def __init__(self):
+		options = [discord.SelectOption(label='Mod Commands'), discord.SelectOption(label='Utilty Commands'), discord.SelectOption(label='Info Server/user Commands')]
+		
+		super().__init__(placeholder='Choose help section...', min_values=1, max_values=1, options=options)
+
+	async def callback(self, interaction: discord.Interaction):
+		prefix = data["command_prefix"]
+		if self.values[0] == "Mod Commands":
+			embed = discord.Embed(title="Mod Commands :closed_lock_with_key:", color=discord.Color.gold())
+			embed.add_field(name=f"{prefix}nuke", value=f"Delete messages in the chat where it is used", inline=True)
+			embed.add_field(name=f"{prefix}kick user_id reason", value=f"Kick a member from the server", inline=True)
+			embed.add_field(name=f"{prefix}ban user_id reason", value=f"Ban a member from the server", inline=True)
+			embed.add_field(name=f"{prefix}unban user_id", value=f"Unban a member from the server", inline=True)
+			embed.add_field(name=f"{prefix}delchannel", value=f"Delete all channel", inline=True)
+			embed.add_field(name=f"{prefix}lockdown", value=f"Lockdown all channel", inline=True)
+			embed.add_field(name=f"{prefix}unlock", value=f"Unlock channel", inline=True)
+			embed.add_field(name=f"{prefix}mute", value=f"Mute a member", inline=True)
+			embed.add_field(name=f"{prefix}unmute", value=f"Unmute a member", inline=True)
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+		elif self.values[0] == "Utilty Commands":
+			embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
+			embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
+			embedt.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
+			embedt.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
+			embedt.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
+			embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
+			embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
+			embedt.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embedt, ephemeral=True)
+		elif self.values[0] == "Info Server/user Commands":
+			embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
+			embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
+			embedd.add_field(name=f"{prefix}userinfo user_id", value="Send the User info", inline=True)
+			embedd.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embedd, ephemeral=True)
+
+
+class HelpDropdownView(discord.ui.View):
+	def __init__(self):
+		super().__init__()
+		self.add_item(HelpDropdown())Dropdown(discord.ui.Select):
 	def __init__(self):
 		options = [discord.SelectOption(label='Mod Commands'), discord.SelectOption(label='Utilty Commands'), discord.SelectOption(label='Info Server/user Commands')]
 		
@@ -872,16 +914,16 @@ class HelpDropdownView(discord.ui.View):
 
 
 @client.tree.command(name="Help", description = "Show the list of command for Ultimate-Bot")
-async def help(ctx):
+async def help(interaction: discord.Interaction):
 	#view = HelpDropdownView()
 	prefix = data["command_prefix"]
-	await ctx.send('Select the help command section:', view=HelpDropdownView())
-	if ctx.author.id == my_id:
+	await interaction.response.send_message('Select the help command section:', view=HelpDropdownView())
+	if interaction.author.id == my_id:
 		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
 		admin_embed.set_footer(text=footer_testo)
-		await ctx.send(embed=admin_embed, ephemeral=True)
+		await await interaction.response.send_message(embed=admin_embed, ephemeral=True)
 
 @client.tree.command(name="reportbug", description="Report a bug of a Ultimate-Bot command") #slash command
 async def report_bug(interaction: discord.Interaction):
