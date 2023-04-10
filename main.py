@@ -884,7 +884,7 @@ async def help(interaction: discord.Interaction):
 	#view = HelpDropdownView()
 	prefix = data["command_prefix"]
 	await interaction.response.send_message('Select the help command section:', view=HelpDropdownView())
-	if interaction.author.id == my_id:
+	if interaction.user == my_id:
 		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
