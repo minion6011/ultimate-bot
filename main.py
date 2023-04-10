@@ -893,17 +893,17 @@ async def update(ctx):
 
 class HelpDropdown(discord.ui.Select):
 	def __init__(self):
-		options = [discord.SelectOption(label='Mod Commands'), discord.SelectOption(label='Utilty'), discord.SelectOption(label='Info Server/user Commands')]
+		options = [discord.SelectOption(label='Mod Commands', emoji=data["emoji_mod_select"]), discord.SelectOption(label='Utilty Commands', emoji=data["emoji_utily_select"]), discord.SelectOption(label='Info Server/user Commands', data["emoji_info_select"])]
 		
 		super().__init__(placeholder='Choose help section...', min_values=1, max_values=1, options=options)
 
 	async def callback(self, interaction: discord.Interaction):
-		if interaction.values[0] == "value1":
-			await interaction.response.send_message(f'Your favourite colour is {self.values[0]}')
-		elif interaction.values[0] == "value2":
-			await interaction.response.send_message(f'Your favourite colour is {self.values[0]}')
-		elif interaction.values[0] == "value3":
-			await interaction.response.send_message(f'Your favourite colour is {self.values[0]}')
+		if interaction.label[0] == "Mod Commands":
+			await interaction.response.send_message(f'Your favourite colour is {self.label[0]}')
+		elif interaction.label[0] == "Utilty Commands":
+			await interaction.response.send_message(f'Your favourite colour is {self.label[0]}')
+		elif interaction.label[0] == "Info Server/user Commands":
+			await interaction.response.send_message(f'Your favourite colour is {self.label[0]}')
 
 
 class HelpDropdownView(discord.ui.View):
