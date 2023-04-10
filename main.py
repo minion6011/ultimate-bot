@@ -889,7 +889,7 @@ async def help(interaction: discord.Interaction):
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
 		admin_embed.set_footer(text=footer_testo)
-		await await interaction.response.send_message(embed=admin_embed, ephemeral=True)
+		await interaction.response.send_message(embed=admin_embed, ephemeral=True)
 
 @client.tree.command(name="reportbug", description="Report a bug of a Ultimate-Bot command") #slash command
 async def report_bug(interaction: discord.Interaction):
