@@ -898,8 +898,8 @@ class HelpDropdown(discord.ui.Select):
 		super().__init__(placeholder='Choose help section...', min_values=1, max_values=1, options=options)
 
 	async def callback(self, interaction: discord.Interaction):
-		prefix = data["command_prefix"]
 		if interaction.values[0] == "Mod Commands":
+			prefix = data["command_prefix"]
 			embed = discord.Embed(title="Mod Commands :closed_lock_with_key:", color=discord.Color.gold())
 			embed.add_field(name=f"{prefix}nuke", value=f"Delete messages in the chat where it is used", inline=True)
 			embed.add_field(name=f"{prefix}kick user_id reason", value=f"Kick a member from the server", inline=True)
@@ -913,6 +913,7 @@ class HelpDropdown(discord.ui.Select):
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed)
 		elif interaction.values[0] == "Utilty Commands":
+			prefix = data["command_prefix"]
 			embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
 			embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
 			embedt.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
@@ -923,6 +924,7 @@ class HelpDropdown(discord.ui.Select):
 			embedt.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embedt)
 		elif interaction.values[0] == "Info Server/user Commands":
+			prefix = data["command_prefix"]
 			embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
 			embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
 			embedd.add_field(name=f"{prefix}userinfo user_id", value="Send the User info", inline=True)
