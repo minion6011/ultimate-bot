@@ -893,20 +893,41 @@ async def update(ctx):
 
 class HelpDropdown(discord.ui.Select):
 	def __init__(self):
-		mod_emoji = data["emoji_mod_select"]
-		utility_emoji = data["emoji_utily_select"]
-		info_emoji = data["emoji_info_select"]
-		options = [discord.SelectOption(label='Mod Commands', emoji=mod_emoji), discord.SelectOption(label='Utilty Commands', emoji=utility_emoji), discord.SelectOption(label='Info Server/user Commands', emoji=info_emoji)]
+		options = [discord.SelectOption(label='Mod Commands'), discord.SelectOption(label='Utilty Commands'), discord.SelectOption(label='Info Server/user Commands')]
 		
 		super().__init__(placeholder='Choose help section...', min_values=1, max_values=1, options=options)
 
 	async def callback(self, interaction: discord.Interaction):
+		prefix = data["command_prefix"]
 		if interaction.label[0] == "Mod Commands":
-			await interaction.response.send_message(f'Your favourite colour is {self.label[0]}')
+			embed = discord.Embed(title="Mod Commands :closed_lock_with_key:", color=discord.Color.gold())
+			embed.add_field(name=f"{prefix}nuke", value=f"Delete messages in the chat where it is used", inline=True)
+			embed.add_field(name=f"{prefix}kick user_id reason", value=f"Kick a member from the server", inline=True)
+			embed.add_field(name=f"{prefix}ban user_id reason", value=f"Ban a member from the server", inline=True)
+			embed.add_field(name=f"{prefix}unban user_id", value=f"Unban a member from the server", inline=True)
+			embed.add_field(name=f"{prefix}delchannel", value=f"Delete all channel", inline=True)
+			embed.add_field(name=f"{prefix}lockdown", value=f"Lockdown all channel", inline=True)
+			embed.add_field(name=f"{prefix}unlock", value=f"Unlock channel", inline=True)
+			embed.add_field(name=f"{prefix}mute", value=f"Mute a member", inline=True)
+			embed.add_field(name=f"{prefix}unmute", value=f"Unmute a member", inline=True)
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed)
 		elif interaction.label[0] == "Utilty Commands":
-			await interaction.response.send_message(f'Your favourite colour is {self.label[0]}')
+			embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
+			embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
+			embedt.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
+			embedt.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
+			embedt.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
+			embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
+			embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
+			embedt.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embedt)
 		elif interaction.label[0] == "Info Server/user Commands":
-			await interaction.response.send_message(f'Your favourite colour is {self.label[0]}')
+			embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
+			embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
+			embedd.add_field(name=f"{prefix}userinfo user_id", value="Send the User info", inline=True)
+			embedd.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embedd)
 
 
 class HelpDropdownView(discord.ui.View):
@@ -915,10 +936,17 @@ class HelpDropdownView(discord.ui.View):
 		self.add_item(HelpDropdown())
 
 @client.command()
-async def select(ctx):
+async def help(ctx):
 	#view = HelpDropdownView()
 	await ctx.send('Select the help command section:', view=HelpDropdownView())
-
+	if ctx.author.id == my_id:
+		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
+		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
+		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
+		admin_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=admin_embed)
+	
+'''
 @client.command()
 @commands.guild_only()
 async def help(ctx):
@@ -957,7 +985,7 @@ async def help(ctx):
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
 		admin_embed.set_footer(text=footer_testo)
 		await ctx.send(embed=admin_embed)
-		
+'''	
 
 
 
