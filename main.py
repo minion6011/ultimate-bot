@@ -899,7 +899,7 @@ class HelpDropdown(discord.ui.Select):
 
 	async def callback(self, interaction: discord.Interaction):
 		prefix = data["command_prefix"]
-		if interaction.label[0] == "Mod Commands":
+		if interaction.values[0] == "Mod Commands":
 			embed = discord.Embed(title="Mod Commands :closed_lock_with_key:", color=discord.Color.gold())
 			embed.add_field(name=f"{prefix}nuke", value=f"Delete messages in the chat where it is used", inline=True)
 			embed.add_field(name=f"{prefix}kick user_id reason", value=f"Kick a member from the server", inline=True)
@@ -912,7 +912,7 @@ class HelpDropdown(discord.ui.Select):
 			embed.add_field(name=f"{prefix}unmute", value=f"Unmute a member", inline=True)
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed)
-		elif interaction.label[0] == "Utilty Commands":
+		elif interaction.values[0] == "Utilty Commands":
 			embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
 			embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
 			embedt.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
@@ -922,7 +922,7 @@ class HelpDropdown(discord.ui.Select):
 			embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
 			embedt.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embedt)
-		elif interaction.label[0] == "Info Server/user Commands":
+		elif interaction.values[0] == "Info Server/user Commands":
 			embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
 			embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
 			embedd.add_field(name=f"{prefix}userinfo user_id", value="Send the User info", inline=True)
@@ -939,12 +939,15 @@ class HelpDropdownView(discord.ui.View):
 async def help(ctx):
 	#view = HelpDropdownView()
 	await ctx.send('Select the help command section:', view=HelpDropdownView())
+	'''
 	if ctx.author.id == my_id:
 		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
 		admin_embed.set_footer(text=footer_testo)
 		await ctx.send(embed=admin_embed)
+	'''
+	
 	
 '''
 @client.command()
