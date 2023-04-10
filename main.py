@@ -826,7 +826,9 @@ class SuggestionModal(ui.Modal, title='Suggest a command'):
 class HelpDropdownView(discord.ui.View):
 	def __init__(self):
 		super().__init__()
-		self.add_item(HelpDropdown())Dropdown(discord.ui.Select):
+		self.add_item(HelpDropdown())
+		
+class HelpDropdown(discord.ui.Select):
 	def __init__(self):
 		options = [discord.SelectOption(label='Mod Commands'), discord.SelectOption(label='Utilty Commands'), discord.SelectOption(label='Info Server/user Commands')]
 		
