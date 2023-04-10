@@ -911,7 +911,7 @@ class HelpDropdown(discord.ui.Select):
 			embed.add_field(name=f"{prefix}mute", value=f"Mute a member", inline=True)
 			embed.add_field(name=f"{prefix}unmute", value=f"Unmute a member", inline=True)
 			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 		elif self.values[0] == "Utilty Commands":
 			embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
 			embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
@@ -921,20 +921,21 @@ class HelpDropdown(discord.ui.Select):
 			embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
 			embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
 			embedt.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embedt)
+			await interaction.response.send_message(embed=embedt, ephemeral=True)
 		elif self.values[0] == "Info Server/user Commands":
 			embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
 			embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
 			embedd.add_field(name=f"{prefix}userinfo user_id", value="Send the User info", inline=True)
 			embedd.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embedd)
+			await interaction.response.send_message(embed=embedd, ephemeral=True)
 
 
 class HelpDropdownView(discord.ui.View):
 	def __init__(self):
 		super().__init__()
 		self.add_item(HelpDropdown())
-
+		
+@client.tree.command(name="Help", description = "Show the list of command for Ultimate-Bot")
 @client.command()
 async def help(ctx):
 	#view = HelpDropdownView()
@@ -945,7 +946,7 @@ async def help(ctx):
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
 		admin_embed.set_footer(text=footer_testo)
-		await ctx.send(embed=admin_embed)
+		await ctx.send(embed=admin_embed, ephemeral=True)
 	
 	
 '''
