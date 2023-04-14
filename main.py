@@ -927,7 +927,7 @@ async def suggestion(interaction: discord.Interaction):
 
 
 @client.tree.command(name="giveaway", description = "Make a giveaway (immediately)") #slash command
-async def giweaway(interaction: discord.Interaction, prize=int):
+async def giweaway(interaction: discord.Interaction, prize: int):
 	if prize == int:
 		embed = discord.Embed(title=":warning: Please select a prize :warning:", color=0xe91e1e)
 		await interaction.response.send_message(embed=embed, ephemeral=True)
