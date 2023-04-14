@@ -56,7 +56,7 @@ errorchannel = 1046796347870826496
 async def on_ready():
 	change_status.start()
 	#tree.sync(force=True)
-	await client.tree.sync()
+	#await client.tree.sync()
 	print(f"Bot logged into {client.user}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json)
@@ -900,7 +900,7 @@ async def report_bug(interaction: discord.Interaction):
 
 @client.tree.context_menu(name="Get Message ID") #message contex command
 async def getmessageid(interaction: discord.Interaction, message: discord.Message):
-    await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
+	await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
 
 
 
@@ -926,9 +926,22 @@ async def suggestion(interaction: discord.Interaction):
 	await interaction.response.send_modal(SuggestionModal())
 
 
-
+@client.tree.command(name="giveaway", description = "Make a giveaway (immediately)") #slash command
+async def giweaway(interaction: discord.Interaction, prize=None):
+	if prize == None:
+		embed = discord.Embed(title=":warning: Please select a prize :warning:", color=0xe91e1e)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+	else:
+		embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
+		results = [member for member in interaction.guild.members if not member.bot]
+		winner = random.choice(results)
+		embed.add_field(name="Winner user:", value=f":confetti_ball:`{winner}`:confetti_ball:")
+		embed.add_field(name="Prize", value=f":gift:***{prize}***:gift:")
+		await interaction.send_message(embed=embed)
 
 #application command discord.py end
+
+
 
 @client.command()
 @commands.guild_only()
