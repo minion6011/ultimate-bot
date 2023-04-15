@@ -755,7 +755,7 @@ async def suggestion(ctx: discord.ApplicationContext):
 #component discord.py start
 
 from discord import ui
-
+from discord import app_commands
 
 
 class BugModal(ui.Modal, title='Report Bug'):
@@ -926,7 +926,7 @@ async def suggestion(interaction: discord.Interaction):
 	await interaction.response.send_modal(SuggestionModal())
 
 
-from discord import app_commands
+
 
 
 
@@ -942,17 +942,6 @@ async def giweaway(interaction: discord.Interaction, prize: str):
 
 #application command discord.py end
 
-
-
-@client.command()
-@commands.guild_only()
-async def giveaway(ctx, prize):
-	embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
-	results = [member for member in ctx.guild.members if not member.bot]
-	winner = random.choice(results)
-	embed.add_field(name="Winner user:", value=f":confetti_ball:`{winner}`:confetti_ball:")
-	embed.add_field(name="Prize", value=f":gift:***{prize}***:gift:")
-	await ctx.send(embed=embed)
 
 
 @client.command()
