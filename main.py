@@ -56,14 +56,14 @@ errorchannel = 1046796347870826496
 async def on_ready():
 	change_status.start()
 	#tree.sync(force=True)
-	slash_sync = await client.tree.sync()
+	#await client.tree.sync()
 	print(f"Bot logged into {client.user}.")
-	print(f"Synced app command (tree) {len(slash_sync)}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json)
 
 
 #messaggi inizio
+
 @client.event
 async def on_message(message):
 	if message.author.bot:
@@ -117,7 +117,7 @@ async def on_message_edit(before, after):
 		await channel.send(embed=embed)
 		await client.process_commands(after)
 
-'''
+
 
 #messaggi fine
 
@@ -208,6 +208,7 @@ async def on_guild_role_update(before, after):
 	embed.add_field(name = 'Avvertenza:', value=f":warning: se il nome non cambio sono i permessi :warning:\n:warning: per mancata voglia non sono stati inseriti :warning:", inline = True)
 	await channel.send(embed=embed)
 '''
+
 @client.event
 async def on_guild_role_create(role):
 	channel = client.get_channel(stalkid)
