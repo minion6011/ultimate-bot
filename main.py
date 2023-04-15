@@ -869,37 +869,28 @@ from discord.ext import commands
 @is_me
 async def giveaway2(ctx, seconds: int, *, prize: str):
 	time = seconds
-	if time == None:
-		await ctx.send("error None")
-	elif time == int:
-		await ctx.send("error int")
 	elif time > 300:
 		await ctx.send("error max num")
 	else:
-		if prize == None:
-			await ctx.send("error None")
-		elif prize == str:
-			await ctx.send("error str")
+		await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
+		message = ctx.message
+		await message.add_reaction(":tada:")
+		await asyncio.sleep(time)
+		message = await ctx.fetch_message(message.id)
+		reactions = message.reactions
+		participants = []
+		for reaction in reactions:
+			if reaction.emoji == ":tada:":
+				users = await reaction.users().flatten()
+				for user in users:
+					if user.bot:
+						continue
+						participants.append(user.mention)
+		if not participants:
+			await ctx.send("No one entered the giveaway.")
 		else:
-			await ctx.send(f"React with 🎉 to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
-			message = ctx.message
-			await message.add_reaction("🎉")
-			await asyncio.sleep(time)
-			message = await ctx.fetch_message(message.id)
-			reactions = message.reactions
-			participants = []
-			for reaction in reactions:
-				if reaction.emoji == "🎉":
-					users = await reaction.users().flatten()
-					for user in users:
-						if user.bot:
-							continue
-							participants.append(user.mention)
-			if not participants:
-				await ctx.send("No one entered the giveaway.")
-			else:
-				winner = random.choice(participants)
-				await ctx.send(f"Congratulations {winner}! You won **{prize}**!")
+			winner = random.choice(participants)
+			await ctx.send(f"Congratulations {winner}! You won **{prize}**!")
 
 
 	
