@@ -56,8 +56,9 @@ errorchannel = 1046796347870826496
 async def on_ready():
 	change_status.start()
 	#tree.sync(force=True)
-	#await client.tree.sync()
+	slash_sync = await client.tree.sync()
 	print(f"Bot logged into {client.user}.")
+	print(f"Synced app command (tree) {len(slash_sync)}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json)
 
@@ -954,10 +955,10 @@ async def giweaway(interaction: discord.Interaction, prize: str):
 @commands.guild_only()
 @is_me #solo se è il mio id
 async def slash_sync(ctx):
-	await client.tree.sync()
+	slash = await client.tree.sync()
 	await client.tree.sync(guild=discord.Object(id=1043925344312381550))
 	await client.tree.sync(guild=discord.Object(id=1031812528226967603))
-	embed = discord.Embed(title="Reloading slash...", color=0x2c2f33)
+	embed = discord.Embed(title=f"Reloading slash {len(slash)}", color=0x2c2f33)
 	await ctx.send(embed=embed, delete_after=7)
 
 
