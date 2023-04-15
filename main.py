@@ -634,7 +634,20 @@ async def infobot(ctx):
 	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
 	await ctx.send(embed = embed)
 
-
+'''
+@client.command()
+async def help(ctx):
+	#view = HelpDropdownView()
+	prefix = data["command_prefix"]
+	await ctx.send('Select the help command section:', view=HelpDropdownView())
+	if ctx.author.id == my_id:
+		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
+		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
+		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
+		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
+		admin_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=admin_embed, ephemeral=True)
+'''
 #component discord.py start
 
 from discord import ui
@@ -766,8 +779,9 @@ class HelpDropdownView(discord.ui.View):
 async def help(interaction: discord.Interaction):
 	#view = HelpDropdownView()
 	prefix = data["command_prefix"]
-	await interaction.response.send_message('Select the help command section:', view=HelpDropdownView())
-	if interaction.user.id == my_id:
+	await interaction.response.send_message('Select the help command section:', view=HelpDropdownView(), ephemeral=True)
+	admin_id = 598119406731657216
+	if interaction.user.id == admin_id:
 		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
@@ -848,18 +862,6 @@ async def verify(ctx):
 
 
 
-@client.command()
-async def help(ctx):
-	#view = HelpDropdownView()
-	prefix = data["command_prefix"]
-	await ctx.send('Select the help command section:', view=HelpDropdownView())
-	if ctx.author.id == my_id:
-		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
-		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
-		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
-		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
-		admin_embed.set_footer(text=footer_testo)
-		await ctx.send(embed=admin_embed, ephemeral=True)
 	
 	
 '''
