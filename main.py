@@ -354,7 +354,7 @@ async def serverinfo(ctx):
 	embed.add_field(name=':calendar: - Created On', value=ctx.guild.created_at.strftime("%b %d %Y"), inline=False)
 	embed.add_field(name=':crown: - Owner', value=f"<@{ctx.guild.owner_id}>", inline=False)
 	embed.add_field(name=':busts_in_silhouette: - Members', value=f'{ctx.guild.member_count} Members', inline=False)
-	embed.add_field(name=':speech_balloon: - Channels', value=f'{len(ctx.guild.text_channels)} Text | {len(ctx.guild.voice_channels)} Voice | {len(ctx.guild.forum_channels)} Forum', inline=False)
+	#embed.add_field(name=':speech_balloon: - Channels', value=f'{len(ctx.guild.text_channels)} Text | {len(ctx.guild.voice_channels)} Voice | {len(ctx.guild.forum_channels)} Forum', inline=False)
 	embed.add_field(name=':open_file_folder: - Category', value=f'{len(ctx.guild.categories)} Category', inline=False)
 	embed.add_field(name=':bust_in_silhouette: - Role', value=f'{len(ctx.guild.roles)} Role count', inline=False)
 	embed.set_footer(text=footer_testo)    
