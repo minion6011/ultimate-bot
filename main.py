@@ -874,13 +874,13 @@ async def giveaway2(ctx, seconds: int, *, prize: str):
 	else:
 		await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
 		message = ctx.message
-		await message.add_reaction(":tada:")
+		await message.add_reaction("<:Confetti:945340857614237776")
 		await asyncio.sleep(time)
 		message = await ctx.fetch_message(message.id)
 		reactions = message.reactions
 		participants = []
 		for reaction in reactions:
-			if reaction.emoji == ":tada:":
+			if reaction.emoji == "<:Confetti:945340857614237776":
 				users = await reaction.users().flatten()
 				for user in users:
 					if user.bot:
