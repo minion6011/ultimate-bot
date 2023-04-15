@@ -777,17 +777,17 @@ class HelpDropdownView(discord.ui.View):
 
 @client.tree.command(name="help", description = "Show the list of command for Ultimate-Bot")
 async def help(interaction: discord.Interaction):
-	#view = HelpDropdownView()
-	prefix = data["command_prefix"]
-	await interaction.response.send_message('Select the help command section:', view=HelpDropdownView(), ephemeral=True)
-	admin_id = 598119406731657216
-	if interaction.user.id == admin_id:
+	if interaction.user.id == my_id:
+		prefix = data["command_prefix"]
 		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
 		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
 		admin_embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=admin_embed, ephemeral=True)
+		await interaction.response.send_message('Select the help command section:', view=HelpDropdownView(), embed=admin_embed, ephemeral=True)
+	else:
+		#view = HelpDropdownView()
+		await interaction.response.send_message( view=HelpDropdownView(), ephemeral=True)
 
 @client.tree.command(name="reportbug", description="Report a bug of a Ultimate-Bot command") #slash command
 async def report_bug(interaction: discord.Interaction):
