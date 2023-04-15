@@ -869,7 +869,7 @@ from discord.ext import commands
 @is_me
 async def giveaway2(ctx, seconds: int, *, prize: str):
 	time = seconds
-	elif time > 300:
+	if time > 300:
 		await ctx.send("error max num")
 	else:
 		await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
