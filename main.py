@@ -64,7 +64,6 @@ async def on_ready():
 
 
 #messaggi inizio
-'''
 @client.event
 async def on_message(message):
 	if message.author.bot:
@@ -128,7 +127,7 @@ async def on_message_edit(before, after):
 
 
 #membri
-'''
+
 @client.event
 async def on_member_ban(guild, user):
 	channel = client.get_channel(stalkid)
@@ -139,7 +138,7 @@ async def on_member_ban(guild, user):
 async def on_member_unban(guild, user):
 	channel = client.get_channel(stalkid)
 	embed = discord.Embed(title=f"**[Stalker]**\nUtente sbannato\nUtente: `{user.display_name}#{user.discriminator}`\n Server: `{guild.name}`", color=discord.Color.red())
-'''
+
 
 
 @client.event
@@ -200,7 +199,7 @@ async def on_guild_role_delete(role):
 	channel = client.get_channel(stalkid)
 	embed = discord.Embed(title=f"**[Stalker]**\nRuolo eliminato\nServer: `{role.guild.name}`", color=discord.Color.red())
 	embed.add_field(name = 'Nome:', value=f"`{role.name}`", inline = True)
-
+'''
 @client.event
 async def on_guild_role_update(before, after):
 	channel = client.get_channel(stalkid)
@@ -208,7 +207,7 @@ async def on_guild_role_update(before, after):
 	embed.add_field(name = 'Nome:', value=f"Prima: `{before.name}` Dopo:  `{after.name}`", inline = False)
 	embed.add_field(name = 'Avvertenza:', value=f":warning: se il nome non cambio sono i permessi :warning:\n:warning: per mancata voglia non sono stati inseriti :warning:", inline = True)
 	await channel.send(embed=embed)
-
+'''
 @client.event
 async def on_guild_role_create(role):
 	channel = client.get_channel(stalkid)
