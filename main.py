@@ -757,7 +757,6 @@ from discord import ui
 
 
 
-
 class BugModal(ui.Modal, title='Report Bug'):
     bug_name = ui.TextInput(label='Bugged Command name')
     #options = [discord.SelectOption(discord.SelectOption(label='Slash Bug')), discord.SelectOption(label='Message components Bug')), discord.SelectOption(label='Command Bug'))]
@@ -925,8 +924,11 @@ async def suggestion(interaction: discord.Interaction):
 	#modal = SuggestionModal
 	await interaction.response.send_modal(SuggestionModal())
 
-
+	
 @client.tree.command(name="giveaway", description = "Make a giveaway (immediately)") #slash command
+@client.tree.command.describe(
+    prize='The prize that you wanna give in givweaway',
+)
 async def giweaway(interaction: discord.Interaction, prize: str):
 		embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
 		results = [member for member in interaction.guild.members if not member.bot]
