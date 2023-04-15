@@ -405,11 +405,7 @@ async def on_reaction_add(reaction, user):
 	else:
 		print("errore")
 '''
-'''
-@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
-async def VerifyButton(self, interaction: discord.Interaction, button=discord.ui.Button):
-	await interaction.response.send_message("Test", ephereal=True)
-'''
+
 
 
 
@@ -628,86 +624,6 @@ async def num_extractor(ctx):
 	embed.set_footer(text=footer_testo)  
 	await ctx.send(embed=embed)
 
-'''
-@client.command()
-async def cayo(ctx):
-	tlista = data["gente_cayo"]
-	lista = f"{tlista}"
-	#lista = f"1 = Bicche\n3 = \n4 = Minifrizz\n5 = Kappa\n6 = \n7 = Marcellogino\n8 = SJ_Anto"
-	list1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-	r = random.choice(list1)
-	embed = discord.Embed(title=lista, color=discord.Color.red())
-	await ctx.send(embed=embed)
-	link = 'https://yt3.ggpht.com/aEPu_BKyaGhlIlO7l9GPUOrB4lYoAn3YvL5q8QYnFERBo4n9BjY5X3cswLT8nPxS28U1fnmsPA=s176-c-k-c0x00ffffff-no-rj'
-	if r == 1:
-		embed = discord.Embed(title=f"È uscito il numero {r}", color=discord.Color.green())
-		embed.set_image(url=link)
-		await ctx.send(embed=embed)
-		embed.set_footer(text=footer_testo)  
-	elif r == 2:
-		embed = discord.Embed(title=f"È uscito il numero {r}", color=discord.Color.green())
-		embed.set_image(url=link)
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-	elif r == 3:
-		embed = discord.Embed(title=f"È uscito il numero {r}", color=discord.Color.green())
-		embed.set_image(url=link)
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-	elif r == 4:
-		embed = discord.Embed(title=f"È uscito il numero {r}", color=discord.Color.green())
-		embed.set_image(url=link)
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-	elif r == 4:
-		embed = discord.Embed(title=f"È uscito il numero {r}", color=discord.Color.green())
-		embed.set_image(url=link)
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-	elif r == 5:
-		embed = discord.Embed(title=f"È uscito il numero {r}", color=discord.Color.green())
-		embed.set_image(url=link)
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-	elif r == 6:
-		embed = discord.Embed(title=f"È uscito il numero {r}", color=discord.Color.green())
-		embed.set_image(url=link)
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-	elif r == 7:
-		embed = discord.Embed(title=f"È uscito il numero {r}", color=discord.Color.green())
-		embed.set_image(url=link)
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-	elif r == 8:
-		embed = discord.Embed(title=f"È uscito il numero {r}", color=discord.Color.green())
-		embed.set_image(url=link)
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-	elif r == 9:
-		embed = discord.Embed(title=f"È uscito il numero {r} niente", color=discord.Color.green())
-		embed.set_image(url=link)
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-	elif r == 10:
-		embed = discord.Embed(title=f"È uscito il numero {r} si rigira", color=discord.Color.green())
-		embed.set_footer(text=footer_testo)
-		embed.set_image(url=link)
-		await ctx.send(embed=embed)
-	elif r == 11:
-		list2 = [1, 2, 3, 4, 5, 6, 7, 8]
-		r2 = random.choice(list2)
-		embed = discord.Embed(title=f"👑\n\nÈ uscito il numero {r2} che vince 2 colpi", color=discord.Color.gold())
-		embed.set_image(url=link)
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-	else:
-		embed = discord.Embed(title=f"errore, N = {r}", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-'''
-
-
 @client.command()
 @commands.guild_only()
 async def infobot(ctx):
@@ -718,40 +634,6 @@ async def infobot(ctx):
 	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
 	await ctx.send(embed = embed)
 
-#applicationcommand Pycord (old)
-'''
-@client.message_command(name="Get Message ID")  # creates a global message command. use guild_ids=[] to create guild-specific commands.
-async def get_message_id(ctx, message: discord.Message):  # message commands return the message
-    await ctx.respond(f"Message ID: `{message.id}`", ephemeral=True)
-
-#modal start
-
-
-class MyModal(discord.ui.Modal):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-
-        self.add_item(discord.ui.InputText(label="Command name"))
-        self.add_item(discord.ui.InputText(label="Description of the command / its functions", style=discord.InputTextStyle.long))
-
-    async def callback(self, interaction: discord.Interaction):
-        channel = client.get_channel(1079859774344134686)
-        embed = discord.Embed(title="Suggestion Modal Results")
-        embed.add_field(name="Command name", value=self.children[0].value)
-        embed.add_field(name="Description of the command / its functions", value=self.children[1].value)
-        #embed.add_field(name="Utente:", value=f"`{interaction.author.display_name}#{message.author.discriminator}`")
-        await channel.send(embed=embed)
-        embed1 = discord.Embed(title="Suggestion sent", color=discord.Color.green())
-        await interaction.response.send_message(embeds=[embed1])
-
-@client.slash_command(name="suggestion", description="Suggest a command for Ultimate-Bot")
-async def suggestion(ctx: discord.ApplicationContext):
-	modal = MyModal(title="Suggest a command")
-	await ctx.send_modal(modal)
-
-#modal end
-'''
-#applicationcommand Pycord (old) end
 
 #component discord.py start
 
@@ -889,6 +771,7 @@ async def help(interaction: discord.Interaction):
 		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
+		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
 		admin_embed.set_footer(text=footer_testo)
 		await interaction.response.send_message(embed=admin_embed, ephemeral=True)
 
@@ -903,34 +786,10 @@ async def report_bug(interaction: discord.Interaction):
 async def getmessageid(interaction: discord.Interaction, message: discord.Message):
 	await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
 
-
-
-
-@client.command()
-@is_me
-async def verify(ctx):
-	#reactions = ['✅'] # add more later if u want idk
-	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
-	embed.set_footer(text=footer_testo)
-	#View=VerifyButton()
-	await ctx.send(embed=embed, view=Button())
-	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
-
-
-
-
-
-
-
 @client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #slash command
 async def suggestion(interaction: discord.Interaction):
 	#modal = SuggestionModal
 	await interaction.response.send_modal(SuggestionModal())
-
-
-
-
-
 
 @client.tree.command(name="giveaway", description = "Make a giveaway (immediately)") #slash command
 @app_commands.describe(prize='The prize that you wanna give in giveaway')
@@ -977,10 +836,15 @@ async def update(ctx):
 	exit()
 
 	
-
-
-
-
+@client.command()
+@is_me
+async def verify(ctx):
+	#reactions = ['✅'] # add more later if u want idk
+	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
+	embed.set_footer(text=footer_testo)
+	#View=VerifyButton()
+	await ctx.send(embed=embed, view=Button())
+	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
 
@@ -993,6 +857,7 @@ async def help(ctx):
 		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
+		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
 		admin_embed.set_footer(text=footer_testo)
 		await ctx.send(embed=admin_embed, ephemeral=True)
 	
