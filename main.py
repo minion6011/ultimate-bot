@@ -927,10 +927,9 @@ async def suggestion(interaction: discord.Interaction):
 
 from discord import app_commands
 
+
+
 @client.tree.command(name="giveaway", description = "Make a giveaway (immediately)") #slash command
-@app_commands.describe(
-    prize='The prize that you wanna give in givweaway',
-)
 async def giweaway(interaction: discord.Interaction, prize: str):
 		embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
 		results = [member for member in interaction.guild.members if not member.bot]
