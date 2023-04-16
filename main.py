@@ -878,7 +878,8 @@ async def giveaway2(ctx, seconds: int, *, prize: str):
 		await asyncio.sleep(time)
 		await ctx.fetch_message(message.id)
 		#reactions = message.reactions
-		users = await message.reactions.users().flatten()
+		users = message.reactions[0].users().flatten()
+		users.pop(users.index(client.user))
 		if len(users) == 0:
 			await ctx.send("No Winner Was Decided!")
 		else:
