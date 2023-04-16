@@ -872,7 +872,7 @@ import asyncio
 from discord.ext import commands
 
 @client.command()
-async def giveaway(ctx):
+async def giveaway3(ctx):
     channel = ctx.channel
     await channel.send('React with :tada: to enter the giveaway!')
     async for message in channel.history():
