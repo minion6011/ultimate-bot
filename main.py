@@ -871,31 +871,38 @@ import asyncio
 
 from discord.ext import commands
 
-@client.command()
-async def giveaway3(ctx, duration: int, prize: str):
-    channel = ctx.channel
-    await channel.send('React with :tada: to enter the giveaway!')
-    async for message in channel.history():
-        if message.author == client.user:
-            await message.add_reaction('<:checkmark_2714fe0f:1073342463995023433>')
-            break
+import discord
+from discord.ext import commands
+import random
+
+bot = commands.Bot(command_prefix='!')
+
+@bot.command()
+async def giveaway3(ctx):
+    # Set the giveaway duration (in seconds)
+    duration = 60
+
+    # Send a message to the channel announcing the giveaway and prompting users to react with an emoji
+    message = await ctx.send("React with 🎉 to enter the giveaway!")
+    await message.add_reaction("🎉")
+
+    # Wait for the specified duration and collect the users who reacted with the specified emoji
     await asyncio.sleep(duration)
-    async for message in ctx.channel.history():
-        if message.author == client.user:
-            break
-    reactions = message.reactions
-    users = []
-    async for reaction in reactions:
-        if str(reaction.emoji) == '<:checkmark_2714fe0f:1073342463995023433>':
-            async for user in reaction.users():
-                if user != client.user:
-                    users.append(user)
-            break
-    if not users:
+    message = await ctx.fetch_message(message.id)
+    reactions = [r for r in message.reactions if str(r.emoji) == '🎉']
+    if not reactions:
         await ctx.send('No one entered the giveaway, so there is no winner!')
     else:
-        winner = random.choice(users)
-        await ctx.send(f'Congratulations {winner.mention}, you won the giveaway!')
+        users = []
+        async for user in reactions[0].users():
+            if user != bot.user:
+                users.append(user)
+        if not users:
+            await ctx.send('No one entered the giveaway, so there is no winner!')
+        else:
+            winner = random.choice(users)
+            await ctx.send(f'Congratulations {winner.mention}, you won the giveaway!')
+
 
 
 
