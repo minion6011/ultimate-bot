@@ -866,7 +866,6 @@ import asyncio
 from discord.ext import commands
 
 @client.command()
-@is_me
 async def giveaway2(ctx, seconds: int, *, prize: str):
 	time = seconds
 	if time > 300:
@@ -876,9 +875,9 @@ async def giveaway2(ctx, seconds: int, *, prize: str):
 		#message = ctx.message
 		await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 		await asyncio.sleep(time)
-		await ctx.fetch_message(message.id)
+		message_id = await ctx.fetch_message(message.id)
 		#reactions = message.reactions
-		users = message.reactions[0].users().flatten()
+		users = message_id.reactions[0].users().flatten()
 		users.pop(users.index(client.user))
 		if len(users) == 0:
 			await ctx.send("No Winner Was Decided!")
