@@ -860,36 +860,21 @@ async def verify(ctx):
 	await ctx.send(embed=embed, view=Button())
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
-import random
-import asyncio
-
-from discord.ext import commands
 
 
-import random
-import asyncio
-
-from discord.ext import commands
-
-import discord
-from discord.ext import commands
-import random
-
-bot = commands.Bot(command_prefix='!')
-
-@bot.command()
+@client.command()
 async def giveaway3(ctx):
     # Set the giveaway duration (in seconds)
-    duration = 60
+    duration = 5
 
     # Send a message to the channel announcing the giveaway and prompting users to react with an emoji
     message = await ctx.send("React with 🎉 to enter the giveaway!")
-    await message.add_reaction("🎉")
+    await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
     # Wait for the specified duration and collect the users who reacted with the specified emoji
     await asyncio.sleep(duration)
     message = await ctx.fetch_message(message.id)
-    reactions = [r for r in message.reactions if str(r.emoji) == '🎉']
+    reactions = [r for r in message.reactions if str(r.emoji) == '<:checkmark_2714fe0f:1073342463995023433>']
     if not reactions:
         await ctx.send('No one entered the giveaway, so there is no winner!')
     else:
@@ -897,7 +882,7 @@ async def giveaway3(ctx):
         async for user in reactions[0].users():
             if user != bot.user:
                 users.append(user)
-        if not users:
+        if
             await ctx.send('No one entered the giveaway, so there is no winner!')
         else:
             winner = random.choice(users)
