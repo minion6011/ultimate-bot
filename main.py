@@ -879,17 +879,20 @@ async def giveaway2(ctx, seconds: int, *, prize: str):
 		#reactions = message.reactions
 		users = message_id.reactions[0].users().flatten()
 		users.pop(users.index(client.user))
-		if len(users) == 0:
-			await ctx.send("No Winner Was Decided!")
-		else:
-			#users.pop(users.index(client.user))
-			winner = random.choice(users)
-			await ctx.send(f"Congratulations! {winner.mention} won the prize: {prize}!")
+		#users.pop(users.index(client.user))
+		winner = random.choice(users)
+		await ctx.send(f"Congratulations! {winner.mention} won the prize: {prize}!")
 
 		
 		
 		
 '''
+
+if len(users) == 0:
+			await ctx.send("No Winner Was Decided!")
+		else:
+		
+		
 		participants = []
 		for reaction in reactions:
 			if reaction.emoji == "<:checkmark_2714fe0f:1073342463995023433>":
