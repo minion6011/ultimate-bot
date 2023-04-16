@@ -880,21 +880,26 @@ async def giveaway3(ctx, duration: int, prize: str):
             await message.add_reaction('<:checkmark_2714fe0f:1073342463995023433>')
             break
     await asyncio.sleep(duration)
-    message = await channel.fetch_message(message.id)
-    reactions = [r for r in message.reactions if str(r.emoji) == '<:checkmark_2714fe0f:1073342463995023433>']
-    if len(reactions) == 0:
-        await channel.send('No one entered the giveaway, so there is no winner!')
+        message = await ctx.channel.history().get(author=client.user)
+    reactions = message.reactions
+    users = []
+    async for reaction in reactions:
+        if str(reaction.emoji) == '<:checkmark_2714fe0f:1073342463995023433>':
+            async for user in reaction.users():
+                if user != client.user:
+                    users.append(user)
+            break
+    if not users:
+        await ctx.send('No one entered the giveaway, so there is no winner!')
     else:
-        users = await reactions[0].users().flatten()
-        users.remove(client.user)
-        if len(users) == 0:
-            await channel.send('No one entered the giveaway, so there is no winner!')
-        else:
-            winner = random.choice(users)
-            await channel.send(f'Congratulations {winner.mention}! You won **{prize}**!')
+        winner = random.choice(users)
+        await ctx.send(f'Congratulations {winner.mention}, you won the giveaway!')
 
 
 
+
+
+Regenerate response
 
 @client.command()
 async def giveaway2(ctx, seconds: int, *, prize: str):
