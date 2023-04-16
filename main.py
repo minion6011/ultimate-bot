@@ -865,6 +865,38 @@ import asyncio
 
 from discord.ext import commands
 
+
+import random
+import asyncio
+
+from discord.ext import commands
+
+@client.command()
+async def giveaway3(ctx, time: int, *, prize: str):
+    await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
+    message = ctx.message
+    await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
+    
+    await asyncio.sleep(time)
+    
+    message = await ctx.fetch_message(message.id)
+    reactions = message.reactions
+    participants = []
+    for reaction in reactions:
+        if reaction.emoji == "<:checkmark_2714fe0f:1073342463995023433>":
+            users = await reaction.users().flatten()
+            for user in users:
+                if user.bot:
+                    continue
+                participants.append(user.mention)
+    
+    if not participants:
+        await ctx.send("No one entered the giveaway.")
+    else:
+        winner = random.choice(participants)
+        await ctx.send(f"Congratulations {winner}! You won **{prize}**!")
+
+
 @client.command()
 async def giveaway2(ctx, seconds: int, *, prize: str):
 	time = seconds
@@ -877,8 +909,8 @@ async def giveaway2(ctx, seconds: int, *, prize: str):
 		await asyncio.sleep(time)
 		msg_id = await ctx.channel.fetch_message(message.id)
 		#reactions = message.reactions
-		users = msg_id.reactions[0].users()
-		#users.pop(users.index(client.user))
+		users = msg_id.reactions[0].users().flatten()
+		users.pop(users.index(client.user))
 		#users.pop(users.index(client.user))
 		winner = random.choice(users)
 		await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
