@@ -861,6 +861,33 @@ async def verify(ctx):
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
+@client.command()
+async def giveaway2(ctx,time:int,prize:str):
+  await ctx.send(f"The giveaway will be in  and will last {time} seconds!")
+
+  embed = discord.embed(title = "Giveaway!", description = f"{prize}", color = ctx.author.color)
+
+  embed.add_field(name = "Hosted by:", value = ctx.author.mention)
+
+  embed.set_footer(text = f"Ends {time} from now!")
+
+  my_msg = await channel.send(embed = embed)
+
+  await my_msg.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
+
+  await asyncio.sleep(time)
+
+  new_msg = await channel.fetch_message(my_msg.id)
+
+  users = await new_msg.reactions[0].users().flatten()
+  users.pop(users.index(client.user))
+
+  winner = random.choice(users)
+
+  await channel.send(f"Congratulations! {winner.mention} won the prize: {prize}!")
+
+
+'''
 
 @client.command()
 async def giveaway3(ctx):
@@ -882,7 +909,7 @@ async def giveaway3(ctx):
         async for user in reactions[0].users():
             if users.bot:
                 users.append(user)
-        if not users:
+        if users:
             await ctx.send('No one entered the giveaway, so there is no winner!')
         else:
             winner = random.choice(users)
@@ -912,7 +939,7 @@ async def giveaway2(ctx, seconds: int, *, prize: str):
 		await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
 
 		
-		
+'''		
 		
 '''
 
