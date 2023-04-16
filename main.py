@@ -872,10 +872,11 @@ async def giveaway2(ctx, seconds: int, *, prize: str):
 	if time > 300:
 		await ctx.send("error max num")
 	else:
-		message = await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
-		await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
+		await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
+		message = ctx.message
+		await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 		await asyncio.sleep(time)
-		message = await ctx.fetch_message(message.id)
+		await ctx.fetch_message(message.id)
 		reactions = message.reactions
 		participants = []
 		for reaction in reactions:
