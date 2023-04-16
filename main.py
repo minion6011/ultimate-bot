@@ -873,8 +873,8 @@ from discord.ext import commands
 
 @client.command()
 async def giveaway3(ctx, time: int, *, prize: str):
-    await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
-    message = ctx.message
+    message = await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
+    #message = ctx.message
     await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
     
     await asyncio.sleep(time)
