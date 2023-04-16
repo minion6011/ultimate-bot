@@ -880,7 +880,7 @@ async def giveaway3(ctx):
     else:
         users = []
         async for user in reactions[0].users():
-            if user != bot.user:
+            if user == user.bot:
                 users.append(user)
         if not users:
             await ctx.send('No one entered the giveaway, so there is no winner!')
