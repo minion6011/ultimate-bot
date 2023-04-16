@@ -899,7 +899,6 @@ async def giveaway3(ctx, duration: int, prize: str):
 
 
 
-Regenerate response
 
 @client.command()
 async def giveaway2(ctx, seconds: int, *, prize: str):
