@@ -872,17 +872,25 @@ import asyncio
 from discord.ext import commands
 
 @client.command()
-async def giveaway3(ctx, time: int, *, prize: str):
+async def giveaway3(ctx, duration: int, *, prize: str):
     channel = ctx.channel
-    await channel.send(f'🎉 GIVEAWAY! 🎉\nPrize: **{prize}**\nReact with 🎁 to enter!\nTime: **{time}** seconds.')
+    await channel.send(f'React with 🎉 to enter the giveaway for **{prize}**! This giveaway will last for {duration} seconds.')
     message = await channel.history().get(author=client.user)
     await message.add_reaction('<:checkmark_2714fe0f:1073342463995023433>')
-    await asyncio.sleep(time)
+    await asyncio.sleep(duration)
     message = await channel.fetch_message(message.id)
-    users = await message.reactions[0].users().flatten()
-    users.pop(users.index(client.user))
-    winner = random.choice(users)
-    await channel.send(f'🎉 Congratulations, {winner.mention}! You won the {prize}! 🎉')
+    reactions = [r for r in message.reactions if str(r.emoji) == '<:checkmark_2714fe0f:1073342463995023433>']
+    if len(reactions) == 0:
+        await channel.send('No one entered the giveaway, so there is no winner!')
+    else:
+        users = await reactions[0].users().flatten()
+        users.remove(client.user)
+        if len(users) == 0:
+            await channel.send('No one entered the giveaway, so there is no winner!')
+        else:
+            winner = random.choice(users)
+            await channel.send(f'Congratulations {winner.mention}! You won **{prize}**!')
+
 
 
 
