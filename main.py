@@ -872,11 +872,13 @@ import asyncio
 from discord.ext import commands
 
 @client.command()
-async def giveaway3(ctx, duration: int, *, prize: str):
+async def giveaway(ctx):
     channel = ctx.channel
-    await channel.send(f'React with 🎉 to enter the giveaway for **{prize}**! This giveaway will last for {duration} seconds.')
-    message = await channel.history().get(author=client.user)
-    await message.add_reaction('<:checkmark_2714fe0f:1073342463995023433>')
+    await channel.send('React with :tada: to enter the giveaway!')
+    async for message in channel.history():
+        if message.author == client.user:
+            await message.add_reaction('<:checkmark_2714fe0f:1073342463995023433>')
+            break
     await asyncio.sleep(duration)
     message = await channel.fetch_message(message.id)
     reactions = [r for r in message.reactions if str(r.emoji) == '<:checkmark_2714fe0f:1073342463995023433>']
