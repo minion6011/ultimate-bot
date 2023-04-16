@@ -877,7 +877,19 @@ async def giveaway2(ctx, seconds: int, *, prize: str):
 		await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 		await asyncio.sleep(time)
 		await ctx.fetch_message(message.id)
-		reactions = message.reactions
+		#reactions = message.reactions
+		users = await message.reactions[0].users().flatten()
+		if len(users) == 0:
+			await ctx.send("No Winner Was Decided!")
+		else:
+			#users.pop(users.index(client.user))
+			winner = random.choice(users)
+			await ctx.send(f"Congratulations! {winner.mention} won the prize: {prize}!")
+
+		
+		
+		
+'''
 		participants = []
 		for reaction in reactions:
 			if reaction.emoji == "<:checkmark_2714fe0f:1073342463995023433>":
@@ -891,7 +903,7 @@ async def giveaway2(ctx, seconds: int, *, prize: str):
 		else:
 			winner = random.choice(participants)
 			await ctx.send(f"Congratulations {winner}! You won **{prize}**!")
-
+'''
 
 	
 	
