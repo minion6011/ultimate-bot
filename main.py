@@ -880,7 +880,7 @@ async def giveaway3(ctx, duration: int, prize: str):
             await message.add_reaction('<:checkmark_2714fe0f:1073342463995023433>')
             break
     await asyncio.sleep(duration)
-        message = await ctx.channel.history().get(author=client.user)
+    message = await ctx.channel.history().get(author=client.user)
     reactions = message.reactions
     users = []
     async for reaction in reactions:
