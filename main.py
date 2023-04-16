@@ -865,13 +865,13 @@ async def verify(ctx):
 async def giveaway2(ctx,time:int,prize:str):
   await ctx.send(f"The giveaway will be in  and will last {time} seconds!")
 
-  embed = discord.embed(title = "Giveaway!", description = f"{prize}", color = ctx.author.color)
+  embed = discord.Embed(title = "Giveaway!", description = f"{prize}", color = ctx.author.color)
 
   embed.add_field(name = "Hosted by:", value = ctx.author.mention)
-
+  channel = ctx.channel
   embed.set_footer(text = f"Ends {time} from now!")
 
-  my_msg = await channel.send(embed = embed)
+  my_msg = await ctx.send(embed = embed)
 
   await my_msg.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
