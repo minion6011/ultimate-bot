@@ -862,6 +862,24 @@ async def verify(ctx):
 
 
 @client.command()
+async def giveaway4(ctx, time: int, winners: int, *, prize: str):
+    await ctx.send(f"React with <:checkmark_2714fe0f:1073342463995023433> to enter the giveaway for **{prize}**!")
+    await asyncio.sleep(time)
+    
+    message = await ctx.fetch_message(ctx.message.id)
+    entries = [user for reaction in message.reactions if str(reaction.emoji) == "<:checkmark_2714fe0f:1073342463995023433>" for user in await reaction.users().flatten() if not user.bot]
+    
+    if len(entries) == 0:
+        await ctx.send("Not enough people entered the giveaway.")
+        return
+    
+    winners = min(winners, len(entries))
+    winner_list = random.sample(entries, winners)
+    winner_mention = ", ".join([winner.mention for winner in winner_list])
+    
+    await ctx.send(f"Congratulations {winner_mention}! You won **{prize}**!")
+
+@client.command()
 async def giveaway3(ctx, seconds: int, *, prize: str):
 	time = seconds
 	if time > 300:
