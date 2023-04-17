@@ -864,6 +864,7 @@ async def verify(ctx):
 @client.command()
 async def giveaway4(ctx, time: int, winners: int, *, prize: str):
     await ctx.send(f"React with <:checkmark_2714fe0f:1073342463995023433> to enter the giveaway for **{prize}**!")
+    await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
     await asyncio.sleep(time)
     
     message = await ctx.fetch_message(ctx.message.id)
