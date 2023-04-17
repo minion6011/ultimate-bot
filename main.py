@@ -873,10 +873,17 @@ async def giveaway3(ctx, seconds: int, *, prize: str):
 		await asyncio.sleep(time)
 		msg_id = await ctx.channel.fetch_message(message.id)
 		reaction = discord.utils.get(msg_id.reactions, emoji="<:checkmark_2714fe0f:1073342463995023433>")
-		reaction_users = [user for user in await reaction.users().flatten() if user != bot.user]
+		if reaction and reaction.count > 1:
+			users = await reaction.users().flatten()
+			users.pop(users.index(bot.user))
+			winner = random.choice(users)
+			await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
+		else:
+			await ctx.send("Not enought participant")
+		#reaction_users = [user for user in await reaction.users().flatten() if user != bot.user]
 		#users.pop(users.index(client.user))
-		winner = random.choice(reaction_users)
-		await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
+		#winner = random.choice(reaction_users)
+		#await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
 
 
 @client.command()
