@@ -873,10 +873,9 @@ async def giveaway3(ctx, seconds: int, *, prize: str):
 		await asyncio.sleep(time)
 		msg_id = await ctx.channel.fetch_message(message.id)
 		#reactions = message.reactions
-		users = msg_id.reactions[0].users().flatten()
-		users.pop(users.index(client.user))
+		reaction_users = [user for user in await reaction.users().flatten() if user != bot.user]
 		#users.pop(users.index(client.user))
-		winner = random.choice(users)
+		winner = random.choice(reaction_users)
 		await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
 
 
