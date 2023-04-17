@@ -862,6 +862,25 @@ async def verify(ctx):
 
 
 @client.command()
+async def giveaway3(ctx, seconds: int, *, prize: str):
+	time = seconds
+	if time > 300:
+		await ctx.send("error max num")
+	else:
+		message = await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
+		#message = ctx.message
+		await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
+		await asyncio.sleep(time)
+		msg_id = await ctx.channel.fetch_message(message.id)
+		#reactions = message.reactions
+		users = msg_id.reactions[0].users().flatten()
+		users.pop(users.index(client.user))
+		#users.pop(users.index(client.user))
+		winner = random.choice(users)
+		await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
+
+
+@client.command()
 async def giveaway2(ctx,time:int,prize:str):
   await ctx.send(f"The giveaway will be in  and will last {time} seconds!")
 
