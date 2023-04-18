@@ -813,21 +813,21 @@ async def suggestion(interaction: discord.Interaction):
 async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 		time = seconds
 		if time > 500:
-			embed = discord.Embed(title="Error: The max of seconds is 500 (for now)", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, emphereal=True)
+			warning_embed = discord.Embed(title="Error: The max of seconds is 500 (for now)", color=discord.Color.red())
+			warning_embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 		else:
 			if interaction.user.guild_permissions.administrator:
 				start_embed = discord.Embed(title=f":tada: Giveaway start in {time} seconds :tada:\nThe prize is {prize} :moneybag:", color=0xe91e63)
 				await interaction.response.send_message(embed=start_embed)
 				await asyncio.sleep(time)
-				embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
 				results = [member for member in interaction.guild.members if not member.bot]
 				winner = random.choice(results)
-				embed.add_field(name="Winner user:", value=f":confetti_ball: `{winner}` :confetti_ball:")
-				embed.add_field(name="Prize", value=f":gift: ***{prize}*** :gift:")
-				embed.set_footer(text=footer_testo)
-				await start_embed.response.edit_message(embed=embed)
+				win_embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
+				win_embed.add_field(name="Winner user:", value=f":confetti_ball: `{winner}` :confetti_ball:")
+				win_embed.add_field(name="Prize", value=f":gift: ***{prize}*** :gift:")
+				win_embed.set_footer(text=footer_testo)
+				await start_embed.response.edit_message(embed=win_embed)
 			else:
 				embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
 				embed.set_footer(text=footer_testo)
