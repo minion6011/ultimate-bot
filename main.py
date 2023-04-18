@@ -670,7 +670,7 @@ class BugModal(ui.Modal, title='Report Bug'):
         embed.add_field(name="User:", value=f"`{interaction.user}`")
         await channel.send(embed=embed)
         embed1 = discord.Embed(title="Bug report sent", color=discord.Color.red())
-	embed1.set_footer(text=footer_testo)
+        embed1.set_footer(text=footer_testo)
         await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
@@ -717,7 +717,7 @@ class SuggestionModal(ui.Modal, title='Suggest a command'):
         embed.add_field(name="Utente:", value=f"`{interaction.user}`")
         await channel.send(embed=embed)
         embed1 = discord.Embed(title="Suggestion sent", color=discord.Color.green())
-	embed1.set_footer(text=footer_testo)
+        embed1.set_footer(text=footer_testo)
         await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
@@ -876,7 +876,7 @@ async def verify(ctx):
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
-
+@is_me
 @client.command()
 async def giveaway2(ctx, time: int, *, prize: str):
 	if time > 300:
