@@ -862,8 +862,7 @@ async def verify(ctx):
 
 
 @client.command()
-async def giveaway4(ctx, time: int, winners: int, *, prize: str):
-	time = seconds
+async def giveaway4(ctx, time: int, prize: str):
 	if time > 300:
 		await ctx.send("error max num")
 	else:
