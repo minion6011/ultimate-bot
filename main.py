@@ -815,7 +815,7 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 		if time > 500:
 			warning_embed = discord.Embed(title="Error: The max of seconds is 500 (for now)", color=discord.Color.red())
 			warning_embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
+			await interaction.response.send_message(embed=warning_embed, ephemeral=True)
 		else:
 			if interaction.user.guild_permissions.administrator:
 				start_embed = discord.Embed(title=f":tada: Giveaway start in {time} seconds :tada:\nThe prize is {prize} :moneybag:", color=0xe91e63)
