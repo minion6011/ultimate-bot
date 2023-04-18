@@ -632,6 +632,7 @@ async def infobot(ctx):
 	embed.add_field(name = ':floppy_disk: **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
 	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
 	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
+	embed.set_footer(text=footer_testo)
 	await ctx.send(embed = embed)
 
 '''
@@ -669,6 +670,7 @@ class BugModal(ui.Modal, title='Report Bug'):
         embed.add_field(name="User:", value=f"`{interaction.user}`")
         await channel.send(embed=embed)
         embed1 = discord.Embed(title="Bug report sent", color=discord.Color.red())
+	embed1.set_footer(text=footer_testo)
         await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
@@ -715,6 +717,7 @@ class SuggestionModal(ui.Modal, title='Suggest a command'):
         embed.add_field(name="Utente:", value=f"`{interaction.user}`")
         await channel.send(embed=embed)
         embed1 = discord.Embed(title="Suggestion sent", color=discord.Color.green())
+	embed1.set_footer(text=footer_testo)
         await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
@@ -808,22 +811,29 @@ async def suggestion(interaction: discord.Interaction):
 @client.tree.command(name="giveaway", description = "Make a giveaway (immediately)") #slash command
 @app_commands.describe(prize='The prize that you wanna give in giveaway')
 async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
-	time = seconds
-	if time > 500:
-		embed = discord.Embed(title="Error: The max of seconds is 500 (for now)", color=discord.Color.red())
+	if not ctx.author.guild_permissions.manage_messages:
+		embed = discord.Embed(title="Error: You need the permission to use this command (Manage messages)", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
 		await interaction.response.send_message(embed=embed, emphereal=True)
 	else:
-		if interaction.user.guild_permissions.administrator:
-			embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
-			results = [member for member in interaction.guild.members if not member.bot]
-			winner = random.choice(results)
-			embed.add_field(name="Winner user:", value=f":confetti_ball:`{winner}`:confetti_ball:")
-			embed.add_field(name="Prize", value=f":gift:***{prize}***:gift:")
-			await interaction.response.send_message(embed=embed)
-		else:
-			embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
+		time = seconds
+		if time > 500:
+			embed = discord.Embed(title="Error: The max of seconds is 500 (for now)", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, emphereal=True)
+		else:
+			if interaction.user.guild_permissions.administrator:
+				embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
+				results = [member for member in interaction.guild.members if not member.bot]
+				winner = random.choice(results)
+				embed.add_field(name="Winner user:", value=f":confetti_ball:`{winner}`:confetti_ball:")
+				embed.add_field(name="Prize", value=f":gift:***{prize}***:gift:")
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed)
+			else:
+				embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, emphereal=True)
 
 #application command discord.py end
 
@@ -837,6 +847,7 @@ async def slash_sync(ctx):
 	await client.tree.sync(guild=discord.Object(id=1043925344312381550))
 	await client.tree.sync(guild=discord.Object(id=1031812528226967603))
 	embed = discord.Embed(title=f"Reloading slash {len(slash)}", color=0x2c2f33)
+	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed, delete_after=7)
 
 
@@ -851,6 +862,7 @@ async def update(ctx):
 	embed.add_field(name = ':floppy_disk: **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
 	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
 	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
+	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed, delete_after=7)
 	exit()
 
