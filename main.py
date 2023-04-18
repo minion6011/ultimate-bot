@@ -807,18 +807,23 @@ async def suggestion(interaction: discord.Interaction):
 
 @client.tree.command(name="giveaway", description = "Make a giveaway (immediately)") #slash command
 @app_commands.describe(prize='The prize that you wanna give in giveaway')
-async def giweaway(interaction: discord.Interaction, prize: str):
-	if interaction.user.guild_permissions.administrator:
-		embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
-		results = [member for member in interaction.guild.members if not member.bot]
-		winner = random.choice(results)
-		embed.add_field(name="Winner user:", value=f":confetti_ball:`{winner}`:confetti_ball:")
-		embed.add_field(name="Prize", value=f":gift:***{prize}***:gift:")
-		await interaction.response.send_message(embed=embed)
-	else:
-		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
+async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
+	time = seconds
+	if time > 500:
+		embed = discord.Embed(title="Error: The max of seconds is 500 (for now)", color=discord.Color.red())
 		await interaction.response.send_message(embed=embed, emphereal=True)
+	else:
+		if interaction.user.guild_permissions.administrator:
+			embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
+			results = [member for member in interaction.guild.members if not member.bot]
+			winner = random.choice(results)
+			embed.add_field(name="Winner user:", value=f":confetti_ball:`{winner}`:confetti_ball:")
+			embed.add_field(name="Prize", value=f":gift:***{prize}***:gift:")
+			await interaction.response.send_message(embed=embed)
+		else:
+			embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, emphereal=True)
 
 #application command discord.py end
 
@@ -861,28 +866,9 @@ async def verify(ctx):
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
-@client.command()
-async def giveaway4(ctx, time: int, prize: str):
-	if time > 300:
-		await ctx.send("error max num")
-	else:
-		start_message = await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
-		#message = ctx.message
-		await start_message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
-		await asyncio.sleep(time)
-		msg_id = await ctx.channel.fetch_message(start_message.id)
-		users = await msg_id.reactions[0].users().flatten()
-		users.pop(users.index(client.user))
-		winner = random.choice(users)
-		await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
-		#reaction_users = [user for user in await reaction.users().flatten() if user != bot.user]
-		#users.pop(users.index(client.user))
-		#winner = random.choice(reaction_users)
-		#await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
 
 @client.command()
-async def giveaway3(ctx, seconds: int, *, prize: str):
-	time = seconds
+async def giveaway2(ctx, time: int, *, prize: str):
 	if time > 300:
 		await ctx.send("error max num")
 	else:
@@ -905,30 +891,6 @@ async def giveaway3(ctx, seconds: int, *, prize: str):
 		#await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
 
 
-@client.command()
-async def giveaway2(ctx,time:int,prize:str):
-  await ctx.send(f"The giveaway will be in  and will last {time} seconds!")
-
-  embed = discord.Embed(title = "Giveaway!", description = f"{prize}", color = ctx.author.color)
-
-  embed.add_field(name = "Hosted by:", value = ctx.author.mention)
-  channel = ctx.channel
-  embed.set_footer(text = f"Ends {time} from now!")
-
-  my_msg = await ctx.send(embed = embed)
-
-  await my_msg.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
-
-  await asyncio.sleep(time)
-
-  new_msg = await channel.fetch_message(my_msg.id)
-
-  users = await new_msg.reactions[0].users().flatten()
-  users.pop(users.index(client.user))
-
-  winner = random.choice(users)
-
-  await channel.send(f"Congratulations! {winner.mention} won the prize: {prize}!")
 
 
 '''
