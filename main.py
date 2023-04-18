@@ -808,7 +808,7 @@ async def suggestion(interaction: discord.Interaction):
 	#modal = SuggestionModal
 	await interaction.response.send_modal(SuggestionModal())
 
-@client.tree.command(name="giveaway", description = "Make a giveaway (immediately)") #slash command
+@client.tree.command(name="giveaway", description = "Make a giveaway") #slash command
 @app_commands.describe(prize='The prize that you wanna give in giveaway')
 async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 		time = seconds
