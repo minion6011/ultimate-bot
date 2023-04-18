@@ -827,7 +827,7 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 				win_embed.add_field(name="Winner user:", value=f":confetti_ball: `{winner}` :confetti_ball:")
 				win_embed.add_field(name="Prize", value=f":gift: ***{prize}*** :gift:")
 				win_embed.set_footer(text=footer_testo)
-				await start_embed.response.edit_message(embed=win_embed)
+				await interaction.response.edit_message(embed=win_embed)
 			else:
 				embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
 				embed.set_footer(text=footer_testo)
