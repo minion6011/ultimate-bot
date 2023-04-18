@@ -811,11 +811,6 @@ async def suggestion(interaction: discord.Interaction):
 @client.tree.command(name="giveaway", description = "Make a giveaway (immediately)") #slash command
 @app_commands.describe(prize='The prize that you wanna give in giveaway')
 async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
-	if not ctx.author.guild_permissions.manage_messages:
-		embed = discord.Embed(title="Error: You need the permission to use this command (Manage messages)", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed, emphereal=True)
-	else:
 		time = seconds
 		if time > 500:
 			embed = discord.Embed(title="Error: The max of seconds is 500 (for now)", color=discord.Color.red())
@@ -823,13 +818,16 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 			await interaction.response.send_message(embed=embed, emphereal=True)
 		else:
 			if interaction.user.guild_permissions.administrator:
+				start_embed = discord.Embed(title=f":tada: Giveaway start in {time} seconds :tada:\nThe prize is {prize} :moneybag:", color=0xe91e63)
+				await interaction.response.send_message(embed=start_embed)
+				await asyncio.sleep(time)
 				embed = discord.Embed(title=":tada: Giveaway :tada:", color=0xe91e63)
 				results = [member for member in interaction.guild.members if not member.bot]
 				winner = random.choice(results)
-				embed.add_field(name="Winner user:", value=f":confetti_ball:`{winner}`:confetti_ball:")
-				embed.add_field(name="Prize", value=f":gift:***{prize}***:gift:")
+				embed.add_field(name="Winner user:", value=f":confetti_ball: `{winner}` :confetti_ball:")
+				embed.add_field(name="Prize", value=f":gift: ***{prize}*** :gift:")
 				embed.set_footer(text=footer_testo)
-				await interaction.response.send_message(embed=embed)
+				await start_embed.response.edit_message(embed=embed)
 			else:
 				embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
 				embed.set_footer(text=footer_testo)
