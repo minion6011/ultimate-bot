@@ -49,6 +49,7 @@ li a:hover {
   <li><a href="#news">News</a></li>
   <li><a href="#contact">Contact</a></li>
   <li><a href="#about">About</a></li>
+  <li><a class="invisible" onclick="hello()">Mod</a></li>
 </ul>
 
 
@@ -61,7 +62,22 @@ li a:hover {
 <button name="button" value="OK" type="button" onclick="hello()">Click Here</button>
 <script>  
 function hello(){  
-alert("hello javatpoint user")
+<!--hide
+
+var password;
+var pass1="1234";
+
+password=prompt('Inserisci la password per visualizzare questa pagina!',' ');
+
+if (password==pass1)
+  alert('Password corretta! Fare clic su OK per entrare!');
+  location.replace('https://minion6011.github.io/ultimate-bot/site/admin.html');
+else
+   {
+    window.location="";
+    }
+
+//-->
 }
 </script> 
  
