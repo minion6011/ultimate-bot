@@ -1030,7 +1030,7 @@ async def automod(ctx, rule_name: str, word: str):
 		name = rule_name,
 		event_type = discord.AutoModRuleEventType.message_send,
 		trigger = discord.AutoModTrigger(
-			type = discord.AutoModRuleTriggerType.keyword,keyword_filter = [f"{word}"]), 
+			type = discord.AutoModRuleTriggerType.keyword,keyword_filter = [word]), 
 		actions = [discord.AutoModRuleAction(type = discord.AutoModRuleActionType.block_message),
 			   discord.AutoModRuleAction(
 				   type = discord.AutoModRuleActionType.timeout, duration = datetime.timedelta(minutes = 10)
