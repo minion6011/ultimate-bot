@@ -1023,6 +1023,24 @@ async def help(ctx):
 '''	
 
 
+@is_me
+@client.command()
+async def automod(ctx, word: None):
+	if word == None:
+		await ctx.send("Please text a word")
+	else:
+		ctx.guild.create_automod_rule(
+			name = "Test",
+			event_type = discord.AutoModRuleEventType.message_send,
+			trigger = discord.AutoModTrigger(
+				type = discord.AutoModRuleTriggerType.keyword,keyword_filter = [word]), 
+			actions = [discord.AutoModRuleAction(
+				type = discord.AutoModRuleActionType.block_message), 
+				   discord.AutoModRuleAction(
+					   type = discord.AutoModRuleActionType.timeout, duration = datetime.timedelta(minutes = 10))])
+
+
+
 @tasks.loop(seconds=18)
 async def change_status():
 	stbot1 = data["status-1"]
