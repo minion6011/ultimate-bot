@@ -920,24 +920,12 @@ async def help(ctx):
 		await ctx.send(embed=admin_embed)
 '''	
 
-@is_me
 @client.command()
-async def test(ctx):
-    ctx.guild.create_automod_rule(
-        name = "Test",
-        event_type = discord.AutoModRuleEventType.message_send,
-        trigger = discord.AutoModTrigger(
-            type = discord.AutoModRuleTriggerType.keyword,
-            keyword_filter = ["asd"]
-        ),
-        actions = [
-            discord.AutoModRuleAction(type = discord.AutoModRuleActionType.block_message),
-            discord.AutoModRuleAction(type = discord.AutoModRuleActionType.timeout, duration = datetime.timedelta(
-                hours = 1
-            ))
-        ]
-
-    )
+@commands.has_permissions(manage_messages=True)
+async def slowmode(ctx, seconds: int):
+    await ctx.channel.edit(slowmode_delay=seconds)
+    slowmode_embed = discord.Embed(title="Slowmode", description="A slowmode was set for this channel", colour=discord.Colour.green())
+    await ctx.send(embed=slowmode_embed, delete_after=5)
 
 @is_me
 @client.command()
