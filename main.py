@@ -875,109 +875,7 @@ async def verify(ctx):
 	await ctx.send(embed=embed, view=Button())
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
-
-@is_me
-@client.command()
-async def giveaway2(ctx, time: int, *, prize: str):
-	if time > 300:
-		await ctx.send("error max num")
-	else:
-		message = await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
-		#message = ctx.message
-		await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
-		await asyncio.sleep(time)
-		msg_id = await ctx.channel.fetch_message(message.id)
-		reaction = discord.utils.get(msg_id.reactions, emoji="<:checkmark_2714fe0f:1073342463995023433>")
-		if reaction and reaction.count > 1:
-			users = await reaction.users().flatten()
-			users.pop(users.index(bot.user))
-			winner = random.choice(users)
-			await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
-		else:
-			await ctx.send("Not enought participant")
-		#reaction_users = [user for user in await reaction.users().flatten() if user != bot.user]
-		#users.pop(users.index(client.user))
-		#winner = random.choice(reaction_users)
-		#await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
-
-
-
-
-'''
-
-@client.command()
-async def giveaway3(ctx):
-    # Set the giveaway duration (in seconds)
-    duration = 5
-
-    # Send a message to the channel announcing the giveaway and prompting users to react with an emoji
-    message = await ctx.send("React with 🎉 to enter the giveaway!")
-    await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
-
-    # Wait for the specified duration and collect the users who reacted with the specified emoji
-    await asyncio.sleep(duration)
-    message = await ctx.fetch_message(message.id)
-    reactions = [r for r in message.reactions if str(r.emoji) == '<:checkmark_2714fe0f:1073342463995023433>']
-    if not reactions:
-        await ctx.send('No one entered the giveaway, so there is no winner!')
-    else:
-        users = []
-        async for user in reactions[0].users():
-            if users.bot:
-                users.append(user)
-        if users:
-            await ctx.send('No one entered the giveaway, so there is no winner!')
-        else:
-            winner = random.choice(users)
-            await ctx.send(f'Congratulations {winner.mention}, you won the giveaway!')
-
-
-
-
-
-
-@client.command()
-async def giveaway2(ctx, seconds: int, *, prize: str):
-	time = seconds
-	if time > 300:
-		await ctx.send("error max num")
-	else:
-		message = await ctx.send(f"React with :tada: to enter the giveaway for **{prize}**! Time remaining: **{time}** seconds.")
-		#message = ctx.message
-		await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
-		await asyncio.sleep(time)
-		msg_id = await ctx.channel.fetch_message(message.id)
-		#reactions = message.reactions
-		users = msg_id.reactions[0].users().flatten()
-		users.pop(users.index(client.user))
-		#users.pop(users.index(client.user))
-		winner = random.choice(users)
-		await ctx.send(f"Congratulations! {winner} won the prize: {prize}!")
-
 		
-'''		
-		
-'''
-
-if len(users) == 0:
-			await ctx.send("No Winner Was Decided!")
-		else:
-		
-		
-		participants = []
-		for reaction in reactions:
-			if reaction.emoji == "<:checkmark_2714fe0f:1073342463995023433>":
-				users = await reaction.users().flatten()
-				for user in users:
-					if user.bot:
-						continue
-						participants.append(user.mention)
-		if not participants:
-			await ctx.send("No one entered the giveaway.")
-		else:
-			winner = random.choice(participants)
-			await ctx.send(f"Congratulations {winner}! You won **{prize}**!")
-'''
 
 	
 	
@@ -1022,6 +920,24 @@ async def help(ctx):
 		await ctx.send(embed=admin_embed)
 '''	
 
+@is_me
+@client.command()
+async def test(ctx):
+    ctx.guild.create_automod_rule(
+        name = "Test",
+        event_type = discord.AutoModRuleEventType.message_send,
+        trigger = discord.AutoModTrigger(
+            type = discord.AutoModRuleTriggerType.keyword,
+            keyword_filter = ["asd"]
+        ),
+        actions = [
+            discord.AutoModRuleAction(type = discord.AutoModRuleActionType.block_message),
+            discord.AutoModRuleAction(type = discord.AutoModRuleActionType.timeout, duration = datetime.timedelta(
+                hours = 1
+            ))
+        ]
+
+    )
 
 @is_me
 @client.command()
