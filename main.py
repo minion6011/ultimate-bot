@@ -930,7 +930,8 @@ async def slowmode(ctx, seconds: int):
 @is_me
 @client.command()
 async def automod(ctx, rule_name: str, word: str, minutes: int):
-	ctx.guild.create_automod_rule(
+	Guild = ctx.guild
+	Guild.create_automod_rule(
 		name = rule_name,
 		event_type = discord.AutoModRuleEventType.message_send,
 		trigger = discord.AutoModTrigger(
