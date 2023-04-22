@@ -1031,13 +1031,12 @@ async def automod(ctx, rule_name: str, word: str, minutes: int):
 		event_type = discord.AutoModRuleEventType.message_send,
 		trigger = discord.AutoModTrigger(
 			type = discord.AutoModRuleTriggerType.keyword,keyword_filter = [word]), 
-		actions=[discord.AutoModRuleActionType.block_message),
+		actions=[discord.AutoModRuleAction(type = discord.AutoModRuleActionType.block_message),
 			 discord.AutoModRuleAction(type = discord.AutoModRuleActionType.timeout, duration = datetime.timedelta(minutes = minutes)
 						  )
 			]
 	)
-
-
+	
 
 @tasks.loop(seconds=18)
 async def change_status():
