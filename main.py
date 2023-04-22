@@ -1033,6 +1033,12 @@ async def automod(ctx, rule_name: str, word: str, minutes: int):
 			type = discord.AutoModRuleTriggerType.keyword,keyword_filter = [word]), 
 		actions = [discord.AutoModRuleActionType.block_message])
 	
+@client.command()
+async def timeout(ctx, member: discord.Member, until: int):
+    handshake = await timeout_user(user_id=member.id, guild_id=ctx.guild.id, until=until)
+    if handshake:
+         return await ctx.send(f"Successfully timed out user for {until} minutes.")
+    await ctx.send("Something went wrong")
 
 @tasks.loop(seconds=18)
 async def change_status():
