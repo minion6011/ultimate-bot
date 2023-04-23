@@ -29,9 +29,9 @@ with open("config.json") as f:
         print(e)
         exit(1)
 
-my_id = 829022689338851389
-admin_id = 598119406731657216
-is_me = if commands.check(lambda ctx: ctx.author.id == my_id) or commands.check(lambda ctx: ctx.author.id == admin_id) else: await ctx.send("you isn't a admin")
+my_id = 598119406731657216
+
+is_me = if commands.check(lambda ctx: ctx.author.id == my_id) 
 
 
 
@@ -862,8 +862,9 @@ async def update(ctx):
 	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
 	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
 	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, delete_after=7)
-	exit()
+	await ctx.send(embed=embed, delete_after=4)
+	await asyncio.sleep(5)
+	exit(1)
 
 	
 @client.command()
