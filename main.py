@@ -31,7 +31,7 @@ with open("config.json") as f:
 
 my_id = 598119406731657216
 
-is_me = if commands.check(lambda ctx: ctx.author.id == my_id) 
+is_me = commands.check(lambda ctx: ctx.author.id == my_id) 
 
 
 
