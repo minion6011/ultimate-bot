@@ -29,8 +29,9 @@ with open("config.json") as f:
         print(e)
         exit(1)
 
-my_id = 598119406731657216
-is_me = commands.check(lambda ctx: ctx.author.id == my_id)
+my_id = 829022689338851389
+admin_id = 598119406731657216
+is_me = commands.check(lambda ctx: ctx.author.id == my_id) or commands.check(lambda ctx: ctx.author.id == admin_id)
 
 
 
