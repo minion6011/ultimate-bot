@@ -925,7 +925,7 @@ async def help(ctx):
 #test - testing
 @client.command()
 @commands.has_permissions(manage_messages=True)
-async def timeout(ctx, member_id: str, minutes: int, reason: str):
+async def timeout(ctx, member_id: discord.Member, minutes: int, reason: str):
 	timeout_embed = discord.Embed(title="Timeout", description=f"You have timeout** <@{member_id}>**\nFor `{minutes}` minutes :timer:\n\n***You can only remove timeout `(for now)` pressing right key and pressing `remove timeout`***", colour=discord.Colour.red())
 	await ctx.send(embed=timeout_embed)
 	await member_id.timeout(until=minutes, reason=reason)
