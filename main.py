@@ -922,6 +922,15 @@ async def help(ctx):
 		await ctx.send(embed=admin_embed)
 '''	
 
+#test - testing
+@client.command()
+@commands.has_permissions(manage_messages=True)
+async def timeout(ctx, member_id: str, minutes: int, reason: str):
+	timeout_embed = discord.Embed(title="Timeout", description=f"You have timeout** <@{member_id}>**\nFor `{minutes}` minutes :timer:\n\n***You can only remove timeout `(for now)` pressing right key and pressing `remove timeout`***", colour=discord.Colour.red())
+	await ctx.send(embed=timeout_embed)
+	await member_id.timeout(until=until, *, reason=reason)
+	#member = interaction.user
+
 @client.command()
 @commands.has_permissions(manage_messages=True)
 async def slowmode(ctx, seconds: int):
@@ -939,14 +948,16 @@ async def automod(ctx, rule_name: str, word: str, minutes: int):
 		trigger = discord.AutoModTrigger(
 			type = discord.AutoModRuleTriggerType.keyword,keyword_filter = [word]), 
 		actions = [discord.AutoModRuleActionType.block_message])
-	
+'''
 @client.command()
 async def timeout(ctx, member: discord.Member, until: int):
     handshake = await timeout_user(user_id=member.id, guild_id=ctx.guild.id, until=until)
     if handshake:
          return await ctx.send(f"Successfully timed out user for {until} minutes.")
     await ctx.send("Something went wrong")
-
+'''
+	
+	
 @tasks.loop(seconds=18)
 async def change_status():
 	stbot1 = data["status-1"]
