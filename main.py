@@ -928,7 +928,7 @@ async def help(ctx):
 
 #test - testing
 
-
+'''
 @is_me
 @client.command()
 async def gpt(ctx, *, request = None):
@@ -956,6 +956,7 @@ async def gpt(ctx, *, request = None):
 				embed.add_field(name="Response", value=response["choices"][0]["text"], inline=False)
 				embed.set_footer(text=footer_testo)
 				await ctx.send(embed=embed)
+'''
 
 @client.command()
 @commands.has_permissions(manage_messages=True)
@@ -1063,7 +1064,18 @@ async def maintence(ctx):
 	embed = discord.Embed(title="Click the button to start or stop maintenance mode\nThis message would be deleted in 20 seconds", color=discord.Color.red())
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed, view=Admin_Button_View(),delete_after=20)
+
 	
+	
+	
+from chatgpt import ChatGPT
+chatgpt = ChatGPT()
+
+@client.command()
+async def chat(ctx, *, rquest: str):
+    response = chatgpt.get_response(request)
+    await ctx.send(response)
+
 @tasks.loop(seconds=18)
 async def change_status():
 	stbot1 = data["status-1"]
