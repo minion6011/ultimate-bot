@@ -952,7 +952,7 @@ async def gpt(ctx, *, request = None):
 				response = await resp.json
 				embed = discord.Embed(title="Chat-GPT", colour=discord.Colour.green())
 				embed.add_field(name="Request", value=f"{request}", inline=False)
-				embed.add_field(name="Response", value=response["choices"][0]["text"]}, inline=False)
+				embed.add_field(name="Response", value=response["choices"][0]["text"], inline=False)
 				embed.set_footer(text=footer_testo)
 				await ctx.send(embed=embed)
 
