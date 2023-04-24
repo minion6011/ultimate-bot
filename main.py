@@ -1054,23 +1054,15 @@ class Admin_Button_View(discord.ui.View):
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 			
-	@discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
-	async def Delete_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
-		if interaction.user.id == my_id:
-			await interaction.delete_original_response()
-		else:
-			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
 
 			
 	
 @client.command()
 @is_me
 async def maintence(ctx):
-	embed = discord.Embed(title="Click the button to start or stop maintenance mode", color=discord.Color.red())
+	embed = discord.Embed(title="Click the button to start or stop maintenance mode\nThis message would be deleted in 20 seconds", color=discord.Color.red())
 	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, view=Admin_Button_View())
+	await ctx.send(embed=embed, view=Admin_Button_View(),delete_after=20)
 	
 @tasks.loop(seconds=18)
 async def change_status():
