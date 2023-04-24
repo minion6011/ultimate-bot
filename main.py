@@ -832,7 +832,7 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 			else:
 				embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
 				embed.set_footer(text=footer_testo)
-				await interaction.response.send_message(embed=embed, emphereal=True)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
 
 #application command discord.py end
 
@@ -928,6 +928,7 @@ async def help(ctx):
 
 #test - testing
 
+
 @is_me
 @client.command()
 async def gpt(ctx, *, request = None):
@@ -936,7 +937,7 @@ async def gpt(ctx, *, request = None):
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
 	else:
-		async with aiothttp.ClientSession() as session:
+		async with aiohttp.ClientSession() as session:
 			AI_key = data["open_ai_key"]
 			payload = {
 				"model":"text-davinci-003",
@@ -1033,25 +1034,25 @@ class Admin_Button_View(discord.ui.View):
 			change_status.start()
 			embed = discord.Embed(title="Maintenance Mod Off", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, emphereal=True)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 		else:
 			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, emphereal=True)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 			
 	@discord.ui.button(label="On", style=discord.ButtonStyle.green)
 	async def On_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
 		if interaction.user.id == my_id:
-			change_status.stop()
+			change_status.cancel()
 			await asyncio.sleep(2)
 			await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name=f"maintenance"))
 			embed = discord.Embed(title="Maintenance Mod On", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, emphereal=True)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 		else:
 			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, emphereal=True)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 
 	
 @client.command()
@@ -1076,7 +1077,6 @@ async def change_status():
 
 @client.event
 async def on_command_error(ctx, error):
-	
     if isinstance(error, discord.ext.commands.errors.CommandNotFound):
         embed = discord.Embed(title="Error: This command does not exist", color=discord.Color.red())
         embed.set_footer(text=footer_testo)
