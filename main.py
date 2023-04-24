@@ -933,14 +933,6 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 		await ctx.send(embed=embed)
 	else:
 		response_emoji = await emoji.guild.fetch_emoji(emoji.id)
-		except discord.NotFound:
-			embed = discord.Embed(title="Error\nNo emoji founded", colour=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-		except discord.EmojiNotFound:
-			embed = discord.Embed(title="Error\nNo emoji founded\nPlease use a custom emoji", colour=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
 		is_managed = "Yes" if response_emoji.managed else "No" 
 		is_animated = "Yes" if response_emoji.animated else "No"
 		requires_colons = "Yes" if response_emoji.require_colons else "No"
@@ -1013,6 +1005,7 @@ async def change_status():
 
 @client.event
 async def on_command_error(ctx, error):
+	
     if isinstance(error, discord.ext.commands.errors.CommandNotFound):
         embed = discord.Embed(title="Error: This command does not exist", color=discord.Color.red())
         embed.set_footer(text=footer_testo)
@@ -1078,6 +1071,14 @@ async def on_command_error(ctx, error):
         channel = client.get_channel(errorchannel)
         embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
         await channel.send(embed=embed)
+    elif isinstance(error, discord.EmojiNotFound):
+        embed = discord.Embed(title="Error\nNo emoji founded\nPlease use a custom emoji", color=discord.Color.red())
+        embed.set_footer(text=footer_testo)
+        await ctx.send(embed=embed, delete_after=4)
+    elif isinstance(error, discord.NotFound):
+        embed = discord.Embed(title="Error\nNo emoji founded", color=discord.Color.red())
+        embed.set_footer(text=footer_testo)
+        await ctx.send(embed=embed, delete_after=4)
     else:
         embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
         embed.set_footer(text=footer_testo)
@@ -1087,7 +1088,7 @@ async def on_command_error(ctx, error):
         embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
         await channel.send(embed=embed)
         raise error
-        
+      
 
 
 
