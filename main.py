@@ -938,13 +938,13 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 		requires_colons = "Yes" if response_emoji.require_colons else "No"
 		creation_time = response_emoji.created_at.strftime("%b %d %Y")
 		can_use_emoji = "Everyone" if not response_emoji.roles else "".join(role.name for role in response_emoji.roles)
-		name = response_emoj.name
-		id_emoji = response_emoj.id	
+		name = response_emoji.name
+		id_emoji = response_emoji.id	
 		embed = discord.Embed(title="Emoji_Info", colour=discord.Colour.blue())
 		embed.add_field(name="Name", value=f"{name}", inline=False)
 		embed.add_field(name="Id", value=f"{id_emoji}", inline=False)
 		embed.add_field(name="Url", value=f"[Emoji Url]({response_emoji.url})", inline=False)
-		embed.add_field(name="Author", value=f"{response_emoj.user.name}", inline=False)
+		embed.add_field(name="Author", value=f"{response_emoji.user.name}", inline=False)
 		embed.add_field(name="Time Created", value=f"{creation_time}", inline=False)
 		embed.add_field(name="Usable by", value=f"{can_use_emoji}", inline=False)
 		embed.add_field(name="Animated", value=f"{is_animated}", inline=False)
