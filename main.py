@@ -921,8 +921,48 @@ async def help(ctx):
 		admin_embed.set_footer(text=footer_testo)
 		await ctx.send(embed=admin_embed)
 '''	
+#return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
 #test - testing
+@client.command()
+@commands.has_permissions(manage_messages=True)
+async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
+	if not emoji:
+		embed = discord.Embed(title="Error\nPlease send a valid emoji", colour=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+	else:
+		response_emoji = await emoji.guild.fetch_emoji(emoji.id)
+		except discord.NotFound:
+			embed = discord.Embed(title="Error\nNo emoji founded", colour=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+		except discord.EmojiNotFound:
+			embed = discord.Embed(title="Error\nNo emoji founded\nPlease use a custom emoji", colour=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+		is_managed = "Yes" if response_emoji.managed else "No" 
+		is_animated = "Yes" if response_emoji.animated else "No"
+		requires_colons = "Yes" if response_emoji.require_colons else "No"
+		creation_time = response_emoji.created_at.strftime("%b %d %Y")
+		can_use_emoji = "Everyone" if not response_emoji.roles else "".join(role.name for role in response_emoji.roles)
+		name = response_emoj.name
+		id_emoji = response_emoj.id	
+		embed = discord.Embed(title="Emoji_Info", colour=discord.Colour.blue())
+		embed.add_field(name="Name", value=f"{name}", inline=False)
+		embed.add_field(name="Id", value=f"{id_emoji}", inline=False)
+		embed.add_field(name="Url", value=f"[Emoji Url]({response_emoji.url})", inline=False)
+		embed.add_field(name="Author", value=f"{response_emoj.user.name}", inline=False)
+		embed.add_field(name="Time Created", value=f"{creation_time}", inline=False)
+		embed.add_field(name="Usable by", value=f"{can_use_emoji}", inline=False)
+		embed.add_field(name="Animated", value=f"{is_animated}", inline=False)
+		embed.add_field(name="Managed", value=f"{is_managed}", inline=False)
+		embed.add_field(name="Requires colons", value=f"{requires_colons}", inline=False)
+		embed.add_field(name="Guild name", value=f"{response_emoji.guild.name}", inline=False)
+		embed.set_footer(text=footer_testo)
+		embed.set_thubnail(url=response_emoji.url)
+		await ctx.send(embed=embed)
+
 @client.command()
 @commands.has_permissions(manage_messages=True)
 async def timeout(ctx, member_id: discord.Member, minutes: int, reason: str):
