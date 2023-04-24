@@ -1097,7 +1097,7 @@ ffmpeg_options = {
 ytdl = youtube_dl.YoutubeDL(ytdlopts)
 
 
-@bot.command()
+@client.command()
 async def play(ctx, *, query):
     
     try:
