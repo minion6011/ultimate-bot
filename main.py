@@ -1068,13 +1068,7 @@ async def maintence(ctx):
 	
 	
 	
-from chatgpt import ChatGPT
-chatgpt = ChatGPT()
 
-@client.command()
-async def chat(ctx, *, rquest: str):
-    response = chatgpt.get_response(request)
-    await ctx.send(response)
 
 @tasks.loop(seconds=18)
 async def change_status():
