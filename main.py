@@ -1020,7 +1020,46 @@ async def timeout(ctx, member: discord.Member, until: int):
          return await ctx.send(f"Successfully timed out user for {until} minutes.")
     await ctx.send("Something went wrong")
 '''
+
+
+class Admin_Button_View(discord.ui.View):
+	def __init__(self):
+		super().__init__()
+		self.value = None
+
+	@discord.ui.button(label="Off", style=discord.ButtonStyle.red)
+	async def Off_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
+		if interaction.user.id == my_id:
+			change_status.start()
+			embed = discord.Embed(title="Maintenance Mod Off", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, emphereal=True)
+		else:
+			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, emphereal=True)
+			
+	@discord.ui.button(label="On", style=discord.ButtonStyle.green)
+	async def On_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
+		if interaction.user.id == my_id:
+			change_status.stop()
+			await asyncio.sleep(2)
+			await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name=f"maintenance"))
+			embed = discord.Embed(title="Maintenance Mod On", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, emphereal=True)
+		else:
+			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, emphereal=True)
+
 	
+@client.command()
+@is_me
+async def maintence(ctx):
+	embed = discord.Embed(title="Click the button to start or stop maintenance mode", color=discord.Color.red())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, view=Admin_Button_View())
 	
 @tasks.loop(seconds=18)
 async def change_status():
