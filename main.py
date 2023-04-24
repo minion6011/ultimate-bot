@@ -1113,7 +1113,7 @@ async def play(ctx, *, query):
     voice_client = ctx.guild.voice_client
     if not voice_client:
         await voice_channel.connect()
-        voice_client = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+        voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
 
     loop = asyncio.get_event_loop()
     data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url=query, download=False)) #extracting the info and not downloading the source
