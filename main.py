@@ -948,7 +948,7 @@ async def gpt(ctx, *, request = None):
 				"frequency_penality":"0",
 				"best_of":"1",
 			}
-			headers = {"Authorization": f"Bearer {AI_key}"}	
+			headers = {"Authorization": "Bearer " + AI_key }	
 			async with session.post("https://api.openai.com/v1/completions", json=payload, headers=headers) as resp:
 				response = await resp.json()
 				embed = discord.Embed(title="Chat-GPT", colour=discord.Colour.green())
