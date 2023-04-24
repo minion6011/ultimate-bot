@@ -772,6 +772,38 @@ class HelpDropdownView(discord.ui.View):
 		super().__init__()
 		self.add_item(HelpDropdown())
 		
+
+		
+class Admin_Button_View(discord.ui.View):
+	def __init__(self):
+		super().__init__()
+		self.value = None
+
+	@discord.ui.button(label="Off", style=discord.ButtonStyle.red)
+	async def Off_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
+		if interaction.user.id == my_id:
+			change_status.start()
+			embed = discord.Embed(title="Maintenance Mod Off", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+		else:
+			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			
+	@discord.ui.button(label="On", style=discord.ButtonStyle.green)
+	async def On_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
+		if interaction.user.id == my_id:
+			change_status.cancel()
+			await asyncio.sleep(2)
+			await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name=f"maintenance"))
+			embed = discord.Embed(title="Maintenance Mod On", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+		else:
+			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 		
 #component discord.py end
 
@@ -787,6 +819,7 @@ async def help(interaction: discord.Interaction):
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
 		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
+		admin_embed.add_field(name=f"{prefix}manutenzione", value="Cambia status al bot", inline=True)
 		admin_embed.set_footer(text=footer_testo)
 		await interaction.response.send_message('Select the help command section:', view=HelpDropdownView(), embed=admin_embed, ephemeral=True)
 	else:
@@ -877,7 +910,12 @@ async def verify(ctx):
 	await ctx.send(embed=embed, view=Button())
 	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
-		
+@client.command()
+@is_me
+async def manuntezione(ctx):
+	embed = discord.Embed(title="Click the button to start or stop maintenance mode\nThis message would be deleted in 20 seconds", color=discord.Color.red())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, view=Admin_Button_View(),delete_after=20)	
 
 	
 	
@@ -1024,51 +1062,76 @@ async def timeout(ctx, member: discord.Member, until: int):
 '''
 
 
-class Admin_Button_View(discord.ui.View):
-	def __init__(self):
-		super().__init__()
-		self.value = None
 
-	@discord.ui.button(label="Off", style=discord.ButtonStyle.red)
-	async def Off_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
-		if interaction.user.id == my_id:
-			change_status.start()
-			embed = discord.Embed(title="Maintenance Mod Off", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-		else:
-			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-			
-	@discord.ui.button(label="On", style=discord.ButtonStyle.green)
-	async def On_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
-		if interaction.user.id == my_id:
-			change_status.cancel()
-			await asyncio.sleep(2)
-			await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name=f"maintenance"))
-			embed = discord.Embed(title="Maintenance Mod On", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-		else:
-			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
 			
 
 			
 	
-@client.command()
-@is_me
-async def maintence(ctx):
-	embed = discord.Embed(title="Click the button to start or stop maintenance mode\nThis message would be deleted in 20 seconds", color=discord.Color.red())
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, view=Admin_Button_View(),delete_after=20)
 
-	
-	
-	
 
+#youtube
+import youtube_dl
+
+ytdlopts = { 
+    'format': 'bestaudio/best',
+    'outtmpl': 'downloads/%(extractor)s-%(id)s-%(title)s.%(ext)s',
+    'restrictfilenames': True,
+    'noplaylist': True,
+    'nocheckcertificate': True,
+    'ignoreerrors': False,
+    'logtostderr': False,
+    'quiet': True,
+    'no_warnings': True,
+    'default_search': 'auto',
+    'source_address': '0.0.0.0',  
+    'force-ipv4': True,
+    'preferredcodec': 'mp3',
+    'cachedir': False
+    
+    }
+
+ffmpeg_options = {
+        'options': '-vn'
+    }
+
+ytdl = youtube_dl.YoutubeDL(ytdlopts)
+
+
+@bot.command()
+async def play(ctx, *, query):
+    
+    try:
+        voice_channel = ctx.author.voice.channel #checking if user is in a voice channel
+    except AttributeError:
+        return await ctx.send("No channel to join. Make sure you are in a voice channel.") #member is not in a voice channel
+
+    permissions = voice_channel.permissions_for(ctx.me)
+    if not permissions.connect or not permissions.speak:
+        await ctx.send("I don't have permission to join or speak in that voice channel.")
+        return
+    
+    voice_client = ctx.guild.voice_client
+    if not voice_client:
+        await voice_channel.connect()
+        voice_client = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+
+    loop = asyncio.get_event_loop()
+    data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url=query, download=False)) #extracting the info and not downloading the source
+
+    
+    title = data['title'] #getting the title
+    song = data['url'] #getting the url
+
+    if 'entries' in data: #checking if the url is a playlist or not
+            data = data['entries'][0] #if its a playlist, we get the first item of it
+
+    try:
+        voice_client.play(discord.FFmpegPCMAudio(source=song,**ffmpeg_options, executable="ffmpeg")) #playing the audio
+    except Exception as e:
+        print(e)
+
+    await ctx.send(f'**Now playing:** {title}') #sending the title of the video
+#youtube
 
 @tasks.loop(seconds=18)
 async def change_status():
