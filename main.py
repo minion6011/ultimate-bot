@@ -949,8 +949,8 @@ async def gpt(ctx, *, request = None):
 				"best_of":"1",
 			}
 			headers = {"Authorization": f"Bearer {AI_key}"}	
-			async with session.post("https://api.openai.com/v1/completions", json=payload, headers=headers,) as resp:
-				response = await resp.json
+			async with session.post("https://api.openai.com/v1/completions", json=payload, headers=headers) as resp:
+				response = await resp.json()
 				embed = discord.Embed(title="Chat-GPT", colour=discord.Colour.green())
 				embed.add_field(name="Request", value=f"{request}", inline=False)
 				embed.add_field(name="Response", value=response["choices"][0]["text"], inline=False)
@@ -1053,7 +1053,17 @@ class Admin_Button_View(discord.ui.View):
 			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
+			
+	@discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
+	async def Delete_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
+		if interaction.user.id == my_id:
+			await interaction.delete_original_response()
+		else:
+			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 
+			
 	
 @client.command()
 @is_me
