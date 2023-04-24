@@ -924,6 +924,38 @@ async def help(ctx):
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
 #test - testing
+
+
+#test - testing
+
+@is_me
+@client.command()
+async def gpt(ctx, *, request = None):
+	if request == None:
+		embed = discord.Embed(title=f"Error\nPlease send a request", colour=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+	else:
+		async with aiothttp.ClientSession() as session:
+			AI_key = data["open_ai_key"]
+			payload = {
+				"model":"text-davinci-003",
+				"prompt": request,
+				"temperature":"0.5",
+				"max_tokens":"50",
+				"presence_penality":"0",
+				"frequency_penality":"0",
+				"best_of":"1",
+			}
+			headers = {"Authorization": f"Bearer {AI_key}"}	
+			async with session.post("https://api.openai.com/v1/completions", json=payload, headers=headers,) as resp:
+				response = await resp.json
+				embed = discord.Embed(title="Chat-GPT", colour=discord.Colour.green())
+				embed.add_field(name="Request", value=f"{request}", inline=False)
+				embed.add_field(name="Response", value=response["choices"][0]["text"]}, inline=False)
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
+
 @client.command()
 @commands.has_permissions(manage_messages=True)
 async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
