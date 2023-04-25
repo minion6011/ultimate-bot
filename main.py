@@ -1069,12 +1069,7 @@ async def timeout(ctx, member: discord.Member, until: int):
 	
 
 
-#youtube
-@client.command()
-async def test(ctx,url: None):
-	#url = ""
-	ctx.voice_client.play(discord.FFmpegPCMAudio(url, executable='"C:\Users\Vittorio\OneDrive\Desktop\Bot\ultimate bot\ffmpeg.exe"'))
-#youtube
+
 
 @tasks.loop(seconds=18)
 async def change_status():
@@ -1156,10 +1151,10 @@ async def on_command_error(ctx, error):
         channel = client.get_channel(errorchannel)
         embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
         await channel.send(embed=embed)
-    elif isinstance(error, discord.EmojiNotFound):
-        embed = discord.Embed(title="Error\nNo emoji founded\nPlease use a custom emoji", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
+    # isinstance(error, discord.EmojiNotFound):
+       #bed = discord.Embed(title="Error\nNo emoji founded\nPlease use a custom emoji", color=discord.Color.red())
+        #ed.set_footer(text=footer_testo)
+        #wait ctx.send(embed=embed, delete_after=4)
     elif isinstance(error, discord.NotFound):
         embed = discord.Embed(title="Error\nNo emoji founded", color=discord.Color.red())
         embed.set_footer(text=footer_testo)
