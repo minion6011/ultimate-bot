@@ -1072,7 +1072,7 @@ async def timeout(ctx, member: discord.Member, until: int):
 #youtube
 import youtube_dl
 
-    @client.command(name='play', aliases=['p'], pass_context = True)
+    @client.command()
     async def play(ctx, *, search_term:str = None):
         if ctx.author.voice:
             voice = None
@@ -1118,7 +1118,7 @@ import youtube_dl
             await ctx.send('You must be in a voice channel to play a song!')
             return
 
-
+'''
     @client.command(name='play', aliases=['p'], pass_context = True)
     async def play(ctx, *, search_term:str = None):
         if ctx.author.voice:
@@ -1164,15 +1164,15 @@ import youtube_dl
         else:
             await ctx.send('You must be in a voice channel to play a song!')
             return
-
-    @client.command(pass_context = True)
+'''
+    @client.command()
     async def leave(ctx):
         if ctx.voice_client:
             await ctx.guild.voice_client.disconnect()
         else:
             await ctx.send("I'm not in a voice channel!")
 
-    @client.command(pass_context = True)
+    @client.command()
     async def pause(ctx):
         voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
         if voice.is_playing():
@@ -1180,7 +1180,7 @@ import youtube_dl
         else:
             await ctx.send('No audio playing...')
 
-    @client.command(pass_context = True)
+    @client.command()
     async def resume(ctx):
         voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
         if voice.is_paused():
@@ -1188,7 +1188,7 @@ import youtube_dl
         else:
             await ctx.send('No audio paused...')
 
-    @client.command(pass_context = True)
+    @client.command()
     async def stop(ctx):
         voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
         voice.stop()
