@@ -1072,49 +1072,50 @@ async def timeout(ctx, member: discord.Member, until: int):
 #youtube
 import youtube_dl
 
-    @client.command()
-    async def play(ctx, *, search_term:str = None):
-        if ctx.author.voice:
-            voice = None
-            if search_term == None:
-                await ctx.send('No song specified.')
-                return
-            if not ctx.voice_client:
-                channel = ctx.message.author.voice.channel
-                voice = await channel.connect()
-            else:
-                voice = ctx.guild.voice_client
-            
-            url = YT.singleSearch(search_term)
-            
-            YTDLP_OPTIONS = {
-                'format': 'bestaudio/best',
-                'extractaudio': True,
-                'audioformat': 'mp3',
-                'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
-                'restrictfilenames': True,
-                'noplaylist': True,
-                'nocheckcertificate': True,
-                'ignoreerrors': False,
-                'logtostderr': False,
-                'quiet': True,
-                'no_warnings': True,
-                'default_search': 'ytsearch',
-                'source_address': '0.0.0.0',
-            }
-'''
- =====>     FFMPEG_OPTIONS = {
-                'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
-                'options': '-vn',
-            }
-'''
-            with yt_dlp.YoutubeDL(YTDLP_OPTIONS) as ydl:
-                info = ydl.extract_info(url, download=False)
-                playUrl = info['url']
+@client.command()
+async def play(ctx, *, search_term:str = None):
+	if ctx.author.voice:
+		voice = None
+		if search_term == None:
+			await ctx.send('No song specified.')
+			return
+		if not ctx.voice_client:
+			channel = ctx.message.author.voice.channel
+			voice = await channel.connect()
+		else:
+			voice = ctx.guild.voice_client
 
-            source = FFmpegPCMAudio(source=playUrl,before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",options="-vn")
-            voice.play(source)
-        else:
+			url = YT.singleSearch(search_term)
+
+			YTDLP_OPTIONS = {
+				'format': 'bestaudio/best',
+				'extractaudio': True,
+				'audioformat': 'mp3',
+				'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+				'restrictfilenames': True,
+				'noplaylist': True,
+				'nocheckcertificate': True,
+				'ignoreerrors': False,
+				'logtostderr': False,
+				'quiet': True,
+				'no_warnings': True,
+				'default_search': 'ytsearch',
+				'source_address': '0.0.0.0',
+			}
+	'''
+	 =====>     FFMPEG_OPTIONS = {
+			'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
+			'options': '-vn',
+		    }
+	'''
+			with yt_dlp.YoutubeDL(YTDLP_OPTIONS) as ydl:
+				info = ydl.extract_info(url, download=False)
+				playUrl = info['url']
+
+			source = FFmpegPCMAudio(source=playUrl,before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",options="-vn")
+			voice.play(source)
+		
+	else:
             await ctx.send('You must be in a voice channel to play a song!')
             return
 
