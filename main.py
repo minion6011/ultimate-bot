@@ -1161,33 +1161,33 @@ async def play(ctx, *, search_term:str = None):
             await ctx.send('You must be in a voice channel to play a song!')
             return
 '''
-    @client.command()
-    async def leave(ctx):
-        if ctx.voice_client:
-            await ctx.guild.voice_client.disconnect()
-        else:
-            await ctx.send("I'm not in a voice channel!")
+@client.command()
+async def leave(ctx):
+	if ctx.voice_client:
+		await ctx.guild.voice_client.disconnect()
+	else:
+		await ctx.send("I'm not in a voice channel!")
 
-    @client.command()
-    async def pause(ctx):
-        voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
-        if voice.is_playing():
-            voice.pause()
-        else:
-            await ctx.send('No audio playing...')
+@client.command()
+async def pause(ctx):
+	voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
+	if voice.is_playing():
+		voice.pause()
+	else:
+		await ctx.send('No audio playing...')
 
-    @client.command()
-    async def resume(ctx):
-        voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
-        if voice.is_paused():
-            voice.resume()
-        else:
-            await ctx.send('No audio paused...')
+@client.command()
+async def resume(ctx):
+	voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
+	if voice.is_paused():
+		voice.resume()
+	else:
+		await ctx.send('No audio paused...')
 
-    @client.command()
-    async def stop(ctx):
-        voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
-        voice.stop()
+@client.command()
+async def stop(ctx):
+	voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
+	voice.stop()
 
 '''
 ytdlopts = { 
