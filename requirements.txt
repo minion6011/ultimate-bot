@@ -5,6 +5,3 @@ requests
 aiohttp
 youtube_dl
 PyNaCl
-yt_dlp
-youtubeSearch
-responses
