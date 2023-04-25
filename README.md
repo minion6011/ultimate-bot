@@ -8,3 +8,4 @@ Ultimate-bot code
 
 ### For memory
 
+C:\Users\Vittorio\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
