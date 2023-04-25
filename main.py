@@ -1071,6 +1071,10 @@ async def timeout(ctx, member: discord.Member, until: int):
 
 #youtube
 import youtube_dl
+from discord import FFmpegPCMAudio
+import responses
+import youtubeSearch as YT
+import yt_dlp
 
 @client.command()
 async def play(ctx, *, search_term:str = None):
