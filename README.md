@@ -6,3 +6,5 @@ Ultimate-bot code
 <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=minion6011&langs_count=4&theme=github_dark&layout=compact" width="49%"></img>  
 
 
+### For memory
+
