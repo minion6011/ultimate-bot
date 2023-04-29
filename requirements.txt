@@ -5,3 +5,4 @@ requests
 aiohttp
 youtube_dl
 PyNaCl
+openai
