@@ -968,10 +968,12 @@ async def help(ctx):
 
 import openai
 import time
-@is_me
-@client.command()
-async def gpt(ctx, *, request = None):
+
+
+@client.tree.command(name="gpt", description = "generate chat-gpt response") #slash command
+async def gpt(interaction: discord.Interaction, *, request):
 	AI_key = data["open_ai_key"]
+	prompt = request
 	openai.api_key = AI_key
 	def generate_text(prompt):
 		response = openai.Completion.create(
@@ -983,10 +985,10 @@ async def gpt(ctx, *, request = None):
 			temperature=0.5,
 		)
 		text = response.choices[0].text
-		return text
-	prompt = request
-	text = generate_text(prompt)
-	await ctx.send(f"Chat-GPT\nRequest = {prompt}\n\nResponse```{text}```")
+		await interaction.response.send_message(f"Chat-GPT\n\nRequest = {prompt}\n\nResponse```{text}```", ephemeral=True)
+		#return text
+	#text = generate_text(prompt)
+	#await interaction.response.send_message(f"Chat-GPT\n\nRequest = {prompt}\n\nResponse```{text}```", ephemeral=True)
 
 
 			
