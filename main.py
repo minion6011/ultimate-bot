@@ -969,6 +969,9 @@ async def help(ctx):
 import openai
 import time
 
+key = data["open_ai_key"]
+
+openai.api_key = key
 
 @client.tree.command(name="gpt", description = "generate chat-gpt response")
 async def chat_gpt(interaction: discord.Interaction, *, question: str):
