@@ -984,8 +984,8 @@ async def gpt(ctx, *, request = None):
 			#stop=None,
 			temperature=0.5,
 		)
-	text = response.choices[0].text
-	return text
+		text = response.choices[0].text
+		return text
 	prompt = request
 	text = generate_text(prompt)
 	embed = discord.Embed(title=f"Chat-GPT\nRequest = {prompt}\n\nResponse```{text}```", colour=discord.Colour.green())
