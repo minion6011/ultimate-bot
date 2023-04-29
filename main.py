@@ -972,10 +972,10 @@ key = data["open_ai_key"]
 
 openai.api_key = key
 
-@client.tree.command(name="gpt", description = "generate chat-gpt response")
-async def chat_gpt(interaction: discord.Interaction, question: str):
+@client.tree.context_menu(name="GPT") #message contex command
+async def chat_gpt(interaction: discord.Interaction, question: discord.Message):
 	response = openai.Completion.create(
-		engine="davinci",
+		engine="text-davinci-003",
 		prompt=f"Q: {question}\nA:",
 		max_tokens=1024,
 		n=1,
@@ -985,7 +985,7 @@ async def chat_gpt(interaction: discord.Interaction, question: str):
 	
 	answer = response.choices[0].text.strip()
 	print(answer)
-	await interaction.respond(f"{answer}")
+	await interaction.response.send_message(f"{answer}")
     
     
 '''
