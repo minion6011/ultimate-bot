@@ -967,7 +967,6 @@ async def help(ctx):
 #test - testing
 
 import openai
-import time
 
 key = data["open_ai_key"]
 
@@ -986,7 +985,7 @@ async def chat_gpt(interaction: discord.Interaction, question: str):
 	
 	answer = response.choices[0].text.strip()
 	print(answer)
-	await interaction.response.send_message(f"{answer}")
+	await interaction.respond(f"{answer}")
     
     
 '''
