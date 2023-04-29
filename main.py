@@ -975,13 +975,11 @@ async def gpt(ctx, *, request = None):
 	openai.api_key = AI_key
 	def generate_text(prompt):
 		response = openai.Completion.create(
-			engine="text-davinci-003",
+			engine="davinci",
 			prompt=prompt,
-			max_tokens=50,
-			presence_penality=0,
-			frequency_penality=0,
-			best_of=1,
-			#stop=None,
+			max_tokens=1024,
+			n=1,
+			stop=None,
 			temperature=0.5,
 		)
 		text = response.choices[0].text
