@@ -966,35 +966,34 @@ async def help(ctx):
 
 #test - testing
 
-'''
+import openai
+import time
 @is_me
 @client.command()
 async def gpt(ctx, *, request = None):
-	if request == None:
-		embed = discord.Embed(title=f"Error\nPlease send a request", colour=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-	else:
-		async with aiohttp.ClientSession() as session:
-			AI_key = data["open_ai_key"]
-			payload = {
-				"model":"text-davinci-003",
-				"prompt": request,
-				"temperature":"0.5",
-				"max_tokens":"50",
-				"presence_penality":"0",
-				"frequency_penality":"0",
-				"best_of":"1",
-			}
-			headers = {"Authorization": "Bearer" + f"{AI_key}" }	
-			async with session.post("https://api.openai.com/v1/completions", json=payload, headers=headers) as resp:
-				response = await resp.json()
-				embed = discord.Embed(title="Chat-GPT", colour=discord.Colour.green())
-				embed.add_field(name="Request", value=f"{request}", inline=False)
-				embed.add_field(name="Response", value=response["choices"][0]["text"], inline=False)
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed)
-'''
+	AI_key = data["open_ai_key"]
+	openai.api_key = AI_key
+	def generate_text(prompt):
+		response = openai.Completion.create(
+			engine="text-davinci-003",
+			prompt=prompt,
+			max_tokens=50,
+			presence_penality=0,
+			frequency_penality=0,
+			best_of=1,
+			#stop=None,
+			temperature=0.5,
+		)
+	text = response.choices[0].text
+	return text
+	prompt = request
+	text = generate_text(prompt)
+	embed = discord.Embed(title=f"Chat-GPT\nRequest = {prompt}\n\nResponse```{text}```", colour=discord.Colour.green())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed)
+
+
+			
 
 @client.command()
 @commands.has_permissions(manage_messages=True)
