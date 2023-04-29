@@ -986,9 +986,7 @@ async def gpt(ctx, *, request = None):
 		return text
 	prompt = request
 	text = generate_text(prompt)
-	embed = discord.Embed(title=f"Chat-GPT\nRequest = {prompt}\n\nResponse```{text}```", colour=discord.Colour.green())
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed)
+	await ctx.send(f"Chat-GPT\nRequest = {prompt}\n\nResponse```{text}```")
 
 
 			
