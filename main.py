@@ -969,6 +969,22 @@ async def help(ctx):
 import openai
 import time
 
+
+@client.tree.command(name="gpt", description = "generate chat-gpt response")
+async def chat_gpt(interaction: discord.Interaction, *, question: str):
+	response = openai.Completion.create(
+		engine="davinci",
+		prompt=f"Q: {question}\nA:",
+		max_tokens=1024,
+		n=1,
+		stop=None,
+		temperature=0.7,
+	)
+	
+	answer = response.choices[0].text.strip()
+	await interaction.response.send_message(answer)
+    
+    
 '''
 @client.tree.command(name="gpt", description = "generate chat-gpt response") #slash command
 async def gpt(interaction: discord.Interaction, *, request):
@@ -1060,7 +1076,7 @@ async def timeout(ctx, member: discord.Member, until: int):
 
 
 
-			
+
 
 			
 	
