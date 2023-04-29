@@ -976,11 +976,11 @@ openai.api_key = key
 async def chat_gpt(interaction: discord.Interaction, question: discord.Message):
 	response = openai.Completion.create(
 		engine="text-davinci-003",
-		prompt=f"Q: {question}\nA:",
+		prompt=question,
 		max_tokens=1024,
 		n=1,
 		stop=None,
-		temperature=0.7,
+		temperature=0.1,
 	)
 	
 	answer = response.choices[0].text.strip()
