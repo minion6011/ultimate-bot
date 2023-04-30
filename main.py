@@ -912,7 +912,7 @@ async def verify(ctx):
 
 @client.command()
 @is_me
-async def manuntezione(ctx):
+async def manutezione(ctx):
 	embed = discord.Embed(title="Click the button to start or stop maintenance mode\nThis message would be deleted in 20 seconds", color=discord.Color.red())
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed, view=Admin_Button_View(),delete_after=20)	
