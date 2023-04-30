@@ -967,14 +967,14 @@ async def help(ctx):
 #test - testing
 
 from chatgpt import Conversation
-
+chatgpt= Conversation()
 #key = data["open_ai_key"]
 
 
 
 @client.tree.context_menu(name="GPT") #message contex command
 async def chat_gpt(interaction: discord.Interaction, question: discord.Message):
-	response = chatgpt.get_response(question)
+	response = chatgpt.chat(question)
 	await interaction.response.send_message(f"{response}")
     
     
