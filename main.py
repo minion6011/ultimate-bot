@@ -985,7 +985,7 @@ async def chat(ctx, *, message):
 	
 	
 @client.command()
-async def chat(ctx, *, request):
+async def test(ctx, *, request):
 	image_resp = openai.Image.create(prompt=request, n=4, size="512x512")
 	await ctx.send(image_resp)
 '''
