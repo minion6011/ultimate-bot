@@ -996,8 +996,8 @@ async def chat(ctx, *, message):
 		
 		
 
-from PIL import Image
-from io import BytesIO
+#from PIL import Image  #Pillow
+#from io import BytesIO  #io
 
 @client.command()
 async def generate_image(ctx, *, request):
