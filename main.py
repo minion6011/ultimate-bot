@@ -998,7 +998,7 @@ async def chat(ctx, *, message):
 		
 @client.command()
 async def chat2(ctx):
-    await ctx.send(openai.Model.list())		
+	print(openai.Model.list())
 		
 
 '''		
