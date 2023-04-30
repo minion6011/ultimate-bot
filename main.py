@@ -869,6 +869,16 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 
 #application command discord.py end
 
+#for update
+
+@client.command()
+@commands.has_permissions(manage_messages=True)
+async def slowmode(ctx, seconds: int):
+    await ctx.channel.edit(slowmode_delay=seconds)
+    slowmode_embed = discord.Embed(title="Slowmode", description="A slowmode was set for this channel", colour=discord.Colour.green())
+    await ctx.send(embed=slowmode_embed, delete_after=5)
+
+#for update end
 
 
 @client.command()
@@ -971,18 +981,35 @@ openai.api_key = data["access_token"]
 
 @client.command()
 async def chat(ctx, *, message):
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=message,
-        temperature=0.7,
-        max_tokens=1000,
-        top_p=0.85,
-        frequency_penalty=0.75,
-        presence_penalty=0.6
-    )
-    await ctx.send(response.choices[0].text)
-	
-	
+	response = openai.Completion.create(
+		engine="text-davinci-003",
+		prompt=message,
+		temperature=0.7,
+		max_tokens=1000, #max parole
+		top_p=0.85,
+		frequency_penalty=0.75,
+		presence_penalty=0.6
+	)
+	await ctx.channel.trigger_typing() #tempo di attesa
+	await ctx.send(f"***```{response.choices[0].text}```***")
+
+import emoji	
+
+@client.command()
+async def chat2(ctx, *, message):
+	response = openai.Completion.create(
+		engine="davinci",
+		prompt=message,
+		temperature=0.7,
+		max_tokens=1000, #max parole
+		top_p=1,
+		frequency_penalty=0.7,
+		presence_penalty=0.6
+	)
+	await ctx.channel.trigger_typing() #tempo di attesa
+	emoji_response = emoji.emojize(response, use_aliases=True)
+	await ctx.send(f"***```{response.choices[0].text}```***")
+	await ctx.send(f" test 2***{emoji_response}***")
 	
 @client.command()
 async def test(ctx, *, request):
@@ -1050,12 +1077,7 @@ async def timeout(ctx, member_id: discord.Member, minutes: int, reason: str):
 	await member_id.timeout(until=minutes, reason=reason)
 	#member = interaction.user
 
-@client.command()
-@commands.has_permissions(manage_messages=True)
-async def slowmode(ctx, seconds: int):
-    await ctx.channel.edit(slowmode_delay=seconds)
-    slowmode_embed = discord.Embed(title="Slowmode", description="A slowmode was set for this channel", colour=discord.Colour.green())
-    await ctx.send(embed=slowmode_embed, delete_after=5)
+
 
 @is_me
 @client.command()
@@ -1067,6 +1089,7 @@ async def automod(ctx, rule_name: str, word: str, minutes: int):
 		trigger = discord.AutoModTrigger(
 			type = discord.AutoModRuleTriggerType.keyword,keyword_filter = [word]), 
 		actions = [discord.AutoModRuleActionType.block_message])
+
 '''
 @client.command()
 async def timeout(ctx, member: discord.Member, until: int):
