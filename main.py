@@ -998,19 +998,20 @@ import emoji
 
 @client.command()
 async def chat2(ctx, *, message):
-	response = openai.Completion.create(
-		engine="davinci",
-		prompt=message,
-		temperature=0.7,
-		max_tokens=1000, #max parole
-		top_p=1,
-		frequency_penalty=0.7,
-		presence_penalty=0.6
-	)
-	await ctx.trigger_typing() #tempo di attesa
-	emoji_response = emoji.emojize(response, use_aliases=True)
-	await ctx.send(f"***```{response.choices[0].text}```***")
-	await ctx.send(f" test 2***{emoji_response}***")
+	async with ctx.typing():
+		response = openai.Completion.create(
+			engine="davinci",
+			prompt=message,
+			temperature=0.7,
+			max_tokens=1000, #max parole
+			top_p=1,
+			frequency_penalty=0.7,
+			presence_penalty=0.6
+		)
+		await ctx.trigger_typing()
+		emoji_response = emoji.emojize(response, use_aliases=True)
+		await ctx.send(f"***```{response.choices[0].text}```***")
+		await ctx.send(f" test 2***{emoji_response}***")
 	
 @client.command()
 async def test(ctx, *, request):
