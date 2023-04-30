@@ -983,15 +983,15 @@ openai.api_key = data["access_token"]
 async def chat(ctx, *, message):
 	async with ctx.typing():
 		response = openai.Completion.create(
-			engine="text-davinci-003",
+			engine="text-davinci-003", 
 			prompt=message,
-			temperature=0.7,
+			temperature=0.7, #creativita' coerenza
 			max_tokens=1000, #max parole
-			top_p=0.85,
-			frequency_penalty=0.75,
-			presence_penalty=0.6
+			top_p=0.85, #considera le possibilita' di risposta
+			frequency_penalty=0.75, #penalizza uso parole comuni
+			presence_penalty=0.6 #uso di parole specifiche(specializzate)
 		)
-		await ctx.send(f"> ***```{response.choices[0].text}```***")
+		await ctx.send(f"***{response.choices[0].text}***")
 
 
 @client.command()
@@ -1006,7 +1006,7 @@ async def chat2(ctx, *, message):
 			frequency_penalty=0.7,
 			presence_penalty=0.6
 		)
-		await ctx.send(f"> ***```{response.choices[0].text}```***")
+		await ctx.send(f"***{response.choices[0].text}***")
 '''		
 @client.command()
 async def chat2(ctx, *, message):
