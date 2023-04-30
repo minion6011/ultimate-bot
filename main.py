@@ -972,7 +972,7 @@ chatgpt= Conversation()
 
 
 
-@client.tree.command(name="GPT", description = "chat-gpt the message") #message contex command
+@client.tree.command(name="GPT", description = "chat gpt the message") #message contex command
 async def chat_gpt(interaction: discord.Interaction, question: str):
 	response = chatgpt.chat(question)
 	await interaction.response.send_message(f"{response}")
