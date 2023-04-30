@@ -966,26 +966,16 @@ async def help(ctx):
 
 #test - testing
 
-import openai
+from chatgpt import Conversation
 
-key = data["open_ai_key"]
+#key = data["open_ai_key"]
 
-openai.api_key = key
+
 
 @client.tree.context_menu(name="GPT") #message contex command
 async def chat_gpt(interaction: discord.Interaction, question: discord.Message):
-	response = openai.Completion.create(
-		engine="text-davinci-003",
-		prompt=question,
-		max_tokens=1024,
-		n=1,
-		stop=None,
-		temperature=0.1,
-	)
-	
-	answer = response.choices[0].text.strip()
-	print(answer)
-	await interaction.response.send_message(f"{answer}")
+	response = chatgpt.get_response(question)
+	await interaction.response.send_message(f"{response}")
     
     
 '''
