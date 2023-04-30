@@ -971,13 +971,14 @@ chatgpt= Conversation()
 #key = data["open_ai_key"]
 
 @client.command()
-async def chat2(ctx, *, message):
+async def chat2(ctx, *, message: str):
 	response = chatgpt.chat(message)
-	await ctx.send(f"{response}")
+	await ctx.send(response)
 	
 @client.command()
 async def chat(ctx, *, message: str):
-	response = chatgpt.chat(message)
+	await ctx.send(f"{message}")
+	response = chatgpt.chat(message.content)
 	await ctx.send(f"{response}")
     
     
