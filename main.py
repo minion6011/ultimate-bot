@@ -971,11 +971,10 @@ chatgpt= Conversation()
 #key = data["open_ai_key"]
 
 
-
-@client.tree.command(name="gpt", description = "chat gpt the message") #message contex command
-async def chat_gpt(interaction: discord.Interaction, question):
-	response = chatgpt.chat(question)
-	await interaction.response.send_message(f"{response}")
+@client.command()
+async def chat(ctx, *, message: str):
+	response = chatgpt.chat(message)
+	await ctx.send(f"{response}")
     
     
 '''
