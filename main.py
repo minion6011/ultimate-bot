@@ -974,11 +974,11 @@ async def chat(ctx, *, message):
     response = openai.Completion.create(
         engine="davinci",
         prompt=message,
-        temperature=0.6,
+        temperature=0.3,
         max_tokens=150,
         top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0.6
+        frequency_penalty=0.6,
+        presence_penalty=-0.6
     )
     await ctx.send(response.choices[0].text)
     
