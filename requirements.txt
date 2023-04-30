@@ -3,6 +3,6 @@ discord-together~=1.2.2
 psutil
 requests
 aiohttp
-youtube_dl
 PyNaCl
-chatgpt
+openai
+emoji
