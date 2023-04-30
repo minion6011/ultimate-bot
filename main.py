@@ -993,37 +993,36 @@ async def chat(ctx, *, message):
 		)
 		await ctx.send(f"***{response.choices[0].text}***")
 
-
-    
 		
-@client.command()
-async def chat2(ctx):
-	print(openai.Model.list())
 		
 
-'''		
+from PIL import Image
+from io import BytesIO
+
 @client.command()
-async def chat2(ctx, *, message):
-	async with ctx.typing():
-		response = openai.Completion.create(
-			engine="davinci",
-			prompt=message,
-			temperature=0.7,
-			max_tokens=1000, #max parole
-			top_p=1,
-			frequency_penalty=0.7,
-			presence_penalty=0.6
-		)
-		#pre_emoji_gpt = response.choices[0].text
-		#emoji_response = emoji.emojize(pre_emoji_gpt)
-		await ctx.send(f"> ***{response.choices[0].text}***")
-		#await ctx.send(f" test 2***{emoji_response}***")
-'''
+async def generate_image(ctx, *, request):
+	prompt = request
+	
+	response = openai.Image.create(
+		prompt=prompt,
+		n=1,
+		size="1024x1024",
+		response_format="url"
+	)
+	
+	image_url = response["data"][0]["url"]
+	#image_data = requests.get(image_url).content
+	#image = Image.open(BytesIO(image_data))
+	
+	#byte_array = BytesIO()
+	#image.save(byte_array, format=image.format)
+	#byte_array.seek(0)
+        #await ctx.send(file=discord.File(byte_array, "image.png"))
+	await ctx.send(image_url)
 		
-@client.command()
-async def test(ctx, *, request):
-	image_resp = openai.Image.create(prompt=request, n=4, size="512x512")
-	await ctx.send(image_resp)
+
+		
+
 '''
 async def gpt(interaction: discord.Interaction, *, request):
 	AI_key = data["open_ai_key"]
