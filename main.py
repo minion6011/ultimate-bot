@@ -994,45 +994,13 @@ async def chat(ctx, *, message):
 		await ctx.send(f"***{response.choices[0].text}***")
 
 
-@client.command()
-async def chat3(ctx, *, message):
-    response = openai.Completion.create(
-        engine="davinci",
-        prompt=message,
-        temperature=0.3,
-        max_tokens=150,
-        top_p=1,
-        frequency_penalty=0.6,
-        presence_penalty=-0.6
-    )
-    await ctx.send(response.choices[0].text)
     
 		
 @client.command()
-async def chat4(ctx, *, message):
-    response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=message,
-        temperature=0.7,
-        max_tokens=200,
-        top_p=0.5,
-        frequency_penalty=0.5,
-        presence_penalty=0.5
-    )
-    await ctx.send(response.choices[0].text)		
+async def chat2(ctx):
+    await ctx.send(openai.Model.list())		
 		
-@client.command()
-async def chat2(ctx, *, message):
-    response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=message,
-        temperature=0.7,
-        max_tokens=200,
-        top_p=0.5,
-        frequency_penalty=0.5,
-        presence_penalty=0.5
-    )
-    await ctx.send(response.choices[0].text)
+
 '''		
 @client.command()
 async def chat2(ctx, *, message):
