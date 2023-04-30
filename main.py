@@ -981,8 +981,13 @@ async def chat(ctx, *, message):
         presence_penalty=0.5
     )
     await ctx.send(response.choices[0].text)
-    
-    
+	
+	
+	
+@client.command()
+async def chat(ctx, *, request):
+	image_resp = openai.Image.create(prompt=request, n=4, size="512x512")
+	await ctx.send(image_resp)
 '''
 async def gpt(interaction: discord.Interaction, *, request):
 	AI_key = data["open_ai_key"]
