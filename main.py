@@ -1020,7 +1020,12 @@ async def generate_image(ctx, *, request):
         #await ctx.send(file=discord.File(byte_array, "image.png"))
 	await ctx.send(image_url)
 		
-
+@generate_image.error
+async def generate_image_error(ctx, error):
+    if isinstance(error, openai.Error):
+        await ctx.send("Your request contains text that is not allowed. Check your request and try again.")
+    else:
+        await ctx.send("Error during command execution.")
 		
 
 '''
