@@ -981,17 +981,18 @@ openai.api_key = data["access_token"]
 
 @client.command()
 async def chat(ctx, *, message):
-	response = openai.Completion.create(
-		engine="text-davinci-003",
-		prompt=message,
-		temperature=0.7,
-		max_tokens=1000, #max parole
-		top_p=0.85,
-		frequency_penalty=0.75,
-		presence_penalty=0.6
-	)
-	await ctx.trigger_typing() #tempo di attesa
-	await ctx.send(f"***```{response.choices[0].text}```***")
+	async with ctx.typing():
+		response = openai.Completion.create(
+			engine="text-davinci-003",
+			prompt=message,
+			temperature=0.7,
+			max_tokens=1000, #max parole
+			top_p=0.85,
+			frequency_penalty=0.75,
+			presence_penalty=0.6
+		)
+		await ctx.trigger_typing()
+		await ctx.send(f"***```{response.choices[0].text}```***")
 
 import emoji	
 
