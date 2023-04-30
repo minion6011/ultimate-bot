@@ -965,21 +965,22 @@ async def help(ctx):
 
 
 #test - testing
+import openai
 
-from chatgpt import Conversation
-chatgpt= Conversation()
-#key = data["open_ai_key"]
+openai.api_key = data["access_token"]
 
 @client.command()
-async def chat2(ctx, *, message: str):
-	response = chatgpt.chat(message)
-	await ctx.send(response)
-	
-@client.command()
-async def chat(ctx, *, message: str):
-	await ctx.send(f"{message}")
-	response = chatgpt.chat(message.content)
-	await ctx.send(f"{response}")
+async def chat(ctx, *, message):
+    response = openai.Completion.create(
+        engine="davinci",
+        prompt=message,
+        temperature=0.6,
+        max_tokens=150,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0.6
+    )
+    await ctx.send(response.choices[0].text)
     
     
 '''
