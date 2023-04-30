@@ -982,38 +982,34 @@ openai.api_key = data["access_token"]
 @client.command()
 async def chat(ctx, *, message):
 	async with ctx.typing():
-		try:
-			response = openai.Completion.create(
-				engine="text-davinci-003",
-				prompt=message,
-				temperature=0.7,
-				max_tokens=1000, #max parole
-				top_p=0.85,
-				frequency_penalty=0.75,
-				presence_penalty=0.6
-			)
-		finally:
-			await ctx.send(f"***```{response.choices[0].text}```***")
+		response = openai.Completion.create(
+			engine="text-davinci-003",
+			prompt=message,
+			temperature=0.7,
+			max_tokens=1000, #max parole
+			top_p=0.85,
+			frequency_penalty=0.75,
+			presence_penalty=0.6
+		)
+		await ctx.send(f"***```{response.choices[0].text}```***")
 
 import emoji	
 
 @client.command()
 async def chat2(ctx, *, message):
 	async with ctx.typing():
-		try:
-			response = openai.Completion.create(
-				engine="davinci",
-				prompt=message,
-				temperature=0.7,
-				max_tokens=1000, #max parole
-				top_p=1,
-				frequency_penalty=0.7,
-				presence_penalty=0.6
-			)
-		finally:
-			emoji_response = emoji.emojize(response, use_aliases=True)
-			await ctx.send(f"***```{response.choices[0].text}```***")
-			await ctx.send(f" test 2***{emoji_response}***")
+		response = openai.Completion.create(
+			engine="davinci",
+			prompt=message,
+			temperature=0.7,
+			max_tokens=1000, #max parole
+			top_p=1,
+			frequency_penalty=0.7,
+			presence_penalty=0.6
+		)
+		emoji_response = emoji.emojize(response)
+		await ctx.send(f"***```{response.choices[0].text}```***")
+		await ctx.send(f" test 2***{emoji_response}***")
 	
 @client.command()
 async def test(ctx, *, request):
