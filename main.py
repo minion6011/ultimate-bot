@@ -1007,7 +1007,8 @@ async def chat2(ctx, *, message):
 			frequency_penalty=0.7,
 			presence_penalty=0.6
 		)
-		emoji_response = emoji.emojize(response)
+		pre_emoji_gpt = response.choices[0].text
+		emoji_response = emoji.emojize(pre_emoji_gpt)
 		await ctx.send(f"***```{response.choices[0].text}```***")
 		await ctx.send(f" test 2***{emoji_response}***")
 	
