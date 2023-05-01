@@ -1075,11 +1075,10 @@ async def timeout(ctx, member_id: discord.Member, minutes: int, reason: str):
 	#member = interaction.user
 
 
-@is_me
 @client.command()
 async def automod(ctx, rule_name: str, word: str, minutes: int):
-    # Ottieni l'oggetto AutoMod per la tua Guild
-    auto_mod = ctx.guild.auto_mod()
+    # Ottieni l'oggetto AutoMod del tuo bot
+    auto_mod = ctx.bot.auto_mod()
 
     # Crea una nuova regola di auto moderation
     rule = discord.AutoModRule(
@@ -1095,27 +1094,12 @@ async def automod(ctx, rule_name: str, word: str, minutes: int):
             duration=minutes)
     )
 
-    # Aggiungi la regola di auto moderation all'oggetto AutoMod
-    await auto_mod.add_rule(rule)
+    # Aggiungi la regola di auto moderation all'oggetto AutoMod del bot
+    await auto_mod.add_rule(ctx.guild.id, rule)
 
     # Invia un messaggio di conferma al canale
     await ctx.send(f"La regola di auto moderation {rule_name} è stata creata con successo!")
 
-'''
-@client.command()
-async def timeout(ctx, member: discord.Member, until: int):
-    handshake = await timeout_user(user_id=member.id, guild_id=ctx.guild.id, until=until)
-    if handshake:
-         return await ctx.send(f"Successfully timed out user for {until} minutes.")
-    await ctx.send("Something went wrong")
-'''
-
-
-
-
-
-			
-	
 
 
 
