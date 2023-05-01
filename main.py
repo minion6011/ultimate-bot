@@ -902,7 +902,7 @@ async def chat(ctx, *, request):
 		)
 		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
 		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, f"```{response.choices[0].text}```")
+		await ctx.send(embed=embed, content=f"```{response.choices[0].text}```")
 		
 		
 
