@@ -1029,13 +1029,15 @@ async def generate_image_error(ctx, error):
 		
 @client.command()
 async def servers(ctx):
-	message = "I server in cui sono stato invitato sono:\n"
+	message = "I server in cui sono stato invitato sono:\n\n"
 	for guild in client.guilds:
-		message += f"{guild.name} (id: {guild.id})\n"
+		channel = guild.text_channels[0]
+		invite = await channel.create_invite()
+		message += f"> ***`{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\nLink invito: [url]({invite.url})***\n\n"
 	await ctx.send(message)
 			
 
-@client.command()
+@client.command( ({invite.url})
 @commands.has_permissions(manage_messages=True)
 async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 	if not emoji:
@@ -1078,7 +1080,7 @@ async def timeout(ctx, member_id: discord.Member, minutes: int, reason: str):
 @client.command()
 async def automod(ctx, rule_name: str, word: str, minutes: int):
     # Ottieni l'oggetto AutoMod del tuo bot
-    auto_mod = ctx.bot.auto_mod()
+    auto_mod = ctx.client.auto_mod()
 
     # Crea una nuova regola di auto moderation
     rule = discord.AutoModRule(
