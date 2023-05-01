@@ -5,3 +5,4 @@ requests
 aiohttp
 PyNaCl
 openai
+googletrans
