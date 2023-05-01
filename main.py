@@ -1027,28 +1027,12 @@ async def generate_image_error(ctx, error):
     else:
         await ctx.send("Error during command execution.")
 		
-
-'''
-async def gpt(interaction: discord.Interaction, *, request):
-	AI_key = data["open_ai_key"]
-	prompt = request
-	openai.api_key = AI_key
-	def generate_text(prompt):
-		response = openai.Completion.create(
-			engine="davinci",
-			prompt=prompt,
-			max_tokens=1024,
-			n=1,
-			stop=None,
-			temperature=0.5,
-		)
-		text = response.choices[0].text
-		await interaction.response.send_message(f"Chat-GPT\n\nRequest = {prompt}\n\nResponse```{text}```", ephemeral=True)
-		#return text
-	#text = generate_text(prompt)
-	#await interaction.response.send_message(f"Chat-GPT\n\nRequest = {prompt}\n\nResponse```{text}```", ephemeral=True)
-
-'''
+@client.command()
+async def servers(ctx):
+	message = "I server in cui sono stato invitato sono:\n"
+	for guild in bot.guilds:
+		message += f"{guild.name} (id: {guild.id})\n"
+	await ctx.send(message)
 			
 
 @client.command()
