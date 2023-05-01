@@ -942,6 +942,8 @@ async def translate(ctx, *, message):
         translated = translator.translate(message, dest='en')
 
         # Invia il messaggio tradotto al canale
+	print(traslated)
+	print(traslated.text)
         await ctx.send(f"**Original message:**\n{message}\n\n**Translated message:**\n{translated.text}")
         
     except Exception as e:
