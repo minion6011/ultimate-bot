@@ -889,20 +889,20 @@ openai.api_key = data["access_token"]
 
 
 @client.command()
-async def chat(ctx, *, message):
+async def chat(ctx, *, request):
 	async with ctx.typing():
 		response = openai.Completion.create(
 			engine="text-davinci-003", 
-			prompt=message,
+			prompt=request,
 			temperature=0.7, #creativita' coerenza
 			max_tokens=1000, #max parole
 			top_p=0.85, #considera le possibilita' di risposta
 			frequency_penalty=0.75, #penalizza uso parole comuni
 			presence_penalty=0.6 #uso di parole specifiche(specializzate)
 		)
-		embed = discord.Embed(title=f"{response.choices[0].text}", colour=discord.Color.blue())
+		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
 		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
+		await ctx.send(embed=embed, f"```{response.choices[0].text}```")
 		
 		
 
@@ -914,6 +914,7 @@ async def generate_image(ctx, *, request):
 
 		response = openai.Image.create(
 			prompt=prompt,
+			model="image-alpha-001",
 			n=1,
 			size="1024x1024",
 			response_format="url"
@@ -922,7 +923,7 @@ async def generate_image(ctx, *, request):
 		image_url = response["data"][0]["url"]
 
 		#await ctx.send(file=discord.File(byte_array, "image.png"))
-		embed = discord.Embed(title=f"Request: {request}", colour=discord.Color.green())
+		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
 		embed.set_image(url=image_url)
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
