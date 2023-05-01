@@ -1030,7 +1030,7 @@ async def generate_image_error(ctx, error):
 @client.command()
 async def servers(ctx):
 	message = "I server in cui sono stato invitato sono:\n"
-	for guild in bot.guilds:
+	for guild in client.guilds:
 		message += f"{guild.name} (id: {guild.id})\n"
 	await ctx.send(message)
 			
