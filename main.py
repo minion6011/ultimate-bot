@@ -900,8 +900,9 @@ async def chat(ctx, *, message):
 			frequency_penalty=0.75, #penalizza uso parole comuni
 			presence_penalty=0.6 #uso di parole specifiche(specializzate)
 		)
-		await ctx.send(f"***{response.choices[0].text}***")
-
+		embed = discord.Embed(title=f"{response.choices[0].text}", colour=discord.Color.blue())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
 		
 		
 
@@ -921,7 +922,7 @@ async def generate_image(ctx, *, request):
 		image_url = response["data"][0]["url"]
 
 		#await ctx.send(file=discord.File(byte_array, "image.png"))
-		embed = discord.Embed(title=f"Request: {request}")
+		embed = discord.Embed(title=f"Request: {request}", colour=discord.Color.green())
 		embed.set_image(url=image_url)
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
