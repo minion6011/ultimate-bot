@@ -1075,17 +1075,31 @@ async def timeout(ctx, member_id: discord.Member, minutes: int, reason: str):
 	#member = interaction.user
 
 
-
 @is_me
 @client.command()
 async def automod(ctx, rule_name: str, word: str, minutes: int):
-	Guild = ctx.guild
-	Guild.create_automod_rule(
-		name = rule_name,
-		event_type = discord.AutoModRuleEventType.message_send,
-		trigger = discord.AutoModTrigger(
-			type = discord.AutoModRuleTriggerType.keyword,keyword_filter = [word]), 
-		actions = [discord.AutoModRuleActionType.block_message])
+    # Ottieni l'oggetto AutoMod per la tua Guild
+    auto_mod = ctx.guild.auto_mod()
+
+    # Crea una nuova regola di auto moderation
+    rule = discord.AutoModRule(
+        name=rule_name,
+        event_type=discord.AutoModRuleEventType.message_send,
+        trigger=discord.AutoModTrigger(
+            type=discord.AutoModRuleTriggerType.keyword,
+            keyword_filter=[word],
+            silent=False),
+        actions=[discord.AutoModRuleActionType.block_message],
+        penalty=discord.AutoModRulePenalty(
+            type=discord.AutoModRulePenaltyType.mute,
+            duration=minutes)
+    )
+
+    # Aggiungi la regola di auto moderation all'oggetto AutoMod
+    await auto_mod.add_rule(rule)
+
+    # Invia un messaggio di conferma al canale
+    await ctx.send(f"La regola di auto moderation {rule_name} è stata creata con successo!")
 
 '''
 @client.command()
