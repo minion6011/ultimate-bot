@@ -742,14 +742,14 @@ class HelpDropdown(discord.ui.Select):
 		if self.values[0] == "Mod Commands":
 			embed = discord.Embed(title="Mod Commands :closed_lock_with_key:", color=discord.Color.gold())
 			embed.add_field(name=f"{prefix}nuke", value=f"Delete messages in the chat where it is used", inline=True)
-			embed.add_field(name=f"{prefix}kick user_id reason", value=f"Kick a member from the server", inline=True)
-			embed.add_field(name=f"{prefix}ban user_id reason", value=f"Ban a member from the server", inline=True)
-			embed.add_field(name=f"{prefix}unban user_id", value=f"Unban a member from the server", inline=True)
+			embed.add_field(name=f"{prefix}kick `user_id` `reason`", value=f"Kick a member from the server", inline=True)
+			embed.add_field(name=f"{prefix}ban user_id `reason`", value=f"Ban a member from the server", inline=True)
+			embed.add_field(name=f"{prefix}unban `user_id`", value=f"Unban a member from the server", inline=True)
 			embed.add_field(name=f"{prefix}delchannel", value=f"Delete all channel", inline=True)
 			embed.add_field(name=f"{prefix}lockdown", value=f"Lockdown all channel", inline=True)
 			embed.add_field(name=f"{prefix}unlock", value=f"Unlock channel", inline=True)
-			embed.add_field(name=f"{prefix}mute", value=f"Mute a member", inline=True)
-			embed.add_field(name=f"{prefix}unmute", value=f"Unmute a member", inline=True)
+			embed.add_field(name=f"{prefix}mute `user_id`", value=f"Mute a member", inline=True)
+			embed.add_field(name=f"{prefix}unmute `user_id`", value=f"Unmute a member", inline=True)
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 		elif self.values[0] == "Utilty Commands":
@@ -760,12 +760,14 @@ class HelpDropdown(discord.ui.Select):
 			embedt.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
 			embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
 			embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
+			embedt.add_field(name=f"{prefix}chat `request`", value="Answer your questions using Openai", inline=True)
+			embedt.add_field(name=f"{prefix}generate_image `request`", value="Generate image using Openai", inline=True)
 			embedt.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embedt, ephemeral=True)
-		elif self.values[0] == "Info Server/user Commands":
+		elif self.values[0] == "Server/user Commands":
 			embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
 			embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
-			embedd.add_field(name=f"{prefix}userinfo user_id", value="Send the User info", inline=True)
+			embedd.add_field(name=f"{prefix}userinfo `user_id`", value="Send the User info", inline=True)
 			embedd.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embedd, ephemeral=True)
 
