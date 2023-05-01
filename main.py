@@ -980,6 +980,20 @@ import openai
 openai.api_key = data["access_token"]
 
 @client.command()
+async def code(ctx, *, message):
+	async with ctx.typing():
+		response = openai.Completion.create(
+			engine="text-codex-002", 
+			prompt=message,
+			temperature=1.0, #creativita' coerenza
+			max_tokens=1024, #max parole
+			top_p=0.75, #considera le possibilita' di risposta
+			frequency_penalty=0.25, #penalizza uso parole comuni
+			presence_penalty=0.25 #uso di parole specifiche(specializzate)
+		)
+		await ctx.send(f"***{response.choices[0].text}***")
+
+@client.command()
 async def chat(ctx, *, message):
 	async with ctx.typing():
 		response = openai.Completion.create(
@@ -1035,7 +1049,8 @@ async def servers(ctx):
 		invite = await channel.create_invite()
 		message += f"> ***`{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\nLink invito: [url]({invite.url})***\n\n"
 	await ctx.send(message)
-			
+	
+	
 
 @client.command()
 @commands.has_permissions(manage_messages=True)
@@ -1068,13 +1083,6 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 		embed.set_thubnail(url=response_emoji.url)
 		await ctx.send(embed=embed)
 
-@client.command()
-@commands.has_permissions(manage_messages=True)
-async def timeout(ctx, member_id: discord.Member, minutes: int, reason: str):
-	timeout_embed = discord.Embed(title="Timeout", description=f"You have timeout** <@{member_id}>**\nFor `{minutes}` minutes :timer:\n\n***You can only remove timeout `(for now)` pressing right key and pressing `remove timeout`***", colour=discord.Colour.red())
-	await ctx.send(embed=timeout_embed)
-	await member_id.timeout(until=minutes, reason=reason)
-	#member = interaction.user
 
 
 @client.command()
