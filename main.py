@@ -931,14 +931,18 @@ async def generate_image(ctx, *, request):
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
 		
-'''		
+	
 @generate_image.error
 async def generate_image_error(ctx, error):
-    if isinstance(error, openai.Error):
-        await ctx.send("Your request contains text that is not allowed. Check your request and try again.")
-    else:
-        await ctx.send("Error during command execution.")
-'''
+	if isinstance(error, openai.Error):
+		embed = discord.Embed(title="Error: Your request contains text that is not allowed. Check your request and try again.", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
+	else:
+		embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
+
 
 
 	
@@ -1197,10 +1201,6 @@ async def on_command_error(ctx, error):
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.NotFound):
 		embed = discord.Embed(title="Error\nNo emoji founded", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=4)
-	elif isinstance(error, openai.Error):
-		embed = discord.Embed(title="Error: Your request contains text that is not allowed. Check your request and try again.", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
 	else:
