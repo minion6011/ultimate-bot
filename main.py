@@ -1088,7 +1088,7 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 @client.command()
 async def automod(ctx, rule_name: str, word: str, minutes: int):
     # Ottieni l'oggetto AutoMod del tuo bot
-    auto_mod = ctx.client.auto_mod()
+    auto_mod = ctx.bot.auto_mod()
 
     # Crea una nuova regola di auto moderation
     rule = discord.AutoModRule(
