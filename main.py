@@ -21,6 +21,9 @@ import requests
 from requests import get
 import json
 
+#open-ai
+import openai
+
 with open("config.json") as f:
     try:
         data = json.load(f)
@@ -878,7 +881,76 @@ async def slowmode(ctx, seconds: int):
     slowmode_embed = discord.Embed(title="Slowmode", description="A slowmode was set for this channel", colour=discord.Colour.green())
     await ctx.send(embed=slowmode_embed, delete_after=5)
 
-#for update end
+
+#openai start
+import openai
+
+openai.api_key = data["access_token"]
+
+
+@client.command()
+async def chat(ctx, *, message):
+	async with ctx.typing():
+		response = openai.Completion.create(
+			engine="text-davinci-003", 
+			prompt=message,
+			temperature=0.7, #creativita' coerenza
+			max_tokens=1000, #max parole
+			top_p=0.85, #considera le possibilita' di risposta
+			frequency_penalty=0.75, #penalizza uso parole comuni
+			presence_penalty=0.6 #uso di parole specifiche(specializzate)
+		)
+		await ctx.send(f"***{response.choices[0].text}***")
+
+		
+		
+
+
+@client.command()
+async def generate_image(ctx, *, request):
+	prompt = request
+	
+	response = openai.Image.create(
+		prompt=prompt,
+		n=1,
+		size="1024x1024",
+		response_format="url"
+	)
+	
+	image_url = response["data"][0]["url"]
+
+        #await ctx.send(file=discord.File(byte_array, "image.png"))
+	await ctx.send(image_url)
+		
+@generate_image.error
+async def generate_image_error(ctx, error):
+    if isinstance(error, openai.Error):
+        await ctx.send("Your request contains text that is not allowed. Check your request and try again.")
+    else:
+        await ctx.send("Error during command execution.")
+
+
+from googletrans import Translator
+
+# Crea un oggetto Translator
+translator = Translator()
+
+@client.command()
+async def translate(ctx, *, message):
+    try:
+        # Traduci il messaggio in inglese
+        translated = translator.translate(message, dest='en')
+
+        # Invia il messaggio tradotto al canale
+        await ctx.send(f"**Original message:**\n{message}\n\n**Translated message:**\n{translated.text}")
+        
+    except Exception as e:
+        # Gestisci eventuali errori
+        await ctx.send(f"An error occurred: {str(e)}")
+	
+#openai end
+
+#for update end  
 
 
 @client.command()
@@ -971,83 +1043,16 @@ async def help(ctx):
 '''	
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
-#test - testing
 
 
-#test - testing
-import openai
 
-openai.api_key = data["access_token"]
-
-@client.command()
-async def code(ctx, *, message):
-	async with ctx.typing():
-		response = openai.Completion.create(
-			engine="text-codex-002", 
-			prompt=message,
-			temperature=1.0, #creativita' coerenza
-			max_tokens=1024, #max parole
-			top_p=0.75, #considera le possibilita' di risposta
-			frequency_penalty=0.25, #penalizza uso parole comuni
-			presence_penalty=0.25 #uso di parole specifiche(specializzate)
-		)
-		await ctx.send(f"***{response.choices[0].text}***")
-
-@client.command()
-async def chat(ctx, *, message):
-	async with ctx.typing():
-		response = openai.Completion.create(
-			engine="text-davinci-003", 
-			prompt=message,
-			temperature=0.7, #creativita' coerenza
-			max_tokens=1000, #max parole
-			top_p=0.85, #considera le possibilita' di risposta
-			frequency_penalty=0.75, #penalizza uso parole comuni
-			presence_penalty=0.6 #uso di parole specifiche(specializzate)
-		)
-		await ctx.send(f"***{response.choices[0].text}***")
-
-		
-		
-
-#from PIL import Image  #Pillow
-#from io import BytesIO  #io
-
-@client.command()
-async def generate_image(ctx, *, request):
-	prompt = request
-	
-	response = openai.Image.create(
-		prompt=prompt,
-		n=1,
-		size="1024x1024",
-		response_format="url"
-	)
-	
-	image_url = response["data"][0]["url"]
-	#image_data = requests.get(image_url).content
-	#image = Image.open(BytesIO(image_data))
-	
-	#byte_array = BytesIO()
-	#image.save(byte_array, format=image.format)
-	#byte_array.seek(0)
-        #await ctx.send(file=discord.File(byte_array, "image.png"))
-	await ctx.send(image_url)
-		
-@generate_image.error
-async def generate_image_error(ctx, error):
-    if isinstance(error, openai.Error):
-        await ctx.send("Your request contains text that is not allowed. Check your request and try again.")
-    else:
-        await ctx.send("Error during command execution.")
-		
 @client.command()
 async def servers(ctx):
 	message = "I server in cui sono stato invitato sono:\n\n"
 	for guild in client.guilds:
 		channel = guild.text_channels[0]
 		invite = await channel.create_invite()
-		message += f" > ***`{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: {invite.url} ***\n\n"
+		message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: {invite.url} ***\n\n"
 	await ctx.send(message)
 	
 	
