@@ -1037,7 +1037,7 @@ async def servers(ctx):
 	await ctx.send(message)
 			
 
-@client.command( ({invite.url})
+@client.command()
 @commands.has_permissions(manage_messages=True)
 async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 	if not emoji:
