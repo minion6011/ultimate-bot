@@ -908,52 +908,48 @@ async def chat(ctx, *, message):
 
 @client.command()
 async def generate_image(ctx, *, request):
-	prompt = request
-	
-	response = openai.Image.create(
-		prompt=prompt,
-		n=1,
-		size="1024x1024",
-		response_format="url"
-	)
-	
-	image_url = response["data"][0]["url"]
+	async with ctx.typing():
+		prompt = request
 
-        #await ctx.send(file=discord.File(byte_array, "image.png"))
-	await ctx.send(image_url)
+		response = openai.Image.create(
+			prompt=prompt,
+			n=1,
+			size="1024x1024",
+			response_format="url"
+		)
+
+		image_url = response["data"][0]["url"]
+
+		#await ctx.send(file=discord.File(byte_array, "image.png"))
+		embed = discord.Embed(title=f"Request: {request}")
+		embed.set_image(url=image_url)
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
 		
+'''		
 @generate_image.error
 async def generate_image_error(ctx, error):
     if isinstance(error, openai.Error):
         await ctx.send("Your request contains text that is not allowed. Check your request and try again.")
     else:
         await ctx.send("Error during command execution.")
+'''
 
 
-from googletrans import Translator
-
-# Crea un oggetto Translator
-translator = Translator()
-
-@client.command()
-async def translate(ctx, *, message):
-    try:
-        # Traduci il messaggio in inglese
-        translated = translator.translate(message, dest='en')
-
-        # Invia il messaggio tradotto al canale
-	print(traslated)
-	print(traslated.text)
-        await ctx.send(f"**Original message:**\n{message}\n\n**Translated message:**\n{translated.text}")
-        
-    except Exception as e:
-        # Gestisci eventuali errori
-        await ctx.send(f"An error occurred: {str(e)}")
 	
 #openai end
 
 #for update end  
 
+@is_me
+@client.command()
+async def servers(ctx):
+	message = "I server in cui sono stato invitato sono:\n\n"
+	for guild in client.guilds:
+		channel = guild.text_channels[0]
+		invite = await channel.create_invite()
+		message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: {invite.url} ***\n\n"
+	await ctx.send(message)
 
 @client.command()
 @commands.guild_only()
@@ -1048,14 +1044,6 @@ async def help(ctx):
 
 
 
-@client.command()
-async def servers(ctx):
-	message = "I server in cui sono stato invitato sono:\n\n"
-	for guild in client.guilds:
-		channel = guild.text_channels[0]
-		invite = await channel.create_invite()
-		message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: {invite.url} ***\n\n"
-	await ctx.send(message)
 	
 	
 
@@ -1133,91 +1121,94 @@ async def change_status():
 	await asyncio.sleep(6)
 	await client.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(client.guilds)} server"))
 
+	
+    if isinstance(error, openai.Error):
+        await ctx.send("Your request contains text that is not allowed. Check your request and try again.")
 
 @client.event
 async def on_command_error(ctx, error):
-    if isinstance(error, discord.ext.commands.errors.CommandNotFound):
-        embed = discord.Embed(title="Error: This command does not exist", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
+	if isinstance(error, discord.ext.commands.errors.CommandNotFound):
+		embed = discord.Embed(title="Error: This command does not exist", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
-        channel = client.get_channel(errorchannel)
-        embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-        await channel.send(embed=embed)
-    elif isinstance(error, discord.ext.commands.errors.CommandInvokeError):
-        embed = discord.Embed(title=f"Error: Unknown", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
+		channel = client.get_channel(errorchannel)
+		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
+		await channel.send(embed=embed)
+	elif isinstance(error, discord.ext.commands.errors.CommandInvokeError):
+		embed = discord.Embed(title=f"Error: Unknown", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
-        channel = client.get_channel(errorchannel)
-        embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-        await channel.send(embed=embed)
-        raise error
-    elif isinstance(error, discord.ext.commands.errors.MissingPermissions):
-        embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
+		channel = client.get_channel(errorchannel)
+		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
+		await channel.send(embed=embed)
+		raise error
+	elif isinstance(error, discord.ext.commands.errors.MissingPermissions):
+		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
-        channel = client.get_channel(errorchannel)
-        embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-        await channel.send(embed=embed)
-    elif isinstance(error, discord.ext.commands.errors.MemberNotFound):
-        embed = discord.Embed(title="Error: Member not found", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
+		channel = client.get_channel(errorchannel)
+		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
+		await channel.send(embed=embed)
+	elif isinstance(error, discord.ext.commands.errors.MemberNotFound):
+		embed = discord.Embed(title="Error: Member not found", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
-        channel = client.get_channel(errorchannel)
-        embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-        await channel.send(embed=embed)
-    elif isinstance(error, discord.ext.commands.errors.UserNotFound):
-        embed = discord.Embed(title="Error: User not found", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
+		channel = client.get_channel(errorchannel)
+		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
+		await channel.send(embed=embed)
+	elif isinstance(error, discord.ext.commands.errors.UserNotFound):
+		embed = discord.Embed(title="Error: User not found", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
-        channel = client.get_channel(errorchannel)
-        embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-        await channel.send(embed=embed)
-    elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-        embed = discord.Embed(title="Error: Missing required argument", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
+		channel = client.get_channel(errorchannel)
+		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
+		await channel.send(embed=embed)
+	elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+		embed = discord.Embed(title="Error: Missing required argument", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
-        channel = client.get_channel(errorchannel)
-        embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-        await channel.send(embed=embed)
-    elif isinstance(error, discord.ext.commands.errors.NoPrivateMessage):
-        embed = discord.Embed(title="Error: This command can only be used in servers", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
+		channel = client.get_channel(errorchannel)
+		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
+		await channel.send(embed=embed)
+	elif isinstance(error, discord.ext.commands.errors.NoPrivateMessage):
+		embed = discord.Embed(title="Error: This command can only be used in servers", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
-        channel = client.get_channel(errorchannel)
-        embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-        await channel.send(embed=embed)
-    elif isinstance(error, discord.errors.HTTPException):
-        embed = discord.Embed(title="Error", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
+		channel = client.get_channel(errorchannel)
+		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
+		await channel.send(embed=embed)
+	elif isinstance(error, discord.errors.HTTPException):
+		embed = discord.Embed(title="Error", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
-        channel = client.get_channel(errorchannel)
-        embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-        await channel.send(embed=embed)
-    # isinstance(error, discord.EmojiNotFound):
-       #bed = discord.Embed(title="Error\nNo emoji founded\nPlease use a custom emoji", color=discord.Color.red())
-        #ed.set_footer(text=footer_testo)
-        #wait ctx.send(embed=embed, delete_after=4)
-    elif isinstance(error, discord.NotFound):
-        embed = discord.Embed(title="Error\nNo emoji founded", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
-    else:
-        embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
+		channel = client.get_channel(errorchannel)
+		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
+		await channel.send(embed=embed)
+	elif isinstance(error, discord.NotFound):
+		embed = discord.Embed(title="Error\nNo emoji founded", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
+	elif isinstance(error, openai.Error):
+		embed = discord.Embed(title="Error: Your request contains text that is not allowed. Check your request and try again.", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
+	else:
+		embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
-        channel = client.get_channel(errorchannel)
-        embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-        await channel.send(embed=embed)
-        raise error
+		channel = client.get_channel(errorchannel)
+		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
+		await channel.send(embed=embed)
+		raise error
       
 
 
