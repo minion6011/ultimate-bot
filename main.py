@@ -1122,9 +1122,7 @@ async def change_status():
 	await asyncio.sleep(6)
 	await client.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(client.guilds)} server"))
 
-	
-    if isinstance(error, openai.Error):
-        await ctx.send("Your request contains text that is not allowed. Check your request and try again.")
+
 
 @client.event
 async def on_command_error(ctx, error):
