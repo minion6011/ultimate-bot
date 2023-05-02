@@ -831,7 +831,7 @@ async def help(interaction: discord.Interaction):
 		for command in client.commands:
 			command_list.append(f"Nome: {command.name} - Descrizione: {command.description} - Utilizzo: {command.usage}")
 		message = "\n".join(command_list)
-		await interaction.response.send_message('Select the help command section:', view=HelpDropdownView(), embed=admin_embed, content=f"{message}", ephemeral=True)
+		await interaction.response.send_message(f'{message}\n\nSelect the help command section:', view=HelpDropdownView(), embed=admin_embed, ephemeral=True)
 	else:
 		#view = HelpDropdownView()
 		await interaction.response.send_message( view=HelpDropdownView(), ephemeral=True)
