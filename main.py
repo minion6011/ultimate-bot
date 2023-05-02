@@ -952,6 +952,19 @@ async def generate_image_error(ctx, error):
 	
 #openai end
 
+from translate import Translator
+
+@client.command()
+async def traduci(ctx, text):
+    dest_lang = "en"
+    try:
+        translator = Translator(to_lang=dest_lang)
+        translation = translator.translate(text)
+        await ctx.send(f"{ctx.author.mention}, ecco il tuo messaggio tradotto:\n{translation}")
+    except Exception as e:
+        print(e)
+        await ctx.send(f"Si è verificato un errore nella traduzione.")
+
 #for update end  
 
 @is_me
