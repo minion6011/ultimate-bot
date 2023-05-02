@@ -955,7 +955,7 @@ async def generate_image_error(ctx, error):
 from translate import Translator
 
 @client.command()
-async def traduci(ctx, text):
+async def traduci(ctx, *, text):
     dest_lang = "en"
     try:
         translator = Translator(to_lang=dest_lang)
