@@ -827,7 +827,11 @@ async def help(interaction: discord.Interaction):
 		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
 		admin_embed.add_field(name=f"{prefix}manutenzione", value="Cambia status al bot", inline=True)
 		admin_embed.set_footer(text=footer_testo)
-		await interaction.response.send_message('Select the help command section:', view=HelpDropdownView(), embed=admin_embed, ephemeral=True)
+		command_list = []
+		for command in bot.commands:
+			command_list.append(f"Nome: {command.name} - Descrizione: {command.description} - Utilizzo: {command.usage}")
+		message = "\n".join(command_list)
+		await interaction.response.send_message('Select the help command section:', view=HelpDropdownView(), embed=admin_embed, content=f"{message}", ephemeral=True)
 	else:
 		#view = HelpDropdownView()
 		await interaction.response.send_message( view=HelpDropdownView(), ephemeral=True)
