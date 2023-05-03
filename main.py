@@ -957,7 +957,7 @@ from translate import Translator
 @client.command()
 async def traduci(ctx, *, text):
     try:
-        translator = Translator(to_lang="en")
+        translator = Translator(to_lang="it")
         translation = translator.translate(text)
         await ctx.send(f"{ctx.author.mention}, ecco il tuo messaggio tradotto:\n{translation}")
     except Exception as e:
