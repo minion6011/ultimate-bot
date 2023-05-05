@@ -1215,8 +1215,7 @@ async def on_command_error(ctx, error):
 		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
 		channel = client.get_channel(errorchannel)
-		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-		await channel.send(embed=embed)
+		await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")
 	elif isinstance(error, discord.NotFound):
 		embed = discord.Embed(title="Error\nNo emoji founded", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
@@ -1227,8 +1226,7 @@ async def on_command_error(ctx, error):
 		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
 		channel = client.get_channel(errorchannel)
-		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-		await channel.send(embed=embed)
+		await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")
 		raise error
       
 
