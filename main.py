@@ -953,7 +953,7 @@ async def generate_image_error(ctx, error):
 #openai end
 
 from deep_translator import GoogleTranslator
-from deep_translator import get_supported_languages
+
 
 @client.command()
 async def traduci(ctx, lingua, *, testo):
@@ -962,7 +962,7 @@ async def traduci(ctx, lingua, *, testo):
 		risultato = traduttore.translate(testo)
 		await ctx.send(f"{ctx.author.mention}, ecco il tuo messaggio tradotto:\n{risultato}")
 	except ValueError:
-		lingue_supportate = ', '.join(get_supported_languages())
+		lingue_supportate = GoogleTranslator.get_supported_languages()
 		await ctx.send(f"La lingua {lingua} non è supportata. \nLe lingue supportate sono: {lingue_supportate}.")
     
 
