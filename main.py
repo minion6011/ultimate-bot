@@ -952,7 +952,8 @@ async def generate_image_error(ctx, error):
 	
 #openai end
 
-from translate import Translator
+#from translate import Translator
+from googletrans import Translator
 
 @client.command()
 async def translate(ctx, language, *, message):
