@@ -956,14 +956,17 @@ from deep_translator import GoogleTranslator
 
 
 @client.command()
-async def traduci(ctx, lingua, *, testo):
+async def traslate(ctx, language=str, *, text=str):
 	try:
-		traduttore = GoogleTranslator(source='auto', target=lingua)
-		risultato = traduttore.translate(testo)
-		await ctx.send(f"{ctx.author.mention}, ecco il tuo messaggio tradotto:\n{risultato}")
+		if len(testo) > 1998:
+			await ctx.send("the text is too long must not exceed 1998 characters")
+		else:
+			traduttore = GoogleTranslator(source='auto', target=language)
+			risultato = traduttore.translate(text)
+			await ctx.send(f"```{risultato}```")
 	except Exception as e:
 		lingue_supportate = GoogleTranslator().get_supported_languages()
-		await ctx.send(f"La lingua {lingua} non è supportata. \nLe lingue supportate sono: {lingue_supportate}.")
+		await ctx.send(f"La lingua {lingua} non è supportata. \nLe lingue supportate sono: \n\n{lingue_supportate}.")
     
 
 #for update end  
