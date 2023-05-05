@@ -955,18 +955,42 @@ async def generate_image_error(ctx, error):
 from deep_translator import GoogleTranslator
 
 
+
+class TraslateButton(discord.ui.View):
+	def __init__(self):
+		super().__init__()
+		self.value = None
+
+	@discord.ui.button(label="List of language", style=discord.ButtonStyle.red)
+	async def TraslateButton(self, interaction: discord.Interaction, button: discord.ui.Button):
+		embed_traslate=discord.Embed(title=f"***```{lingue_supportate}```***", color=discord.Color.green())
+		embed_traslate.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed_traslate, ephemeral=True)
+
+
+
 @client.command()
 async def traslate(ctx, language=str, *, text=str):
 	try:
-		if len(testo) > 1998:
+		if len(text) > 1998:
 			await ctx.send("the text is too long must not exceed 1998 characters")
 		else:
-			traduttore = GoogleTranslator(source='auto', target=language)
-			risultato = traduttore.translate(text)
-			await ctx.send(f"```{risultato}```")
+			if len(text) > 1024:
+				traduttore = GoogleTranslator(source='auto', target=language)
+				risultato = traduttore.translate(text)
+				await ctx.send(f"```{risultato}```")
+			else:
+				traduttore = GoogleTranslator(source='auto', target=language)
+				risultato = traduttore.translate(text)
+				embed=discord.Embed(color=discord.Color.green())
+				embed.add_field(name=":earth_americas: Request:", value=f"{request}")
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed, content=f"```{risultato}```")
 	except Exception as e:
 		lingue_supportate = GoogleTranslator().get_supported_languages()
-		await ctx.send(f"La lingua {lingua} non è supportata. \nLe lingue supportate sono: \n\n{lingue_supportate}.")
+		embed=discord.Embed(title=f"The language {language} is not supported.\nTo see the supported languages press the button.", color=discord.Color.green())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, view=TraslateButton())
     
 
 #for update end  
