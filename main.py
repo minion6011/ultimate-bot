@@ -955,14 +955,25 @@ async def generate_image_error(ctx, error):
 from translate import Translator
 
 @client.command()
-async def traduci(ctx, *, text):
-    try:
-        translator = Translator(to_lang="it")
-        translation = translator.translate(text)
-        await ctx.send(f"{ctx.author.mention}, ecco il tuo messaggio tradotto:\n{translation}")
-    except Exception as e:
-        print(e)
-        await ctx.send(f"Si è verificato un errore nella traduzione.")
+async def translate(ctx, language, *, message):
+    language = language.lower()
+    if language not in googletrans.LANGUAGES and language not in googletrans.LANGCODES:
+        await ctx.send("Invalid Language. Try Again.", ephemeral=True)
+        return
+    
+    text = ' '.join(message)
+    translator = googletrans.Translator()
+    translation = translator.translate(text, dest=language)
+    if translation is None:
+        await ctx.send("The input could not be translated!")
+        return
+    text_translated = translation.text
+    embed = discord.Embed()
+    embed.add_field(name=f"**Input 📥 :**", value=f"```\n{message}```",inline=False)
+    embed.add_field(name=f"**Output 📤 :**", value=f"```\n{text_translated}```",inline=False)
+    embed.set_footer(icon_url=f"{ctx.author.avatar.url}", text=f"Translated to {language.capitalize()}")
+    #embed.timestamp = datetime.datetime.utcnow()
+    await ctx.send(embed=embed)
 
 #for update end  
 
