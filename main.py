@@ -962,7 +962,7 @@ async def traduci(ctx, lingua, *, testo):
 		risultato = traduttore.translate(testo)
 		await ctx.send(f"{ctx.author.mention}, ecco il tuo messaggio tradotto:\n{risultato}")
 	except Exception as e:
-		lingue_supportate = GoogleTranslator.get_supported_languages()
+		lingue_supportate = GoogleTranslator().get_supported_languages()
 		await ctx.send(f"La lingua {lingua} non è supportata. \nLe lingue supportate sono: {lingue_supportate}.")
     
 
