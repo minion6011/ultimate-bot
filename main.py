@@ -1,27 +1,35 @@
+#estremo funzionamento del bot
 import discord
 from discord.ext import commands, tasks
-from discord_together import DiscordTogether
-from random import choice
+from discord.ext.commands import has_permissions, CheckFailure, NoPrivateMessage
+from discord.utils import get
 
 #discord py slash
 from discord import app_commands
-#end
 
-from discord.utils import get
-from discord.ext.commands import has_permissions, CheckFailure, NoPrivateMessage
-import random
-import json
-import os
-import asyncio
+#command
+import random #per estrazzione
+from random import choice #per estrazzione
+import asyncio #per attesa di tempo
+import os #per azioni sul pc
+import aiohttp #https
+import requests #https
+from requests import get #https
+import json #json
+
+#system-info
 import psutil
 
-import aiohttp
-
-import requests
-from requests import get
-import json
-
 #open-ai
+import openai
+
+#activity
+from discord_together import DiscordTogether
+
+#traduttore
+from deep_translator import GoogleTranslator
+
+#openai
 import openai
 
 with open("config.json") as f:
@@ -55,6 +63,8 @@ footer_testo = data["footer_embed"]
 stalkid = 1045020366751404172
 errorchannel = 1046796347870826496
 
+#key
+openai.api_key = data["access_token"]
 
 @client.event
 async def on_ready():
@@ -284,6 +294,7 @@ async def nuke(ctx, amount=100):
         embed.set_footer(text=footer_testo)  
         await ctx.send(embed=embed, delete_after=4)
 
+'''
 @client.command()
 @commands.guild_only()
 async def activity(ctx, id=None):
@@ -343,7 +354,7 @@ async def activity(ctx, id=None):
                         embed.add_field(name="Boosted activity\n1 = Sketch Heads\n2 = Chess in the Park\n3 = Land.io\n4 = Spell Cast\n5 = Blazing 8s\n6 = Poker Night\n7 = Letter League\n8 = Booble League\n9 = Checkers in the Park\n10 = Awkword\n11 = Ask Away\n14 = Bash Out", value="Free Activity\n12 = Know what I Meme\n 13 = Watch Together")
                         embed.set_footer(text=footer_testo)    
                         await ctx.send(embed=embed)
-                       
+'''
 
 
 
@@ -579,6 +590,93 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 
 
 
+@client.command()
+@commands.guild_only()
+@commands.has_permissions(manage_messages=True)
+async def slowmode(ctx, seconds: int):
+	await ctx.channel.edit(slowmode_delay=seconds)
+	slowmode_embed = discord.Embed(title="Slowmode", description="A slowmode was set for this channel", colour=discord.Colour.green())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=slowmode_embed, delete_after=10)
+
+
+
+
+@client.command()
+@commands.guild_only()
+async def chat(ctx, *, request):
+	async with ctx.typing():
+		response = openai.Completion.create(
+			engine="text-davinci-003", 
+			prompt=request,
+			temperature=0.7, #creativita' coerenza
+			max_tokens=1000, #max parole
+			top_p=0.85, #considera le possibilita' di risposta
+			frequency_penalty=0.75, #penalizza uso parole comuni
+			presence_penalty=0.6 #uso di parole specifiche(specializzate)
+		)
+		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, content=f"```{response.choices[0].text}```")	
+
+@client.command()
+@commands.guild_only()
+async def generate_image(ctx, *, request):
+	async with ctx.typing():
+		prompt = request
+
+		response = openai.Image.create(
+			prompt=prompt,
+			model="image-alpha-001",
+			n=1,
+			size="1024x1024",
+			response_format="url"
+		)
+
+		image_url = response["data"][0]["url"]
+
+		#await ctx.send(file=discord.File(byte_array, "image.png"))
+		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+		embed.set_image(url=image_url)
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+		
+@generate_image.error
+async def generate_image_error(ctx, error):
+	if isinstance(error, openai.Error):
+		embed = discord.Embed(title="Error: Your request contains text that is not allowed. Check your request and try again.", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
+	else:
+		embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
+
+@client.command()
+@commands.guild_only()
+async def translate(ctx, language, *, request):
+	text = request
+	lang = language
+	try:
+		if len(text) > 1998:
+			await ctx.send("the text is too long must not exceed 1998 characters")
+		else:
+			if len(text) > 1024:
+				traduttore = GoogleTranslator(source='auto', target=lang)
+				risultato = traduttore.translate(text)
+				await ctx.send(f"```{risultato}```")
+			else:
+				traduttore = GoogleTranslator(source='auto', target=lang)
+				risultato = traduttore.translate(text)
+				embed=discord.Embed(color=discord.Color.green())
+				embed.add_field(name=":earth_americas: Request:", value=f"{request}")
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed, content=f"```{risultato}```")
+	except Exception as e:
+		embed=discord.Embed(title=f"The language {lang} is not supported.\nTo see the supported languages press the button.", color=discord.Color.green())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, view=TraslateButton())
+
 
 
 @client.command()
@@ -810,7 +908,22 @@ class Admin_Button_View(discord.ui.View):
 			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
+
+	
+class TraslateButton(discord.ui.View):
+	def __init__(self):
+		super().__init__()
+		self.value = None
+
+	@discord.ui.button(label="List of language", style=discord.ButtonStyle.red)
+	async def TraslateButton(self, interaction: discord.Interaction, button: discord.ui.Button):
+		lingue_supportate = GoogleTranslator().get_supported_languages()
+		embed_traslate=discord.Embed(title=f"***```{lingue_supportate}```***", color=discord.Color.green())
+		embed_traslate.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed_traslate, ephemeral=True)
 		
+		
+
 #component discord.py end
 
 #apllication command discord.py
@@ -877,128 +990,13 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 				embed.set_footer(text=footer_testo)
 				await interaction.response.send_message(embed=embed, ephemeral=True)
 
-#application command discord.py end
 
-#for update
-
-@client.command()
-@commands.has_permissions(manage_messages=True)
-async def slowmode(ctx, seconds: int):
-    await ctx.channel.edit(slowmode_delay=seconds)
-    slowmode_embed = discord.Embed(title="Slowmode", description="A slowmode was set for this channel", colour=discord.Colour.green())
-    await ctx.send(embed=slowmode_embed, delete_after=5)
-
-
-#openai start
-import openai
-
-openai.api_key = data["access_token"]
-
-
-@client.command()
-async def chat(ctx, *, request):
-	async with ctx.typing():
-		response = openai.Completion.create(
-			engine="text-davinci-003", 
-			prompt=request,
-			temperature=0.7, #creativita' coerenza
-			max_tokens=1000, #max parole
-			top_p=0.85, #considera le possibilita' di risposta
-			frequency_penalty=0.75, #penalizza uso parole comuni
-			presence_penalty=0.6 #uso di parole specifiche(specializzate)
-		)
-		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, content=f"```{response.choices[0].text}```")
-		
-		
-
-
-@client.command()
-async def generate_image(ctx, *, request):
-	async with ctx.typing():
-		prompt = request
-
-		response = openai.Image.create(
-			prompt=prompt,
-			model="image-alpha-001",
-			n=1,
-			size="1024x1024",
-			response_format="url"
-		)
-
-		image_url = response["data"][0]["url"]
-
-		#await ctx.send(file=discord.File(byte_array, "image.png"))
-		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
-		embed.set_image(url=image_url)
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-		
-	
-@generate_image.error
-async def generate_image_error(ctx, error):
-	if isinstance(error, openai.Error):
-		embed = discord.Embed(title="Error: Your request contains text that is not allowed. Check your request and try again.", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=4)
-	else:
-		embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=4)
-
-
-
-	
-#openai end
-
-from deep_translator import GoogleTranslator
-
-
-
-class TraslateButton(discord.ui.View):
-	def __init__(self):
-		super().__init__()
-		self.value = None
-
-	@discord.ui.button(label="List of language", style=discord.ButtonStyle.red)
-	async def TraslateButton(self, interaction: discord.Interaction, button: discord.ui.Button):
-		lingue_supportate = GoogleTranslator().get_supported_languages()
-		embed_traslate=discord.Embed(title=f"***```{lingue_supportate}```***", color=discord.Color.green())
-		embed_traslate.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed_traslate, ephemeral=True)
-
-
-
-@client.command()
-async def traslate(ctx, language, *, request):
-	text = request
-	lang = language
-	try:
-		if len(text) > 1998:
-			await ctx.send("the text is too long must not exceed 1998 characters")
-		else:
-			if len(text) > 1024:
-				traduttore = GoogleTranslator(source='auto', target=lang)
-				risultato = traduttore.translate(text)
-				await ctx.send(f"```{risultato}```")
-			else:
-				traduttore = GoogleTranslator(source='auto', target=lang)
-				risultato = traduttore.translate(text)
-				embed=discord.Embed(color=discord.Color.green())
-				embed.add_field(name=":earth_americas: Request:", value=f"{request}")
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed, content=f"```{risultato}```")
-	except Exception as e:
-		embed=discord.Embed(title=f"The language {lang} is not supported.\nTo see the supported languages press the button.", color=discord.Color.green())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, view=TraslateButton())
     
 
-#for update end  
 
 @is_me
 @client.command()
+@commands.guild_only()
 async def servers(ctx):
 	message = "I server in cui sono stato invitato sono:\n\n"
 	for guild in client.guilds:
@@ -1102,7 +1100,7 @@ async def help(ctx):
 
 	
 	
-
+@is_me
 @client.command()
 @commands.has_permissions(manage_messages=True)
 async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
@@ -1135,7 +1133,7 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 		await ctx.send(embed=embed)
 
 
-
+@is_me
 @client.command()
 async def automod(ctx, rule_name: str, word: str, minutes: int):
     # Ottieni l'oggetto AutoMod del tuo bot
