@@ -831,7 +831,7 @@ class HelpDropdownView(discord.ui.View):
 		
 class HelpDropdown(discord.ui.Select):
 	def __init__(self):
-		options = [discord.SelectOption(label='Mod Commands'), discord.SelectOption(label='Utilty Commands'), discord.SelectOption(label='Info Server/user Commands'), discord.SelectOption(label='Slash Commands')]
+		options = [discord.SelectOption(label='Mod Commands'), discord.SelectOption(label='Utilty Commands'), discord.SelectOption(label='Server/user Commands'), discord.SelectOption(label='Slash Commands')]
 		
 		super().__init__(placeholder='Choose help section...', min_values=1, max_values=1, options=options)
 
@@ -865,7 +865,7 @@ class HelpDropdown(discord.ui.Select):
 			embedt.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embedt, ephemeral=True)
 		elif self.values[0] == "Server/user Commands":
-			embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
+			embedd = discord.Embed(title="Server/user Commands :scroll:", color=discord.Color.blurple())
 			embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
 			embedd.add_field(name=f"{prefix}userinfo `user_id`", value="Send the User info", inline=True)
 			embedd.set_footer(text=footer_testo)
