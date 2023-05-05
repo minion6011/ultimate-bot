@@ -972,7 +972,7 @@ class TraslateButton(discord.ui.View):
 
 @client.command()
 async def traslate(ctx, language = str, *, request = str):
-	text = message.encode('utf-8')
+	text = request.encode('utf-8')
 	lang = language.encode('utf-8')
 	try:
 		if len(text) > 1998:
