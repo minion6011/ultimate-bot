@@ -972,8 +972,8 @@ class TraslateButton(discord.ui.View):
 
 @client.command()
 async def traslate(ctx, language = str, *, request = str):
-	text = request.encode('utf-8')
-	lang = language.encode('utf-8')
+	text = request.text
+	lang = language.text
 	try:
 		if len(text) > 1998:
 			await ctx.send("the text is too long must not exceed 1998 characters")
