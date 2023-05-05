@@ -831,7 +831,7 @@ class HelpDropdownView(discord.ui.View):
 		
 class HelpDropdown(discord.ui.Select):
 	def __init__(self):
-		options = [discord.SelectOption(label='Mod Commands'), discord.SelectOption(label='Utilty Commands'), discord.SelectOption(label='Info Server/user Commands')]
+		options = [discord.SelectOption(label='Mod Commands'), discord.SelectOption(label='Utilty Commands'), discord.SelectOption(label='Info Server/user Commands'), discord.SelectOption(label='Slash Commands')]
 		
 		super().__init__(placeholder='Choose help section...', min_values=1, max_values=1, options=options)
 
@@ -861,6 +861,7 @@ class HelpDropdown(discord.ui.Select):
 			embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
 			embedt.add_field(name=f"{prefix}chat `request`", value="Answer your questions using Openai", inline=True)
 			embedt.add_field(name=f"{prefix}generate_image `request`", value="Generate image using Openai", inline=True)
+			embedt.add_field(name=f"{prefix}translate `language` `text`", value="Translates text into any supported language", inline=True)
 			embedt.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embedt, ephemeral=True)
 		elif self.values[0] == "Server/user Commands":
@@ -869,7 +870,14 @@ class HelpDropdown(discord.ui.Select):
 			embedd.add_field(name=f"{prefix}userinfo `user_id`", value="Send the User info", inline=True)
 			embedd.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embedd, ephemeral=True)
-
+		elif self.values[0] == "Slash Commands":
+			embed = discord.Embed(title="Slash command :computer:", color=discord.Color.blurple())
+			embed.add_field(name="</help:1094994368445816934>", value="This command", inline=True)
+			embed.add_field(name="</reportbug:1093483925533368361>", value="Report a Ultimate-Bot Bug", inline=True)
+			embed.add_field(name="</suggestion:1079857792095105044>", value="Send a suggestion for Ultimate-Bot", inline=True)
+			embed.add_field(name="</giveaway:1096547565601828946>", value="Make a giveaway for all member in a server", inline=True)
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 
 class HelpDropdownView(discord.ui.View):
 	def __init__(self):
@@ -1169,9 +1177,9 @@ async def change_status():
 	stbot2 = data["status-2"]
 	#statuses = [f"{stbot1}",f"{stbot2}"]
 	#status = random.choice(statuses)
-	await client.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=stbot1))
+	await client.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{stbot1}"))
 	await asyncio.sleep(6)
-	await client.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=stbot2))
+	await client.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{stbot2}"))
 	await asyncio.sleep(6)
 	await client.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(client.guilds)} server"))
 
