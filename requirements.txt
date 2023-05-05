@@ -5,4 +5,4 @@ requests
 aiohttp
 PyNaCl
 openai
-googletrans
+deep_translator
