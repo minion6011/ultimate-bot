@@ -6,4 +6,3 @@ aiohttp
 PyNaCl
 openai
 googletrans
-translate
