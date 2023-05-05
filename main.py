@@ -1166,8 +1166,8 @@ async def on_command_error(ctx, error):
 		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
 		channel = client.get_channel(errorchannel)
-		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
-		await channel.send(embed=embed)
+		#embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
+		await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")
 		raise error
 	elif isinstance(error, discord.ext.commands.errors.MissingPermissions):
 		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
