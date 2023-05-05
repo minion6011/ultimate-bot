@@ -971,24 +971,26 @@ class TraslateButton(discord.ui.View):
 
 
 @client.command()
-async def traslate(ctx, language, *, text):
+async def traslate(ctx, language = str, *, request = str):
+	text = message.encode('utf-8')
+	lang = language.encode('utf-8')
 	try:
 		if len(text) > 1998:
 			await ctx.send("the text is too long must not exceed 1998 characters")
 		else:
 			if len(text) > 1024:
-				traduttore = GoogleTranslator(source='auto', target=language)
+				traduttore = GoogleTranslator(source='auto', target=lang)
 				risultato = traduttore.translate(text)
 				await ctx.send(f"```{risultato}```")
 			else:
-				traduttore = GoogleTranslator(source='auto', target=language)
+				traduttore = GoogleTranslator(source='auto', target=lang)
 				risultato = traduttore.translate(text)
 				embed=discord.Embed(color=discord.Color.green())
 				embed.add_field(name=":earth_americas: Request:", value=f"{request}")
 				embed.set_footer(text=footer_testo)
 				await ctx.send(embed=embed, content=f"```{risultato}```")
 	except Exception as e:
-		embed=discord.Embed(title=f"The language {language} is not supported.\nTo see the supported languages press the button.", color=discord.Color.green())
+		embed=discord.Embed(title=f"The language {lang} is not supported.\nTo see the supported languages press the button.", color=discord.Color.green())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, view=TraslateButton())
     
