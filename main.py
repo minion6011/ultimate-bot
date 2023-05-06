@@ -1103,6 +1103,8 @@ async def help(ctx):
 '''	
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
+from typing import List
+
 class TicTacToeButton(discord.ui.Button['TicTacToe']):
     def __init__(self, x: int, y: int):
         super().__init__(style=discord.ButtonStyle.secondary, label='\u200b', row=y)
