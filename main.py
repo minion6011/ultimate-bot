@@ -1229,7 +1229,7 @@ async def tictactoe(ctx, enemy: discord.Member):
 	await ctx.send('Tic Tac Toe: X goes first', view=TicTacToe())
 	global player1
 	global player2
-	player1 = interaction.user
+	player1 = ctx.message.author
 	player2 = enemy
 	
 @is_me
