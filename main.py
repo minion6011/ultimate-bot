@@ -1103,9 +1103,12 @@ async def help(ctx):
 '''	
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
+from discord.ext.games import TicTacToe
 
-
-
+@client.command()
+async def tictactoe(ctx, player2):
+    game = TicTacToe(ctx.author, player2)
+    await game.start()
 	
 	
 @is_me
