@@ -1111,25 +1111,25 @@ async def play(ctx):
     if not voice_channel:
         await ctx.send("You need to be in a voice channel to use this command.")
         return
-    
+
     try:
-        voice = await voice_channel.connect()
+        voice_client = await voice_channel.connect()
         audio_filename = "recording.wav"
-        source = discord.PCMVolumeTransformer(voice, volume=1.0)
+        audio_source = discord.PCMVolumeTransformer(voice_client.source, volume=1.0)
         with open(audio_filename, "wb") as f:
             while True:
-                data = await source.read()
+                data = await audio_source.read()
                 if not data:
                     break
                 f.write(data)
         await ctx.send("Recording finished. Saving file...")
-        await voice.disconnect()
+        await voice_client.disconnect()
         await ctx.send(file=discord.File(audio_filename))
     except Exception as e:
         await ctx.send("An error occurred while trying to record audio: " + str(e))
     finally:
-        if voice and voice.is_connected():
-            await voice.disconnect()
+        if voice_client and voice_client.is_connected():
+            await voice_client.disconnect()
 
 
 
