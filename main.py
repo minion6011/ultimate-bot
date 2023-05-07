@@ -1122,13 +1122,18 @@ async def play(ctx, url):
                     await ctx.send('Error: Could not download file.')
                     return
 
+                # Ottenere il nome del file dalla URL
+                file_name = os.path.basename(url)
+
                 voice_client.play(discord.FFmpegPCMAudio(resp.content))
 
         while voice_client.is_playing() or voice_client.is_paused():
             await asyncio.sleep(1)
 
         await voice_client.disconnect()
-        os.remove("audio_file.mp3")
+        
+        # Eliminare il file dopo la riproduzione
+        os.remove(file_name)
         
     except discord.errors.ClientException:
         await ctx.send("Bot is already in a voice channel.")
