@@ -1115,11 +1115,13 @@ async def play(ctx):
     try:
         voice = await voice_channel.connect()
         audio_filename = "recording.wav"
-        recorder = discord.AudioRecorder(voice, filename=audio_filename)
-        await ctx.send("Recording started.")
-        recorder.start()
-        await asyncio.sleep(10)  # record for 10 seconds (adjust as needed)
-        recorder.stop()
+        source = discord.PCMVolumeTransformer(voice, volume=1.0)
+        with open(audio_filename, "wb") as f:
+            while True:
+                data = await source.read()
+                if not data:
+                    break
+                f.write(data)
         await ctx.send("Recording finished. Saving file...")
         await voice.disconnect()
         await ctx.send(file=discord.File(audio_filename))
