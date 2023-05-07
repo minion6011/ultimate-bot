@@ -1103,37 +1103,31 @@ async def help(ctx):
 '''	
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
-#test youtube
-import pytube
-from pytube import YouTube
+
 
 @client.command()
-async def play(ctx, url: str):
+async def play(ctx):
     voice_channel = ctx.author.voice.channel
-    if voice_channel:
-        try:
-            voice = await voice_channel.connect()
-        except Exception as e:
-            print("Error connecting to voice channel:", e)
-            await ctx.send("An error occurred while trying to connect to the voice channel.")
-            return
-    else:
+    if not voice_channel:
         await ctx.send("You need to be in a voice channel to use this command.")
         return
     
     try:
-        await ctx.send("Getting the video ready...")
-        yt = YouTube(url)
-        video = yt.streams.filter(only_audio=True).first()
-        await ctx.send("Playing: " + yt.title)
-        video_url = video.url
-        source = await discord.FFmpegOpusAudio.from_probe(video_url)
-        player = voice.play(source)
-        await asyncio.sleep(yt.length)
+        voice = await voice_channel.connect()
+        audio_filename = "recording.wav"
+        recorder = discord.AudioRecorder(voice, filename=audio_filename)
+        await ctx.send("Recording started.")
+        recorder.start()
+        await asyncio.sleep(10)  # record for 10 seconds (adjust as needed)
+        recorder.stop()
+        await ctx.send("Recording finished. Saving file...")
         await voice.disconnect()
+        await ctx.send(file=discord.File(audio_filename))
     except Exception as e:
-        print("Error playing video:", e)
-        await ctx.send("An error occurred while trying to play the video.")
+        await ctx.send("An error occurred while trying to record audio: " + str(e))
+    finally:
+        if voice and voice.is_connected():
+            await voice.disconnect()
 
 
 
