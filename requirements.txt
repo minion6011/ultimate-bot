@@ -4,6 +4,6 @@ psutil
 requests
 aiohttp
 PyNaCl
-pytube
+datetime
 openai
 deep_translator
