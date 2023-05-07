@@ -4,5 +4,6 @@ psutil
 requests
 aiohttp
 PyNaCl
+pytube
 openai
 deep_translator
