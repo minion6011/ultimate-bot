@@ -1113,8 +1113,10 @@ async def play(ctx, url: str):
     if voice_channel:
         try:
             voice = await voice_channel.connect()
-        except:
-            pass
+        except Exception as e:
+            print("Error connecting to voice channel:", e)
+            await ctx.send("An error occurred while trying to connect to the voice channel.")
+            return
     else:
         await ctx.send("You need to be in a voice channel to use this command.")
         return
@@ -1129,7 +1131,8 @@ async def play(ctx, url: str):
         player = voice.play(source)
         await asyncio.sleep(yt.length)
         await voice.disconnect()
-    except:
+    except Exception as e:
+        print("Error playing video:", e)
         await ctx.send("An error occurred while trying to play the video.")
 
 
