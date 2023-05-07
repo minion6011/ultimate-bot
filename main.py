@@ -1104,28 +1104,34 @@ async def help(ctx):
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
 #test youtube
+import pytube
 from pytube import YouTube
 
 @client.command()
-async def play(ctx, url):
-    # Connect to the voice channel
-    channel = ctx.author.voice.channel
-    voice = await channel.connect()
-   
-    # Download the video
-    yt = YouTube(url)
-    stream = yt.streams.filter(only_audio=True).first()
-   
-    # Play the song
-    source = discord.FFmpegPCMAudio(stream.url)
-    player = voice.play(source)
-   
-    # Wait for the song to finish playing
-    while voice.is_playing():
-        await asyncio.sleep(1)
-   
-    # Disconnect from the voice channel
-    await voice.disconnect()
+async def play(ctx, url: str):
+    voice_channel = ctx.author.voice.channel
+    if voice_channel:
+        try:
+            voice = await voice_channel.connect()
+        except:
+            pass
+    else:
+        await ctx.send("You need to be in a voice channel to use this command.")
+        return
+    
+    try:
+        await ctx.send("Getting the video ready...")
+        yt = YouTube(url)
+        video = yt.streams.filter(only_audio=True).first()
+        await ctx.send("Playing: " + yt.title)
+        video_url = video.url
+        source = await discord.FFmpegOpusAudio.from_probe(video_url)
+        player = voice.play(source)
+        await asyncio.sleep(yt.length)
+        await voice.disconnect()
+    except:
+        await ctx.send("An error occurred while trying to play the video.")
+
 
 
 
