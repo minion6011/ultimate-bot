@@ -1114,6 +1114,9 @@ async def play(ctx):
 
     try:
         voice_client = await voice_channel.connect()
+        await ctx.send("Recording started. Waiting for audio...")
+        while not voice_client.is_playing():
+            await discord.utils.sleep_until(datetime.datetime.now() + datetime.timedelta(seconds=1))
         audio_filename = "recording.wav"
         audio_source = discord.PCMVolumeTransformer(voice_client.source, volume=1.0)
         with open(audio_filename, "wb") as f:
@@ -1130,6 +1133,7 @@ async def play(ctx):
     finally:
         if voice_client and voice_client.is_connected():
             await voice_client.disconnect()
+
 
 
 
