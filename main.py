@@ -1104,37 +1104,34 @@ async def help(ctx):
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
 
-import datetime
+
 
 @client.command()
-async def play(ctx):
-    voice_channel = ctx.author.voice.channel
-    if not voice_channel:
-        await ctx.send("You need to be in a voice channel to use this command.")
+async def play(ctx, url):
+    if not ctx.message.author.voice:
+        await ctx.send("You are not connected to a voice channel.")
         return
 
     try:
+        voice_channel = ctx.message.author.voice.channel
         voice_client = await voice_channel.connect()
-        await ctx.send("Recording started. Waiting for audio...")
-        while not voice_client.is_playing():
-            await discord.utils.sleep_until(datetime.datetime.now() + datetime.timedelta(seconds=1))
-        audio_filename = "recording.wav"
-        audio_source = discord.PCMVolumeTransformer(voice_client.source, volume=1.0)
-        with open(audio_filename, "wb") as f:
-            while True:
-                data = await audio_source.read()
-                if not data:
-                    break
-                f.write(data)
-        await ctx.send("Recording finished. Saving file...")
-        await voice_client.disconnect()
-        await ctx.send(file=discord.File(audio_filename))
-    except Exception as e:
-        await ctx.send("An error occurred while trying to record audio: " + str(e))
-    finally:
-        if voice_client and voice_client.is_connected():
-            await voice_client.disconnect()
 
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as resp:
+                if resp.status != 200:
+                    await ctx.send('Error: Could not download file.')
+                    return
+
+                voice_client.play(discord.FFmpegPCMAudio(resp.content))
+
+        while voice_client.is_playing() or voice_client.is_paused():
+            await asyncio.sleep(1)
+
+        await voice_client.disconnect()
+        os.remove("audio_file.mp3")
+        
+    except discord.errors.ClientException:
+        await ctx.send("Bot is already in a voice channel.")
 
 
 
