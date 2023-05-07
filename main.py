@@ -362,7 +362,7 @@ async def activity(ctx, id=None):
 @client.command()
 @commands.guild_only()
 async def serverinfo(ctx):
-	check_forum = discord.utils.get(ctx.guild.forum_channels)
+	#check_forum = discord.utils.get(ctx.guild.forum_channels)
 	check_text = discord.utils.get(ctx.guild.text_channels)
 	check_voice = discord.utils.get(ctx.guild.voice_channels)
 	check_category = discord.utils.get(ctx.guild.categories)
@@ -373,8 +373,8 @@ async def serverinfo(ctx):
 	embed.add_field(name=':calendar: - Created On', value=ctx.guild.created_at.strftime("%b %d %Y"), inline=False)
 	embed.add_field(name=':crown: - Owner', value=f"<@{ctx.guild.owner_id}>", inline=False)
 	embed.add_field(name=':busts_in_silhouette: - Members', value=f'{ctx.guild.member_count} Members', inline=False)
-	if check_forum is not None:
-		embed.add_field(name=f':speech_left: - Forum {len(ctx.guild.forum_channels)}', inline=False)
+	#if check_forum is not None:
+	#	embed.add_field(name=f':speech_left: - Forum {len(ctx.guild.forum_channels)}', inline=False)
 	if check_text is not None:
 		embed.add_field(name=f':speech_balloon: - Text {len(ctx.guild.text_channels)}', inline=False)
 	if check_voice is not None:
