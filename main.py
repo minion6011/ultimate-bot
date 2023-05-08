@@ -1109,7 +1109,7 @@ async def help(ctx):
 
 from pytube import YouTube
 
-@bot.command()
+@client.command()
 async def play(ctx, url: str):
     # Controlla se l'utente si trova in un canale vocale
     if ctx.author.voice is None:
