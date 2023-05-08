@@ -1106,6 +1106,41 @@ async def help(ctx):
 		await ctx.send(embed=admin_embed)
 '''	
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
+import yt_dlp
+
+@client.command()
+async def rick(self, ctx):
+    voice_channel = ctx.author.voice.channel
+    if ctx.voice_client is None:
+        await voice_channel.connect()
+
+    if ctx.voice_client.is_playing():
+        await ctx.send("something is currently playing...")
+        return
+
+    FFMPEG_OPTIONS = {
+        'before_options':
+        '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -probesize 200M',
+        'options': '-vn'
+    }
+    ydl_opts = {
+    'format': 'bestaudio/best',
+    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+    'quiet': True,
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',
+    }],
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        secret = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        info = ydl.extract_info(secret, download=False)
+        url2 = info['url']
+        print(url2)
+        source = discord.FFmpegPCMAudio(url2)
+        vc = ctx.voice_client
+        vc.play(source)
 
 from discord.utils import get
 import ffmpeg
@@ -1114,7 +1149,7 @@ import ffmpeg
 @client.command()
 async def play(ctx, url: str):
     voice_channel = ctx.author.voice.channel
-    voice_client = get(bot.voice_clients, guild=ctx.guild)
+    voice_client = get(client.voice_clients, guild=ctx.guild)
 
     if not voice_client:
         voice_client = await voice_channel.connect()
