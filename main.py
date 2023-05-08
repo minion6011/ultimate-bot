@@ -1107,9 +1107,32 @@ async def help(ctx):
 '''	
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
+from pytube import YouTube
+
+@bot.command()
+async def play(ctx, url: str):
+    # Controlla se l'utente si trova in un canale vocale
+    if ctx.author.voice is None:
+        await ctx.send("Devi essere in un canale vocale per utilizzare questo comando.")
+        return
+
+    # Connette il bot al canale vocale dell'utente
+    voice_channel = ctx.author.voice.channel
+    voice_client = await voice_channel.connect()
+
+    # Ottiene il file audio dal video di YouTube
+    video = YouTube(url)
+    audio_stream = video.streams.filter(only_audio=True).first()
+
+    # Riproduce l'audio nel canale vocale
+    audio_source = discord.FFmpegPCMAudio(audio_stream.url)
+    voice_client.play(audio_source)
+
+    # Invia un messaggio di conferma
+    await ctx.send(f"Riproducendo {video.title} in {voice_channel.name}.")
 
 
-
+'''
 @client.command()
 async def play(ctx, url):
     if not ctx.message.author.voice:
@@ -1136,7 +1159,7 @@ async def play(ctx, url):
         
     except discord.errors.ClientException:
         await ctx.send("Bot is already in a voice channel.")
-
+'''
 
 
 
