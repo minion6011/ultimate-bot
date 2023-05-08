@@ -4,6 +4,7 @@ psutil
 requests
 aiohttp
 PyNaCl
+ffmpeg
 datetime
 openai
 deep_translator
