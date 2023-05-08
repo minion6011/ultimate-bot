@@ -1107,30 +1107,31 @@ async def help(ctx):
 '''	
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
-from pytube import YouTube
+from discord.utils import get
+import ffmpeg
+
+bot = commands.Bot(command_prefix='!')
 
 @client.command()
 async def play(ctx, url: str):
-    # Controlla se l'utente si trova in un canale vocale
-    if ctx.author.voice is None:
-        await ctx.send("Devi essere in un canale vocale per utilizzare questo comando.")
-        return
-
-    # Connette il bot al canale vocale dell'utente
     voice_channel = ctx.author.voice.channel
-    voice_client = await voice_channel.connect()
+    voice_client = get(bot.voice_clients, guild=ctx.guild)
 
-    # Ottiene il file audio dal video di YouTube
-    video = YouTube(url)
-    audio_stream = video.streams.filter(only_audio=True).first()
+    if not voice_client:
+        voice_client = await voice_channel.connect()
+    else:
+        await voice_client.move_to(voice_channel)
 
-    # Riproduce l'audio nel canale vocale
-    audio_source = discord.FFmpegPCMAudio(audio_stream.url)
-    voice_client.play(audio_source)
+    audio_source = ffmpeg.input(url)
+    audio_output = ffmpeg.output(audio_source, 'pipe:', format='opus')
+    process = audio_output.run_async(pipe_stdout=True)
 
-    # Invia un messaggio di conferma
-    await ctx.send(f"Riproducendo {video.title} in {voice_channel.name}.")
-
+    try:
+        await voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegOpusAudio(process.stdout)))
+    except discord.errors.ClientException:
+        await ctx.send("L'audio non è stato riprodotto correttamente.")
+    else:
+        await ctx.send(f"Riproducendo audio dal seguente URL: {url}")
 
 '''
 @client.command()
