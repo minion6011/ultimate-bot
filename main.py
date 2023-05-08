@@ -1108,7 +1108,7 @@ async def help(ctx):
 '''	
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
-from wavelink import Client
+from wavelink.client import Client
 
 wavelink = Client(bot=client)
 
