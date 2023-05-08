@@ -1112,42 +1112,25 @@ import yt_dlp
 
 @client.command()
 async def play(ctx, url):
-    voice_channel = ctx.author.voice.channel
-    voice_client = get(client.voice_clients, guild=ctx.guild)
-
-    if not voice_client:
-        voice_client = await voice_channel.connect()
+    if not ctx.message.author.voice:
+        await ctx.send("Devi essere in un canale vocale per utilizzare questo comando.")
+        return
     else:
-        await voice_client.move_to(voice_channel)
+        channel = ctx.message.author.voice.channel
 
-    ytdl_format_options = {
-        'format': 'bestaudio/best',
-        'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
-        'restrictfilenames': True,
-        'noplaylist': True,
-        'nocheckcertificate': True,
-        'ignoreerrors': False,
-        'logtostderr': False,
-        'quiet': True,
-        'no_warnings': True,
-        'default_search': 'auto',
-        'source_address': '0.0.0.0'
-    }
-    ffmpeg_options = {
-        'options': '-vn'
-    }
-    ydl = yt_dlp.YoutubeDL(ytdl_format_options)
-    info_dict = ydl.extract_info(url, download=False)
-
-    url = info_dict['formats'][0]['url']
-    source = await discord.FFmpegOpusAudio.from_probe(url, **ffmpeg_options)
+    await channel.connect()
+    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
 
     try:
-        await voice_client.play(source)
-    except discord.errors.ClientException:
-        await ctx.send("L'audio non è stato riprodotto correttamente.")
-    else:
-        await ctx.send(f"Riproducendo audio dal seguente URL: {url}")
+        ytdl = yt_dlp.YoutubeDL({'quiet': True})
+        info = await asyncio.get_event_loop().run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
+        url2 = info['formats'][0]['url']
+        voice.play(discord.FFmpegPCMAudio(url2))
+        await ctx.send("Sto riproducendo: " + info['title'])
+    except Exception as e:
+        print(e)
+        await ctx.send("Errore durante la riproduzione.")
+	
 
 from discord.utils import get
 import ffmpeg
