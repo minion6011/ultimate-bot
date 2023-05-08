@@ -642,7 +642,11 @@ async def generate_image(ctx, *, request):
 			size="1024x1024",
 			response_format="url"
 		)
-
+		if response.choices[0].text.strip() == "":
+			raise ValueError("The request is not supported.")
+			embed = discord.Embed(title="The request is not supported.", colour=discord.Color.red())
+			await ctx.send(embed=embed)
+		else:
 		image_url = response["data"][0]["url"]
 
 		#await ctx.send(file=discord.File(byte_array, "image.png"))
@@ -650,17 +654,10 @@ async def generate_image(ctx, *, request):
 		embed.set_image(url=image_url)
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
+		except Exception as e:
+			embed = discord.Embed(title="An error occurred while generating the image", colour=discord.Color.red())
+			await ctx.send(embed=embed)
 		
-@generate_image.error
-async def generate_image_error(ctx, error):
-	if isinstance(error, openai.Error):
-		embed = discord.Embed(title="Error: Your request contains text that is not allowed. Check your request and try again.", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=4)
-	else:
-		embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=4)
 
 @client.command()
 @commands.guild_only()
