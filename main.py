@@ -1110,7 +1110,6 @@ async def help(ctx):
 from discord.utils import get
 import ffmpeg
 
-bot = commands.Bot(command_prefix='!')
 
 @client.command()
 async def play(ctx, url: str):
