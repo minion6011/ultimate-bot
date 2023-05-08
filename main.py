@@ -1109,38 +1109,43 @@ async def help(ctx):
 import yt_dlp
 
 @client.command()
-async def rick(self, ctx):
+async def play(ctx, url):
     voice_channel = ctx.author.voice.channel
-    if ctx.voice_client is None:
-        await voice_channel.connect()
+    voice_client = get(bot.voice_clients, guild=ctx.guild)
 
-    if ctx.voice_client.is_playing():
-        await ctx.send("something is currently playing...")
-        return
+    if not voice_client:
+        voice_client = await voice_channel.connect()
+    else:
+        await voice_client.move_to(voice_channel)
 
-    FFMPEG_OPTIONS = {
-        'before_options':
-        '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -probesize 200M',
+    ytdl_format_options = {
+        'format': 'bestaudio/best',
+        'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+        'restrictfilenames': True,
+        'noplaylist': True,
+        'nocheckcertificate': True,
+        'ignoreerrors': False,
+        'logtostderr': False,
+        'quiet': True,
+        'no_warnings': True,
+        'default_search': 'auto',
+        'source_address': '0.0.0.0'
+    }
+    ffmpeg_options = {
         'options': '-vn'
     }
-    ydl_opts = {
-    'format': 'bestaudio/best',
-    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
-    'quiet': True,
-    'postprocessors': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '192',
-    }],
-    }
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        secret = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-        info = ydl.extract_info(secret, download=False)
-        url2 = info['url']
-        print(url2)
-        source = discord.FFmpegPCMAudio(url2)
-        vc = ctx.voice_client
-        vc.play(source)
+    ydl = yt_dlp.YoutubeDL(ytdl_format_options)
+    info_dict = ydl.extract_info(url, download=False)
+
+    url = info_dict['formats'][0]['url']
+    source = await discord.FFmpegOpusAudio.from_probe(url, **ffmpeg_options)
+
+    try:
+        await voice_client.play(source)
+    except discord.errors.ClientException:
+        await ctx.send("L'audio non è stato riprodotto correttamente.")
+    else:
+        await ctx.send(f"Riproducendo audio dal seguente URL: {url}")
 
 from discord.utils import get
 import ffmpeg
