@@ -1154,7 +1154,7 @@ import ffmpeg
 
 
 @client.command()
-async def play(ctx, url: str):
+async def play2(ctx, url: str):
     voice_channel = ctx.author.voice.channel
     voice_client = get(client.voice_clients, guild=ctx.guild)
 
