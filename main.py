@@ -1110,6 +1110,9 @@ async def help(ctx):
 from discord.utils import get
 import yt_dlp
 
+from pydub import AudioSegment
+from pydub.playback import play
+
 @client.command()
 async def play(ctx, url):
     if not ctx.message.author.voice:
@@ -1123,9 +1126,10 @@ async def play(ctx, url):
 
     try:
         ytdl = yt_dlp.YoutubeDL({'quiet': True})
-        info = await asyncio.get_event_loop().run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
+        info = ytdl.extract_info(url, download=False)
         url2 = info['formats'][0]['url']
-        voice.play(discord.FFmpegPCMAudio(url2))
+        song = AudioSegment.from_file(url2)
+        play(song)
         await ctx.send("Sto riproducendo: " + info['title'])
     except Exception as e:
         print(e)
