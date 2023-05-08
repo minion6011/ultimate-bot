@@ -75,6 +75,7 @@ async def on_ready():
 	print(f"Synced app command (tree) {len(slash_sync)}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json)
+	await wavelink.initiate() 
 
 
 #messaggi inizio
@@ -1107,88 +1108,35 @@ async def help(ctx):
 '''	
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
-from discord.utils import get
-import yt_dlp
+from wavelink import Client
 
-from pydub import AudioSegment
-from pydub.playback import play
+wavelink = Client(bot=client)
 
 @client.command()
-async def play(ctx, url):
-    if not ctx.message.author.voice:
-        await ctx.send("Devi essere in un canale vocale per utilizzare questo comando.")
+async def play(ctx, url: str):
+    # controllo se l'utente è in un canale vocale
+    if not ctx.author.voice:
+        await ctx.send("Non sei connesso a un canale vocale.")
         return
-    else:
-        channel = ctx.message.author.voice.channel
 
+    # controllo se il bot è già connesso ad un canale vocale
+    if ctx.guild.me.voice and ctx.guild.me.voice.channel:
+        if ctx.author.voice.channel != ctx.guild.me.voice.channel:
+            await ctx.send("Il bot è già connesso ad un canale vocale.")
+            return
+
+    # collegamento al canale vocale
+    channel = ctx.author.voice.channel
     await channel.connect()
-    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
 
-    try:
-        ytdl = yt_dlp.YoutubeDL({'quiet': True})
-        info = ytdl.extract_info(url, download=False)
-        url2 = info['formats'][0]['url']
-        song = AudioSegment.from_file(url2)
-        play(song)
-        await ctx.send("Sto riproducendo: " + info['title'])
-    except Exception as e:
-        print(e)
-        await ctx.send("Errore durante la riproduzione.")
-	
+    # caricamento della traccia
+    track = await wavelink.get_tracks(url)
 
-from discord.utils import get
-import ffmpeg
+    # riproduzione della traccia
+    player = wavelink.get_player(ctx.guild.id)
+    await player.play(track[0])
 
-
-@client.command()
-async def play2(ctx, url: str):
-    voice_channel = ctx.author.voice.channel
-    voice_client = get(client.voice_clients, guild=ctx.guild)
-
-    if not voice_client:
-        voice_client = await voice_channel.connect()
-    else:
-        await voice_client.move_to(voice_channel)
-
-    audio_source = ffmpeg.input(url)
-    audio_output = ffmpeg.output(audio_source, 'pipe:', format='opus')
-    process = audio_output.run_async(pipe_stdout=True)
-
-    try:
-        await voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegOpusAudio(process.stdout)))
-    except discord.errors.ClientException:
-        await ctx.send("L'audio non è stato riprodotto correttamente.")
-    else:
-        await ctx.send(f"Riproducendo audio dal seguente URL: {url}")
-
-'''
-@client.command()
-async def play(ctx, url):
-    if not ctx.message.author.voice:
-        await ctx.send("You are not connected to a voice channel.")
-        return
-
-    try:
-        voice_channel = ctx.message.author.voice.channel
-        voice_client = await voice_channel.connect()
-
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as resp:
-                if resp.status != 200:
-                    await ctx.send('Error: Could not download file.')
-                    return
-
-                player = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(resp.content))
-                voice_client.play(player)
-
-        while voice_client.is_playing() or voice_client.is_paused():
-            await asyncio.sleep(1)
-
-        await voice_client.disconnect()
-        
-    except discord.errors.ClientException:
-        await ctx.send("Bot is already in a voice channel.")
-'''
+    await ctx.send(f"Riproduzione di {track[0].title}")
 
 
 
