@@ -1111,7 +1111,7 @@ import yt_dlp
 @client.command()
 async def play(ctx, url):
     voice_channel = ctx.author.voice.channel
-    voice_client = get(bot.voice_clients, guild=ctx.guild)
+    voice_client = get(client.voice_clients, guild=ctx.guild)
 
     if not voice_client:
         voice_client = await voice_channel.connect()
