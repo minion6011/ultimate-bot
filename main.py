@@ -647,16 +647,16 @@ async def generate_image(ctx, *, request):
 			embed = discord.Embed(title="The request is not supported.", colour=discord.Color.red())
 			await ctx.send(embed=embed)
 		else:
-		image_url = response["data"][0]["url"]
+			image_url = response["data"][0]["url"]
 
-		#await ctx.send(file=discord.File(byte_array, "image.png"))
-		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
-		embed.set_image(url=image_url)
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-		except Exception as e:
-			embed = discord.Embed(title="An error occurred while generating the image", colour=discord.Color.red())
+			#await ctx.send(file=discord.File(byte_array, "image.png"))
+			embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+			embed.set_image(url=image_url)
+			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
+			except Exception as e:
+				embed = discord.Embed(title="An error occurred while generating the image", colour=discord.Color.red())
+				await ctx.send(embed=embed)
 		
 
 @client.command()
