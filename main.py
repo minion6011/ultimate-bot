@@ -1127,24 +1127,22 @@ async def play(ctx, url):
 		voice = await voice_channel.connect()
 		
 		# Play the video
-		filename = f"{video.title}"
-		files = glob.glob(f"{filename}.*")
-		if files:
-			file_extension = files[0].split(".")[-1]
-			source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{video.title}.{file_extension}"))
-			voice.play(source)
+		#filename = f"{video.title}"
+		#files = glob.glob(f"{filename}.*")
+		#if files:
+		#file_extension = files[0].split(".")[-1]
+		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{video}"))
+		voice.play(source)
+		
+		# Wait for the video to finish playing
+		while voice.is_playing():
+			await asyncio.sleep(1)
 			
-			# Wait for the video to finish playing
-			while voice.is_playing():
-				await asyncio.sleep(1)
-				
-			# Disconnect from the voice channel
-			await voice.disconnect()
-			
-			# Delete the video file
-			os.remove(f"{video.title}.{file_extension}")
-		else:
-			await ctx.send("An error occurred while playing the video. (contact admin)")
+		# Disconnect from the voice channel
+		await voice.disconnect()
+		
+		# Delete the video file
+		os.remove(f"{video.title}")
 	except Exception as e:
 		print(e)
 		await ctx.send("An error occurred while playing the video.")
