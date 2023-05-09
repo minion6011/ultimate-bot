@@ -1119,7 +1119,8 @@ async def play(ctx, url):
 	try:
 		# Download the video
 		video = pytube.YouTube(url)
-		video.streams.first().download()
+		video.streams.filter(file_extension='3gpp').first().dowload()
+		#video.streams.first().download()
 		
 		# Get the voice channel of the user who typed the command
 		voice_channel = ctx.author.voice.channel
@@ -1132,8 +1133,10 @@ async def play(ctx, url):
 		#files = glob.glob(f"{filename}.*")
 		#if files:
 		#file_extension = files[0].split(".")[-1]
-		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{video.default_filename}"))
+		#file_name = video.title + '.' + file.mime_type.split('/')[-1]
+		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{video.title}.3gpp"))
 		voice.play(source)
+		await ctx.send("video start")
 		
 		# Wait for the video to finish playing
 		while voice.is_playing():
@@ -1143,11 +1146,13 @@ async def play(ctx, url):
 		await voice.disconnect()
 		
 		# Delete the video file
-		os.remove(f"{video.default_filename}")
+		os.remove(f"{video.title}.3gpp")
 	except Exception as e:
+		await voice.disconnect()
 		print(e)
-		await ctx.send("An error occurred while playing the video.")
-
+		channel = client.get_channel(errorchannel)
+		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
+		raise error
 
 @is_me
 @client.command()
