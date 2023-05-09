@@ -1122,7 +1122,7 @@ async def play(ctx, url):
 		
 		# Download the video
 		video = pytube.YouTube(url)
-		video.streams.filter(file_extension='3gpp').first().dowload()
+		video.streams.first().download()
 		#video.streams.first().download()
 		
 		# Get the voice channel of the user who typed the command
@@ -1152,6 +1152,7 @@ async def play(ctx, url):
 		os.remove(f"{video.title}.3gpp")
 	except Exception as e:
 		await voice.disconnect()
+		await ctx.send("e")
 		print(e)
 		channel = client.get_channel(errorchannel)
 		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
