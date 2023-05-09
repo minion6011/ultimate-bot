@@ -1108,35 +1108,6 @@ async def help(ctx):
 '''	
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
-from wavelink.client import Client
-
-wavelink = Client(bot=client)
-
-@client.command()
-async def play(ctx, url: str):
-    # controllo se l'utente è in un canale vocale
-    if not ctx.author.voice:
-        await ctx.send("Non sei connesso a un canale vocale.")
-        return
-
-    # controllo se il bot è già connesso ad un canale vocale
-    if ctx.guild.me.voice and ctx.guild.me.voice.channel:
-        if ctx.author.voice.channel != ctx.guild.me.voice.channel:
-            await ctx.send("Il bot è già connesso ad un canale vocale.")
-            return
-
-    # collegamento al canale vocale
-    channel = ctx.author.voice.channel
-    await channel.connect()
-
-    # caricamento della traccia
-    track = await wavelink.get_tracks(url)
-
-    # riproduzione della traccia
-    player = wavelink.get_player(ctx.guild.id)
-    await player.play(track[0])
-
-    await ctx.send(f"Riproduzione di {track[0].title}")
 
 
 
