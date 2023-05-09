@@ -1135,7 +1135,7 @@ async def play2(ctx, url):
 		#file_extension = files[0].split(".")[-1]
 		#file_name = video.title + '.' + file.mime_type.split('/')[-1]
 		content = BytesIO()
-		stream.stream_to_buffer(content)
+		audio_url.stream_to_buffer(content)
 		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(content))
 		voice.play(source)
 		await ctx.send("video start")
