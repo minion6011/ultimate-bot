@@ -1112,37 +1112,43 @@ async def help(ctx):
 import pytube
 import asyncio
 import os
+import glob
 
 @client.command()
 async def play(ctx, url):
-    try:
-        # Download the video
-        video = pytube.YouTube(url)
-        video.streams.first().download()
-        
-        # Get the voice channel of the user who typed the command
-        voice_channel = ctx.author.voice.channel
-        
-        # Join the voice channel
-        voice = await voice_channel.connect()
-        
-        # Play the video
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{video.title}.mp4"))
-        voice.play(source)
-        
-        # Wait for the video to finish playing
-        while voice.is_playing():
-            await asyncio.sleep(1)
-        
-        # Disconnect from the voice channel
-        await voice.disconnect()
-        
-        # Delete the video file
-        os.remove(f"{video.title}.mp4")
-        
-    except Exception as e:
-        print(e)
-        await ctx.send("An error occurred while playing the video.")
+	try:
+		# Download the video
+		video = pytube.YouTube(url)
+		video.streams.first().download()
+		
+		# Get the voice channel of the user who typed the command
+		voice_channel = ctx.author.voice.channel
+		
+		# Join the voice channel
+		voice = await voice_channel.connect()
+		
+		# Play the video
+		filename = f"{video.title}"
+		files = glob.glob(f"{filename}.*")
+		if files:
+			file_extension = files[0].split(".")[-1]
+			source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{video.title}.{file_extension}"))
+			voice.play(source)
+			
+			# Wait for the video to finish playing
+			while voice.is_playing():
+				await asyncio.sleep(1)
+				
+			# Disconnect from the voice channel
+			await voice.disconnect()
+			
+			# Delete the video file
+			os.remove(f"{video.title}.{file_extension}")
+		else:
+			await ctx.send("An error occurred while playing the video. (contact admin)")
+	except Exception as e:
+		print(e)
+		await ctx.send("An error occurred while playing the video.")
 
 
 @is_me
