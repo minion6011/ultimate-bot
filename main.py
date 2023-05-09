@@ -75,7 +75,6 @@ async def on_ready():
 	print(f"Synced app command (tree) {len(slash_sync)}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json)
-	await wavelink.initiate() 
 
 
 #messaggi inizio
