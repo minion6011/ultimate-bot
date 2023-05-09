@@ -4,7 +4,8 @@ psutil
 requests
 aiohttp
 PyNaCl
-yt_dlp
 datetime
 openai
 deep_translator
+pytube
+discord.py[voice]
