@@ -1108,57 +1108,18 @@ async def help(ctx):
 '''	
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
-
+#music
 import pytube
 import asyncio
 import os
-from io import BytesIO
 
-@client.command()
-async def play2(ctx, url):
-	try:
-		# Download the video
-		video = pytube.YouTube(url)
-		audio_url = video.streams.filter(only_audio=True).first()
-		#video.streams.first().download()
-		
-		# Get the voice channel of the user who typed the command
-		voice_channel = ctx.author.voice.channel
-		
-		# Join the voice channel
-		voice = await voice_channel.connect()
-		
-		# Play the video
-		#filename = f"{video.title}"
-		#files = glob.glob(f"{filename}.*")
-		#if files:
-		#file_extension = files[0].split(".")[-1]
-		#file_name = video.title + '.' + file.mime_type.split('/')[-1]
-		content = BytesIO()
-		audio_url.stream_to_buffer(content)
-		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(content))
-		voice.play(source)
-		await ctx.send("video start")
-		
-		# Wait for the video to finish playing
-		while voice.is_playing():
-			await asyncio.sleep(1)
-			
-		# Disconnect from the voice channel
-		await voice.disconnect()
-		
-		# Delete the video file
-		os.remove(f"{video.title}.3gpp")
-	except Exception as e:
-		await voice.disconnect()
-		print(e)
-		channel = client.get_channel(errorchannel)
-		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
-		raise e
+voice = None
 
 @client.command()
 async def play(ctx, url):
 	try:
+		global voice
+		
 		# Download the video
 		video = pytube.YouTube(url)
 		video.streams.filter(file_extension='3gpp').first().dowload()
@@ -1195,6 +1156,35 @@ async def play(ctx, url):
 		channel = client.get_channel(errorchannel)
 		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
 		raise error
+		
+@client.command()
+async def stop(ctx):
+	global voice
+	if voice:
+		await voice.disconnect()
+		voice_client = None
+		await ctx.send("disconesso")
+	else:
+		await ctx.send("nessuna canzone attiva")
+		
+@bot.command()
+async def volume(ctx, volume: float):
+    global voice
+
+    if not voice:
+        await ctx.send('Not currently in a voice channel')
+        return
+
+    # Check that the volume is within the acceptable range of 0.0 to 2.0
+    if volume < 0.0 or volume > 2.0:
+        await ctx.send('Volume must be between 0.0 and 2.0')
+        return
+
+    # Update the volume level of the current audio stream
+    voice.source.volume = volume
+    await ctx.send(f'Volume set to {volume}')
+
+#music end	
 
 @is_me
 @client.command()
