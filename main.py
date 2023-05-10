@@ -1146,7 +1146,6 @@ async def play(ctx, url):
 		
 		# Play the video
 		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
-		playback_states[ctx.guild.id] = {'player': player,'url': url}
 		voice.play(source)
 		
 		# Wait for the video to finish playing
@@ -1226,20 +1225,19 @@ async def stop(ctx):
 		
 @client.command()
 async def volume(ctx, volume: int):
-    voice_client = ctx.author.voice.channel
-
-    if not voice_client:
-        await ctx.send('Not currently in a voice channel')
-        return
-
-    # Check that the volume is within the acceptable range of 0.0 to 2.0
-    if volume < 0.0 or volume > 2.0:
-        await ctx.send('Volume must be between 0.0 and 2.0')
-        return
-
-    # Update the volume level of the current audio stream
-    voice_client.source.volume = volume
-    await ctx.send(f'Volume set to {volume}')
+	voice_client = ctx.voice_client
+	
+	if not voice_client:
+		await ctx.send('Not currently in a voice channel')
+		return
+	if voice_client.is_playing():
+		if volume < 0.0 or volume > 2.0:
+			await ctx.send("error max volume")
+		else:
+			voice_client.source.volume = volume
+			await ctx.send(f'Volume set to {volume}')
+	else:
+		await ctx.send("no song playing")
 
 #music end	
 
