@@ -1137,13 +1137,11 @@ async def play(ctx, url):
 		
 		#info
 		embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.red())
-		embed.add_field(name = '***Description:***', value = f'```{video.description}```', inline = False)
 		embed.set_image(url=video.thumbnail_url)
 		embed.set_footer(text=footer_testo)
 		await msg.edit(embed=embed)
 		#await ctx.send(embed=embed)
-		
-		
+
 		
 		# Play the video
 		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
@@ -1219,16 +1217,17 @@ async def play(ctx, url):
 
 @client.command()
 async def stop(ctx):
-	voice = get(client.voice_clients, guild=ctx.guild)
-	if voice and voice.is_connected():
-		await voice.disconnect()
-		embed = discord.Embed(title="Successfully disconnected.", color=discord.Colour.green())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-	else:
-		embed = discord.Embed(title="The bot is not connected to a voice channel.", color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
+	voice_channel = ctx.author.voice.channel
+	voice = await voice_channel.disconnect()
+	#if voice and voice.is_connected():
+	#	await voice.disconnect()
+	#	embed = discord.Embed(title="Successfully disconnected.", color=discord.Colour.green())
+	#embed.set_footer(text=footer_testo)
+	#	await ctx.send(embed=embed)
+	#else:
+	#	embed = discord.Embed(title="The bot is not connected to a voice channel.", color=discord.Colour.red())
+	#	embed.set_footer(text=footer_testo)
+	#	await ctx.send(embed=embed)
 
 		
 @client.command()
