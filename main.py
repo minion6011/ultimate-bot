@@ -1113,7 +1113,6 @@ import pytube
 import asyncio
 import os
 
-voice_client = None
 
 @client.command()
 async def play(ctx, url):
@@ -1159,13 +1158,13 @@ async def play(ctx, url):
 		
 @client.command()
 async def stop(ctx):
-	global voice_client
-	if voice_client:
-		await voice_client.disconnect()
-		voice_client = None
-		await ctx.send("disconesso")
-	else:
-		await ctx.send("nessuna canzone attiva")
+    global voice_client
+
+    if voice_client:
+        await voice_client.disconnect()
+        voice_client = None
+    else:
+        await ctx.send('Not currently in a voice channel')
 		
 @client.command()
 async def volume(ctx, volume: float):
