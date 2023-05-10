@@ -1135,7 +1135,7 @@ async def play(ctx, url):
 		#if files:
 		#file_extension = files[0].split(".")[-1]
 		#file_name = video.title + '.' + file.mime_type.split('/')[-1]
-		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{video.title}.3gpp"))
+		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
 		voice_client.play(source)
 		await ctx.send("video start")
 		
