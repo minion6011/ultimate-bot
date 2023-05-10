@@ -1118,7 +1118,7 @@ import os
 async def play(ctx, url):
 	try:
 		#delete author message
-		await ctx.message.delete
+		#await ctx.message.delete
 		
 		#loading embed
 		loading_embed = discord.Embed(title="<:Loading:649725559303176212 Dowloading song :musical_note:", color=discord.Colour.cyan())
