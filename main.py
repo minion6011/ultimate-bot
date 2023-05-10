@@ -1130,19 +1130,19 @@ async def play(ctx, url):
 		description = video.description
 		
 		# Get the voice channel of the user who typed the command
+		embed = discord.Embed(title=f"***{title}***", description=f"```{description}```", color=discord.Colour.green())
+		embed.set_image(url=image)
+		embed.set_footer(text=footer_testo)  
+		await ctx.send(embed=embed)
 		
 		voice_client = await ctx.author.voice.channel.connect()
 		
 		#await asyncio.sleep(1)
 		#file_name = video.title + '.' + file.mime_type.split('/')[-1]
-		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{video.title}.3gpp"))
-		#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
+		#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{video.title}.3gpp"))
+		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
 		#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".mp4"))
 		voice_client.play(source)
-		embed = discord.Embed(title=f"***{title}***", description=f"```{description}```", color=discord.Colour.green())
-		embed.set_image(url=image)
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
 		await asyncio.sleep(1)
 		# Wait for the video to finish playing
 		#while voice_client.is_playing():
