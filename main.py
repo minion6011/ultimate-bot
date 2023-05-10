@@ -1123,22 +1123,25 @@ async def play(ctx, url):
 		#video.streams.filter(progressive=True, file_extension='mp4').first().download()
 		video.streams.first().download()
 		
+		
+		#info
+		title = video.title
+		image = video.thumbnail_url
+		description = video.description
+		
 		# Get the voice channel of the user who typed the command
 		
 		voice_client = await ctx.author.voice.channel.connect()
 		
-		# Join the voice channel
-		
-		# Play the video
-		#filename = f"{video.title}"
-		#files = glob.glob(f"{filename}.*")
-		#if files:
-		#file_extension = files[0].split(".")[-1]
+
 		#file_name = video.title + '.' + file.mime_type.split('/')[-1]
 		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
 		#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".mp4"))
 		voice_client.play(source)
-		await ctx.send("video start")
+		embed = discord.Embed(title=f"***{title}***", description=f"```{description}```", color=discord.Colour.green())
+		embed.set_image(url=image)
+		embed.set_footer(text=footer_testo)  
+		await ctx.send(embed=embed)
 		
 		# Wait for the video to finish playing
 		#while voice_client.is_playing():
@@ -1150,6 +1153,7 @@ async def play(ctx, url):
 		# Delete the video file
 		os.remove(f"{video.title}.3gpp")
 	except Exception as e:
+		os.remove(f"{video.title}.3gpp")
 		await voice_client.disconnect()
 		await ctx.send("e")
 		print(e)
