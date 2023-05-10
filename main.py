@@ -1118,14 +1118,13 @@ async def play2(ctx, url):
 	try:
 		# Download the video
 		video = pytube.YouTube(url)
-		video.streams.filter(file_extension='3gpp').first().dowload()
-		#video.streams.first().download()
+		#video.streams.filter(file_extension='3gpp').first().dowload()
+		video.streams.first().download()
 		
 		# Get the voice channel of the user who typed the command
-		voice_channel = ctx.author.voice.channel
+		voice = await ctx.author.voice.channel.connect()
 		
 		# Join the voice channel
-		voice = await voice_channel.connect()
 		
 		# Play the video
 		#filename = f"{video.title}"
