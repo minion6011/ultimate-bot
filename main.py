@@ -1113,6 +1113,7 @@ import pytube
 import asyncio
 import os
 
+playback_states = {}
 
 @client.command()
 async def play(ctx, url):
@@ -1121,7 +1122,7 @@ async def play(ctx, url):
 		#await ctx.message.delete
 		
 		#loading embed
-		loading_embed = discord.Embed(title="<:Loading:649725559303176212> Dowloading song :musical_note:", color=discord.Colour.blue())
+		loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
 		loading_embed.set_footer(text=footer_testo)
 		msg = await ctx.send(embed=loading_embed)
 		
@@ -1145,6 +1146,7 @@ async def play(ctx, url):
 		
 		# Play the video
 		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
+		playback_states[ctx.guild.id] = {'player': player,'url': url}
 		voice.play(source)
 		
 		# Wait for the video to finish playing
@@ -1217,17 +1219,9 @@ async def play(ctx, url):
 
 @client.command()
 async def stop(ctx):
-	voice_channel = ctx.author.voice.channel
-	voice = await voice_channel.disconnect()
-	#if voice and voice.is_connected():
-	#	await voice.disconnect()
-	#	embed = discord.Embed(title="Successfully disconnected.", color=discord.Colour.green())
-	#embed.set_footer(text=footer_testo)
-	#	await ctx.send(embed=embed)
-	#else:
-	#	embed = discord.Embed(title="The bot is not connected to a voice channel.", color=discord.Colour.red())
-	#	embed.set_footer(text=footer_testo)
-	#	await ctx.send(embed=embed)
+    voice_client = ctx.voice_client
+    if voice_client.is_playing():
+        voice_client.audio_player.stop()
 
 		
 @client.command()
