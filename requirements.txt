@@ -9,4 +9,3 @@ openai
 deep_translator
 pytube
 discord.py[voice]
-io
