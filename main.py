@@ -1113,12 +1113,12 @@ import pytube
 import asyncio
 import os
 
-voice_channel = None
+voice_client = None
 
 @client.command()
 async def play(ctx, url):
 	try:
-		global voice
+		global voice_client
 		
 		# Download the video
 		video = pytube.YouTube(url)
@@ -1126,10 +1126,9 @@ async def play(ctx, url):
 		#video.streams.first().download()
 		
 		# Get the voice channel of the user who typed the command
-		voice_channel = ctx.author.voice.channel
+		voice_client = await ctx.author.voice.channel.connect()
 		
 		# Join the voice channel
-		voice_channel = await voice_channel.connect()
 		
 		# Play the video
 		#filename = f"{video.title}"
@@ -1138,20 +1137,20 @@ async def play(ctx, url):
 		#file_extension = files[0].split(".")[-1]
 		#file_name = video.title + '.' + file.mime_type.split('/')[-1]
 		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{video.title}.3gpp"))
-		voice.play(source)
+		voice_client.play(source)
 		await ctx.send("video start")
 		
 		# Wait for the video to finish playing
-		while voice.is_playing():
+		while voice_client.is_playing():
 			await asyncio.sleep(1)
 			
 		# Disconnect from the voice channel
-		await voice.disconnect()
+		await voice_client.disconnect()
 		
 		# Delete the video file
 		os.remove(f"{video.title}.3gpp")
 	except Exception as e:
-		await voice.disconnect()
+		await voice_client.disconnect()
 		await ctx.send("e")
 		print(e)
 		channel = client.get_channel(errorchannel)
@@ -1160,19 +1159,19 @@ async def play(ctx, url):
 		
 @client.command()
 async def stop(ctx):
-	global voice_channel
-	if voice_channel:
-		await voice_channel.disconnect()
-		voice_channel = None
+	global voice_client
+	if voice_client:
+		await voice_client.disconnect()
+		voice_client = None
 		await ctx.send("disconesso")
 	else:
 		await ctx.send("nessuna canzone attiva")
 		
 @client.command()
 async def volume(ctx, volume: float):
-    global voice_channel
+    global voice_client
 
-    if not voice_channel:
+    if not voice_client:
         await ctx.send('Not currently in a voice channel')
         return
 
@@ -1182,7 +1181,7 @@ async def volume(ctx, volume: float):
         return
 
     # Update the volume level of the current audio stream
-    voice_channel.source.volume = volume
+    voice_client.source.volume = volume
     await ctx.send(f'Volume set to {volume}')
 
 #music end	
