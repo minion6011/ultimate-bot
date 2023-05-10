@@ -1154,7 +1154,7 @@ async def play(ctx, url):
 		print(e)
 		channel = client.get_channel(errorchannel)
 		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
-		raise error
+		raise e
 		
 @client.command()
 async def stop(ctx):
