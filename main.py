@@ -1117,7 +1117,6 @@ import os
 @client.command()
 async def play(ctx, url):
 	try:
-		global voice_client
 		
 		# Download the video
 		video = pytube.YouTube(url)
@@ -1125,6 +1124,7 @@ async def play(ctx, url):
 		#video.streams.first().download()
 		
 		# Get the voice channel of the user who typed the command
+		
 		voice_client = await ctx.author.voice.channel.connect()
 		
 		# Join the voice channel
@@ -1140,8 +1140,8 @@ async def play(ctx, url):
 		await ctx.send("video start")
 		
 		# Wait for the video to finish playing
-		while voice_client.is_playing():
-			await asyncio.sleep(1)
+		#while voice_client.is_playing():
+			#await asyncio.sleep(1)
 			
 		# Disconnect from the voice channel
 		await voice_client.disconnect()
@@ -1158,17 +1158,16 @@ async def play(ctx, url):
 		
 @client.command()
 async def stop(ctx):
-    global voice_client
+	if not ctx.author.voice:
+		 await ctx.send('Not currently in a voice channel')
+	else:
+		voice_channel = ctx.author.voice.channel
+		await voice_channel.disconnect()
 
-    if voice_client:
-        await voice_client.disconnect()
-        voice_client = None
-    else:
-        await ctx.send('Not currently in a voice channel')
 		
 @client.command()
 async def volume(ctx, volume: float):
-    global voice_client
+    voice_client = ctx.author.voice.channel
 
     if not voice_client:
         await ctx.send('Not currently in a voice channel')
