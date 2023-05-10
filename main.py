@@ -1168,7 +1168,7 @@ async def stop(ctx):
 	else:
 		await ctx.send("nessuna canzone attiva")
 		
-@bot.command()
+@client.command()
 async def volume(ctx, volume: float):
     global voice_channel
 
