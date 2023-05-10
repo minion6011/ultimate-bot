@@ -1120,7 +1120,7 @@ async def play(ctx, url):
 		
 		# Download the video
 		video = pytube.YouTube(url)
-		video.streams.first().download()
+		video.streams.filter(progressive=True, file_extension='mp4').first().download()
 		#video.streams.first().download()
 		
 		# Get the voice channel of the user who typed the command
@@ -1135,7 +1135,8 @@ async def play(ctx, url):
 		#if files:
 		#file_extension = files[0].split(".")[-1]
 		#file_name = video.title + '.' + file.mime_type.split('/')[-1]
-		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
+		#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
+		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".mp4"))
 		voice_client.play(source)
 		await ctx.send("video start")
 		
