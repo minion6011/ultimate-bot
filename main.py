@@ -1154,7 +1154,7 @@ async def play(ctx, url):
 		# Delete the video file
 		os.remove(f"{video.title}.3gpp")
 	except Exception as e:
-		os.remove(f"{video.title}.3gpp")
+		#os.remove(f"{video.title}.3gpp")
 		await voice_client.disconnect()
 		await ctx.send("e")
 		print(e)
