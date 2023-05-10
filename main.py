@@ -1117,6 +1117,14 @@ import os
 @client.command()
 async def play(ctx, url):
 	try:
+		#delete author message
+		await ctx.message.delete
+		
+		#loading embed
+		loading_embed = discord.Embed(title="<:Loading:649725559303176212 Dowloading song :musical_note:", color=discord.Colour.cyan())
+		loading_embed.set_footer(text=footer_testo)
+		msg = await ctx.send(embed=loading_embed)
+		
 		# Download the video
 		video = pytube.YouTube(url)
 		video.streams.first().download()
@@ -1128,10 +1136,11 @@ async def play(ctx, url):
 		voice = await voice_channel.connect()
 		
 		#info
-		embed = discord.Embed(title=f"***Title: ***```{video.title}```\n***Description:*** ```{video.description}```", color=discord.Colour.green())
+		embed = discord.Embed(title=f"***Title: ***```{video.title}```\n\n***Description:*** ```{video.description}```", color=discord.Colour.red())
 		embed.set_image(url=video.thumbnail_url)
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
+		embed.set_footer(text=footer_testo)
+		await msg.edit(embed=embed)
+		#await ctx.send(embed=embed)
 		
 		
 		
@@ -1148,9 +1157,16 @@ async def play(ctx, url):
 		
 		# Delete the video file
 		os.remove(video.title + ".3gpp")
+	#error
 	except Exception as e:
+		os.remove(video.title + ".3gpp")
 		print(e)
-		await ctx.send("An error occurred while playing the video.")
+		embed = discord.Embed(title="An error occurred while playing the video.\n\n***Songs that have `/` or `'` in the title don't work***", color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+		channel = client.get_channel(errorchannel)
+		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
+		
 '''
 @client.command()
 async def play(ctx, url):
@@ -1206,13 +1222,17 @@ async def stop(ctx):
 	voice = get(client.voice_clients, guild=ctx.guild)
 	if voice and voice.is_connected():
 		await voice.disconnect()
-		await ctx.send("Successfully disconnected.")
+		embed = discord.Embed(title="Successfully disconnected.", color=discord.Colour.green())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
 	else:
-		await ctx.send("The bot is not connected to a voice channel.")
+		embed = discord.Embed(title="The bot is not connected to a voice channel.", color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
 
 		
 @client.command()
-async def volume(ctx, volume: float):
+async def volume(ctx, volume: int):
     voice_client = ctx.author.voice.channel
 
     if not voice_client:
