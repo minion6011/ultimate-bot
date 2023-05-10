@@ -1113,7 +1113,7 @@ import pytube
 import asyncio
 import os
 
-voice = None
+voice_channel = None
 
 @client.command()
 async def play(ctx, url):
@@ -1129,7 +1129,7 @@ async def play(ctx, url):
 		voice_channel = ctx.author.voice.channel
 		
 		# Join the voice channel
-		voice = await voice_channel.connect()
+		voice_channel = await voice_channel.connect()
 		
 		# Play the video
 		#filename = f"{video.title}"
@@ -1160,19 +1160,19 @@ async def play(ctx, url):
 		
 @client.command()
 async def stop(ctx):
-	global voice
-	if voice:
-		await voice.disconnect()
-		voice_client = None
+	global voice_channel
+	if voice_channel:
+		await voice_channel.disconnect()
+		voice_channel = None
 		await ctx.send("disconesso")
 	else:
 		await ctx.send("nessuna canzone attiva")
 		
 @bot.command()
 async def volume(ctx, volume: float):
-    global voice
+    global voice_channel
 
-    if not voice:
+    if not voice_channel:
         await ctx.send('Not currently in a voice channel')
         return
 
@@ -1182,7 +1182,7 @@ async def volume(ctx, volume: float):
         return
 
     # Update the volume level of the current audio stream
-    voice.source.volume = volume
+    voice_channel.source.volume = volume
     await ctx.send(f'Volume set to {volume}')
 
 #music end	
