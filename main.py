@@ -1219,12 +1219,16 @@ async def play(ctx, url):
 @client.command()
 async def stop(ctx):
     voice_client = ctx.voice_client
-    if voice_client.is_playing():
-        voice_client.audio_player.stop()
+    if voice_client and voice_client.is_connected():
+        if voice_client.is_playing():
+            voice_client.stop()
+        await voice_client.disconnect()
+    else:
+        await ctx.send("I'm not connected to a voice channel.")
 
 		
 @client.command()
-async def volume(ctx, volume: int):
+async def volume(ctx, volume):
 	voice_client = ctx.voice_client
 	
 	if not voice_client:
