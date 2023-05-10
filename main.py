@@ -1114,7 +1114,7 @@ import asyncio
 import os
 
 @client.command()
-async def play(ctx, url):
+async def play2(ctx, url):
 	try:
 		# Download the video
 		video = pytube.YouTube(url)
