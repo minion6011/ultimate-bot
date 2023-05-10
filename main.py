@@ -1133,7 +1133,7 @@ async def play(ctx, url):
 		
 		voice_client = await ctx.author.voice.channel.connect()
 		
-
+		await asyncio.sleep(1)
 		#file_name = video.title + '.' + file.mime_type.split('/')[-1]
 		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(dowloaded))
 		#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
