@@ -1115,7 +1115,7 @@ import os
 
 
 @client.command()
-async def play3(ctx, url):
+async def play(ctx, url):
 	try:
 		# Download the video
 		video = pytube.YouTube(url)
@@ -1128,7 +1128,7 @@ async def play3(ctx, url):
 		voice = await voice_channel.connect()
 		
 		#info
-		embed = discord.Embed(title=f"***Title: {video.title}***\n***Description:*** ```{video.description}```", color=discord.Colour.green())
+		embed = discord.Embed(title=f"***Title: ***```{video.title}```\n***Description:*** ```{video.description}```", color=discord.Colour.green())
 		embed.set_image(url=video.thumbnail_url)
 		embed.set_footer(text=footer_testo)  
 		await ctx.send(embed=embed)
@@ -1151,7 +1151,7 @@ async def play3(ctx, url):
 	except Exception as e:
 		print(e)
 		await ctx.send("An error occurred while playing the video.")
-
+'''
 @client.command()
 async def play(ctx, url):
 	try:
@@ -1199,14 +1199,16 @@ async def play(ctx, url):
 		channel = client.get_channel(errorchannel)
 		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
 		raise e
-		
+'''
+
 @client.command()
 async def stop(ctx):
-	if not ctx.author.voice:
-		 await ctx.send('Not currently in a voice channel')
+	voice = get(client.voice_clients, guild=ctx.guild)
+	if voice and voice.is_connected():
+		await voice.disconnect()
+		await ctx.send("Successfully disconnected.")
 	else:
-		voice_channel = ctx.author.voice.channel
-		await voice_channel.disconnect()
+		await ctx.send("The bot is not connected to a voice channel.")
 
 		
 @client.command()
