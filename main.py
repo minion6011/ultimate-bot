@@ -1164,15 +1164,15 @@ async def play(ctx, url):
 		
 		
 		#info
-		title = video.title
-		image = video.thumbnail_url
-		description = video.description
+		#title = video.title
+		#image = video.thumbnail_url
+		#description = video.description
 		
 		# Get the voice channel of the user who typed the command
-		embed = discord.Embed(title=f"***{title}***", description=f"```{description}```", color=discord.Colour.green())
-		embed.set_image(url=image)
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
+		#embed = discord.Embed(title=f"***{title}***", description=f"```{description}```", color=discord.Colour.green())
+		#embed.set_image(url=image)
+		#embed.set_footer(text=footer_testo)  
+		#await ctx.send(embed=embed)
 		
 		voice_client = await ctx.author.voice.channel.connect()
 		
