@@ -1121,7 +1121,7 @@ async def play(ctx, url):
 		# Download the video
 		video = pytube.YouTube(url)
 		#video.streams.filter(progressive=True, file_extension='mp4').first().download()
-		video.streams.first().download()
+		dowloaded = video.streams.first().download()
 		
 		
 		#info
@@ -1135,7 +1135,8 @@ async def play(ctx, url):
 		
 
 		#file_name = video.title + '.' + file.mime_type.split('/')[-1]
-		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
+		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(dowloaded))
+		#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
 		#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".mp4"))
 		voice_client.play(source)
 		embed = discord.Embed(title=f"***{title}***", description=f"```{description}```", color=discord.Colour.green())
