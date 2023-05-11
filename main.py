@@ -1262,7 +1262,7 @@ async def stop(ctx):
 
 		
 @client.command()
-async def volume(ctx, volume: int):
+async def volume(ctx, volume: float):
 	voice_client = ctx.voice_client
 	
 	if not voice_client:
