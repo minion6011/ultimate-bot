@@ -1194,9 +1194,6 @@ async def play(ctx, url):
 				os.remove(video.title + ".3gpp")
 	#error
 	except Exception as e:
-		try:
-			await msg.delete()
-			return
 		print(e)
 		embed = discord.Embed(title="An error occurred while playing the video.\n\n***Songs that have `/` or `'` in the title don't work***", color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
