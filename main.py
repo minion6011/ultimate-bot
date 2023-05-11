@@ -1269,11 +1269,15 @@ async def volume(ctx, volume: float):
 		await ctx.send('Not currently in a voice channel')
 		return
 	if voice_client.is_playing():
-		if volume < 0.0 or volume > 2.0:
-			await ctx.send("error max volume")
+		if volume < 0.0 or volume > 5.0:
+			embed = discord.Embed(title=f'The max of volume is 5.0\nThe min 0.0', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
 		else:
 			voice_client.source.volume = volume
-			await ctx.send(f'Volume set to {volume}')
+			embed = discord.Embed(title=f':loud_sound: Volume set to ***{volume}***', color=discord.Colour.blue())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
 	else:
 		await ctx.send("no song playing")
 
