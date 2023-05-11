@@ -28,4 +28,3 @@ I removed the ?activity command (due to discord adding that you need nitro to us
 
 
 ## Remember to vote for ultimate bot on https://top.gg/bot/1009106161104072726
-
