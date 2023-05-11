@@ -1,14 +1,12 @@
-### Version 1.6
+# Version 1.6
 
-New update to the bot, version 1.6:
-
-# 🛠️ Fixed:
+#### 🛠️ Fixed:
 
 Fixed a bug in /help
 
 Updated help
 
-# 📂 Added:
+#### 📂 Added:
 
 Added the section of Slash Commands in  /help
 
@@ -22,7 +20,7 @@ Added the section of Slash Commands in  /help
 
 Now the bot during code issues or update has maintenance status
 
-# ❌ Removed:
+#### ❌ Removed:
 
 I removed the version of help that is used with '?'
 
