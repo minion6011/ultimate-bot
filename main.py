@@ -1167,7 +1167,7 @@ async def play(ctx, url):
 				voice_channel = ctx.author.voice.channel
 
 				# Join the voice channel
-				voice = voice_channel.connect()
+				voice = await voice_channel.connect()
 
 				#info
 				embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.red())
@@ -1192,16 +1192,16 @@ async def play(ctx, url):
 				os.remove(video.title + ".3gpp")
 	#error
 	except Exception as e:
-		try:
-			await msg.delete()
-			return
 		print(e)
 		embed = discord.Embed(title="An error occurred while playing the video.\n\n***Songs that have `/` or `'` in the title don't work***", color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
 		channel = client.get_channel(errorchannel)
 		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
-		
+		try:
+			await msg.delete()
+		except Exception as e:
+			return
 '''
 @client.command()
 async def play(ctx, url):
