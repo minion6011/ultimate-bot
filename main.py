@@ -1256,30 +1256,43 @@ async def stop(ctx):
 	if voice_client and voice_client.is_connected():
 		if voice_client.is_playing():
 			voice_client.stop()
-		await voice_client.disconnect()
+			await voice_client.disconnect()
+			embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+		else:
+			await voice_client.disconnect()
+			embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
 	else:
-		await ctx.send("I'm not connected to a voice channel.")
-
+		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
 		
 @client.command()
 async def volume(ctx, volume: float):
 	voice_client = ctx.voice_client
 	
 	if not voice_client:
-		await ctx.send('Not currently in a voice channel')
+		embed = discord.Embed(title='Please enter the voice chat where the bot is', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
 		return
 	if voice_client.is_playing():
 		if volume < 0.0 or volume > 5.0:
-			embed = discord.Embed(title=f'The max of volume is 5.0\nThe min 0.0', color=discord.Colour.red())
+			embed = discord.Embed(title=f'The max of volume is ```5.0```\nThe min ```0.0```', color=discord.Colour.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
 		else:
 			voice_client.source.volume = volume
-			embed = discord.Embed(title=f':loud_sound: Volume set to ***{volume}***', color=discord.Colour.blue())
+			embed = discord.Embed(title=f':loud_sound: Volume set to ***```{volume}```***', color=discord.Colour.blue())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
 	else:
-		await ctx.send("no song playing")
+		embed = discord.Embed(title='No songs playing at the moment', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
 
 #music end	
 
