@@ -1167,7 +1167,7 @@ async def play(ctx, url):
 				voice_channel = ctx.author.voice.channel
 
 				# Join the voice channel
-				voice = await voice_channel.connect()
+				voice = voice_channel.connect()
 
 				#info
 				embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.red())
