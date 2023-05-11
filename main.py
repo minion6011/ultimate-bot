@@ -69,7 +69,6 @@ openai.api_key = data["access_token"]
 @client.event
 async def on_ready():
 	change_status.start()
-	heartbeat.start() #music bot
 	#tree.sync(force=True)
 	slash_sync = await client.tree.sync()
 	print(f"Bot logged into {client.user}.")
@@ -1356,10 +1355,6 @@ async def automod(ctx, rule_name: str, word: str, minutes: int):
     await ctx.send(f"La regola di auto moderation {rule_name} è stata creata con successo!")
 
 
-@tasks.loop(seconds=30)
-async def heartbeat():
-    while True:
-        await client.ws.heartbeat()
 
 @tasks.loop(seconds=18)
 async def change_status():
