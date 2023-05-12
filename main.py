@@ -1136,7 +1136,7 @@ async def play2(ctx, url):
 			video.streams.first().download(filename=file_name)
 
 			# Get the voice channel of the user who typed the command
-			voice_client = ctx.guild.voice_client
+			#voice_client = ctx.guild.voice_client
 			voice_channel = ctx.author.voice.channel
 			# Join the voice channel
 			voice = voice_channel.connect()
@@ -1148,7 +1148,7 @@ async def play2(ctx, url):
 			await msg.delete()
 			await ctx.send(embed=embed)
 			# Play the video
-			source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(file_name))
+			source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
 			voice.play(source)
 			# Wait for the video to finish playing
 			while voice.is_playing():
@@ -1186,13 +1186,13 @@ async def play(ctx, url):
 			video = pytube.YouTube(url)
 			
 			#song name
-			number = random.randint(1, 100000)
-			extension = "3gpp"
-			file_name = f"{number}.{extension}"
+			#number = random.randint(1, 100000)
+			#extension = "3gpp"
+			#file_name = f"{number}.{extension}"
 			
 			#dowload
-			#video.streams.first().download()
-			video.streams.first().download(filename=file_name)
+			video.streams.first().download()
+			#video.streams.first().download(filename=file_name)
 
 			# Get the voice channel of the user who typed the command
 			#voice_client = ctx.guild.voice_client
@@ -1213,8 +1213,8 @@ async def play(ctx, url):
 
 
 			# Play the video
-			source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(file_name))
-			#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
+			#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(file_name))
+			source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
 			voice.play(source)
 
 			# Wait for the video to finish playing
