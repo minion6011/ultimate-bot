@@ -1117,12 +1117,12 @@ from youtube_dl import YoutubeDL
 
 @client.command()
 async def play2(ctx, url):
-    voice_channel = get(ctx.guild.voice_channels, name='Your Voice Channel Name')
-    voice_client = await voice_channel.connect()
-    with YoutubeDL({'format': 'bestaudio'}) as ydl:
-        info = ydl.extract_info(url, download=False)
-        url2 = info['formats'][0]['url']
-        voice_client.play(discord.FFmpegPCMAudio(url2))
+	voice_channel = ctx.author.voice.channel
+	voice = voice_channel.connect()
+	with YoutubeDL({'format': 'bestaudio'}) as ydl:
+		info = ydl.extract_info(url, download=False)
+		url2 = info['formats'][0]['url']
+		voice_client.play(discord.FFmpegPCMAudio(url2))
 	
 	
 	
