@@ -1112,22 +1112,6 @@ import pytube
 import asyncio
 import os
 
-
-import ffmpeg
-
-
-@client.command()
-async def play2(ctx, url):
-    voice_channel = ctx.author.voice.channel
-    voice_client = await voice_channel.connect()
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as resp:
-            if resp.status != 200:
-                return await ctx.send('Could not download file...')
-            stream = resp.content
-            player = voice_client.play(discord.FFmpegPCMAudio(await stream.read()), after=lambda e: print('Player error: %s' % e) if e else None)
-    await ctx.send('Now playing: {}'.format(url))
-	
 	
 	
 @client.command()
@@ -1149,11 +1133,12 @@ async def play(ctx, url):
 			video = pytube.YouTube(url)
 			
 			#song name
-			number = random.randint(1, 10000)
+			number = random.randint(1, 100000)
 			extension = "3gpp"
 			file_name = f"{number}.{extension}"
 			
-			
+			#dowload
+			#video.streams.first().download()
 			video.streams.first().download(filename=file_name)
 
 			# Get the voice channel of the user who typed the command
@@ -1165,7 +1150,7 @@ async def play(ctx, url):
 				voice = voice_channel.connect()
 
 				#info
-				embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.red())
+				embed = discord.Embed(title=f"***Title: ***```{video.title}```\n{file_name}", color=discord.Colour.red())
 				embed.set_image(url=video.thumbnail_url)
 				embed.set_footer(text=footer_testo)
 				#await msg.edit(embed=embed)
@@ -1174,7 +1159,8 @@ async def play(ctx, url):
 
 
 				# Play the video
-				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
+				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(file_name))
+				#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
 				voice.play(source)
 
 				# Wait for the video to finish playing
@@ -1185,7 +1171,8 @@ async def play(ctx, url):
 				await voice.disconnect()
 
 				# Delete the video file
-				os.remove(video.title + ".3gpp")
+				#os.remove(video.title + ".3gpp")
+				os.remove(file_name)
 	#error
 	except Exception as e:
 		print(e)
