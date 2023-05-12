@@ -1112,7 +1112,23 @@ import pytube
 import asyncio
 import os
 
+from discord import FFmpegPCMAudio
 
+@client.command()
+async def play(ctx, url: str):
+    voice_channel = ctx.author.voice.channel
+    vc = await voice_channel.connect()
+
+    try:
+        audio_source = FFmpegPCMAudio(url)
+        vc.play(audio_source)
+    except Exception as e:
+        await ctx.send(f'Error: {e}')
+    finally:
+        await vc.disconnect()
+	
+	
+	
 @client.command()
 async def play(ctx, url):
 	try:
