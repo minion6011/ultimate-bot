@@ -1144,6 +1144,37 @@ async def play(ctx, url):
 			# Get the voice channel of the user who typed the command
 			voice_client = ctx.guild.voice_client
 			if voice_client and voice_client.is_connected():
+				#voice_channel = ctx.author.voice.channel
+
+				# Join the voice channel
+				#voice = voice_channel.connect()
+				voice = ctx.voice_client
+
+				#info
+				embed = discord.Embed(title=f"***Title: ***```{video.title}```\n{file_name}", color=discord.Colour.red())
+				embed.set_image(url=video.thumbnail_url)
+				embed.set_footer(text=footer_testo)
+				#await msg.edit(embed=embed)
+				await msg.delete()
+				await ctx.send(embed=embed)
+
+
+				# Play the video
+				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(file_name))
+				#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
+				voice.play(source)
+
+				# Wait for the video to finish playing
+				while voice.is_playing():
+					await asyncio.sleep(1)
+
+				# Disconnect from the voice channel
+				await voice.disconnect()
+
+				# Delete the video file
+				#os.remove(video.title + ".3gpp")
+				os.remove(file_name)
+			else:
 				voice_channel = ctx.author.voice.channel
 
 				# Join the voice channel
@@ -1173,8 +1204,6 @@ async def play(ctx, url):
 				# Delete the video file
 				#os.remove(video.title + ".3gpp")
 				os.remove(file_name)
-			else:
-				await ctx.send("eror")
 	#error
 	except Exception as e:
 		print(e)
