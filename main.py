@@ -1173,6 +1173,8 @@ async def play(ctx, url):
 				# Delete the video file
 				#os.remove(video.title + ".3gpp")
 				os.remove(file_name)
+			else:
+				await ctx.send("eror")
 	#error
 	except Exception as e:
 		print(e)
