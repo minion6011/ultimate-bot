@@ -1120,8 +1120,12 @@ import ffmpeg
 async def play2(ctx, url):
     voice_channel = ctx.author.voice.channel
     voice_client = await voice_channel.connect()
-    response = requests.get(url, stream=True)
-    voice_client.play(discord.AudioStream(response.raw, blocksize=1024))
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            if resp.status != 200:
+                return await ctx.send('Could not download file...')
+            player = voice_client.play(discord.FFmpegPCMAudio(resp.content), after=lambda e: print('Player error: %s' % e) if e else None)
+    await ctx.send('Now playing: {}'.format(url))
 	
 	
 	
