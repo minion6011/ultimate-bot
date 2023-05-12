@@ -1112,17 +1112,26 @@ import pytube
 import asyncio
 import os
 
-from discord.utils import get
-from youtube_dl import YoutubeDL
+
+import ffmpeg
+
 
 @client.command()
-async def play2(ctx, url):
-	voice_channel = ctx.author.voice.channel
-	voice = voice_channel.connect()
-	with YoutubeDL({'format': 'bestaudio'}) as ydl:
-		info = ydl.extract_info(url, download=False)
-		url2 = info['formats'][0]['url']
-		voice_client.play(discord.FFmpegPCMAudio(url2))
+async def play2(ctx, song_url):
+    # Get the song title from the URL
+    song_title = song_url.split("/")[-1]
+
+    # Create a new FFmpeg object
+    ffmpeg_object = ffmpeg.FFmpeg()
+
+    # Create a new audio stream from the song URL
+    audio_stream = ffmpeg_object.input(song_url).audio_stream()
+
+    # Create a new PCM audio object from the audio stream
+    pcm_audio = discord.FFmpegPCMAudio(audio_stream)
+
+    # Play the audio in the current voice channel
+    await ctx.voice_client.play(pcm_audio)
 	
 	
 	
