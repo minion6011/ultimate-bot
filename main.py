@@ -1112,20 +1112,17 @@ import pytube
 import asyncio
 import os
 
-from discord import FFmpegPCMAudio
+from discord.utils import get
+from youtube_dl import YoutubeDL
 
 @client.command()
-async def play2(ctx, url: str):
-    voice_channel = ctx.author.voice.channel
-    vc = await voice_channel.connect()
-
-    try:
-        audio_source = FFmpegPCMAudio(url)
-        vc.play(audio_source)
-    except Exception as e:
-        await ctx.send(f'Error: {e}')
-    finally:
-        await vc.disconnect()
+async def play2(ctx, url):
+    voice_channel = get(ctx.guild.voice_channels, name='Your Voice Channel Name')
+    voice_client = await voice_channel.connect()
+    with YoutubeDL({'format': 'bestaudio'}) as ydl:
+        info = ydl.extract_info(url, download=False)
+        url2 = info['formats'][0]['url']
+        voice_client.play(discord.FFmpegPCMAudio(url2))
 	
 	
 	
