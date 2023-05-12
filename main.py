@@ -1125,7 +1125,7 @@ async def play2(ctx, url):
             if resp.status != 200:
                 return await ctx.send('Could not download file...')
             stream = resp.content
-            player = voice_client.play(discord.FFmpegPCMAudio(stream.read()), after=lambda e: print('Player error: %s' % e) if e else None)
+            player = voice_client.play(discord.FFmpegPCMAudio(await stream.read()), after=lambda e: print('Player error: %s' % e) if e else None)
     await ctx.send('Now playing: {}'.format(url))
 	
 	
