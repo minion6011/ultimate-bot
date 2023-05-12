@@ -1112,6 +1112,59 @@ import pytube
 import asyncio
 import os
 
+
+@client.command()
+async def play3(ctx, url):
+	try:
+		#delete author message
+		#await ctx.message.delete
+		
+		#loading embed
+		loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+		loading_embed.set_footer(text=footer_testo)
+		msg = await ctx.send(embed=loading_embed)
+		
+		# Download the video
+		video = pytube.YouTube(url)
+		video.streams.first().download()
+		
+		# Get the voice channel of the user who typed the command
+		voice_channel = ctx.author.voice.channel
+		
+		# Join the voice channel
+		voice = await voice_channel.connect()
+		
+		#info
+		embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.red())
+		embed.set_image(url=video.thumbnail_url)
+		embed.set_footer(text=footer_testo)
+		await msg.edit(embed=embed)
+		#await ctx.send(embed=embed)
+
+		
+		# Play the video
+		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
+		voice.play(source)
+		
+		# Wait for the video to finish playing
+		while voice.is_playing():
+			await asyncio.sleep(1)
+			
+		# Disconnect from the voice channel
+		await voice.disconnect()
+		
+		# Delete the video file
+		os.remove(video.title + ".3gpp")
+	#error
+	except Exception as e:
+		print(e)
+		embed = discord.Embed(title="An error occurred while playing the video.\n\n***Songs that have `/` or `'` in the title don't work***", color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+		channel = client.get_channel(errorchannel)
+		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
+		
+		
 @client.command()
 async def play2(ctx, url):
 	try:
