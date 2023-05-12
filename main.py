@@ -1147,7 +1147,14 @@ async def play(ctx, url):
 
 			# Download the video
 			video = pytube.YouTube(url)
-			video.streams.first().download()
+			
+			#song name
+			number = random.randint(1, 10000)
+			extension = "3gpp"
+			file_name = f"{number}.{extension}"
+			
+			
+			video.streams.first().download(filename=file_name)
 
 			# Get the voice channel of the user who typed the command
 			voice_client = ctx.guild.voice_client
