@@ -1219,67 +1219,52 @@ async def play2(ctx, url):
 		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
 			
 			
-			
 @client.command()
 async def play(ctx, url):
 	try:
-		author_voice_state = ctx.author.voice  # Get the author's voice state
-		if not author_voice_state:  # If the author is in a voice channel
-			await ctx.send(f"{ctx.author.name} please enter in voice chat.")
-		else:
-			#delete author message
-			#await ctx.message.delete
+		#delete author message
+		#await ctx.message.delete
+		
+		#loading embed
+		loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+		loading_embed.set_footer(text=footer_testo)
+		msg = await ctx.send(embed=loading_embed)
+		
+		# Download the video
+		video = pytube.YouTube(url)
+		
+		number = random.randint(1, 100000)
+		extension = "3gpp"
+		file_name = f"{number}.{extension}"
+		video.streams.first().download(filename=file_name)
+		
+		# Get the voice channel of the user who typed the command
+		voice_channel = ctx.author.voice.channel
+		
+		# Join the voice channel
+		voice = await voice_channel.connect()
+		
+		#info
+		embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.red())
+		embed.set_image(url=video.thumbnail_url)
+		embed.set_footer(text=footer_testo)
+		await msg.edit(embed=embed)
+		#await ctx.send(embed=embed)
 
-			#loading embed
-			loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
-			loading_embed.set_footer(text=footer_testo)
-			msg = await ctx.send(embed=loading_embed)
-
-			# Download the video
-			video = pytube.YouTube(url)
+		
+		# Play the video
+		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
+		voice.play(source)
+		
+		# Wait for the video to finish playing
+		while voice.is_playing():
+			await asyncio.sleep(1)
 			
-			#song name
-			#number = random.randint(1, 100000)
-			#extension = "3gpp"
-			#file_name = f"{number}.{extension}"
-			
-			#dowload
-			video.streams.first().download()
-			#video.streams.first().download(filename=file_name)
-
-			# Get the voice channel of the user who typed the command
-			#voice_client = ctx.guild.voice_client
-			#if voice_client and voice_client.is_connected():
-			voice_channel = ctx.author.voice.channel
-
-			# Join the voice channel
-			voice = voice_channel.connect()
-			#voice = ctx.voice_client
-
-			#info
-			embed = discord.Embed(title=f"***Title: ***```{video.title}```\n{file_name}", color=discord.Colour.red())
-			embed.set_image(url=video.thumbnail_url)
-			embed.set_footer(text=footer_testo)
-			#await msg.edit(embed=embed)
-			await msg.delete()
-			await ctx.send(embed=embed)
-
-
-			# Play the video
-			#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(file_name))
-			source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
-			voice.play(source)
-
-			# Wait for the video to finish playing
-			while voice.is_playing():
-				await asyncio.sleep(1)
-			
-			# Disconnect from the voice channel
-			await voice.disconnect()
-
-			# Delete the video file
-			#os.remove(video.title + ".3gpp")
-			os.remove(file_name)
+		# Disconnect from the voice channel
+		await voice.disconnect()
+		
+		# Delete the video file
+		os.remove(f"{file_name}")
 	#error
 	except Exception as e:
 		print(e)
