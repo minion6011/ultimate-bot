@@ -1181,6 +1181,7 @@ async def play(ctx, url):
 			#return
 		
 		# Get the voice channel of the user who typed the command
+		await asyncio.sleep(3)
 		voice_channel = ctx.author.voice.channel
 		
 		# Join the voice channel
