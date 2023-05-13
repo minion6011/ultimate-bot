@@ -1204,7 +1204,7 @@ async def play(ctx, url):
 		# Play the video
 		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
 		voice.play(source)
-		volume = "6.0"
+		volume = 6.0
 		voice_client = ctx.voice_client
 		voice_client.source.volume = volume
 		
