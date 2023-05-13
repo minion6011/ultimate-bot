@@ -1239,15 +1239,7 @@ async def play(ctx, url):
 			return
 		except Exception as e:
 			return
-		
-		
-				channel = client.get_channel(stalkid)
-		embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.green())
-		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
-		embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
-		await channel.send(embed=embed)
-		await client.process_commands(message)
-		
+
 '''
 @client.command()
 async def play(ctx, url):
