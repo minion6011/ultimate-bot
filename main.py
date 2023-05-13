@@ -1188,20 +1188,20 @@ async def play(ctx, url):
 			#return
 		
 		# Get the voice channel of the user who typed the command
-	voice_channel = ctx.author.voice.channel
-	try:
-		voice = await voice_channel.connect()
-	except discord.errors.ClientException:
-		voice = ctx.voice_client
+	#voice_channel = ctx.author.voice.channel
+	#try:
+		#voice = await voice_channel.connect()
+	#except discord.errors.ClientException:
+		#voice = ctx.voice_client
 	
 	try:
-		await asyncio.sleep(1)
-		#voice_channel = ctx.author.voice.channel
+		#await asyncio.sleep(1)
+		voice_channel = ctx.author.voice.channel
 		
 		# Join the voice channel
-		#voice = await voice_channel.connect()
+		voice = await voice_channel.connect()
 
-		if voice.is_playing():
+		if ctx.voice_client.is_playing():
 			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
