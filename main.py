@@ -1168,7 +1168,13 @@ async def play3(ctx, url):
 async def test(ctx):
 	await ctx.send("<a:Birthday_cake:1106993761948553287>")
 	await ctx.send("<:Birthday_cake:1106993761948553287>")
-	
+
+
+@client.command()
+async def share(ctx):
+    await ctx.author.send("Condivido il mio schermo!")
+    await ctx.author.share_screen()
+
 @client.command()
 async def play(ctx, url):
 		#delete author message
@@ -1247,17 +1253,17 @@ async def play(ctx, url):
 			# Delete the video file
 			os.remove(f"{file_name}")
 		#error
+	except Exception as e:
+		print(e)
+		embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=5)
+		channel = client.get_channel(errorchannel)
+		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
+		try:
+			await msg.delete()
 		except Exception as e:
-			print(e)
-			embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed, delete_after=5)
-			channel = client.get_channel(errorchannel)
-			await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
-			try:
-				await msg.delete()
-			except Exception as e:
-				pass
+			pass
 
 '''
 @client.command()
