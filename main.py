@@ -1236,6 +1236,7 @@ async def play(ctx, url):
 		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
 		try:
 			await msg.delete()
+			return
 		except Exception as e:
 			return
 		
