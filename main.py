@@ -1164,9 +1164,11 @@ async def play3(ctx, url):
 		channel = client.get_channel(errorchannel)
 		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
 		
-		
-			
-			
+@client.command()
+async def test(ctx):
+	await ctx.send("<a:Birthday_cake:1106993761948553287>")
+	await ctx.send("<:Birthday_cake:1106993761948553287>")
+	
 @client.command()
 async def play(ctx, url):
 	try:
