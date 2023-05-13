@@ -1172,12 +1172,26 @@ async def play(ctx, url):
 	try:
 		#delete author message
 		#await ctx.message.delete
-		voice_check = ctx.voice_client
-		if voice_check.is_playing():
+		
+		#voice_check = ctx.voice_client
+		#if voice_check.is_playing():
+			#embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
+			#embed.set_footer(text=footer_testo)
+			#await ctx.send(embed=embed)
+			#return
+		
+		# Get the voice channel of the user who typed the command
+		voice_channel = ctx.author.voice.channel
+		
+		# Join the voice channel
+		voice = await voice_channel.connect()
+
+		if voice.is_playing():
 			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
 			return
+		
 		#loading embed
 		loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
 		loading_embed.set_footer(text=footer_testo)
@@ -1191,11 +1205,6 @@ async def play(ctx, url):
 		file_name = f"{number}.{extension}"
 		video.streams.first().download(filename=file_name)
 		
-		# Get the voice channel of the user who typed the command
-		voice_channel = ctx.author.voice.channel
-		
-		# Join the voice channel
-		voice = await voice_channel.connect()
 		
 		#info
 		embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
