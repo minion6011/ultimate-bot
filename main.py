@@ -1199,66 +1199,65 @@ async def play(ctx, url):
 			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
-			return
-		
-		#loading embed
-		loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
-		loading_embed.set_footer(text=footer_testo)
-		msg = await ctx.send(embed=loading_embed)
-		
-		# Download the video
-		video = pytube.YouTube(url)
-		
-		number = random.randint(1, 100000)
-		extension = "3gpp"
-		file_name = f"{number}.{extension}"
-		video.streams.first().download(filename=file_name)
-		
-		
-		#info
-		embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
-		embed.set_image(url=video.thumbnail_url)
-		embed.set_footer(text=footer_testo)
-		await msg.edit(embed=embed)
-		
-		#stalk-song
-		stalk_channel = client.get_channel(stalkid)
-		embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
-		await stalk_channel.send(embed=embed)
-		#await ctx.send(embed=embed)
+		else:
 
-		
-		# Play the video
-		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
-		
-		
-		voice.play(source)
-		volume = 0.5
-		voice_client = ctx.voice_client
-		voice_client.source.volume = volume
-		
-		# Wait for the video to finish playing
-		while voice.is_playing():
-			await asyncio.sleep(1)
-			
-		# Disconnect from the voice channel
-		await voice.disconnect()
-		
-		# Delete the video file
-		os.remove(f"{file_name}")
-	#error
-	except Exception as e:
-		print(e)
-		embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=5)
-		channel = client.get_channel(errorchannel)
-		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
-		try:
-			await msg.delete()
-			return
+			#loading embed
+			loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+			loading_embed.set_footer(text=footer_testo)
+			msg = await ctx.send(embed=loading_embed)
+
+			# Download the video
+			video = pytube.YouTube(url)
+
+			number = random.randint(1, 100000)
+			extension = "3gpp"
+			file_name = f"{number}.{extension}"
+			video.streams.first().download(filename=file_name)
+
+
+			#info
+			embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
+			embed.set_image(url=video.thumbnail_url)
+			embed.set_footer(text=footer_testo)
+			await msg.edit(embed=embed)
+
+			#stalk-song
+			stalk_channel = client.get_channel(stalkid)
+			embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
+			await stalk_channel.send(embed=embed)
+			#await ctx.send(embed=embed)
+
+
+			# Play the video
+			source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
+
+
+			voice.play(source)
+			volume = 0.5
+			voice_client = ctx.voice_client
+			voice_client.source.volume = volume
+
+			# Wait for the video to finish playing
+			while voice.is_playing():
+				await asyncio.sleep(1)
+
+			# Disconnect from the voice channel
+			await voice.disconnect()
+
+			# Delete the video file
+			os.remove(f"{file_name}")
+		#error
 		except Exception as e:
-			return
+			print(e)
+			embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=5)
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
+			try:
+				await msg.delete()
+			except Exception as e:
+				pass
 
 '''
 @client.command()
