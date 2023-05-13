@@ -1192,19 +1192,28 @@ async def play(ctx, url):
 		# Join the voice channel
 		voice = await voice_channel.connect()
 		
-		
+		if voice.is_playing():
+			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+			return
 		#info
-		embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.red())
+		embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
 		embed.set_image(url=video.thumbnail_url)
 		embed.set_footer(text=footer_testo)
 		await msg.edit(embed=embed)
+		
+		#stalk-song
+		stalk_channel = client.get_channel(stalkid)
+		embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
+		await stalk_channel.send(embed=embed)
 		#await ctx.send(embed=embed)
 
 		
 		# Play the video
 		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
 		voice.play(source)
-		volume = 6.0
+		volume = 1.5
 		voice_client = ctx.voice_client
 		voice_client.source.volume = volume
 		
@@ -1220,11 +1229,23 @@ async def play(ctx, url):
 	#error
 	except Exception as e:
 		print(e)
-		embed = discord.Embed(title="An error occurred while playing the video.\n\n***Songs that have `/` or `'` in the title don't work***", color=discord.Colour.red())
+		embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
+		await ctx.send(embed=embed, delete_after=5)
 		channel = client.get_channel(errorchannel)
 		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
+		try:
+			await msg.delete()
+		except Exception as e:
+			return
+		
+		
+				channel = client.get_channel(stalkid)
+		embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.green())
+		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
+		embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
+		await channel.send(embed=embed)
+		await client.process_commands(message)
 		
 '''
 @client.command()
