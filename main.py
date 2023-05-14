@@ -1238,10 +1238,10 @@ async def play(ctx, url):
 	
 	try:
 		#await asyncio.sleep(1)
-		voice_channel = ctx.author.voice.channel
+		#voice_channel = ctx.author.voice.channel
 		
 		# Join the voice channel
-		voice = await voice_channel.connect()
+		#voice = await voice_channel.connect()
 
 		if ctx.voice_client.is_playing():
 			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
@@ -1278,7 +1278,10 @@ async def play(ctx, url):
 
 			# Play the video
 			source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
-
+			
+			voice_channel = ctx.author.voice.channel
+			voice = await voice_channel.connect()
+			
 
 			voice.play(source)
 			volume = 0.5
