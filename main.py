@@ -1115,7 +1115,6 @@ import os
 
 @client.command()
 async def play3(ctx, url: str):
-	c
 		# Check if the bot is already connected to a voice channel
 		if ctx.voice_client and ctx.voice_client.is_connected():
 			if ctx.voice_client.is_playing():
