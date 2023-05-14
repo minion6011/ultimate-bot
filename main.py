@@ -1181,7 +1181,7 @@ async def play(ctx, url):
 		# Get the voice channel of the user who typed the command
 	#voice_channel = ctx.author.voice.channel
 	#try:
-		voice = await voice_channel.connect()
+		#voice = await voice_channel.connect()
 	#except discord.errors.ClientException:
 		#voice = ctx.voice_client
 	
