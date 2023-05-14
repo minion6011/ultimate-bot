@@ -1187,6 +1187,24 @@ async def play3(ctx, url: str):
 		
 		while voice.is_playing():
 			await asyncio.sleep(1)
+			
+		await voice.disconnect()
+
+		# Delete the video file
+		os.remove(f"{file_name}")
+		#error
+	except Exception as e:
+		print(e)
+		embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=5)
+		channel = client.get_channel(errorchannel)
+		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
+		try:
+			await msg.delete()
+		except Exception as e:
+			pass
+		
 		
 @client.command()
 async def test(ctx):
