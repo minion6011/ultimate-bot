@@ -1247,7 +1247,8 @@ async def play(ctx, url):
 			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
-		else:
+		elif ctx.voice_client == None:
+		#else:
 
 			#loading embed
 			loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
