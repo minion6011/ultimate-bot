@@ -1114,55 +1114,46 @@ import os
 
 
 @client.command()
-async def play3(ctx, url):
-	try:
-		#delete author message
-		#await ctx.message.delete
-		
-		#loading embed
-		loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
-		loading_embed.set_footer(text=footer_testo)
-		msg = await ctx.send(embed=loading_embed)
-		
-		# Download the video
-		video = pytube.YouTube(url)
-		video.streams.first().download()
-		
-		# Get the voice channel of the user who typed the command
-		voice_channel = ctx.author.voice.channel
-		
-		# Join the voice channel
-		voice = await voice_channel.connect()
-		
-		#info
-		embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.red())
-		embed.set_image(url=video.thumbnail_url)
-		embed.set_footer(text=footer_testo)
-		await msg.edit(embed=embed)
-		#await ctx.send(embed=embed)
+async def play3(ctx, url: str):
+    # check if user is in a voice channel
+    if not ctx.author.voice:
+        return await ctx.send("You are not connected to a voice channel.")
 
-		
-		# Play the video
-		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
-		voice.play(source)
-		
-		# Wait for the video to finish playing
-		while voice.is_playing():
-			await asyncio.sleep(1)
-			
-		# Disconnect from the voice channel
-		await voice.disconnect()
-		
-		# Delete the video file
-		os.remove(video.title + ".3gpp")
-	#error
-	except Exception as e:
-		print(e)
-		embed = discord.Embed(title="An error occurred while playing the video.\n\n***Songs that have `/` or `'` in the title don't work***", color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-		channel = client.get_channel(errorchannel)
-		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
+    # check if bot is already in a voice channel
+    if ctx.voice_client:
+        if ctx.voice_client.is_playing():
+            return await ctx.send("Already playing audio.")
+        else:
+            await ctx.voice_client.disconnect()
+
+    # get audio stream from the YouTube video
+    try:
+        video = pytube.YouTube(url)
+        stream = video.streams.filter(only_audio=True).first()
+    except pytube.exceptions.VideoUnavailable:
+        return await ctx.send("Video is unavailable or region-restricted.")
+
+    # connect to the voice channel
+    try:
+        await ctx.author.voice.channel.connect()
+    except discord.ClientException:
+        return await ctx.send("Bot is already connected to a voice channel.")
+    except discord.InvalidArgument:
+        return await ctx.send("You are not connected to a voice channel.")
+
+    # play the audio stream
+    try:
+        ctx.voice_client.play(discord.PCMVolumeTransformer(stream.stream_to_buffer()), after=lambda e: print(f'Player error: {e}') if e else None)
+        await ctx.send(f"Playing `{video.title}`")
+    except Exception as e:
+        print(f"Error playing audio: {e}")
+        await ctx.send("Error playing audio. Please try again later.")
+
+    # disconnect from the voice channel after audio is finished playing
+    while ctx.voice_client.is_playing():
+        await asyncio.sleep(1)
+    await ctx.voice_client.disconnect()
+    await ctx.send("Disconnected from voice channel.")
 		
 @client.command()
 async def test(ctx):
@@ -1190,7 +1181,7 @@ async def play(ctx, url):
 		# Get the voice channel of the user who typed the command
 	#voice_channel = ctx.author.voice.channel
 	#try:
-		#voice = await voice_channel.connect()
+		voice = await voice_channel.connect()
 	#except discord.errors.ClientException:
 		#voice = ctx.voice_client
 	
