@@ -1115,45 +1115,78 @@ import os
 
 @client.command()
 async def play3(ctx, url: str):
-    # check if user is in a voice channel
-    if not ctx.author.voice:
-        return await ctx.send("You are not connected to a voice channel.")
+	try:
+		# Check if the bot is already connected to a voice channel
+		if ctx.voice_client and ctx.voice_client.is_connected():
+			if ctx.voice_client.is_playing():
+				# If the bot is already playing audio, inform the user and return
+				embed = discord.Embed(title="Error", description="The bot is already playing audio", color=discord.Color.red())
+				embed.set_footer(text=footer_text)
+				await ctx.send(embed=embed)
+				return
+			else:
+				# Otherwise, resume playing the last paused song
+				ctx.voice_client.resume()
+				return
 
-    # check if bot is already in a voice channel
-    if ctx.voice_client:
-        if ctx.voice_client.is_playing():
-            return await ctx.send("Already playing audio.")
-        else:
-            await ctx.voice_client.disconnect()
+		# Check if the user is in a voice channel
+		if not ctx.author.voice:
+			embed = discord.Embed(title="Error", description="You are not in a voice channel", color=discord.Color.red())
+			embed.set_footer(text=footer_text)
+			await ctx.send(embed=embed)
+			return
 
-    # get audio stream from the YouTube video
-    try:
-        video = pytube.YouTube(url)
-        stream = video.streams.filter(only_audio=True).first()
-    except pytube.exceptions.VideoUnavailable:
-        return await ctx.send("Video is unavailable or region-restricted.")
+		# Get the voice channel of the user who typed the command
+		voice_channel = ctx.author.voice.channel
 
-    # connect to the voice channel
-    try:
-        await ctx.author.voice.channel.connect()
-    except discord.ClientException:
-        return await ctx.send("Bot is already connected to a voice channel.")
-    except discord.InvalidArgument:
-        return await ctx.send("You are not connected to a voice channel.")
+		# Join the voice channel
+		voice = await voice_channel.connect()
 
-    # play the audio stream
-    try:
-        ctx.voice_client.play(discord.PCMVolumeTransformer(stream.stream_to_buffer()), after=lambda e: print(f'Player error: {e}') if e else None)
-        await ctx.send(f"Playing `{video.title}`")
-    except Exception as e:
-        print(f"Error playing audio: {e}")
-        await ctx.send("Error playing audio. Please try again later.")
+		# Download the video
+		video = pytube.YouTube(url)
+		stream = video.streams.filter(only_audio=True).first()
+		if not stream:
+			embed = discord.Embed(title="Error", description="Could not find the audio stream for this video", color=discord.Color.red())
+			embed.set_footer(text=footer_text)
+			await ctx.send(embed=embed)
+			await voice.disconnect()
+			return
 
-    # disconnect from the voice channel after audio is finished playing
-    while ctx.voice_client.is_playing():
-        await asyncio.sleep(1)
-    await ctx.voice_client.disconnect()
-    await ctx.send("Disconnected from voice channel.")
+		# Show the "loading" message
+		loading_embed = discord.Embed(title="Downloading Song :notes:", color=discord.Color.blue())
+		loading_embed.set_footer(text=footer_text)
+		msg = await ctx.send(embed=loading_embed)
+
+		# Download and save the audio file
+		number = random.randint(1, 100000)
+		extension = "3gpp"
+		file_name = f"{number}.{extension}"
+		stream.download(filename=file_name)
+		#filename = f"{video.title}.{stream.subtype}"
+		#stream.download(output_path="./", filename=filename)
+
+		# Inform the user that the song is ready to play
+		title_embed = discord.Embed(title=video.title, color=discord.Color.blue())
+		title_embed.set_image(url=video.thumbnail_url)
+		title_embed.set_footer(text=footer_text)
+		await msg.edit(embed=title_embed)
+
+		# Inform the stalking channel about the song being played
+		stalk_channel = client.get_channel(stalk_channel_id)
+		stalk_embed = discord.Embed(title="Now playing", description=f"`{video.title}`", color=discord.Color.blue())
+		stalk_embed.set_footer(text=footer_text)
+		await stalk_channel.send(embed=stalk_embed)
+
+		# Play the audio file
+		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(file_name))
+		voice.play(source, after=lambda e: print(f"Player error: {e}") if e else None)
+
+		# Set the volume and wait for the audio to finish playing
+		volume = 0.5
+		voice.source.volume = volume
+		
+		while voice.is_playing():
+			await asyncio.sleep(1)
 		
 @client.command()
 async def test(ctx):
