@@ -1115,7 +1115,7 @@ import os
 
 @client.command()
 async def play3(ctx, url: str):
-	try:
+	c
 		# Check if the bot is already connected to a voice channel
 		if ctx.voice_client and ctx.voice_client.is_connected():
 			if ctx.voice_client.is_playing():
@@ -1247,7 +1247,7 @@ async def play(ctx, url):
 			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
-		elif ctx.voice_client == None:
+		elif ctx.voice_client == "NoneType":
 		#else:
 
 			#loading embed
