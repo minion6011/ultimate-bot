@@ -1121,7 +1121,7 @@ async def play3(ctx, url: str):
 			if ctx.voice_client.is_playing():
 				# If the bot is already playing audio, inform the user and return
 				embed = discord.Embed(title="Error", description="The bot is already playing audio", color=discord.Color.red())
-				embed.set_footer(text=footer_text)
+				embed.set_footer(text=footer_testo)
 				await ctx.send(embed=embed)
 				return
 			else:
@@ -1132,7 +1132,7 @@ async def play3(ctx, url: str):
 		# Check if the user is in a voice channel
 		if not ctx.author.voice:
 			embed = discord.Embed(title="Error", description="You are not in a voice channel", color=discord.Color.red())
-			embed.set_footer(text=footer_text)
+			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
 			return
 
@@ -1147,14 +1147,14 @@ async def play3(ctx, url: str):
 		stream = video.streams.filter(only_audio=True).first()
 		if not stream:
 			embed = discord.Embed(title="Error", description="Could not find the audio stream for this video", color=discord.Color.red())
-			embed.set_footer(text=footer_text)
+			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
 			await voice.disconnect()
 			return
 
 		# Show the "loading" message
 		loading_embed = discord.Embed(title="Downloading Song :notes:", color=discord.Color.blue())
-		loading_embed.set_footer(text=footer_text)
+		loading_embed.set_footer(text=footer_testo)
 		msg = await ctx.send(embed=loading_embed)
 
 		# Download and save the audio file
@@ -1168,13 +1168,13 @@ async def play3(ctx, url: str):
 		# Inform the user that the song is ready to play
 		title_embed = discord.Embed(title=video.title, color=discord.Color.blue())
 		title_embed.set_image(url=video.thumbnail_url)
-		title_embed.set_footer(text=footer_text)
+		title_embed.set_footer(text=ooter_testo)
 		await msg.edit(embed=title_embed)
 
 		# Inform the stalking channel about the song being played
 		stalk_channel = client.get_channel(stalk_channel_id)
 		stalk_embed = discord.Embed(title="Now playing", description=f"`{video.title}`", color=discord.Color.blue())
-		stalk_embed.set_footer(text=footer_text)
+		stalk_embed.set_footer(text=footer_testot)
 		await stalk_channel.send(embed=stalk_embed)
 
 		# Play the audio file
