@@ -1112,7 +1112,7 @@ import pytube
 import asyncio
 import os
 
-
+'''
 @client.command()
 async def play3(ctx, url: str):
 		# Check if the bot is already connected to a voice channel
@@ -1203,7 +1203,7 @@ async def play3(ctx, url: str):
 			await msg.delete()
 		except Exception as e:
 			pass
-		
+'''	
 		
 @client.command()
 async def test(ctx):
