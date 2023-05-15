@@ -1138,6 +1138,10 @@ async def play(ctx, url):
 	voice_state = ctx.author.voice
 	if voice_state is None:
 		await ctx.send("You are not currently in a voice channel.")
+		embed = discord.Embed(title=f"*** You are not currently in a voice channel. ***", color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+		
 	else:
 		if ctx.voice_client is not None and ctx.voice_client.is_playing():
 			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
@@ -1155,9 +1159,10 @@ async def play(ctx, url):
 				video = pytube.YouTube(url)
 
 				number = random.randint(1, 100000)
-				extension = "mp4"
+				extension = "mp3"
 				file_name = f"{number}.{extension}"
-				video.streams.first().download(filename=file_name)
+				video.streams.get_highest_resolution().download(filename=file_name)
+				#video.streams.first().download(filename=file_name)
 
 				filename = f"{file_name}" #global
 
@@ -1271,31 +1276,27 @@ async def stop(ctx):
 	voice_client = ctx.voice_client
 	if voice_client and voice_client.is_connected():
 		if voice_client.is_playing():
-			voice_client.stop()
-			await voice_client.disconnect()
-			await asyncio.sleep(1)
-			os.remove(f"{filename}") #global
-			embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
+			try:
+				voice_client.stop()
+				await voice_client.disconnect()
+				await asyncio.sleep(1)
+				os.remove(f"{filename}") #global
+				embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
+				pass
+			except Exception as e:
+				pass
 		else:
-			if filename == None: #global
-				await ctx.send("error filename = none")
-				try:
-					await voice_client.disconnect()
-					pass
-				except Exception as e:
-					pass
-			else:
-				try:
-					os.remove(f"{filename}") #global
-					await voice_client.disconnect()
-					embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
-					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed)
-					pass
-				except Exception as e:
-					pass
+			try:
+				os.remove(f"{filename}") #global
+				await voice_client.disconnect()
+				embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
+				pass
+			except Exception as e:
+				pass
 	else:
 		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
@@ -1311,8 +1312,8 @@ async def volume(ctx, volume: float):
 		await ctx.send(embed=embed)
 		return
 	if voice_client.is_playing():
-		if volume < 0.0 or volume > 15.0:
-			embed = discord.Embed(title=f'The max of volume is ```15.0```\nThe min ```0.0```', color=discord.Colour.red())
+		if volume < 0.0 or volume > 25.0:
+			embed = discord.Embed(title=f'The max of volume is ```25.0```\nThe min ```0.0```', color=discord.Colour.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
 		else:
