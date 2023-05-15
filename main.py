@@ -1268,6 +1268,7 @@ async def stop(ctx):
 		if voice_client.is_playing():
 			voice_client.stop()
 			await voice_client.disconnect()
+			os.remove(f"{filename}") #global
 			embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
