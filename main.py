@@ -1112,99 +1112,7 @@ import pytube
 import asyncio
 import os
 
-'''
-@client.command()
-async def play3(ctx, url: str):
-		# Check if the bot is already connected to a voice channel
-		if ctx.voice_client and ctx.voice_client.is_connected():
-			if ctx.voice_client.is_playing():
-				# If the bot is already playing audio, inform the user and return
-				embed = discord.Embed(title="Error", description="The bot is already playing audio", color=discord.Color.red())
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed)
-				return
-			else:
-				# Otherwise, resume playing the last paused song
-				ctx.voice_client.resume()
-				return
 
-		# Check if the user is in a voice channel
-		if not ctx.author.voice:
-			embed = discord.Embed(title="Error", description="You are not in a voice channel", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-			return
-
-		# Get the voice channel of the user who typed the command
-		voice_channel = ctx.author.voice.channel
-
-		# Join the voice channel
-		voice = await voice_channel.connect()
-
-		# Download the video
-		video = pytube.YouTube(url)
-		stream = video.streams.filter(only_audio=True).first()
-		if not stream:
-			embed = discord.Embed(title="Error", description="Could not find the audio stream for this video", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-			await voice.disconnect()
-			return
-
-		# Show the "loading" message
-		loading_embed = discord.Embed(title="Downloading Song :notes:", color=discord.Color.blue())
-		loading_embed.set_footer(text=footer_testo)
-		msg = await ctx.send(embed=loading_embed)
-
-		# Download and save the audio file
-		number = random.randint(1, 100000)
-		extension = "3gpp"
-		file_name = f"{number}.{extension}"
-		stream.download(filename=file_name)
-		#filename = f"{video.title}.{stream.subtype}"
-		#stream.download(output_path="./", filename=filename)
-
-		# Inform the user that the song is ready to play
-		title_embed = discord.Embed(title=video.title, color=discord.Color.blue())
-		title_embed.set_image(url=video.thumbnail_url)
-		title_embed.set_footer(text=ooter_testo)
-		await msg.edit(embed=title_embed)
-
-		# Inform the stalking channel about the song being played
-		stalk_channel = client.get_channel(stalk_channel_id)
-		stalk_embed = discord.Embed(title="Now playing", description=f"`{video.title}`", color=discord.Color.blue())
-		stalk_embed.set_footer(text=footer_testot)
-		await stalk_channel.send(embed=stalk_embed)
-
-		# Play the audio file
-		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(file_name))
-		voice.play(source, after=lambda e: print(f"Player error: {e}") if e else None)
-
-		# Set the volume and wait for the audio to finish playing
-		volume = 0.5
-		voice.source.volume = volume
-		
-		while voice.is_playing():
-			await asyncio.sleep(1)
-			
-		await voice.disconnect()
-
-		# Delete the video file
-		os.remove(f"{file_name}")
-		#error
-	except Exception as e:
-		print(e)
-		embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=5)
-		channel = client.get_channel(errorchannel)
-		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
-		try:
-			await msg.delete()
-		except Exception as e:
-			pass
-'''	
-		
 @client.command()
 async def test(ctx):
 	await ctx.send("<a:Birthday_cake:1106993761948553287>")
@@ -1218,37 +1126,13 @@ async def share(ctx):
 
 @client.command()
 async def play(ctx, url):
-		#delete author message
-		#await ctx.message.delete
-		
-		#voice_check = ctx.voice_client
-		#if voice_check.is_playing():
-			#embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
-			#embed.set_footer(text=footer_testo)
-			#await ctx.send(embed=embed)
-			#return
-		
-		# Get the voice channel of the user who typed the command
-	#voice_channel = ctx.author.voice.channel
-	#try:
-		#voice = await voice_channel.connect()
-	#except discord.errors.ClientException:
-		#voice = ctx.voice_client
-	
-	try:
-		#await asyncio.sleep(1)
-		#voice_channel = ctx.author.voice.channel
-		
-		# Join the voice channel
-		#voice = await voice_channel.connect()
-
-		if ctx.voice_client is not None and ctx.voice_client.is_playing():
-			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-		else:
-		#else:
-
+	if ctx.voice_client is not None and ctx.voice_client.is_playing():
+		embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=8)
+	else:
+	#else:
+		try:
 			#loading embed
 			loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
 			loading_embed.set_footer(text=footer_testo)
@@ -1298,17 +1182,17 @@ async def play(ctx, url):
 			# Delete the video file
 			os.remove(f"{file_name}")
 		#error
-	except Exception as e:
-		print(e)
-		embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=5)
-		channel = client.get_channel(errorchannel)
-		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
-		try:
-			await msg.delete()
 		except Exception as e:
-			pass
+			print(e)
+			embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=5)
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
+			try:
+				await msg.delete()
+			except Exception as e:
+				pass
 
 '''
 @client.command()
