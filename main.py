@@ -1155,7 +1155,7 @@ async def play(ctx, url):
 				video = pytube.YouTube(url)
 
 				number = random.randint(1, 100000)
-				extension = "3gpp"
+				extension = "mp4"
 				file_name = f"{number}.{extension}"
 				video.streams.first().download(filename=file_name)
 
@@ -1165,7 +1165,9 @@ async def play(ctx, url):
 				embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
 				embed.set_image(url=video.thumbnail_url)
 				embed.set_footer(text=footer_testo)
-				await msg.edit(embed=embed)
+				await ctx.send(embed=embed)
+				await msg.delete()
+				#await msg.edit(embed=embed)
 
 				#stalk-song
 				stalk_channel = client.get_channel(stalkid)
