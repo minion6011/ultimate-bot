@@ -1159,7 +1159,7 @@ async def play(ctx, url):
 				video = pytube.YouTube(url)
 
 				number = random.randint(1, 100000)
-				extension = "mp3"
+				extension = "mp4"
 				file_name = f"{number}.{extension}"
 				video.streams.get_highest_resolution().download(filename=file_name)
 				#video.streams.first().download(filename=file_name)
