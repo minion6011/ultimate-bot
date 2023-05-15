@@ -1197,7 +1197,7 @@ async def play(ctx, url):
 				os.remove(f"{file_name}")
 			#error
 			except Exception as e:
-				if e == "Already connected to a voice channel.":
+				if str(e) == "Already connected to a voice channel.":
 					pass
 				else:
 					print(e)
