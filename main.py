@@ -1124,8 +1124,17 @@ async def share(ctx):
     await ctx.author.send("Condivido il mio schermo!")
     await ctx.author.share_screen()
 
+#music bot
+	
+global filename
+filename = None
+	
+	
+	
 @client.command()
 async def play(ctx, url):
+	global filename #global
+	
 	voice_state = ctx.author.voice
 	if voice_state is None:
 		await ctx.send("You are not currently in a voice channel.")
@@ -1150,6 +1159,7 @@ async def play(ctx, url):
 				file_name = f"{number}.{extension}"
 				video.streams.first().download(filename=file_name)
 
+				filename = f"{file_name}" #global
 
 				#info
 				embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
@@ -1251,6 +1261,8 @@ async def play(ctx, url):
 
 @client.command()
 async def stop(ctx):
+	global filename #global
+	
 	voice_client = ctx.voice_client
 	if voice_client and voice_client.is_connected():
 		if voice_client.is_playing():
@@ -1260,10 +1272,19 @@ async def stop(ctx):
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
 		else:
-			await voice_client.disconnect()
-			embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
+			if filename == None: #global
+				await ctx.send("error filename = none")
+				try:
+					await voice_client.disconnect()
+					pass
+			else:
+				try:
+					os.remove(f"{filename}") #global
+					await voice_client.disconnect()
+					embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
+					embed.set_footer(text=footer_testo)
+					await ctx.send(embed=embed)
+					pass
 	else:
 		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
