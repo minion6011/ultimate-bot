@@ -1276,7 +1276,9 @@ async def stop(ctx):
 				await ctx.send("error filename = none")
 				try:
 					await voice_client.disconnect()
-					return
+					pass
+				except Exception as e:
+					pass
 			else:
 				try:
 					os.remove(f"{filename}") #global
@@ -1284,7 +1286,9 @@ async def stop(ctx):
 					embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
 					embed.set_footer(text=footer_testo)
 					await ctx.send(embed=embed)
-					return
+					pass
+				except Exception as e:
+					pass
 	else:
 		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
