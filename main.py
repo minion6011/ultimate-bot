@@ -1126,37 +1126,13 @@ async def share(ctx):
 
 @client.command()
 async def play(ctx, url):
-		#delete author message
-		#await ctx.message.delete
-		
-		#voice_check = ctx.voice_client
-		#if voice_check.is_playing():
-			#embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
-			#embed.set_footer(text=footer_testo)
-			#await ctx.send(embed=embed)
-			#return
-		
-		# Get the voice channel of the user who typed the command
-	#voice_channel = ctx.author.voice.channel
-	#try:
-		#voice = await voice_channel.connect()
-	#except discord.errors.ClientException:
-		#voice = ctx.voice_client
-	
-	try:
-		#await asyncio.sleep(1)
-		#voice_channel = ctx.author.voice.channel
-		
-		# Join the voice channel
-		#voice = await voice_channel.connect()
-
-		if ctx.voice_client is not None and ctx.voice_client.is_playing():
-			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-		else:
+	if ctx.voice_client is not None and ctx.voice_client.is_playing():
+		embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+	else:
 		#else:
-
+		try:
 			#loading embed
 			loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
 			loading_embed.set_footer(text=footer_testo)
@@ -1206,17 +1182,17 @@ async def play(ctx, url):
 			# Delete the video file
 			os.remove(f"{file_name}")
 		#error
-	except Exception as e:
-		print(e)
-		embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=5)
-		channel = client.get_channel(errorchannel)
-		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
-		try:
-			await msg.delete()
 		except Exception as e:
-			pass
+			print(e)
+			embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=5)
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
+			try:
+				await msg.delete()
+			except Exception as e:
+				pass
 
 
 '''
