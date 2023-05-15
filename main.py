@@ -1242,11 +1242,11 @@ async def play(ctx, url):
 		# Join the voice channel
 		#voice = await voice_channel.connect()
 
-		if ctx.voice_client.is_playing():
+		if ctx.voice_client is not None and ctx.voice_client.is_playing():
 			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
-		elif ctx.voice_client == "NoneType":
+		else:
 		#else:
 
 			#loading embed
