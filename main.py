@@ -1219,55 +1219,45 @@ async def play(ctx, url):
 						pass
 
 
-'''
 @client.command()
-async def play(ctx, url):
-	try:
-		
-		# Download the video
-		video = pytube.YouTube(url)
-		#video.streams.filter(progressive=True, file_extension='mp4').first().download()
-		dowloaded = video.streams.first().download()
-		
-		
-		#info
-		#title = video.title
-		#image = video.thumbnail_url
-		#description = video.description
-		
-		# Get the voice channel of the user who typed the command
-		#embed = discord.Embed(title=f"***{title}***", description=f"```{description}```", color=discord.Colour.green())
-		#embed.set_image(url=image)
-		#embed.set_footer(text=footer_testo)  
-		#await ctx.send(embed=embed)
-		
-		voice_client = await ctx.author.voice.channel.connect()
-		
-		#await asyncio.sleep(1)
-		#file_name = video.title + '.' + file.mime_type.split('/')[-1]
-		#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{video.title}.3gpp"))
-		source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".3gpp"))
-		#source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(video.title + ".mp4"))
-		voice_client.play(source)
-		await asyncio.sleep(1)
-		# Wait for the video to finish playing
-		#while voice_client.is_playing():
-			#await asyncio.sleep(1)
+async def pause(ctx):
+	voice_client = ctx.voice_client
+	if voice_client and voice_client.is_connected():
+		if voice_client.is_playing():
+			try:
+				voice_client.pause()
+				await asyncio.sleep(1)
+				embed = discord.Embed(title=':pause_button: The song has been paused', color=discord.Colour.green())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
+				pass
+			except Exception as e:
+				pass
+		else:
+			embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
 			
-		# Disconnect from the voice channel
-		await voice_client.disconnect()
-		
-		# Delete the video file
-		os.remove(f"{video.title}.3gpp")
-	except Exception as e:
-		#os.remove(f"{video.title}.3gpp")
-		await voice_client.disconnect()
-		await ctx.send("e")
-		print(e)
-		channel = client.get_channel(errorchannel)
-		await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
-		raise e
-'''
+			
+
+@client.command()
+async def resume(ctx):
+	voice_client = ctx.voice_client
+	if voice_client and voice_client.is_connected():
+		if voice_client.is_playing():
+			try:
+				voice_client.resume()
+				await asyncio.sleep(1)
+				embed = discord.Embed(title=':arrow_forward: The song has been resumed', color=discord.Colour.green())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
+				pass
+			except Exception as e:
+				pass
+		else:
+			embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song, pause it and enter in the voice chat where the bot is', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
 
 @client.command()
 async def stop(ctx):
