@@ -1244,7 +1244,7 @@ async def pause(ctx):
 async def resume(ctx):
 	voice_client = ctx.voice_client
 	if voice_client and voice_client.is_connected():
-		if voice_client.is_playing():
+		if voice_client.is_paused():
 			try:
 				voice_client.resume()
 				await asyncio.sleep(1)
