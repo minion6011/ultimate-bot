@@ -1221,43 +1221,23 @@ async def play(ctx, url):
 
 @client.command()
 async def pause(ctx):
-	voice_client = ctx.voice_client
-	if voice_client and voice_client.is_connected():
-		if voice_client.is_playing():
-			try:
-				voice_client.pause()
-				await asyncio.sleep(1)
-				embed = discord.Embed(title=':pause_button: The song has been paused', color=discord.Colour.green())
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed)
-				pass
-			except Exception as e:
-				pass
-		else:
-			embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-			
+    voice_client = ctx.voice_client
+    if voice_client.is_playing():
+        voice_client.pause()
+        await ctx.send("Playback paused.")
+    else:
+        await ctx.send("Nothing is playing.")
 			
 
 @client.command()
 async def resume(ctx):
-	voice_client = ctx.voice_client
-	if voice_client and voice_client.is_connected():
-		if voice_client.is_paused():
-			try:
-				voice_client.resume()
-				await asyncio.sleep(1)
-				embed = discord.Embed(title=':arrow_forward: The song has been resumed', color=discord.Colour.green())
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed)
-				pass
-			except Exception as e:
-				pass
-		else:
-			embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song, pause it and enter in the voice chat where the bot is', color=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
+    voice_client = ctx.voice_client
+    if voice_client.is_paused():
+        voice_client.resume()
+        await ctx.send("Playback resumed.")
+    else:
+        await ctx.send("Playback is not paused.")
+
 
 @client.command()
 async def stop(ctx):
