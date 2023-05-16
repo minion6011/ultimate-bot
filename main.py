@@ -1137,7 +1137,6 @@ async def play(ctx, url):
 	
 	voice_state = ctx.author.voice
 	if voice_state is None:
-		await ctx.send("You are not currently in a voice channel.")
 		embed = discord.Embed(title=f"*** You are not currently in a voice channel. ***", color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
@@ -1159,7 +1158,7 @@ async def play(ctx, url):
 				video = pytube.YouTube(url)
 
 				number = random.randint(1, 100000)
-				extension = "mp3"
+				extension = "mp4"
 				file_name = f"{number}.{extension}"
 				#video.streams.get_highest_resolution().download(filename=file_name)
 				video.streams.first().download(filename=file_name)
@@ -1189,7 +1188,7 @@ async def play(ctx, url):
 
 
 				voice.play(source)
-				volume = 0.5
+				volume = 0.4
 				voice_client = ctx.voice_client
 				voice_client.source.volume = volume
 
@@ -1202,6 +1201,9 @@ async def play(ctx, url):
 
 				# Delete the video file
 				os.remove(f"{file_name}")
+				
+				
+				pass
 			#error
 			except Exception as e:
 				if str(e) == "Already connected to a voice channel.":
