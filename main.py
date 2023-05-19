@@ -1137,15 +1137,15 @@ async def play(ctx, url):
 	
 	voice_state = ctx.author.voice
 	if voice_state is None:
-		embed = discord.Embed(title=f"*** You are not currently in a voice channel. ***", color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
+		no_voice_embed = discord.Embed(title=f"*** You are not currently in a voice channel. ***", color=discord.Colour.red())
+		no_voice_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=no_voice_embed)
 		
 	else:
 		if ctx.voice_client is not None and ctx.voice_client.is_playing():
-			embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
+			no_music_embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
+			no_music_embed.set_footer(text=footer_testo)
+			await ctx.send(embed=no_music_embed)
 		else:
 			#else:
 			try:
@@ -1166,17 +1166,17 @@ async def play(ctx, url):
 				filename = f"{file_name}" #global
 
 				#info
-				embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
-				embed.set_image(url=video.thumbnail_url)
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed)
-				await msg.delete()
-				#await msg.edit(embed=embed)
+				title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
+				title_embed.set_image(url=video.thumbnail_url)
+				title_embed.set_footer(text=footer_testo)
+				#await ctx.send(embed=title_embed)
+				#await msg.delete()
+				await msg.edit(embed=title_embed)
 
 				#stalk-song
 				stalk_channel = client.get_channel(stalkid)
-				embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
-				await stalk_channel.send(embed=embed)
+				stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
+				await stalk_channel.send(embed=stalk_embed)
 				#await ctx.send(embed=embed)
 
 
@@ -1210,9 +1210,9 @@ async def play(ctx, url):
 					pass
 				else:
 					print(e)
-					embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed, delete_after=5)
+					error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed, delete_after=5)
 					channel = client.get_channel(errorchannel)
 					await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
 					try:
