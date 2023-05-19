@@ -1149,7 +1149,6 @@ async def play(ctx, url):
 		else:
 			#else:
 			try:
-				loading embed
 				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
 				loading_embed.set_footer(text=footer_testo)
 				loading = await ctx.send(embed=loading_embed)
