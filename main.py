@@ -1152,7 +1152,7 @@ async def play(ctx, url):
 				#loading embed
 				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
 				loading_embed.set_footer(text=footer_testo)
-				msg = await ctx.send(embed=loading_embed)
+				await ctx.send(embed=loading_embed, delete_after=5)
 
 				# Download the video
 				video = pytube.YouTube(url)
@@ -1169,9 +1169,9 @@ async def play(ctx, url):
 				title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
 				title_embed.set_image(url=video.thumbnail_url)
 				title_embed.set_footer(text=footer_testo)
-				#await ctx.send(embed=title_embed)
+				await ctx.send(embed=title_embed)
 				#await msg.delete()
-				await msg.edit(embed=title_embed)
+				#await msg.edit(embed=title_embed)
 
 				#stalk-song
 				stalk_channel = client.get_channel(stalkid)
