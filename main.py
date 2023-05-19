@@ -1150,9 +1150,9 @@ async def play(ctx, url):
 			#else:
 			try:
 				#loading embed
-				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
-				loading_embed.set_footer(text=footer_testo)
-				await ctx.send(embed=loading_embed, delete_after=5)
+				#loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+				#loading_embed.set_footer(text=footer_testo)
+				#await ctx.send(embed=loading_embed, delete_after=5)
 
 				# Download the video
 				video = pytube.YouTube(url)
