@@ -1128,7 +1128,7 @@ async def play(ctx, url):
 		await ctx.send(embed=embed)
 	else:
 		if ctx.voice_client is not None and ctx.voice_client.is_playing():
-			no_music_embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
+			no_music_embed = discord.Embed(title="*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
 			no_music_embed.set_footer(text=footer_testo)
 			await ctx.send(embed=no_music_embed)
 		else:
@@ -1214,7 +1214,9 @@ async def play(ctx, url):
 					await ctx.send(embed=error_embed_3, delete_after=5)
 					pass
 				else:
-					await ctx.send('An error occurred while processing the video.')
+					error_embed_4 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
+					error_embed_4.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_4, delete_after=5)
 					
 					#stalk
 					channel = client.get_channel(errorchannel)
