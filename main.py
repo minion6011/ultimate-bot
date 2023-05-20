@@ -1113,17 +1113,6 @@ import asyncio
 import os
 
 
-@client.command()
-async def test(ctx):
-	await ctx.send("<a:Birthday_cake:1106993761948553287>")
-	await ctx.send("<:Birthday_cake:1106993761948553287>")
-
-
-@client.command()
-async def share(ctx):
-    await ctx.author.send("Condivido il mio schermo!")
-    await ctx.author.share_screen()
-
 #music bot
 	
 global filename
@@ -1214,10 +1203,15 @@ async def play(ctx, url):
 				except Exception:
 					pass
 				if 'This video is age-restricted' in str(e):
-					await ctx.send('the video is age-restricted.')
+					#await ctx.send('the video is age-restricted.')
+					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
+					error_embed_2.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_2, delete_after=5)
 					pass
 				elif 'is streaming live and cannot be loaded' in str(e):
-					await ctx.send('the video is live.')
+					error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
+					error_embed_3.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_3, delete_after=5)
 					pass
 				else:
 					await ctx.send('An error occurred while processing the video.')
