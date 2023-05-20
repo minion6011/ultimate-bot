@@ -1133,11 +1133,8 @@ filename = None
 	
 @client.command()
 async def play(ctx, url):
-	global filename #global
-	
-	voice_state = ctx.author.voice
-	if voice_state is None:
-		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
+	if ctx.author.voice.channel is None:
+		embed = discord.Embed(title=f"*** You are not currently in a voice channel. ***", color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
 	else:
@@ -1160,8 +1157,10 @@ async def play(ctx, url):
 				file_name = f"{number}.{extension}"
 				#video.streams.get_highest_resolution().download(filename=file_name)
 				video.streams.first().download(filename=file_name)
-
-				filename = f"{file_name}" #global
+				
+				#global
+				global filename
+				filename = f"{file_name}"
 				
 				#loading delete
 				await asyncio.sleep(0.5)
@@ -1185,13 +1184,12 @@ async def play(ctx, url):
 
 				# Play the video
 				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
-
 				voice_channel = ctx.author.voice.channel
 				voice = await voice_channel.connect()
-
-
 				voice.play(source)
-				volume = 0.4
+				
+				#volume fix
+				volume = 0.3
 				voice_client = ctx.voice_client
 				voice_client.source.volume = volume
 
@@ -1204,8 +1202,6 @@ async def play(ctx, url):
 
 				# Delete the video file
 				os.remove(f"{file_name}")
-				
-				
 				pass
 			#error
 			except Exception as e:
