@@ -1209,16 +1209,23 @@ async def play(ctx, url):
 			#error
 			except pytube.exceptions.PytubeError as e:
 				#is streaming live and cannot be loaded
+				try:
+					await msg.delete()
+				except Exception as e:
+					pass
 				if 'This video is age-restricted' in str(e):
 					await ctx.send('the video is age-restricted.')
+					pass
 				elif 'is streaming live and cannot be loaded' in str(e):
 					await ctx.send('the video is live.')
+					pass
 				else:
 					await ctx.send('An error occurred while processing the video.')
 					
 					#stalk
 					channel = client.get_channel(errorchannel)
 					await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
+					pass
 			except Exception as e:
 				if str(e) == "Already connected to a voice channel.":
 					pass
