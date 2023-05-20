@@ -1142,7 +1142,7 @@ async def play(ctx, url):
 		await ctx.send(embed=embed)
 	else:
 		if ctx.voice_client is not None and ctx.voice_client.is_playing():
-			no_music_embed = discord.Embed(title="*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
+			no_music_embed = discord.Embed(title=f"*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
 			no_music_embed.set_footer(text=footer_testo)
 			await ctx.send(embed=no_music_embed)
 		else:
