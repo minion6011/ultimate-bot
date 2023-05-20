@@ -1109,6 +1109,7 @@ async def help(ctx):
 
 #music
 import pytube
+from pytube import AgeRestrictedError
 import asyncio
 import os
 
@@ -1158,52 +1159,63 @@ async def play(ctx, url):
 				#video.streams.get_highest_resolution().download(filename=file_name)
 				video.streams.first().download(filename=file_name)
 				
-				#global
-				global filename
-				filename = f"{file_name}"
-				
-				#loading delete
-				await asyncio.sleep(0.5)
-				await loading.delete()
-				await asyncio.sleep(0.5)
-				
-				#info
-				title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
-				title_embed.set_image(url=video.thumbnail_url)
-				title_embed.set_footer(text=footer_testo)
-				await ctx.send(embed=title_embed)
-				#await msg.delete()
-				#await msg.edit(embed=title_embed)
+				if video.video_type == 'live' or video.is_live:
+					await ctx.send('il video è una trasmissione in diretta o una premiere.')
+				else:
 
-				#stalk-song
-				stalk_channel = client.get_channel(stalkid)
-				stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
-				await stalk_channel.send(embed=stalk_embed)
-				#await ctx.send(embed=embed)
+					#global
+					global filename
+					filename = f"{file_name}"
+
+					#loading delete
+					await asyncio.sleep(0.5)
+					await loading.delete()
+					await asyncio.sleep(0.5)
+
+					#info
+					title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
+					title_embed.set_image(url=video.thumbnail_url)
+					title_embed.set_footer(text=footer_testo)
+					await ctx.send(embed=title_embed)
+					#await msg.delete()
+					#await msg.edit(embed=title_embed)
+
+					#stalk-song
+					stalk_channel = client.get_channel(stalkid)
+					stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
+					await stalk_channel.send(embed=stalk_embed)
+					#await ctx.send(embed=embed)
 
 
-				# Play the video
-				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
-				voice_channel = ctx.author.voice.channel
-				voice = await voice_channel.connect()
-				voice.play(source)
-				
-				#volume fix
-				volume = 0.3
-				voice_client = ctx.voice_client
-				voice_client.source.volume = volume
+					# Play the video
+					source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
+					voice_channel = ctx.author.voice.channel
+					voice = await voice_channel.connect()
+					voice.play(source)
 
-				# Wait for the video to finish playing
-				while voice.is_playing():
-					await asyncio.sleep(1)
+					#volume fix
+					volume = 0.3
+					voice_client = ctx.voice_client
+					voice_client.source.volume = volume
 
-				# Disconnect from the voice channel
-				await voice.disconnect()
+					# Wait for the video to finish playing
+					while voice.is_playing():
+						await asyncio.sleep(1)
 
-				# Delete the video file
-				os.remove(f"{file_name}")
-				pass
+					# Disconnect from the voice channel
+					await voice.disconnect()
+
+					# Delete the video file
+					os.remove(f"{file_name}")
+					pass
 			#error
+			except pytube.exceptions.PytubeError:
+				await ctx.send('An error occurred while processing the video.')
+				pass
+			except AgeRestrictedError:
+				# Handle the age restriction error
+				await ctx.send("The video you are trying to download is age-restricted. Please log in to access it.")
+			
 			except Exception as e:
 				if str(e) == "Already connected to a voice channel.":
 					pass
