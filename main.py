@@ -1210,8 +1210,8 @@ async def play(ctx, url):
 			except pytube.exceptions.PytubeError as e:
 				#is streaming live and cannot be loaded
 				try:
-					await msg.delete()
-				except Exception as e:
+					await loading.delete()
+				except Exception:
 					pass
 				if 'This video is age-restricted' in str(e):
 					await ctx.send('the video is age-restricted.')
@@ -1239,8 +1239,8 @@ async def play(ctx, url):
 					channel = client.get_channel(errorchannel)
 					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
 					try:
-						await msg.delete()
-					except Exception as e:
+						await loading.delete()
+					except Exception:
 						pass
 
 
