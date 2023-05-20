@@ -1109,7 +1109,6 @@ async def help(ctx):
 
 #music
 import pytube
-from pytube import AgeRestrictedError
 import asyncio
 import os
 
@@ -1209,13 +1208,12 @@ async def play(ctx, url):
 					os.remove(f"{file_name}")
 					pass
 			#error
-			except pytube.exceptions.PytubeError:
-				await ctx.send('An error occurred while processing the video.')
-				pass
-			except AgeRestrictedError:
-				# Handle the age restriction error
-				await ctx.send("The video you are trying to download is age-restricted. Please log in to access it.")
-			
+			except pytube.exceptions.PytubeError as e:
+				if 'This video is age-restricted' in str(e):
+					await ctx.send('the video is age-restricted.')
+				else:
+					await ctx.send('An error occurred while processing the video.')
+					pass
 			except Exception as e:
 				if str(e) == "Already connected to a voice channel.":
 					pass
