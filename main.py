@@ -1145,23 +1145,28 @@ async def play(ctx, url):
 		else:
 			#else:
 			try:
-				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
-				loading_embed.set_footer(text=footer_testo)
-				loading = await ctx.send(embed=loading_embed)
 
-				# Download the video
+				# Find the video
 				video = pytube.YouTube(url)
-
-				number = random.randint(1, 100000)
-				extension = "mp4"
-				file_name = f"{number}.{extension}"
-				#video.streams.get_highest_resolution().download(filename=file_name)
-				video.streams.first().download(filename=file_name)
 				
+				#live/premier check
 				if video.video_type == 'live' or video.is_live:
 					await ctx.send('il video è una trasmissione in diretta o una premiere.')
 				else:
-
+					#loading embed
+					loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+					loading_embed.set_footer(text=footer_testo)
+					loading = await ctx.send(embed=loading_embed)
+					
+					#title-file
+					number = random.randint(1, 100000)
+					extension = "mp4"
+					file_name = f"{number}.{extension}"
+					#video.streams.get_highest_resolution().download(filename=file_name)
+					
+					#dowload
+					video.streams.first().download(filename=file_name)
+					
 					#global
 					global filename
 					filename = f"{file_name}"
@@ -1171,7 +1176,7 @@ async def play(ctx, url):
 					await loading.delete()
 					await asyncio.sleep(0.5)
 
-					#info
+					#video-info-embed
 					title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
 					title_embed.set_image(url=video.thumbnail_url)
 					title_embed.set_footer(text=footer_testo)
@@ -1213,7 +1218,10 @@ async def play(ctx, url):
 					await ctx.send('the video is age-restricted.')
 				else:
 					await ctx.send('An error occurred while processing the video.')
-					pass
+					
+					#stalk
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
 			except Exception as e:
 				if str(e) == "Already connected to a voice channel.":
 					pass
@@ -1222,8 +1230,10 @@ async def play(ctx, url):
 					error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
 					error_embed.set_footer(text=footer_testo)
 					await ctx.send(embed=error_embed, delete_after=5)
+					
+					#stalk
 					channel = client.get_channel(errorchannel)
-					await channel.send(f"**[Errore]** \naudio isinstance: ```{e}```")
+					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
 					try:
 						await msg.delete()
 					except Exception as e:
