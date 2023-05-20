@@ -1133,8 +1133,8 @@ filename = None
 	
 @client.command()
 async def play(ctx, url):
-	if ctx.author.voice.channel is None:
-		embed = discord.Embed(title=f"*** You are not currently in a voice channel. ***", color=discord.Colour.red())
+	if ctx.author.voice is None:
+		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
 	else:
