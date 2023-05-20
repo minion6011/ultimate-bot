@@ -1150,7 +1150,7 @@ async def play(ctx, url):
 				video = pytube.YouTube(url)
 				
 				#live/premier check
-				if video.video_type == 'live' or video.is_live:
+				if video.is_live:
 					await ctx.send('il video è una trasmissione in diretta o una premiere.')
 				else:
 					#loading embed
