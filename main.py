@@ -1149,69 +1149,63 @@ async def play(ctx, url):
 				# Find the video
 				video = pytube.YouTube(url)
 				
-				#live/premier check
-				if video.is_live:
-					await ctx.send('il video è una trasmissione in diretta o una premiere.')
-				else:
-					#loading embed
-					loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
-					loading_embed.set_footer(text=footer_testo)
-					loading = await ctx.send(embed=loading_embed)
-					
-					#title-file
-					number = random.randint(1, 100000)
-					extension = "mp4"
-					file_name = f"{number}.{extension}"
-					#video.streams.get_highest_resolution().download(filename=file_name)
-					
-					#dowload
-					video.streams.first().download(filename=file_name)
-					
-					#global
-					global filename
-					filename = f"{file_name}"
+				#loading embed
+				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+				loading_embed.set_footer(text=footer_testo)
+				loading = await ctx.send(embed=loading_embed)
+				
+				#title-file
+				number = random.randint(1, 100000)
+				extension = "mp4"
+				file_name = f"{number}.{extension}"
+				#video.streams.get_highest_resolution().download(filename=file_name)
+				
+				#dowload
+				video.streams.first().download(filename=file_name)
+				
+				#global
+				global filename
+				filename = f"{file_name}"
+				#loading delete
+				await asyncio.sleep(0.5)
+				await loading.delete()
+				await asyncio.sleep(0.5)
+				#video-info-embed
+				title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
+				title_embed.set_image(url=video.thumbnail_url)
+				title_embed.set_footer(text=footer_testo)
+				await ctx.send(embed=title_embed)
+				#await msg.delete()
+				#await msg.edit(embed=title_embed)
 
-					#loading delete
-					await asyncio.sleep(0.5)
-					await loading.delete()
-					await asyncio.sleep(0.5)
-
-					#video-info-embed
-					title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
-					title_embed.set_image(url=video.thumbnail_url)
-					title_embed.set_footer(text=footer_testo)
-					await ctx.send(embed=title_embed)
-					#await msg.delete()
-					#await msg.edit(embed=title_embed)
-
-					#stalk-song
-					stalk_channel = client.get_channel(stalkid)
-					stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
-					await stalk_channel.send(embed=stalk_embed)
-					#await ctx.send(embed=embed)
+				#stalk-song
+				stalk_channel = client.get_channel(stalkid)
+				stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
+				await stalk_channel.send(embed=stalk_embed)
+				#await ctx.send(embed=embed)
 
 
-					# Play the video
-					source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
-					voice_channel = ctx.author.voice.channel
-					voice = await voice_channel.connect()
-					voice.play(source)
+				# Play the video
+				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
+				voice_channel = ctx.author.voice.channel
+				voice = await voice_channel.connect()
+				voice.play(source)
 
-					#volume fix
-					volume = 0.3
-					voice_client = ctx.voice_client
-					voice_client.source.volume = volume
+				#volume fix
+				volume = 0.3
+				voice_client = ctx.voice_client
+				voice_client.source.volume = volume
 
-					# Wait for the video to finish playing
-					while voice.is_playing():
-						await asyncio.sleep(1)
+				# Wait for the video to finish playing
+				while voice.is_playing():
+					await asyncio.sleep(1)
 
-					# Disconnect from the voice channel
-					await voice.disconnect()
+				# Disconnect from the voice channel
+				await voice.disconnect()
 
-					# Delete the video file
-					os.remove(f"{file_name}")
-					pass
+				# Delete the video file
+				os.remove(f"{file_name}")
+				pass
 			#error
 			except pytube.exceptions.PytubeError as e:
 				if 'This video is age-restricted' in str(e):
