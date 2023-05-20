@@ -1207,7 +1207,8 @@ async def play(ctx, url):
 				os.remove(f"{file_name}")
 				pass
 			#error
-			except pytube.exceptions.PytubeError as e:is streaming live and cannot be loaded
+			except pytube.exceptions.PytubeError as e:
+				#is streaming live and cannot be loaded
 				if 'This video is age-restricted' in str(e):
 					await ctx.send('the video is age-restricted.')
 				elif 'is streaming live and cannot be loaded' in str(e):
