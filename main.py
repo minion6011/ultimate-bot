@@ -1207,19 +1207,18 @@ async def play(ctx, url):
 					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
 					error_embed_2.set_footer(text=footer_testo)
 					await ctx.send(embed=error_embed_2, delete_after=5)
-				#elif 'is streaming live' in str(e):
-					#error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
-					#error_embed_3.set_footer(text=footer_testo)
-					#await ctx.send(embed=error_embed_3, delete_after=5)
+				elif 'is streaming live' in str(e):
+					error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
+					error_embed_3.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_3, delete_after=5)
 				else:
-					error_embed_4 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
+					error_embed_4 = discord.Embed(title="***Error: The video have an error***", color=discord.Colour.red())
 					error_embed_4.set_footer(text=footer_testo)
 					await ctx.send(embed=error_embed_4, delete_after=5)
 					
 					#stalk
 					channel = client.get_channel(errorchannel)
 					await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
-					pass
 			except Exception as e:
 				if str(e) == "Already connected to a voice channel.":
 					pass
