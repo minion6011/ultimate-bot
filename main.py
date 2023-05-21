@@ -1125,12 +1125,12 @@ async def play(ctx, url):
 	if ctx.author.voice is None:
 		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
+		await ctx.send(embed=embed, delete_after=5)
 	else:
 		if ctx.voice_client is not None and ctx.voice_client.is_playing():
 			no_music_embed = discord.Embed(title="*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
 			no_music_embed.set_footer(text=footer_testo)
-			await ctx.send(embed=no_music_embed)
+			await ctx.send(embed=no_music_embed, delete_after=5)
 		else:
 			#else:
 			try:
@@ -1208,11 +1208,13 @@ async def play(ctx, url):
 					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
 					error_embed_2.set_footer(text=footer_testo)
 					await ctx.send(embed=error_embed_2, delete_after=5)
+					await asyncio.sleep(0.5)
 				elif 'is streaming live' in str(e):
 					await asyncio.sleep(1)
 					error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
 					error_embed_3.set_footer(text=footer_testo)
 					await ctx.send(embed=error_embed_3, delete_after=5)
+					await asyncio.sleep(0.5)
 				else:
 					await asyncio.sleep(1)
 					error_embed_4 = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
@@ -1230,7 +1232,7 @@ async def play(ctx, url):
 					error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
 					error_embed.set_footer(text=footer_testo)
 					await ctx.send(embed=error_embed, delete_after=5)
-					
+					await asyncio.sleep(0.5)
 					#stalk
 					channel = client.get_channel(errorchannel)
 					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
