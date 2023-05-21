@@ -1241,6 +1241,8 @@ async def play(ctx, url):
 					except Exception:
 						pass
 
+					
+#https://discordpy.readthedocs.io/en/stable/api.html?highlight=is_playing#discord.VoiceClient.is_playing
 
 @client.command()
 async def pause(ctx):
@@ -1282,14 +1284,22 @@ async def stop(ctx):
 				pass
 		else:
 			try:
-				os.remove(f"{filename}") #global
-				await voice_client.disconnect()
-				embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed)
-				pass
+				voice_check = discord.utils.get(client.voice_clients, guild=ctx.guild) # This allows for more functionality with voice channels
+				if voice_check == None:
+					await ctx.send("please play a song to use ?stop")
+				else:
+					os.remove(f"{filename}") #global
+					await voice_client.disconnect()
+					embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
+					embed.set_footer(text=footer_testo)
+					await ctx.send(embed=embed)
+					pass
 			except Exception as e:
-				pass
+				try:
+					os.remove(f"{filename}") #global
+					pass
+				except Exception as e:
+					pass
 	else:
 		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
