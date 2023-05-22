@@ -1158,7 +1158,7 @@ async def play(ctx, url):
 				#loading delete
 				await asyncio.sleep(0.5)
 				await loading.delete()
-				await asyncio.sleep(0.5)
+				await asyncio.sleep(1)
 				#video-info-embed
 				title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
 				title_embed.set_image(url=video.thumbnail_url)
