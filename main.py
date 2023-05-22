@@ -1196,6 +1196,7 @@ async def play(ctx, url):
 				# Delete the video file
 				os.remove(f"{file_name}")
 				#pass
+				return
 			#error
 			except pytube.exceptions.PytubeError as e:
 				#is streaming live and cannot be loaded
