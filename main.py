@@ -1166,6 +1166,7 @@ async def play(ctx, url):
 				await ctx.send(embed=title_embed)
 				#await msg.delete()
 				#await msg.edit(embed=title_embed)
+				await asyncio.sleep(0.5)
 
 				#stalk-song
 				stalk_channel = client.get_channel(stalkid)
@@ -1194,7 +1195,7 @@ async def play(ctx, url):
 
 				# Delete the video file
 				os.remove(f"{file_name}")
-				pass
+				#pass
 			#error
 			except pytube.exceptions.PytubeError as e:
 				#is streaming live and cannot be loaded
