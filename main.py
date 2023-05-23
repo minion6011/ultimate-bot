@@ -1009,12 +1009,12 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 
 class MusicModal(ui.Modal, title=f'Volume\n The max is 15'):
 	answer = ui.TextInput(label='Volume', style=discord.TextStyle.short)
-
-    async def on_submit(self, interaction: discord.Interaction):
-	volume = self.children[0].value
-        embed1 = discord.Embed(title=f"Suggestion sent {volume}", color=discord.Color.green())
-        embed1.set_footer(text=footer_testo)
-        await interaction.response.send_message(embeds=[embed1], ephemeral=True)
+	
+	async def on_submit(self, interaction: discord.Interaction):
+		volume = self.children[0].value
+		embed1 = discord.Embed(title=f"Suggestion sent {volume}", color=discord.Color.green())
+		embed1.set_footer(text=footer_testo)
+		await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
 
