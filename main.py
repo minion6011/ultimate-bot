@@ -1028,7 +1028,7 @@ class Music_Button_View(discord.ui.View):
 	async def Stop_Music_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
 		await interaction.delete_original_response()
 			
-	@discord.ui.button(label="Volume", style=discord.ButtonStyle.blue)
+	@discord.ui.button(label="Volume", style=discord.ButtonStyle.blurple)
 	async def Volume_Music_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
 		await interaction.response.send_modal(MusicModal())
 
