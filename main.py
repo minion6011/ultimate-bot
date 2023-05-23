@@ -1007,15 +1007,42 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 #---------Test------------#
 
 
-class MusicModal(ui.Modal, title=f'Volume\n The max is 15'):
-	answer = ui.TextInput(label='Volume', style=discord.TextStyle.short)
+class MusicModal(ui.Modal, title=f'Set the Volume'):
+	volume_text = ui.TextInput(label='Volume', style=discord.TextStyle.short)
 	
 	async def on_submit(self, interaction: discord.Interaction):
-		volume = self.children[0].value
-		embed1 = discord.Embed(title=f"Suggestion sent {volume}", color=discord.Color.green())
-		embed1.set_footer(text=footer_testo)
-		await interaction.response.send_message(embeds=[embed1], ephemeral=True)
+		#value
+		volume_value = self.children[0].value
 
+		#check if volume non è un numero
+		if not volume_value.isdigit():
+			embed = discord.Embed(title='Please enter a number\nThe max of volume number is ```25.0```\nThe min ```0.0```', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embeds=[embed], ephemeral=True)
+			return
+		
+		volume = float(volume_value)
+		
+		voice_client = interaction.voice_client
+		if not voice_client:
+			embed = discord.Embed(title='Please enter the voice chat where the bot is', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embeds=[embed], ephemeral=True)
+			return
+		if voice_client.is_playing():
+			if volume < 0.0 or volume > 25.0:
+				embed = discord.Embed(title=f'The max of volume is ```25.0```\nThe min ```0.0```', color=discord.Colour.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embeds=[embed], ephemeral=True)
+			else:
+				voice_client.source.volume = volume
+				embed = discord.Embed(title=f':loud_sound: Volume set to ***```{volume}```***', color=discord.Colour.blue())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embeds=[embed], ephemeral=True)
+		else:
+			embed = discord.Embed(title='No songs playing at the moment', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embeds=[embed], ephemeral=True)
 
 
 	
@@ -1031,7 +1058,12 @@ class Music_Button_View(discord.ui.View):
 	@discord.ui.button(label="Volume", style=discord.ButtonStyle.blurple)
 	async def Volume_Music_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
 		await interaction.response.send_modal(MusicModal())
+		
 
+
+		
+		
+		
 @client.command()
 async def play2(ctx, url):
 	if ctx.author.voice is None:
@@ -1114,7 +1146,7 @@ async def play2(ctx, url):
 					await loading.delete()
 				except Exception:
 					pass
-				if 'is age-restricted' in str(e):
+				if 'is age restricted' in str(e):
 					await asyncio.sleep(1)
 					#await ctx.send('the video is age-restricted.')
 					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
