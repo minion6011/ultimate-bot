@@ -1023,7 +1023,9 @@ class MusicModal(ui.Modal, title=f'Set the Volume'):
 		
 		volume = float(volume_value)
 		
-		voice_client = interaction.voice_client
+		voice_client = self.voice_client
+		
+		#voice_client = interaction.voice_client
 		if not voice_client:
 			embed = discord.Embed(title='Please enter the voice chat where the bot is', color=discord.Colour.red())
 			embed.set_footer(text=footer_testo)
@@ -1053,7 +1055,13 @@ class Music_Button_View(discord.ui.View):
 
 	@discord.ui.button(label="Stop", style=discord.ButtonStyle.red)
 	async def Stop_Music_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
-		await interaction.delete_original_response()
+		
+		
+		
+		
+		for child in self.children:
+			await child.delete()
+		#await interaction.delete_original_response()
 			
 	@discord.ui.button(label="Volume", style=discord.ButtonStyle.blurple)
 	async def Volume_Music_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -1107,7 +1115,8 @@ async def play2(ctx, url):
 				title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
 				title_embed.set_image(url=video.thumbnail_url)
 				title_embed.set_footer(text=footer_testo)
-				title = await ctx.send(embed=title_embed, view=Music_Button_View())
+				view = Music_Button_View()
+				title = await ctx.send(embed=title_embed, view=view)
 				#await msg.delete()
 				#await msg.edit(embed=title_embed)
 				await asyncio.sleep(0.5)
@@ -1137,9 +1146,16 @@ async def play2(ctx, url):
 				# Disconnect from the voice channel
 				await voice.disconnect()
 				await title.delete()
+				
+				for child in view.children:
+					await child.delete()
 
 				# Delete the video file
-				os.remove(f"{file_name}")
+				if os.path.exists(file_name):
+					os.remove(f"{file_name}")
+				else:
+					pass
+				return
 			except pytube.exceptions.PytubeError as e:
 				#is streaming live and cannot be loaded
 				try:
