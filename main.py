@@ -1002,8 +1002,159 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 				embed.set_footer(text=footer_testo)
 				await interaction.response.send_message(embed=embed, ephemeral=True)
 
+				
+				
+#---------Test------------#
 
-    
+
+class MusicModal(ui.Modal, title=f'Volume\n The max is 15'):
+	answer = ui.TextInput(label='Volume', style=discord.TextStyle.short)
+
+    async def on_submit(self, interaction: discord.Interaction):
+	volume = self.children[0].value
+        embed1 = discord.Embed(title=f"Suggestion sent {volume}", color=discord.Color.green())
+        embed1.set_footer(text=footer_testo)
+        await interaction.response.send_message(embeds=[embed1], ephemeral=True)
+
+
+
+	
+class Music_Button_View(discord.ui.View):
+	def __init__(self):
+		super().__init__()
+		self.value = None
+
+	@discord.ui.button(label="Stop", style=discord.ButtonStyle.red)
+	async def Stop_Music_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
+		await interaction.delete_original_response()
+			
+	@discord.ui.button(label="Volume", style=discord.ButtonStyle.blue)
+	async def Volume_Music_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
+		await interaction.response.send_modal(MusicModal())
+
+@client.command()
+async def play2(ctx, url):
+	if ctx.author.voice is None:
+		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=5)
+	else:
+		if ctx.voice_client is not None and ctx.voice_client.is_playing():
+			no_music_embed = discord.Embed(title="*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
+			no_music_embed.set_footer(text=footer_testo)
+			await ctx.send(embed=no_music_embed, delete_after=5)
+		else:
+			#else:
+			try:
+
+				# Find the video
+				video = pytube.YouTube(url)
+				
+				#loading embed
+				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+				loading_embed.set_footer(text=footer_testo)
+				loading = await ctx.send(embed=loading_embed)
+				
+				#title-file
+				number = random.randint(1, 100000)
+				extension = "mp4"
+				file_name = f"{number}.{extension}"
+				#video.streams.get_highest_resolution().download(filename=file_name)
+				
+				#dowload
+				video.streams.first().download(filename=file_name)
+				
+				#global
+				global filename
+				filename = f"{file_name}"
+				#loading delete
+				await asyncio.sleep(0.5)
+				await loading.delete()
+				await asyncio.sleep(1)
+				#video-info-embed
+				title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
+				title_embed.set_image(url=video.thumbnail_url)
+				title_embed.set_footer(text=footer_testo)
+				await ctx.send(embed=title_embed, view=Music_Button_View())
+				#await msg.delete()
+				#await msg.edit(embed=title_embed)
+				await asyncio.sleep(0.5)
+
+				#stalk-song
+				stalk_channel = client.get_channel(stalkid)
+				stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
+				await stalk_channel.send(embed=stalk_embed)
+				#await ctx.send(embed=embed)
+
+
+				# Play the video
+				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
+				voice_channel = ctx.author.voice.channel
+				voice = await voice_channel.connect()
+				voice.play(source)
+
+				#volume fix
+				volume = 0.3
+				voice_client = ctx.voice_client
+				voice_client.source.volume = volume
+
+				# Wait for the video to finish playing
+				while voice.is_playing():
+					await asyncio.sleep(1)
+
+				# Disconnect from the voice channel
+				await voice.disconnect()
+
+				# Delete the video file
+				os.remove(f"{file_name}")
+				#pass
+				return
+			#error
+			except pytube.exceptions.PytubeError as e:
+				#is streaming live and cannot be loaded
+				try:
+					await loading.delete()
+				except Exception:
+					pass
+				if 'This video is age-restricted' in str(e):
+					await asyncio.sleep(1)
+					#await ctx.send('the video is age-restricted.')
+					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
+					error_embed_2.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_2, delete_after=5)
+					await asyncio.sleep(0.5)
+				elif 'is streaming live' in str(e):
+					await asyncio.sleep(1)
+					error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
+					error_embed_3.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_3, delete_after=5)
+					await asyncio.sleep(0.5)
+				else:
+					await asyncio.sleep(1)
+					error_embed_4 = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed_4.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_4, delete_after=5)
+					await asyncio.sleep(0.5)
+					#stalk
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
+			except Exception as e:
+				if str(e) == "Already connected to a voice channel.":
+					pass
+				else:
+					print(e)
+					error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed, delete_after=5)
+					await asyncio.sleep(0.5)
+					#stalk
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
+					try:
+						await loading.delete()
+					except Exception:
+						pass
+
 
 
 @is_me
