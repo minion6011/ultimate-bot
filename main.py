@@ -1075,7 +1075,7 @@ async def play2(ctx, url):
 				title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
 				title_embed.set_image(url=video.thumbnail_url)
 				title_embed.set_footer(text=footer_testo)
-				await ctx.send(embed=title_embed, view=Music_Button_View())
+				title = await ctx.send(embed=title_embed, view=Music_Button_View())
 				#await msg.delete()
 				#await msg.edit(embed=title_embed)
 				await asyncio.sleep(0.5)
@@ -1104,19 +1104,17 @@ async def play2(ctx, url):
 
 				# Disconnect from the voice channel
 				await voice.disconnect()
+				await title.delete()
 
 				# Delete the video file
 				os.remove(f"{file_name}")
-				#pass
-				return
-			#error
 			except pytube.exceptions.PytubeError as e:
 				#is streaming live and cannot be loaded
 				try:
 					await loading.delete()
 				except Exception:
 					pass
-				if 'This video is age-restricted' in str(e):
+				if 'is age-restricted' in str(e):
 					await asyncio.sleep(1)
 					#await ctx.send('the video is age-restricted.')
 					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
