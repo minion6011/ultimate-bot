@@ -930,9 +930,9 @@ class TraslateButton(discord.ui.View):
 	@discord.ui.button(label="List of language", style=discord.ButtonStyle.red)
 	async def TraslateButton(self, interaction: discord.Interaction, button: discord.ui.Button):
 		lingue_supportate = GoogleTranslator().get_supported_languages()
-		embed_traslate=discord.Embed(title=f"***```{lingue_supportate}```***", color=discord.Color.green())
-		embed_traslate.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed_traslate, ephemeral=True)
+		#embed_traslate=discord.Embed(title=f"***```{lingue_supportate}```***", color=discord.Color.green())
+		#embed_traslate.set_footer(text=footer_testo)
+		await interaction.response.send_message(f"***```{lingue_supportate}```***", ephemeral=True)
 		
 		
 
