@@ -633,23 +633,37 @@ async def chat(ctx, *, request):
 @commands.guild_only()
 async def generate_image(ctx, *, request):
 	async with ctx.typing():
-		prompt = request
+		if len(text) > 60:
+			embed = discord.Embed(title="Error: The text is too long must not exceed 50 characters", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			try:
+				prompt = request
 
-		response = openai.Image.create(
-			prompt=prompt,
-			model="image-alpha-001",
-			n=1,
-			size="1024x1024",
-			response_format="url"
-		)
-		image_url = response["data"][0]["url"]
+				response = openai.Image.create(
+					prompt=prompt,
+					model="image-alpha-001",
+					n=1,
+					size="1024x1024",
+					response_format="url"
+				)
+				image_url = response["data"][0]["url"]
 
-		#await ctx.send(file=discord.File(byte_array, "image.png"))
-		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
-		embed.set_image(url=image_url)
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-		
+				#await ctx.send(file=discord.File(byte_array, "image.png"))
+				embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+				embed.set_image(url=image_url)
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
+			except Exception:
+				if 'is not allowed' in str(e):
+					embed = discord.Embed(title=f"Error:\n the request: {request} contains text that is not allowed by the security rules", color=discord.Color.red())
+					embed.set_footer(text=footer_testo)
+					await ctx.send(embed=embed, delete_after=4)
+				else:
+					embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+					embed.set_footer(text=footer_testo)
+					await ctx.send(embed=embed, delete_after=4)
 
 @client.command()
 @commands.guild_only()
@@ -658,7 +672,9 @@ async def translate(ctx, language, *, request):
 	lang = language
 	try:
 		if len(text) > 1998:
-			await ctx.send("the text is too long must not exceed 1998 characters")
+			embed = discord.Embed(title="Error: The text is too long must not exceed 1998 characters", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
 		else:
 			if len(text) > 1024:
 				traduttore = GoogleTranslator(source='auto', target=lang)
