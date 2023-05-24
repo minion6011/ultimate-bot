@@ -1337,7 +1337,7 @@ async def test(ctx, url):
 	while voice_client.is_playing():
 		await asyncio.sleep(1)
 		
-	await voice_client.disconnect()
+	await voice.disconnect()
 	
 @client.command()
 async def play(ctx, url):
