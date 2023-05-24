@@ -1328,7 +1328,7 @@ filename = None
 
 
 @client.command()
-async def play(ctx, url):
+async def test(ctx, url):
 	voice = await ctx.author.voice.channel
 	voice_client = await voice.connect()
 	source = discord.FFmpegPCMAudio(video_url)
