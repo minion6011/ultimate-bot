@@ -1329,12 +1329,15 @@ filename = None
 
 @client.command()
 async def test(ctx, url):
-	voice = await ctx.author.voice.channel
-	voice_client = await voice.connect()
-	source = discord.FFmpegPCMAudio(video_url)
-	
+	voice_channel = message.author.voice.channel
+	voice_client = await voice_channel.connect()
+	source = discord.FFmpegPCMAudio(url)
 	voice_client.play(source)
 	
+	while voice_client.is_playing():
+		await asyncio.sleep(1)
+		
+	await voice_client.disconnect()
 	
 @client.command()
 async def play(ctx, url):
