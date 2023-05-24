@@ -1325,7 +1325,15 @@ import os
 	
 global filename
 filename = None
+
+
+@client.command()
+async def play(ctx, url):
+	voice = await ctx.author.voice.channel
+	voice_client = await voice.connect()
+	source = discord.FFmpegPCMAudio(video_url)
 	
+	voice_client.play(source)
 	
 	
 @client.command()
