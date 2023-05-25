@@ -1585,6 +1585,28 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 		await ctx.send(embed=embed)
 
 
+@client.command()
+async def automod2(ctx, rule_name: str, word: str, minutes: int):
+    # Crea una nuova regola di auto moderation
+    rule = discord.AutoModRule(
+        name=rule_name,
+        event_type=discord.AutoModRuleEventType.message_send,
+        trigger=discord.AutoModTrigger(
+            type=discord.AutoModRuleTriggerType.keyword,
+            keyword_filter=[word],
+            silent=False),
+        actions=[discord.AutoModRuleActionType.block_message],
+        penalty=discord.AutoModRulePenalty(
+            type=discord.AutoModRulePenaltyType.mute,
+            duration=minutes)
+    )
+
+    # Aggiungi la regola di auto moderation al canale corrente
+    await ctx.channel.autoblock_users(word, reason=f"Parola proibita: {word}", delete_message=True)
+
+    # Invia un messaggio di conferma al canale
+    await ctx.send(f"La regola di auto moderation {rule_name} è stata creata con successo!")
+		
 @is_me
 @client.command()
 async def automod(ctx, rule_name: str, word: str, minutes: int):
