@@ -645,7 +645,7 @@ async def generate_image(ctx, *, request):
 				
 				response = openai.Image.create(
 					prompt=prompt,
-					model=" image-beta-003",
+					model="image-beta-003",
 					n=1,
 					size="1024x1024",
 					response_format="url"
