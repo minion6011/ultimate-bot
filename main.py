@@ -1022,7 +1022,7 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 				
 #---------Test------------#
 
-
+'''
 class MusicModal(ui.Modal, title=f'Set the Volume'):
 	volume_text = ui.TextInput(label='Volume', style=discord.TextStyle.short)
 	
@@ -1217,7 +1217,21 @@ async def play2(ctx, url):
 					except Exception:
 						pass
 
+'''
+@client.command()
+async def generate_image2(ctx, *, prompt):
 
+    # Genera l'immagine utilizzando il modello "image-beta-003"
+    response = openai.Image.create(
+        prompt=prompt,
+        model="image-beta-003",
+        n=1,
+        size="1024x1024",
+        response_format="url"
+    )
+
+    # Invia l'immagine generata al canale Discord dell'utente
+    await ctx.send(response["data"][0]["url"])
 
 @is_me
 @client.command()
