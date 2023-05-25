@@ -647,7 +647,7 @@ async def generate_image(ctx, *, request):
 					prompt=prompt,
 					model=" image-beta-003",
 					n=1,
-					size="1024x1024"
+					size="1024x1024",
 					response_format="url"
 				)
 				image_url = response["data"][0]["url"]
