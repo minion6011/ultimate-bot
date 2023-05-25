@@ -658,7 +658,7 @@ async def generate_image(ctx, *, request):
 				embed.set_footer(text=footer_testo)
 				await ctx.send(embed=embed)
 			except Exception as e:
-				if 'is not allowed' in str(e):
+				if 'safety system' in str(e):
 					embed = discord.Embed(title=f"Error:\n the request: {request} contains text that is not allowed by the security rules", color=discord.Color.red())
 					embed.set_footer(text=footer_testo)
 					await ctx.send(embed=embed, delete_after=4)
@@ -1216,114 +1216,9 @@ async def play2(ctx, url):
 						await loading.delete()
 					except Exception:
 						pass
-
-'''
-@client.command()
-async def generate_image2(ctx):
-	models = openai.Model.list()
-	image_models = [model.id for model in models['data'] if model.output_info and model.output_info.type == "image"]
-	await ctx.send(f"{image_models}")
-
-@is_me
-@client.command()
-@commands.guild_only()
-async def servers(ctx):
-	message = "I server in cui sono stato invitato sono:\n\n"
-	for guild in client.guilds:
-		channel = guild.text_channels[0]
-		invite = await channel.create_invite()
-		message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: {invite.url} ***\n\n"
-	await ctx.send(message)
-
-@client.command()
-@commands.guild_only()
-@is_me #solo se è il mio id
-async def slash_sync(ctx):
-	slash = await client.tree.sync()
-	await client.tree.sync(guild=discord.Object(id=1043925344312381550))
-	await client.tree.sync(guild=discord.Object(id=1031812528226967603))
-	embed = discord.Embed(title=f"Reloading slash {len(slash)}", color=0x2c2f33)
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, delete_after=7)
-
-
-@client.command()
-@commands.guild_only()
-@is_me #solo se è il mio id
-async def update(ctx):
-	embed = discord.Embed(title="Reloading system...", color=0x2c2f33)
-	embed.set_image(url="https://support.discord.com/hc/en-us/article_attachments/206303208/eJwVyksOwiAQANC7sJfp8Ke7Lt15A0MoUpJWGmZcGe-ubl_eW7zGLmaxMZ80A6yNch-rJO4j1SJr73Uv6Wwkcz8gMae8HeXJBOjC5NEap42dokUX_4SotI8GVfBaYYDldr3n3y_jomRtD_H5ArCeI9g.zGz1JSL-9DXgpkX_SkmMDM8NWGg.gif")
-	embed.add_field(name = '**System info**', value = f':gear:', inline = False)
-	embed.add_field(name = ':computer: **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
-	embed.add_field(name = ':floppy_disk: **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
-	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
-	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, delete_after=4)
-	await asyncio.sleep(5)
-	exit(1)
-
-	
-@client.command()
-@is_me
-async def verify(ctx):
-	#reactions = ['✅'] # add more later if u want idk
-	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
-	embed.set_footer(text=footer_testo)
-	#View=VerifyButton()
-	await ctx.send(embed=embed, view=Button())
-	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
-
-@client.command()
-@is_me
-async def manutenzione(ctx):
-	embed = discord.Embed(title="Click the button to start or stop maintenance mode\nThis message would be deleted in 20 seconds", color=discord.Color.red())
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, view=Admin_Button_View(),delete_after=20)	
-
-	
-	
-'''
-@client.command()
-@commands.guild_only()
-async def help(ctx):
-	prefix = data["command_prefix"]
-	embed = discord.Embed(title="Mod Commands :closed_lock_with_key:", color=discord.Color.gold())
-	embed.add_field(name=f"{prefix}nuke", value=f"Delete messages in the chat where it is used", inline=True)
-	embed.add_field(name=f"{prefix}kick user_id reason", value=f"Kick a member from the server", inline=True)
-	embed.add_field(name=f"{prefix}ban user_id reason", value=f"Ban a member from the server", inline=True)
-	embed.add_field(name=f"{prefix}unban user_id", value=f"Unban a member from the server", inline=True)
-	embed.add_field(name=f"{prefix}delchannel", value=f"Delete all channel", inline=True)
-	embed.add_field(name=f"{prefix}lockdown", value=f"Lockdown all channel", inline=True)
-	embed.add_field(name=f"{prefix}unlock", value=f"Unlock channel", inline=True)
-	embed.add_field(name=f"{prefix}mute", value=f"Mute a member", inline=True)
-	embed.add_field(name=f"{prefix}unmute", value=f"Unmute a member", inline=True)
-	embed.set_footer(text=footer_testo)  
-	await ctx.send(embed=embed)
-	await asyncio.sleep(1*1)
-	embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
-	embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
-	embedt.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
-	embedt.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
-	embedt.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
-	embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
-	embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
-	embedt.set_footer(text=footer_testo)
-	await ctx.send(embed=embedt)
-	await asyncio.sleep(1*1)
-	embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
-	embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
-	embedd.add_field(name=f"{prefix}userinfo user_id", value="Send the User info", inline=True)
-	embedd.set_footer(text=footer_testo)
-	await ctx.send(embed=embedd)
-	if ctx.author.id == my_id:
-		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
-		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
-		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
-		admin_embed.set_footer(text=footer_testo)
-		await ctx.send(embed=admin_embed)
-'''	
-#return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
+						
+						
+						
 
 #music
 import pytube
@@ -1553,7 +1448,109 @@ async def volume(ctx, volume: float):
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
 
-#music end	
+'''
+
+@is_me
+@client.command()
+@commands.guild_only()
+async def servers(ctx):
+	message = "I server in cui sono stato invitato sono:\n\n"
+	for guild in client.guilds:
+		channel = guild.text_channels[0]
+		invite = await channel.create_invite()
+		message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: {invite.url} ***\n\n"
+	await ctx.send(message)
+
+@client.command()
+@commands.guild_only()
+@is_me #solo se è il mio id
+async def slash_sync(ctx):
+	slash = await client.tree.sync()
+	await client.tree.sync(guild=discord.Object(id=1043925344312381550))
+	await client.tree.sync(guild=discord.Object(id=1031812528226967603))
+	embed = discord.Embed(title=f"Reloading slash {len(slash)}", color=0x2c2f33)
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, delete_after=7)
+
+
+@client.command()
+@commands.guild_only()
+@is_me #solo se è il mio id
+async def update(ctx):
+	embed = discord.Embed(title="Reloading system...", color=0x2c2f33)
+	embed.set_image(url="https://support.discord.com/hc/en-us/article_attachments/206303208/eJwVyksOwiAQANC7sJfp8Ke7Lt15A0MoUpJWGmZcGe-ubl_eW7zGLmaxMZ80A6yNch-rJO4j1SJr73Uv6Wwkcz8gMae8HeXJBOjC5NEap42dokUX_4SotI8GVfBaYYDldr3n3y_jomRtD_H5ArCeI9g.zGz1JSL-9DXgpkX_SkmMDM8NWGg.gif")
+	embed.add_field(name = '**System info**', value = f':gear:', inline = False)
+	embed.add_field(name = ':computer: **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
+	embed.add_field(name = ':floppy_disk: **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
+	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
+	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, delete_after=4)
+	await asyncio.sleep(5)
+	exit(1)
+
+	
+@client.command()
+@is_me
+async def verify(ctx):
+	#reactions = ['✅'] # add more later if u want idk
+	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
+	embed.set_footer(text=footer_testo)
+	#View=VerifyButton()
+	await ctx.send(embed=embed, view=Button())
+	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
+
+@client.command()
+@is_me
+async def manutenzione(ctx):
+	embed = discord.Embed(title="Click the button to start or stop maintenance mode\nThis message would be deleted in 20 seconds", color=discord.Color.red())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, view=Admin_Button_View(),delete_after=20)	
+
+	
+	
+'''
+@client.command()
+@commands.guild_only()
+async def help(ctx):
+	prefix = data["command_prefix"]
+	embed = discord.Embed(title="Mod Commands :closed_lock_with_key:", color=discord.Color.gold())
+	embed.add_field(name=f"{prefix}nuke", value=f"Delete messages in the chat where it is used", inline=True)
+	embed.add_field(name=f"{prefix}kick user_id reason", value=f"Kick a member from the server", inline=True)
+	embed.add_field(name=f"{prefix}ban user_id reason", value=f"Ban a member from the server", inline=True)
+	embed.add_field(name=f"{prefix}unban user_id", value=f"Unban a member from the server", inline=True)
+	embed.add_field(name=f"{prefix}delchannel", value=f"Delete all channel", inline=True)
+	embed.add_field(name=f"{prefix}lockdown", value=f"Lockdown all channel", inline=True)
+	embed.add_field(name=f"{prefix}unlock", value=f"Unlock channel", inline=True)
+	embed.add_field(name=f"{prefix}mute", value=f"Mute a member", inline=True)
+	embed.add_field(name=f"{prefix}unmute", value=f"Unmute a member", inline=True)
+	embed.set_footer(text=footer_testo)  
+	await ctx.send(embed=embed)
+	await asyncio.sleep(1*1)
+	embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
+	embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
+	embedt.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
+	embedt.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
+	embedt.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
+	embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
+	embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
+	embedt.set_footer(text=footer_testo)
+	await ctx.send(embed=embedt)
+	await asyncio.sleep(1*1)
+	embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
+	embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
+	embedd.add_field(name=f"{prefix}userinfo user_id", value="Send the User info", inline=True)
+	embedd.set_footer(text=footer_testo)
+	await ctx.send(embed=embedd)
+	if ctx.author.id == my_id:
+		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
+		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
+		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
+		admin_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=admin_embed)
+'''	
+#return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
+
 
 @is_me
 @client.command()
