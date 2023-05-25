@@ -1593,18 +1593,20 @@ async def automod2(ctx, rule_name: str, word: str, minutes: int):
         event_type=discord.AutoModRuleEventType.message_send,
         trigger=discord.AutoModTrigger(
             type=discord.AutoModRuleTriggerType.keyword,
-            keyword_filter=[word]),
+            keyword_filter=[word]
+        ),
         actions=[discord.AutoModRuleActionType.block_message],
-        penalty=discord.AutoModRulePenalty(
-            type=discord.AutoModRulePenaltyType.mute,
-            duration=minutes)
+        punishment=discord.AutoModRulePunishment(
+            type=discord.AutoModRulePunishmentType.mute,
+            duration=minutes
+        )
     )
 
     # Aggiungi la regola di auto moderation al canale corrente
     await ctx.channel.autoblock_users(word, reason=f"Parola proibita: {word}", delete_message=True)
 
     # Invia un messaggio di conferma al canale
-    await ctx.send(f"La regola di auto moderation {rule_name} è stata creata con successo!")
+    await ctx.send(f"La regola di AutoMod {rule_name} è stata impostata con successo!")
 		
 @is_me
 @client.command()
