@@ -1593,8 +1593,7 @@ async def automod2(ctx, rule_name: str, word: str, minutes: int):
         event_type=discord.AutoModRuleEventType.message_send,
         trigger=discord.AutoModTrigger(
             type=discord.AutoModRuleTriggerType.keyword,
-            keyword_filter=[word],
-            silent=False),
+            keyword_filter=[word]),
         actions=[discord.AutoModRuleActionType.block_message],
         penalty=discord.AutoModRulePenalty(
             type=discord.AutoModRulePenaltyType.mute,
