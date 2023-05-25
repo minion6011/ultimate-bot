@@ -1220,6 +1220,10 @@ async def play2(ctx, url):
 '''
 @client.command()
 async def generate_image2(ctx):
+	models = openai.Model.list()
+	image_models = [model.id for model in models['data'] if model.output_info.type == "image"]
+	await ctx.send(f"{image_models}")
+	await ctx.send("---------")
 	model_list = openai.Model.list()
 	model_ids = [model.id for model in model_list['data']]
 	await ctx.send(f"{model_ids}")
