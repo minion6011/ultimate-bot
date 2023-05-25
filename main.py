@@ -1622,11 +1622,7 @@ async def automod(ctx, rule_name: str, word: str, minutes: int):
             type=discord.AutoModRuleTriggerType.keyword,
             keyword_filter=[word],
             silent=False),
-        actions=[discord.AutoModRuleActionType.block_message],
-        penalty=discord.AutoModRulePenalty(
-            type=discord.AutoModRulePenaltyType.mute,
-            duration=minutes)
-    )
+        actions=[discord.AutoModRuleActionType.block_message])
 
     # Aggiungi la regola di auto moderation all'oggetto AutoMod del bot
     await auto_mod.add_rule(ctx.guild.id, rule)
