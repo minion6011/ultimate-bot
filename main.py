@@ -1219,19 +1219,11 @@ async def play2(ctx, url):
 
 '''
 @client.command()
-async def generate_image2(ctx, *, prompt):
+async def generate_image2(ctx):
+	model_list = openai.Model.list()
+	model_ids = [model.id for model in model_list['data']]
+	await ctx.send(f"{model_ids}")
 
-    # Genera l'immagine utilizzando il modello "image-beta-003"
-    response = openai.Image.create(
-        prompt=prompt,
-        model="image-beta-003",
-        n=1,
-        size="1024x1024",
-        response_format="url"
-    )
-
-    # Invia l'immagine generata al canale Discord dell'utente
-    await ctx.send(response["data"][0]["url"])
 
 @is_me
 @client.command()
