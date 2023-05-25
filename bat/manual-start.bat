@@ -98,6 +98,8 @@ goto menu
 cls
 py -3 -m pip install -U pip
 py -3 -m pip install -U --user -r requirements.txt
+py -3 -m pip install --upgrade -r requirements.txt
+
 pause
 goto menu
 
