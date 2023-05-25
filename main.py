@@ -633,19 +633,21 @@ async def chat(ctx, *, request):
 @commands.guild_only()
 async def generate_image(ctx, *, request):
 	async with ctx.typing():
-		if len(request) > 60:
-			embed = discord.Embed(title="Error: The text is too long must not exceed 50 characters", color=discord.Color.red())
+		if len(request) > 80:
+			embed = discord.Embed(title="Error: The text is too long must not exceed 80 characters", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed, delete_after=4)
 		else:
 			try:
 				prompt = request
 
+				#image-alpha-001, image-beta-001, image-beta-002, image-beta-003
+				
 				response = openai.Image.create(
 					prompt=prompt,
-					model="image-alpha-001",
+					model=" image-beta-003",
 					n=1,
-					size="1024x1024",
+					size="1024x1024"
 					response_format="url"
 				)
 				image_url = response["data"][0]["url"]
