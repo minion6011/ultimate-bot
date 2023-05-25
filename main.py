@@ -666,6 +666,9 @@ async def generate_image(ctx, *, request):
 					embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
 					embed.set_footer(text=footer_testo)
 					await ctx.send(embed=embed, delete_after=4)
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+					print(e)
 
 @client.command()
 @commands.guild_only()
