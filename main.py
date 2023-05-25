@@ -655,7 +655,7 @@ async def generate_image(ctx, *, request):
 				embed.set_image(url=image_url)
 				embed.set_footer(text=footer_testo)
 				await ctx.send(embed=embed)
-			except Exception:
+			except Exception as e:
 				if 'is not allowed' in str(e):
 					embed = discord.Embed(title=f"Error:\n the request: {request} contains text that is not allowed by the security rules", color=discord.Color.red())
 					embed.set_footer(text=footer_testo)
