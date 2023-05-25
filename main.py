@@ -1595,11 +1595,7 @@ async def automod2(ctx, rule_name: str, word: str, minutes: int):
             type=discord.AutoModRuleTriggerType.keyword,
             keyword_filter=[word]
         ),
-        actions=[discord.AutoModRuleActionType.block_message],
-        punishment=discord.AutoModRulePunishment(
-            type=discord.AutoModRulePunishmentType.mute,
-            duration=minutes
-        )
+        actions=[discord.AutoModRuleActionType.block_message]
     )
 
     # Aggiungi la regola di auto moderation al canale corrente
