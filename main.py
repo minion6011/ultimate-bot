@@ -1604,28 +1604,67 @@ async def automod2(ctx, rule_name: str, word: str, minutes: int):
     # Invia un messaggio di conferma al canale
     await ctx.send(f"La regola di AutoMod {rule_name} è stata impostata con successo!")
 		
+
+'''
+    @commands.command(name="testautomod")
+    async def automod(self, ctx: commands.Context):
+        auto_mod_trigger = discord.AutoModTrigger(
+            type= discord.AutoModRuleTriggerType.keyword_preset,
+            presets=discord.AutoModPresets(profanity=True))
+        a_single_object_for_this = discord.AutoModRuleAction(custom_message=f"Profanity is not allowed for this server!")
+        actions_list = [a_single_object_for_this]
+        auto_mod_event = discord.AutoModRuleEventType.message_send
+        await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
+'''
+
+@client.command()
+async def automod3(ctx)
+	auto_mod_trigger = discord.AutoModTrigger(
+		type= discord.AutoModRuleTriggerType.keyword_preset,
+		
+		presets=discord.AutoModPresets(profanity=True))
+	
+	a_single_object_for_this = discord.AutoModRuleAction(custom_message=f"Profanity is not allowed for this server!")
+	
+	actions_list = [a_single_object_for_this]
+	
+	auto_mod_event = discord.AutoModRuleEventType.message_send
+	
+	await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
+
+	
+	
+	
+'''	
 @is_me
 @client.command()
 async def automod(ctx, rule_name: str, word: str, minutes: int):
     # Ottieni l'oggetto AutoMod del tuo bot
-    auto_mod = ctx.bot.auto_mod()
+    #auto_mod = ctx.bot.auto_mod()
 
     # Crea una nuova regola di auto moderation
-    rule = discord.AutoModRule(
-        name=rule_name,
-        event_type=discord.AutoModRuleEventType.message_send,
-        trigger=discord.AutoModTrigger(
+	rule = discord.AutoModRule(
+		name=rule_name,
+		event_type=discord.AutoModRuleEventType.message_send,
+		
+		trigger=discord.AutoModTrigger(
             type=discord.AutoModRuleTriggerType.keyword,
             keyword_filter=[word],
-            silent=False),
+            exempt_roles=[],
+	),
+	
         actions=[discord.AutoModRuleActionType.block_message])
-
+	
+	auto_mod_event = discord.AutoModRuleEventType.message_send
+	
     # Aggiungi la regola di auto moderation all'oggetto AutoMod del bot
-    await auto_mod.add_rule(ctx.guild.id, rule)
+    await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=trigger, actions=actions, event_type=auto_mod_event)
+   
+	
 
     # Invia un messaggio di conferma al canale
     await ctx.send(f"La regola di auto moderation {rule_name} è stata creata con successo!")
-
+'''
 
 
 @tasks.loop(seconds=18)
