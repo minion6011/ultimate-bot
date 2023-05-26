@@ -1618,7 +1618,7 @@ async def automod2(ctx, rule_name: str, word: str, minutes: int):
 '''
 
 @client.command()
-async def automod3(ctx)
+async def automod3(ctx):
 	auto_mod_trigger = discord.AutoModTrigger(
 		type= discord.AutoModRuleTriggerType.keyword_preset,
 		
