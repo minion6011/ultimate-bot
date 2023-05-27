@@ -1086,7 +1086,7 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 		embed.add_field(name="Requires colons", value=f"{requires_colons}", inline=False)
 		embed.add_field(name="Guild name", value=f"{response_emoji.guild.name}", inline=False)
 		embed.set_footer(text=footer_testo)
-		embed.set_thubnail(url=response_emoji.url)
+		embed.set_thumbnail(url=response_emoji.url)
 		await ctx.send(embed=embed)
 
 
