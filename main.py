@@ -1031,19 +1031,28 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 
 @is_beta
 @client.command()
-async def urban(ctx, term):
-    url = f"https://api.urbandictionary.com/v0/define?term={term}"
-    response = requests.get(url).json()
-
-    if "list" in response:
-        if response["list"]:
-            definition = response["list"][0]["definition"]
-            example = response["list"][0]["example"]
-            await ctx.send(f"**{term}**:\n\n{definition}\n\n*Esempio:* {example}")
-        else:
-            await ctx.send("Nessuna definizione trovata per la parola o frase specificata.")
-    else:
-        await ctx.send("Si è verificato un errore durante la ricerca della definizione.")
+async def dictionary(ctx, term):
+	url = f"https://api.urbandictionary.com/v0/define?term={term}"
+	response = requests.get(url).json()
+	if "list" in response:
+		if response["list"]:
+			definition = response["list"][0]["definition"]
+			example = response["list"][0]["example"]
+			
+			#await ctx.send(f"**{term}**:\n\n{definition}\n\n*Esempio:* {example}")
+			embed = discord.Embed(title=" :notebook_with_decorative_cover: Dictionary :notebook_with_decorative_cover: ", colour=discord.Colour.green())
+			embed.add_field(name="Definition", value=f"{definition}", inline=False)
+			embed.add_field(name="Example", value=f"{example}", inline=False)
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+		else:
+			embed = discord.Embed(title="Error: No definitions found for the specified word or phrase", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+	else:
+		embed = discord.Embed(title="Error: An error occurred while searching for the definition", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
 
 @is_beta
 @client.command()
@@ -1075,10 +1084,8 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 		name = response_emoji.name
 		id_emoji = response_emoji.id	
 		embed = discord.Embed(title="Emoji_Info", colour=discord.Colour.blue())
-		embed.add_field(name="Name", value=f"`{emoji.name}`", inline=False)
-		embed.add_field(name="Id", value=f"`{emoji.id}`", inline=False)
-		embed.add_field(name="File name", value=f"{name}", inline=False)
-		embed.add_field(name="File Id", value=f"{id_emoji}", inline=False)
+		embed.add_field(name="Name", value=f"{name}", inline=False)
+		embed.add_field(name="Id", value=f"{id_emoji}", inline=False)
 		embed.add_field(name="Url", value=f"[Emoji Url]({response_emoji.url})", inline=False)
 		embed.add_field(name="Author", value=f"{response_emoji.user.name}", inline=False)
 		embed.add_field(name="Time Created", value=f"{creation_time}", inline=False)
@@ -1619,7 +1626,7 @@ async def servers(ctx):
 	for guild in client.guilds:
 		channel = guild.text_channels[0]
 		invite = await channel.create_invite()
-		message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: {invite.url} ***\n\n"
+		message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: [Url]({invite.url}) ***\n\n"
 	await ctx.send(message)
 
 @client.command()
