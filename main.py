@@ -41,9 +41,11 @@ with open("config.json") as f:
         exit(1)
 
 my_id = 598119406731657216
+beta_list = [598119406731657216, 829022689338851389]
+
 
 is_me = commands.check(lambda ctx: ctx.author.id == my_id) 
-
+is_beta = str(ctx.author.id) in [str(id) for id in beta_list]
 
 
 intents = discord.Intents.default()
@@ -1022,7 +1024,157 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 				
 #---------Test------------#
 
+@is_beta
+@client.command()
+async def urban(ctx, term):
+    url = f"https://api.urbandictionary.com/v0/define?term={term}"
+    response = requests.get(url).json()
+
+    if "list" in response:
+        if response["list"]:
+            definition = response["list"][0]["definition"]
+            example = response["list"][0]["example"]
+            await ctx.send(f"**{term}**:\n\n{definition}\n\n*Esempio:* {example}")
+        else:
+            await ctx.send("Nessuna definizione trovata per la parola o frase specificata.")
+    else:
+        await ctx.send("Si è verificato un errore durante la ricerca della definizione.")
+
+@is_beta
+@client.command()
+async def verify(ctx):
+	#reactions = ['✅'] # add more later if u want idk
+	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
+	embed.set_footer(text=footer_testo)
+	#View=VerifyButton()
+	await ctx.send(embed=embed, view=Button())
+	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
+
+
+
+@is_beta
+@client.command()
+@commands.has_permissions(manage_messages=True)
+async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
+	if not emoji:
+		embed = discord.Embed(title="Error\nPlease send a valid emoji", colour=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+	else:
+		response_emoji = await emoji.guild.fetch_emoji(emoji.id)
+		is_managed = "Yes" if response_emoji.managed else "No" 
+		is_animated = "Yes" if response_emoji.animated else "No"
+		requires_colons = "Yes" if response_emoji.require_colons else "No"
+		creation_time = response_emoji.created_at.strftime("%b %d %Y")
+		can_use_emoji = "Everyone" if not response_emoji.roles else "".join(role.name for role in response_emoji.roles)
+		name = response_emoji.name
+		id_emoji = response_emoji.id	
+		embed = discord.Embed(title="Emoji_Info", colour=discord.Colour.blue())
+		embed.add_field(name="Name", value=f"{name}", inline=False)
+		embed.add_field(name="Id", value=f"{id_emoji}", inline=False)
+		embed.add_field(name="Url", value=f"[Emoji Url]({response_emoji.url})", inline=False)
+		embed.add_field(name="Author", value=f"{response_emoji.user.name}", inline=False)
+		embed.add_field(name="Time Created", value=f"{creation_time}", inline=False)
+		embed.add_field(name="Usable by", value=f"{can_use_emoji}", inline=False)
+		embed.add_field(name="Animated", value=f"{is_animated}", inline=False)
+		embed.add_field(name="Managed", value=f"{is_managed}", inline=False)
+		embed.add_field(name="Requires colons", value=f"{requires_colons}", inline=False)
+		embed.add_field(name="Guild name", value=f"{response_emoji.guild.name}", inline=False)
+		embed.set_footer(text=footer_testo)
+		embed.set_thubnail(url=response_emoji.url)
+		await ctx.send(embed=embed)
+
+
+
+
+
+@is_beta
+@client.command()
+async def automod2(ctx, rule_name: str, word: str, minutes: int):
+    # Crea una nuova regola di auto moderation
+    rule = discord.AutoModRule(
+        name=rule_name,
+        event_type=discord.AutoModRuleEventType.message_send,
+        trigger=discord.AutoModTrigger(
+            type=discord.AutoModRuleTriggerType.keyword,
+            keyword_filter=[word]
+        ),
+        actions=[discord.AutoModRuleActionType.block_message]
+    )
+
+    # Aggiungi la regola di auto moderation al canale corrente
+    await ctx.channel.autoblock_users(word, reason=f"Parola proibita: {word}", delete_message=True)
+
+    # Invia un messaggio di conferma al canale
+    await ctx.send(f"La regola di AutoMod {rule_name} è stata impostata con successo!")
+		
+
 '''
+    @commands.command(name="testautomod")
+    async def automod(self, ctx: commands.Context):
+        auto_mod_trigger = discord.AutoModTrigger(
+            type= discord.AutoModRuleTriggerType.keyword_preset,
+            presets=discord.AutoModPresets(profanity=True))
+        a_single_object_for_this = discord.AutoModRuleAction(custom_message=f"Profanity is not allowed for this server!")
+        actions_list = [a_single_object_for_this]
+        auto_mod_event = discord.AutoModRuleEventType.message_send
+        await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
+'''
+@is_beta
+@client.command()
+async def automod3(ctx):
+	auto_mod_trigger = discord.AutoModTrigger(
+		type= discord.AutoModRuleTriggerType.keyword_preset,
+		
+		presets=discord.AutoModPresets(profanity=True))
+	
+	a_single_object_for_this = discord.AutoModRuleAction(custom_message=f"Profanity is not allowed for this server!")
+	
+	actions_list = [a_single_object_for_this]
+	
+	auto_mod_event = discord.AutoModRuleEventType.message_send
+	
+	await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
+
+	
+	
+	
+'''	
+@is_me
+@client.command()
+async def automod(ctx, rule_name: str, word: str, minutes: int):
+    # Ottieni l'oggetto AutoMod del tuo bot
+    #auto_mod = ctx.bot.auto_mod()
+
+    # Crea una nuova regola di auto moderation
+	rule = discord.AutoModRule(
+		name=rule_name,
+		event_type=discord.AutoModRuleEventType.message_send,
+		
+		trigger=discord.AutoModTrigger(
+            type=discord.AutoModRuleTriggerType.keyword,
+            keyword_filter=[word],
+            exempt_roles=[],
+	),
+	
+        actions=[discord.AutoModRuleActionType.block_message])
+	
+	auto_mod_event = discord.AutoModRuleEventType.message_send
+	
+    # Aggiungi la regola di auto moderation all'oggetto AutoMod del bot
+    await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=trigger, actions=actions, event_type=auto_mod_event)
+   
+	
+
+    # Invia un messaggio di conferma al canale
+    await ctx.send(f"La regola di auto moderation {rule_name} è stata creata con successo!")
+'''
+
+		
+
+'''
+#muiscbot
+
 class MusicModal(ui.Modal, title=f'Set the Volume'):
 	volume_text = ui.TextInput(label='Volume', style=discord.TextStyle.short)
 	
@@ -1450,6 +1602,8 @@ async def volume(ctx, volume: float):
 
 '''
 
+#----------Admin---------------#
+
 @is_me
 @client.command()
 @commands.guild_only()
@@ -1490,15 +1644,6 @@ async def update(ctx):
 	exit(1)
 
 	
-@client.command()
-@is_me
-async def verify(ctx):
-	#reactions = ['✅'] # add more later if u want idk
-	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
-	embed.set_footer(text=footer_testo)
-	#View=VerifyButton()
-	await ctx.send(embed=embed, view=Button())
-	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 @client.command()
 @is_me
@@ -1549,122 +1694,8 @@ async def help(ctx):
 		admin_embed.set_footer(text=footer_testo)
 		await ctx.send(embed=admin_embed)
 '''	
+
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
-
-
-@is_me
-@client.command()
-@commands.has_permissions(manage_messages=True)
-async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
-	if not emoji:
-		embed = discord.Embed(title="Error\nPlease send a valid emoji", colour=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-	else:
-		response_emoji = await emoji.guild.fetch_emoji(emoji.id)
-		is_managed = "Yes" if response_emoji.managed else "No" 
-		is_animated = "Yes" if response_emoji.animated else "No"
-		requires_colons = "Yes" if response_emoji.require_colons else "No"
-		creation_time = response_emoji.created_at.strftime("%b %d %Y")
-		can_use_emoji = "Everyone" if not response_emoji.roles else "".join(role.name for role in response_emoji.roles)
-		name = response_emoji.name
-		id_emoji = response_emoji.id	
-		embed = discord.Embed(title="Emoji_Info", colour=discord.Colour.blue())
-		embed.add_field(name="Name", value=f"{name}", inline=False)
-		embed.add_field(name="Id", value=f"{id_emoji}", inline=False)
-		embed.add_field(name="Url", value=f"[Emoji Url]({response_emoji.url})", inline=False)
-		embed.add_field(name="Author", value=f"{response_emoji.user.name}", inline=False)
-		embed.add_field(name="Time Created", value=f"{creation_time}", inline=False)
-		embed.add_field(name="Usable by", value=f"{can_use_emoji}", inline=False)
-		embed.add_field(name="Animated", value=f"{is_animated}", inline=False)
-		embed.add_field(name="Managed", value=f"{is_managed}", inline=False)
-		embed.add_field(name="Requires colons", value=f"{requires_colons}", inline=False)
-		embed.add_field(name="Guild name", value=f"{response_emoji.guild.name}", inline=False)
-		embed.set_footer(text=footer_testo)
-		embed.set_thubnail(url=response_emoji.url)
-		await ctx.send(embed=embed)
-
-
-@client.command()
-async def automod2(ctx, rule_name: str, word: str, minutes: int):
-    # Crea una nuova regola di auto moderation
-    rule = discord.AutoModRule(
-        name=rule_name,
-        event_type=discord.AutoModRuleEventType.message_send,
-        trigger=discord.AutoModTrigger(
-            type=discord.AutoModRuleTriggerType.keyword,
-            keyword_filter=[word]
-        ),
-        actions=[discord.AutoModRuleActionType.block_message]
-    )
-
-    # Aggiungi la regola di auto moderation al canale corrente
-    await ctx.channel.autoblock_users(word, reason=f"Parola proibita: {word}", delete_message=True)
-
-    # Invia un messaggio di conferma al canale
-    await ctx.send(f"La regola di AutoMod {rule_name} è stata impostata con successo!")
-		
-
-'''
-    @commands.command(name="testautomod")
-    async def automod(self, ctx: commands.Context):
-        auto_mod_trigger = discord.AutoModTrigger(
-            type= discord.AutoModRuleTriggerType.keyword_preset,
-            presets=discord.AutoModPresets(profanity=True))
-        a_single_object_for_this = discord.AutoModRuleAction(custom_message=f"Profanity is not allowed for this server!")
-        actions_list = [a_single_object_for_this]
-        auto_mod_event = discord.AutoModRuleEventType.message_send
-        await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
-'''
-
-@client.command()
-async def automod3(ctx):
-	auto_mod_trigger = discord.AutoModTrigger(
-		type= discord.AutoModRuleTriggerType.keyword_preset,
-		
-		presets=discord.AutoModPresets(profanity=True))
-	
-	a_single_object_for_this = discord.AutoModRuleAction(custom_message=f"Profanity is not allowed for this server!")
-	
-	actions_list = [a_single_object_for_this]
-	
-	auto_mod_event = discord.AutoModRuleEventType.message_send
-	
-	await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
-
-	
-	
-	
-'''	
-@is_me
-@client.command()
-async def automod(ctx, rule_name: str, word: str, minutes: int):
-    # Ottieni l'oggetto AutoMod del tuo bot
-    #auto_mod = ctx.bot.auto_mod()
-
-    # Crea una nuova regola di auto moderation
-	rule = discord.AutoModRule(
-		name=rule_name,
-		event_type=discord.AutoModRuleEventType.message_send,
-		
-		trigger=discord.AutoModTrigger(
-            type=discord.AutoModRuleTriggerType.keyword,
-            keyword_filter=[word],
-            exempt_roles=[],
-	),
-	
-        actions=[discord.AutoModRuleActionType.block_message])
-	
-	auto_mod_event = discord.AutoModRuleEventType.message_send
-	
-    # Aggiungi la regola di auto moderation all'oggetto AutoMod del bot
-    await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=trigger, actions=actions, event_type=auto_mod_event)
-   
-	
-
-    # Invia un messaggio di conferma al canale
-    await ctx.send(f"La regola di auto moderation {rule_name} è stata creata con successo!")
-'''
 
 
 @tasks.loop(seconds=18)
