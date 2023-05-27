@@ -46,9 +46,11 @@ beta_list = [598119406731657216, 829022689338851389]
 
 is_me = commands.check(lambda ctx: ctx.author.id == my_id) 
 
-is_beta = str(message.author.id) in [str(id) for id in beta_list]
-if not is_beta:
-    await message.author.send("Non sei ancora autorizzato ad accedere alla funzionalità beta.")
+is_beta = commands.check(lambda ctx: ctx.author.id in beta_list )
+
+#is_beta = str(message.author.id) in [str(id) for id in beta_list]
+#if not is_beta:
+#    await message.author.send("Non sei ancora autorizzato ad accedere alla funzionalità beta.")
 
 
 intents = discord.Intents.default()
