@@ -1075,8 +1075,10 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 		name = response_emoji.name
 		id_emoji = response_emoji.id	
 		embed = discord.Embed(title="Emoji_Info", colour=discord.Colour.blue())
-		embed.add_field(name="Name", value=f"{name}", inline=False)
-		embed.add_field(name="Id", value=f"{id_emoji}", inline=False)
+		embed.add_field(name="Name", value=f"`{emoji.name}`", inline=False)
+		embed.add_field(name="Id", value=f"`{emoji.id}`", inline=False)
+		embed.add_field(name="File name", value=f"{name}", inline=False)
+		embed.add_field(name="File Id", value=f"{id_emoji}", inline=False)
 		embed.add_field(name="Url", value=f"[Emoji Url]({response_emoji.url})", inline=False)
 		embed.add_field(name="Author", value=f"{response_emoji.user.name}", inline=False)
 		embed.add_field(name="Time Created", value=f"{creation_time}", inline=False)
