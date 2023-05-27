@@ -995,6 +995,9 @@ async def report_bug(interaction: discord.Interaction):
 async def getmessageid(interaction: discord.Interaction, message: discord.Message):
 	await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
 
+
+
+
 @client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #slash command
 async def suggestion(interaction: discord.Interaction):
 	#modal = SuggestionModal
@@ -1028,6 +1031,69 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 				
 				
 #---------Test------------#
+
+
+@client.command()
+@commands.guild_only()
+async def translate(ctx, language, *, request):
+	text = request
+	lang = language
+	try:
+		if len(text) > 1998:
+			embed = discord.Embed(title="Error: The text is too long must not exceed 1998 characters", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			if len(text) > 1024:
+				traduttore = GoogleTranslator(source='auto', target=lang)
+				risultato = traduttore.translate(text)
+				await ctx.send(f"```{risultato}```")
+			else:
+				traduttore = GoogleTranslator(source='auto', target=lang)
+				risultato = traduttore.translate(text)
+				embed=discord.Embed(color=discord.Color.green())
+				embed.add_field(name=":earth_americas: Request:", value=f"{request}")
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed, content=f"```{risultato}```")
+	except Exception as e:
+		embed=discord.Embed(title=f"The language {lang} is not supported.\nTo see the supported languages press the button.", color=discord.Color.green())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, view=TraslateButton())
+
+
+@client.tree.context_menu(name="Traslate") #message contex command
+async def traslate(interaction: discord.Interaction, message: discord.Message):
+	text = message
+	lang = "en"
+	try:
+		if len(text) > 1998:
+			embed = discord.Embed(title="Error: The text is too long must not exceed 1998 characters", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			#await ctx.send(embed=embed, delete_after=4)
+		else:
+			if len(text) > 1024:
+				traduttore = GoogleTranslator(source='auto', target=lang)
+				risultato = traduttore.translate(text)
+				await interaction.response.send_message(f"```{risultato}```", ephemeral=True)
+				#await ctx.send(f"```{risultato}```")
+			else:
+				traduttore = GoogleTranslator(source='auto', target=lang)
+				risultato = traduttore.translate(text)
+				embed=discord.Embed(color=discord.Color.green())
+				embed.add_field(name=":earth_americas: Request:", value=f"{request}")
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, content=f"```{risultato}```", ephemeral=True)
+	except Exception as e:
+		embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+		#error-chat
+		channel = client.get_channel(errorchannel)
+		await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")
+		print(e)
+
+
 
 @is_beta
 @client.command()
