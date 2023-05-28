@@ -1032,12 +1032,12 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 
 
 
-@client.tree.context_menu(name="Traslate") #message contex command
+@client.tree.context_menu(name="Traslate message") #message contex command
 async def traslate(interaction: discord.Interaction, message: discord.Message):
-	text = message
+	text = message.content
 	lang = "en"
 	try:
-		if text > 1998:
+		if len(text) > 1998:
 			embed = discord.Embed(title="Error: The text is too long must not exceed 1998 characters", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
