@@ -1052,7 +1052,6 @@ async def traslate(interaction: discord.Interaction, message: discord.Message):
 				traduttore = GoogleTranslator(source='auto', target=lang)
 				risultato = traduttore.translate(text)
 				embed=discord.Embed(color=discord.Color.green())
-				embed.add_field(name=":earth_americas: Request:", value=f"{request}")
 				embed.set_footer(text=footer_testo)
 				await interaction.response.send_message(embed=embed, content=f"```{risultato}```", ephemeral=True)
 	except Exception as e:
