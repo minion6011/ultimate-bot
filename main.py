@@ -1037,7 +1037,7 @@ async def traslate(interaction: discord.Interaction, message: discord.Message):
 	text = message
 	lang = "en"
 	try:
-		if len(text) > 1998:
+		if text > 1998:
 			embed = discord.Embed(title="Error: The text is too long must not exceed 1998 characters", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
