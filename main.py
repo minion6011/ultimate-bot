@@ -32,6 +32,7 @@ from deep_translator import GoogleTranslator
 #openai
 import openai
 
+#config
 with open("config.json") as f:
     try:
         data = json.load(f)
@@ -40,6 +41,7 @@ with open("config.json") as f:
         print(e)
         exit(1)
 
+	
 my_id = 598119406731657216
 beta_list = [598119406731657216, 829022689338851389]
 
@@ -52,12 +54,13 @@ is_beta = commands.check(lambda ctx: ctx.author.id in beta_list )
 #if not is_beta:
 #    await message.author.send("Non sei ancora autorizzato ad accedere alla funzionalità beta.")
 
-
+#intent
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 intents.presences = True
 intents.reactions = True
+
 
 pre = data["command_prefix"]
 client = commands.Bot(command_prefix=(pre), intents=intents, case_insensitive=True)
@@ -66,12 +69,16 @@ client.remove_command('help')
 
 
 #dati generali
+
+#discord
 footer_testo = data["footer_embed"]
 stalkid = 1045020366751404172
 errorchannel = 1046796347870826496
 
-#key
+#openai
 openai.api_key = data["access_token"]
+
+
 
 @client.event
 async def on_ready():
@@ -84,7 +91,7 @@ async def on_ready():
 	client.togetherControl = await DiscordTogether(token_json)
 
 
-#messaggi inizio
+#-----------Stalker--------------#
 
 @client.event
 async def on_message(message):
@@ -140,15 +147,6 @@ async def on_message_edit(before, after):
 		await client.process_commands(after)
 
 
-
-#messaggi fine
-
-
-
-#eventi server
-
-
-#membri
 
 @client.event
 async def on_member_ban(guild, user):
@@ -238,7 +236,7 @@ async def on_guild_role_create(role):
 	embed.add_field(name = 'Nome:', value=f"`{role.name}`", inline = True)
 	await channel.send(embed=embed)
 
-#fine eventi server
+#----------Commands--------#
 
 
 
