@@ -776,11 +776,13 @@ async def help(ctx):
 		admin_embed.set_footer(text=footer_testo)
 		await ctx.send(embed=admin_embed, ephemeral=True)
 '''
-#component discord.py start
+#-------------Ui----------#
 
 from discord import ui
 from discord import app_commands
 
+
+#-ReportBug
 
 class BugModal(ui.Modal, title='Report Bug'):
     bug_name = ui.TextInput(label='Bugged Command name')
@@ -801,6 +803,8 @@ class BugModal(ui.Modal, title='Report Bug'):
         await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
+#-Verify
+	
 class Button(discord.ui.View):
 	def __init__(self):
 		super().__init__()
@@ -831,6 +835,7 @@ class Button(discord.ui.View):
 			await ctx.user.add_roles(role)
 			
 
+#-Suggestion
 	
 class SuggestionModal(ui.Modal, title='Suggest a command'):
     name = ui.TextInput(label='Command name')
@@ -848,6 +853,7 @@ class SuggestionModal(ui.Modal, title='Suggest a command'):
         await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
+#-Help
 		
 class HelpDropdownView(discord.ui.View):
 	def __init__(self):
@@ -904,12 +910,9 @@ class HelpDropdown(discord.ui.Select):
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 
-class HelpDropdownView(discord.ui.View):
-	def __init__(self):
-		super().__init__()
-		self.add_item(HelpDropdown())
 		
 
+#-Manutenzione
 		
 class Admin_Button_View(discord.ui.View):
 	def __init__(self):
@@ -942,7 +945,9 @@ class Admin_Button_View(discord.ui.View):
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 
-	
+
+#-Traslate	
+		
 class TraslateButton(discord.ui.View):
 	def __init__(self):
 		super().__init__()
@@ -957,9 +962,7 @@ class TraslateButton(discord.ui.View):
 		
 		
 
-#component discord.py end
-
-#apllication command discord.py
+#------------Slash------------#
 
 
 
@@ -1170,6 +1173,8 @@ async def automod2(ctx, rule_name: str, word: str, minutes: int):
         auto_mod_event = discord.AutoModRuleEventType.message_send
         await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
 '''
+
+
 @is_beta
 @client.command()
 async def automod3(ctx):
@@ -1748,6 +1753,8 @@ async def help(ctx):
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
 
+#--------Presence------------#
+
 @tasks.loop(seconds=18)
 async def change_status():
 	stbot1 = data["status-1"]
@@ -1761,7 +1768,8 @@ async def change_status():
 	await client.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"{len(client.guilds)} server"))
 
 
-
+#----------Error--------#
+	
 @client.event
 async def on_command_error(ctx, error):
 	if isinstance(error, discord.ext.commands.errors.CommandNotFound):
