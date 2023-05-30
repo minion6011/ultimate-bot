@@ -1425,7 +1425,7 @@ async def play2(ctx, url):
 						pass
 						
 						
-						
+'''						
 
 #music
 import pytube
@@ -1439,18 +1439,7 @@ global filename
 filename = None
 
 
-@client.command()
-async def test(ctx, url):
-	source = discord.FFmpegPCMAudio(url)
-	voice_channel = ctx.author.voice.channel
-	voice = await voice_channel.connect()
-	voice.play(source)
-	
-	while voice.is_playing():
-		await asyncio.sleep(1)
-		
-	await voice.disconnect()
-	
+@is_beta
 @client.command()
 async def play(ctx, url):
 	if ctx.author.voice is None:
@@ -1574,7 +1563,7 @@ async def play(ctx, url):
 					except Exception:
 						pass
 
-
+@is_beta
 @client.command()
 async def pause(ctx):
     voice_client = ctx.voice_client
@@ -1584,7 +1573,7 @@ async def pause(ctx):
     else:
         await ctx.send("Nothing is playing.")
 			
-
+@is_beta
 @client.command()
 async def resume(ctx):
     voice_client = ctx.voice_client
@@ -1594,7 +1583,7 @@ async def resume(ctx):
     else:
         await ctx.send("Playback is not paused.")
 
-
+@is_beta
 @client.command()
 async def stop(ctx):
 	global filename #global
@@ -1630,7 +1619,8 @@ async def stop(ctx):
 		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
-		
+
+@is_beta
 @client.command()
 async def volume(ctx, volume: float):
 	voice_client = ctx.voice_client
@@ -1655,7 +1645,6 @@ async def volume(ctx, volume: float):
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
 
-'''
 
 #----------Admin---------------#
 
