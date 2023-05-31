@@ -1236,43 +1236,42 @@ async def play(ctx, url):
 			await ctx.send(embed=no_music_embed, delete_after=5)
 		else:
 			#else:
-			# Find the video
-			video = pytube.YouTube(url)
-			
-			#loading embed
-			async with ctx.typing():
-				#loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
-				#loading_embed.set_footer(text=footer_testo)
-				#loading = await ctx.send(embed=loading_embed)
+			try:
 
+				# Find the video
+				video = pytube.YouTube(url)
+				
+				#loading embed
+				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+				loading_embed.set_footer(text=footer_testo)
+				loading = await ctx.send(embed=loading_embed)
+				
 				#title-file
 				number = random.randint(1, 100000)
 				extension = "mp4"
 				file_name = f"{number}.{extension}"
 				#video.streams.get_highest_resolution().download(filename=file_name)
-
+				
 				#dowload
 				video.streams.first().download(filename=file_name)
-
+				
 				#info
 				video_length = video.length
 				minutes, seconds = divmod(video_length, 60)
-
+				
 				artist = video.author
-
+				
 				#global
 				global filename
 				filename = f"{file_name}"
-
 				#loading delete
-				#await asyncio.sleep(0.5)
-				#await loading.delete()
-				#await asyncio.sleep(1)
-
+				await asyncio.sleep(0.5)
+				await loading.delete()
+				await asyncio.sleep(1)
 				#video-info-embed
-				title_embed = discord.Embed(title="**Now playing:**", color=discord.Colour.blue())
+				title_embed = discord.Embed(color=discord.Colour.blue())
 				title_embed.set_image(url=video.thumbnail_url)
-				title_embed.description = f"\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}` **   :arrow_backward:  -  :pause_button:  -  :arrow_forward: **"
+				title_embed.description = f"𝗡𝗼𝘄 𝗽𝗹𝗮𝘆𝗶𝗻𝗴: \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}` ** :arrow_backward:     :pause_button:     :arrow_forward: **"
 				title_embed.set_footer(text=footer_testo)
 				title_embed = await ctx.send(embed=title_embed)
 				#await msg.delete()
@@ -1309,53 +1308,51 @@ async def play(ctx, url):
 				await title_embed.delete()
 				#pass
 				#return
-					
-@play.error
-async def play_error(ctx, error):
-	#filename
-	global filename
-	voice_client = ctx.voice_client
-	if isinstance(error, pytube.exceptions.PytubeError):
-		if 'This video is age-restricted' in str(error):
-			await asyncio.sleep(1)
-			#await ctx.send('the video is age-restricted.')
-			error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
-			error_embed_2.set_footer(text=footer_testo)
-			await ctx.send(embed=error_embed_2, delete_after=5)
-			await asyncio.sleep(0.5)
-		elif 'is streaming live' in str(error):
-			await asyncio.sleep(1)
-			error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
-			error_embed_3.set_footer(text=footer_testo)
-			await ctx.send(embed=error_embed_3, delete_after=5)
-			await asyncio.sleep(0.5)
-		else:
-			await asyncio.sleep(1)
-			error_embed_4 = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-			error_embed_4.set_footer(text=footer_testo)
-			await ctx.send(embed=error_embed_4, delete_after=5)
-			await asyncio.sleep(0.5)
-			#stalk
-			channel = client.get_channel(errorchannel)
-			await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{error}```")
-	else:
-		if str(error) == "Already connected to a voice channel.":
-			pass
-		else:
-			print(error)
-			error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-			error_embed.set_footer(text=footer_testo)
-			await ctx.send(embed=error_embed, delete_after=5)
-			await asyncio.sleep(0.5)
-			#stalk
-			channel = client.get_channel(errorchannel)
-			await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{error}```")
-			try:
-				os.remove(f"{filename}") #global
-				await asyncio.sleep(0.5)
-				await voice_client.disconnect()
-			except Exception:
-				pass
+			#error
+			except pytube.exceptions.PytubeError as e:
+				#is streaming live and cannot be loaded
+				try:
+					await loading.delete()
+				except Exception:
+					pass
+				if 'This video is age-restricted' in str(e):
+					await asyncio.sleep(1)
+					#await ctx.send('the video is age-restricted.')
+					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
+					error_embed_2.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_2, delete_after=5)
+					await asyncio.sleep(0.5)
+				elif 'is streaming live' in str(e):
+					await asyncio.sleep(1)
+					error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
+					error_embed_3.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_3, delete_after=5)
+					await asyncio.sleep(0.5)
+				else:
+					await asyncio.sleep(1)
+					error_embed_4 = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed_4.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_4, delete_after=5)
+					await asyncio.sleep(0.5)
+					#stalk
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
+			except Exception as e:
+				if str(e) == "Already connected to a voice channel.":
+					pass
+				else:
+					print(e)
+					error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed, delete_after=5)
+					await asyncio.sleep(0.5)
+					#stalk
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
+					try:
+						await loading.delete()
+					except Exception:
+						pass
 
 @is_beta
 @client.command()
