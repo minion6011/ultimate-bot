@@ -1166,25 +1166,6 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 
 
 
-@is_beta
-@client.command()
-async def automod2(ctx, rule_name: str, word: str, minutes: int):
-    # Crea una nuova regola di auto moderation
-    rule = discord.AutoModRule(
-        name=rule_name,
-        event_type=discord.AutoModRuleEventType.message_send,
-        trigger=discord.AutoModTrigger(
-            type=discord.AutoModRuleTriggerType.keyword,
-            keyword_filter=[word]
-        ),
-        actions=[discord.AutoModRuleActionType.block_message]
-    )
-
-    # Aggiungi la regola di auto moderation al canale corrente
-    await ctx.channel.autoblock_users(word, reason=f"Parola proibita: {word}", delete_message=True)
-
-    # Invia un messaggio di conferma al canale
-    await ctx.send(f"La regola di AutoMod {rule_name} è stata impostata con successo!")
 		
 
 '''
@@ -1203,19 +1184,16 @@ async def automod2(ctx, rule_name: str, word: str, minutes: int):
 @is_beta
 @client.command()
 async def automod3(ctx):
-	auto_mod_trigger = discord.AutoModTrigger(
-		type= discord.AutoModRuleTriggerType.keyword_preset,
-		
-		presets=discord.AutoModPresets(profanity=True))
-	
-	a_single_object_for_this = discord.AutoModRuleAction(custom_message=f"Profanity is not allowed for this server!")
-	
-	actions_list = [a_single_object_for_this]
-	
-	auto_mod_event = discord.AutoModRuleEventType.message_send
-	
-	await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
-
+    auto_mod_trigger = discord.AutoModTrigger(
+        type=discord.AutoModRuleTriggerType.keyword_preset,
+        presets=discord.AutoModPresets(profanity=True)
+    )
+    
+    a_single_object_for_this = discord.AutoModRuleActionType.block_message(custom_message="Profanity is not allowed for this server!")
+    
+    auto_mod_event = discord.AutoModRuleEventType.message_send
+    
+    await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=[a_single_object_for_this], event_type=auto_mod_event)
 	
 	
 	
