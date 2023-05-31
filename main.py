@@ -1195,7 +1195,6 @@ async def automod3(ctx):
     
     await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=[a_single_object_for_this], event_type=auto_mod_event)
 	
-	
 '''	
 @is_me
 @client.command()
