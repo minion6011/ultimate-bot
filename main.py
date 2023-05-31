@@ -1271,7 +1271,7 @@ async def play(ctx, url):
 				#video-info-embed
 				title_embed = discord.Embed(color=discord.Colour.blue())
 				title_embed.set_image(url=video.thumbnail_url)
-				title_embed.description = f"𝗡𝗼𝘄 𝗽𝗹𝗮𝘆𝗶𝗻𝗴: \n***Title: ***`{video.title}`\n`{artist}` \n `{minutes}:{seconds}`** ━●━━━━━━━━ **\n** ◁ㅤ ❚❚ ㅤ▷ **"
+				title_embed.description = f"𝗡𝗼𝘄 𝗽𝗹𝗮𝘆𝗶𝗻𝗴: \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}` ** :arrow_backward:     :pause_button:     :arrow_forward: **"
 				title_embed.set_footer(text=footer_testo)
 				title_embed = await ctx.send(embed=title_embed)
 				#await msg.delete()
