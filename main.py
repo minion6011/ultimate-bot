@@ -84,9 +84,9 @@ openai.api_key = data["access_token"]
 async def on_ready():
 	change_status.start()
 	#tree.sync(force=True)
-	slash_sync = await client.tree.sync()
 	print(f"Bot logged into {client.user}.")
-	print(f"Synced app command (tree) {len(slash_sync)}.")
+	#slash_sync = await client.tree.sync()
+	#print(f"Synced app command (tree) {len(slash_sync)}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json)
 
