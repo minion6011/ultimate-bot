@@ -1255,6 +1255,12 @@ async def play(ctx, url):
 				#dowload
 				video.streams.first().download(filename=file_name)
 				
+				#info
+				video_length = video.length
+				minutes, seconds = divmod(video_length, 60)
+				
+				artist = video.author
+				
 				#global
 				global filename
 				filename = f"{file_name}"
@@ -1263,8 +1269,9 @@ async def play(ctx, url):
 				await loading.delete()
 				await asyncio.sleep(1)
 				#video-info-embed
-				title_embed = discord.Embed(title=f"***Title: ***```{video.title}```", color=discord.Colour.blue())
+				title_embed = discord.Embed(title=f"***Title: ***`{video.title}`", color=discord.Colour.blue())
 				title_embed.set_image(url=video.thumbnail_url)
+				title_embed.description = f" `{artist}` \n `{minutes}:{seconds}`** ━●━━━━━━━━ **\n** ◁ㅤ ❚❚ ㅤ▷ **"
 				title_embed.set_footer(text=footer_testo)
 				title_embed = await ctx.send(embed=title_embed)
 				#await msg.delete()
@@ -1299,7 +1306,7 @@ async def play(ctx, url):
 				# Delete the video file
 				os.remove(f"{file_name}")
 				await title_embed.delete()
-				pass
+				#pass
 				#return
 			#error
 			except pytube.exceptions.PytubeError as e:
