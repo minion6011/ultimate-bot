@@ -1184,8 +1184,6 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 @is_beta
 @client.command()
 async def automod3(ctx):
-@client.command()
-async def automod3(ctx):
     auto_mod_trigger = discord.AutoModTrigger(
         type=discord.AutoModRuleTriggerType.keyword_preset,
         presets=discord.AutoModPresets(profanity=True)
