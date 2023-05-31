@@ -996,8 +996,33 @@ async def report_bug(interaction: discord.Interaction):
 async def getmessageid(interaction: discord.Interaction, message: discord.Message):
 	await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
 
+@client.tree.context_menu(name="Ban User") #message contex command
+async def ban(interaction: discord.Interaction, message: discord.Message):
+	if interaction.user.guild_permissions.administrator:
+		try:
+			target = interaction.target_author
+		
+			# Banna l'utente
+			await interaction.guild.ban(target)
+		
+			# Invia un messaggio di conferma
+			await interaction.response.send_message("L'utente è stato bannato!")
+			
+		except Exception as e:
+			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			#error-chat
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+			print(e)
 
-
+	else:
+		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+		
+		
 
 @client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #slash command
 async def suggestion(interaction: discord.Interaction):
@@ -1063,7 +1088,7 @@ async def traslate(interaction: discord.Interaction, message: discord.Message):
 		await interaction.response.send_message(embed=embed, ephemeral=True)
 		#error-chat
 		channel = client.get_channel(errorchannel)
-		await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")
+		await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
 		print(e)
 
 
