@@ -1184,17 +1184,18 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 @is_beta
 @client.command()
 async def automod3(ctx):
+@client.command()
+async def automod3(ctx):
     auto_mod_trigger = discord.AutoModTrigger(
         type=discord.AutoModRuleTriggerType.keyword_preset,
         presets=discord.AutoModPresets(profanity=True)
     )
     
-    a_single_object_for_this = discord.AutoModRuleAction(discord.AutoModRuleActionType.block_message, custom_message="Profanity is not allowed for this server!")
+    a_single_object_for_this = discord.AutoModRuleAction(discord.AutoModRuleActionType.block_message)
     
     auto_mod_event = discord.AutoModRuleEventType.message_send
     
     await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=[a_single_object_for_this], event_type=auto_mod_event)
-
 '''	
 @is_me
 @client.command()
