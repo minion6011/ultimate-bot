@@ -1191,7 +1191,10 @@ async def automod3(ctx):
     )
 
     # Crea un'azione personalizzata per bloccare i messaggi contenenti la parola "spam"
-    action = discord.AutoModRuleActionType.block_message(custom_message="Messaggi contenenti la parola 'spam' non sono ammessi in questo canale.")
+    action = discord.AutoModRuleAction(
+        action_type=discord.AutoModRuleActionType.block_message,
+        custom_message="Messaggi contenenti la parola 'spam' non sono ammessi in questo canale."
+    )
 
     # Crea una regola di AutoMod personalizzata utilizzando il trigger e l'azione creati
     rule = discord.AutoModRule(
