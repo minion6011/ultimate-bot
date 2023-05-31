@@ -1183,7 +1183,6 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 
 @is_beta
 @client.command()
-@client.command()
 async def automod3(ctx):
     # Crea un trigger personalizzato per la parola "spam"
     trigger = discord.AutoModTrigger(
