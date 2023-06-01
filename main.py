@@ -1006,7 +1006,9 @@ async def ban(interaction: discord.Interaction, message: discord.Message):
 			await interaction.guild.ban(target)
 		
 			# Invia un messaggio di conferma
-			await interaction.response.send_message("L'utente è stato bannato!")
+			embed = discord.Embed(title="The user has been banned!", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 			
 		except Exception as e:
 			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
@@ -1016,7 +1018,10 @@ async def ban(interaction: discord.Interaction, message: discord.Message):
 			channel = client.get_channel(errorchannel)
 			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
 			print(e)
-
+		except discord.ext.commands.errors.MissingPermissions as e:
+			embed = discord.Embed(title="Error: I don't have permission to ban this member", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 	else:
 		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
