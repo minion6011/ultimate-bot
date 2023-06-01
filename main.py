@@ -1000,7 +1000,7 @@ async def getmessageid(interaction: discord.Interaction, message: discord.Messag
 async def ban(interaction: discord.Interaction, message: discord.Message):
 	if interaction.user.guild_permissions.administrator:
 		try:
-			target = interaction.message.author
+			target = message.author
 		
 			# Banna l'utente
 			await interaction.guild.ban(target)
