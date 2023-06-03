@@ -1229,7 +1229,6 @@ import os
 global filename
 filename = None
 
-interaction.user
 
 @client.tree.command(name="Play", description = "Play a song") #slash command
 async def play(interaction: discord.Interaction, url: str):
