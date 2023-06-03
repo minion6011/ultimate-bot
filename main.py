@@ -1237,7 +1237,7 @@ async def play(interaction: discord.Interaction, url: str):
 		embed.set_footer(text=footer_testo)
 		await interaction.response.send_message(embed=embed, ephemeral=True)
 	else:
-		if interaction.voice_client is not None and interaction.voice_client.is_playing():
+		if interaction.guild.voice_client is not None and interaction.guild.voice_client.is_playing():
 			no_music_embed = discord.Embed(title="*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
 			no_music_embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=no_music_embed, ephemeral=True)
@@ -1292,7 +1292,7 @@ async def play(interaction: discord.Interaction, url: str):
 
 				# Play the video
 				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
-				voice_channel = interaction.author.voice.channel
+				voice_channel = interaction.user.voice.channel
 				voice = await voice_channel.connect()
 				voice.play(source)
 	
