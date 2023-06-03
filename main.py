@@ -1232,7 +1232,7 @@ filename = None
 
 @client.tree.command(name="play", description = "Play a song") #slash command
 async def play(interaction: discord.Interaction, url: str):
-	if interaction.user.voice is None:
+	if interaction.author.voice is None:
 		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
 		await interaction.response.send_message(embed=embed, ephemeral=True)
@@ -1292,7 +1292,7 @@ async def play(interaction: discord.Interaction, url: str):
 
 				# Play the video
 				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
-				voice_channel = interaction.user.voice.channel
+				voice_channel = interaction.author.voice.channel
 				voice = await voice_channel.connect()
 				voice.play(source)
 	
