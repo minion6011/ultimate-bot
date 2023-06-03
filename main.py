@@ -1362,22 +1362,22 @@ async def stop(interaction: discord.Interaction):
 	if voice_client and voice_client.is_connected():
 		if voice_client.is_playing():
 			try:
+				embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
 				voice_client.stop()
 				await voice_client.disconnect()
 				#await asyncio.sleep(2)
 				os.remove(f"{filename}") #global
-				embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
-				embed.set_footer(text=footer_testo)
-				await interaction.response.send_message(embed=embed, ephemeral=True)
 			except Exception as e:
 				pass
 		else:
 			try:
-				os.remove(f"{filename}") #global
-				await voice_client.disconnect()
 				embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
 				embed.set_footer(text=footer_testo)
 				await interaction.response.send_message(embed=embed, ephemeral=True)
+				os.remove(f"{filename}") #global
+				await voice_client.disconnect()
 			except Exception as e:
 				try:
 					os.remove(f"{filename}")
