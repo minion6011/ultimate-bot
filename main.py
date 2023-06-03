@@ -1230,7 +1230,7 @@ global filename
 filename = None
 
 
-@client.tree.command(name="Play", description = "Play a song") #slash command
+@client.tree.command(name="play", description = "Play a song") #slash command
 async def play(interaction: discord.Interaction, url: str):
 	if interaction.user.voice is None:
 		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
