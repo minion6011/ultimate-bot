@@ -1369,7 +1369,6 @@ async def stop(interaction: discord.Interaction):
 				embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
 				embed.set_footer(text=footer_testo)
 				await interaction.response.send_message(embed=embed, ephemeral=True)
-				pass
 			except Exception as e:
 				pass
 		else:
@@ -1379,7 +1378,6 @@ async def stop(interaction: discord.Interaction):
 				embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
 				embed.set_footer(text=footer_testo)
 				await interaction.response.send_message(embed=embed, ephemeral=True)
-				pass
 			except Exception as e:
 				try:
 					os.remove(f"{filename}")
