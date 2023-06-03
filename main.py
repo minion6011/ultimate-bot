@@ -1317,7 +1317,7 @@ async def play(interaction: discord.Interaction, url: str):
 				#return
 			#error
 			except pytube.exceptions.PytubeError as e:
-				if 'This video is age-restricted' in str(e):
+				if 'is age restricted' in str(e):
 					await asyncio.sleep(1)
 					#await ctx.send('the video is age-restricted.')
 					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
