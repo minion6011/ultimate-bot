@@ -996,38 +996,6 @@ async def report_bug(interaction: discord.Interaction):
 async def getmessageid(interaction: discord.Interaction, message: discord.Message):
 	await interaction.response.send_message(f"***Message ID: ***`{message.id}`", ephemeral=True)
 
-@client.tree.context_menu(name="Ban User") #message contex command
-async def ban(interaction: discord.Interaction, message: discord.Message):
-	if interaction.user.guild_permissions.administrator:
-		try:
-			target = message.author
-		
-			# Banna l'utente
-			await interaction.guild.ban(target)
-		
-			# Invia un messaggio di conferma
-			embed = discord.Embed(title="The user has been banned!", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-			
-		except Exception as e:
-			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-			#error-chat
-			channel = client.get_channel(errorchannel)
-			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
-			print(e)
-		except discord.ext.commands.errors.MissingPermissions as e:
-			embed = discord.Embed(title="Error: I don't have permission to ban this member", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-	else:
-		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed, ephemeral=True)
-		
-		
 
 @client.tree.command(name = "suggestion", description = "Suggest a command for Ultimate-Bot") #slash command
 async def suggestion(interaction: discord.Interaction):
@@ -1064,6 +1032,38 @@ async def giweaway(interaction: discord.Interaction, seconds: int, prize: str):
 #---------Test------------#
 
 
+@client.tree.context_menu(name="Ban User") #message contex command
+async def ban(interaction: discord.Interaction, message: discord.Message):
+	if interaction.user.guild_permissions.administrator:
+		try:
+			target = message.author
+		
+			# Banna l'utente
+			await interaction.guild.ban(target)
+		
+			# Invia un messaggio di conferma
+			embed = discord.Embed(title="The user has been banned!", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			
+		except Exception as e:
+			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			#error-chat
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+			print(e)
+		except discord.ext.commands.errors.MissingPermissions as e:
+			embed = discord.Embed(title="Error: I don't have permission to ban this member", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+	else:
+		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+		
+		
 
 @client.tree.context_menu(name="Traslate message") #message contex command
 async def traslate(interaction: discord.Interaction, message: discord.Message):
@@ -1215,6 +1215,9 @@ async def automod3(ctx):
     # Invia un messaggio di conferma al canale
     await ctx.send("Regola di AutoMod creata con successo!")
 
+	
+	
+	
 #music
 import pytube
 import asyncio
@@ -1442,12 +1445,12 @@ async def servers(ctx):
 @commands.guild_only()
 @is_me #solo se è il mio id
 async def slash_sync(ctx):
-	slash = await client.tree.sync()
+	#slash = await client.tree.sync()
 	await client.tree.sync(guild=discord.Object(id=1043925344312381550))
 	await client.tree.sync(guild=discord.Object(id=1031812528226967603))
-	embed = discord.Embed(title=f"Reloading slash {len(slash)}", color=0x2c2f33)
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, delete_after=7)
+	#embed = discord.Embed(title=f"Reloading slash {len(slash)}", color=0x2c2f33)
+	#embed.set_footer(text=footer_testo)
+	#await ctx.send(embed=embed, delete_after=7)
 
 
 @client.command()
