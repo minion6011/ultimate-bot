@@ -1364,7 +1364,7 @@ async def stop(interaction: discord.Interaction):
 			try:
 				voice_client.stop()
 				await voice_client.disconnect()
-				await asyncio.sleep(2)
+				#await asyncio.sleep(2)
 				os.remove(f"{filename}") #global
 				embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
 				embed.set_footer(text=footer_testo)
