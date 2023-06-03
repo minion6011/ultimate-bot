@@ -1232,7 +1232,7 @@ filename = None
 
 @client.tree.command(name="play", description = "Play a song") #slash command
 async def play(interaction: discord.Interaction, url: str):
-	if interaction.author.voice is None:
+	if interaction.user.voice is None:
 		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
 		await interaction.response.send_message(embed=embed, ephemeral=True)
