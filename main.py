@@ -1570,12 +1570,12 @@ async def servers(ctx):
 @commands.guild_only()
 @is_me #solo se è il mio id
 async def slash_sync(ctx):
-	#slash = await client.tree.sync()
+	slash = await client.tree.sync()
 	await client.tree.sync(guild=discord.Object(id=1043925344312381550))
 	await client.tree.sync(guild=discord.Object(id=1031812528226967603))
-	#embed = discord.Embed(title=f"Reloading slash {len(slash)}", color=0x2c2f33)
-	#embed.set_footer(text=footer_testo)
-	#await ctx.send(embed=embed, delete_after=7)
+	embed = discord.Embed(title=f"Reloading slash {len(slash)}", color=0x2c2f33)
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, delete_after=7)
 
 
 @client.command()
