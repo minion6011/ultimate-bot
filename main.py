@@ -1298,7 +1298,7 @@ async def play(interaction: discord.Interaction, url: str):
 	
 				#volume fix
 				volume = 0.4
-				voice_client = interaction.voice_client
+				voice_client = interaction.guild.voice_client
 				voice_client.source.volume = volume
 
 				# Wait for the video to finish playing
@@ -1353,8 +1353,73 @@ async def play(interaction: discord.Interaction, url: str):
 					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
 
 
-				
 
+@client.tree.command(name="stop", description = "Stop a song") #slash command
+async def stop(interaction: discord.Interaction):				
+	global filename #global
+	
+	voice_client = interaction.guild.voice_client
+	if voice_client and voice_client.is_connected():
+		if voice_client.is_playing():
+			try:
+				voice_client.stop()
+				await voice_client.disconnect()
+				await asyncio.sleep(2)
+				os.remove(f"{filename}") #global
+				embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+				pass
+			except Exception as e:
+				pass
+		else:
+			try:
+				os.remove(f"{filename}") #global
+				await voice_client.disconnect()
+				embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+				pass
+			except Exception as e:
+				try:
+					os.remove(f"{filename}")
+				except Exception:
+					pass
+	else:
+		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+
+		
+		
+		
+		
+@client.tree.command(name="volume", description = "Set the volume of the song") #slash command
+async def volume(interaction: discord.Interaction, volume: float):				
+	voice_client = interaction.guild.voice_client
+	
+	if not voice_client:
+		embed = discord.Embed(title='Please enter the voice chat where the bot is', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+		return
+	if voice_client.is_playing():
+		if volume < 0.0 or volume > 25.0:
+			embed = discord.Embed(title=f'The max of volume is ```25.0```\nThe min ```0.0```', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+		else:
+			voice_client.source.volume = volume
+			embed = discord.Embed(title=f':loud_sound: Volume set to ***```{volume}```***', color=discord.Colour.blue())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+	else:
+		embed = discord.Embed(title='No songs playing at the moment', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+		
+
+'''
 
 @is_beta
 @client.command()
@@ -1489,7 +1554,6 @@ async def play(ctx, url):
 						pass
 
 
-
 @is_beta
 @client.command()
 async def stop(ctx):
@@ -1526,6 +1590,7 @@ async def stop(ctx):
 		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
+'''
 
 @is_beta
 @client.command()
