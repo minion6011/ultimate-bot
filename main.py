@@ -32,6 +32,14 @@ from deep_translator import GoogleTranslator
 #openai
 import openai
 
+#music-bot
+import pytube
+import asyncio
+import os
+
+#global-music-bot
+
+
 #config
 with open("config.json") as f:
     try:
@@ -299,67 +307,6 @@ async def nuke(ctx, amount=100):
         embed.set_footer(text=footer_testo)  
         await ctx.send(embed=embed, delete_after=4)
 
-'''
-@client.command()
-@commands.guild_only()
-async def activity(ctx, id=None):
-        utilmax = 5
-        if ctx.author.voice is None:
-                await ctx.send("Please enter in a voice channel to use this command")
-        else:
-                if id == "1":
-                        link1 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'sketch-heads', max_uses = utilmax)
-                        await ctx.send(f"**Sketch Heads** - {link1}")
-                if id == "2":
-                        link2 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'chess', max_uses = utilmax)
-                        await ctx.send(f"**Chess in the Park** - {link2}")
-                if id == "3":
-                        link3 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'land-io', max_uses = utilmax)
-                        await ctx.send(f"**Land.io** - {link3}")
-                if id == "4":
-                        link4 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'spellcast', max_uses = utilmax)
-                        await ctx.send(f"**Spell Cast** - {link4}")
-                if id == "5":
-                        link5 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'blazing-8s', max_uses = utilmax)
-                        await ctx.send(f"**Blazing 8s** - {link5}")
-                if id == "6":
-                        link6 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'poker', max_uses = utilmax)
-                        await ctx.send(f"**Poker Night** - {link6}")
-                if id == "7":
-                        link7 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'letter-league', max_uses = utilmax)
-                        await ctx.send(f"**Letter League** - {link7}")
-                if id == "8":
-                        link8 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'bobble-league', max_uses = utilmax)
-                        await ctx.send(f"**Bobble League** - {link8}")
-                if id == "9":
-                        link9 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'checkers', max_uses = utilmax)
-                        await ctx.send(f"**Checkers in the Park** - {link9}")
-                if id == "10":
-                        link10 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'awkword', max_uses = utilmax)
-                        await ctx.send(f"**Awword** - {link10}")
-                if id == "11":
-                        link11 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656', max_uses = utilmax)
-                        await ctx.send(f"**Ask Away** - {link11}")
-                if id == "12":
-                        link12 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656', max_uses = utilmax)
-                        await ctx.send(f"**Know what I Meme** - {link12}")
-                if id == "13":
-                        link13 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'youtube')
-                        await ctx.send(f"**Watch Together** - {link13}")
-                if id == "14":
-                        link14 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1006584476094177371')
-                        await ctx.send(f"**Bash Out** - {link14}")
-                elif id == None:
-                        embed = discord.Embed(title="Activity List", color=discord.Color.gold())
-                        embed.add_field(name="Boosted activity\n1 = Sketch Heads\n2 = Chess in the Park\n3 = Land.io\n4 = Spell Cast\n5 = Blazing 8s\n6 = Poker Night\n7 = Letter League\n8 = Booble League\n9 = Checkers in the Park\n10 = Awkword\n11 = Ask Away\n14 = Bash Out", value="Free Activity\n12 = Know what I Meme\n 13 = Watch Together")
-                        embed.set_footer(text=footer_testo)    
-                        await ctx.send(embed=embed)
-                else:
-                        embed = discord.Embed(title="Activity List", color=discord.Color.gold())
-                        embed.add_field(name="Boosted activity\n1 = Sketch Heads\n2 = Chess in the Park\n3 = Land.io\n4 = Spell Cast\n5 = Blazing 8s\n6 = Poker Night\n7 = Letter League\n8 = Booble League\n9 = Checkers in the Park\n10 = Awkword\n11 = Ask Away\n14 = Bash Out", value="Free Activity\n12 = Know what I Meme\n 13 = Watch Together")
-                        embed.set_footer(text=footer_testo)    
-                        await ctx.send(embed=embed)
-'''
 
 
 
@@ -402,43 +349,6 @@ async def meme(ctx):
 				embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
 				embed.set_footer(text=footer_testo)  
 				await ctx.send(embed=embed)
-
-'''
-@client.command()
-async def meme(ctx):
-    data = requests.get('https://meme-api.herokuapp.com/gimme').json()
-    meme = discord.Embed(title=f"{data['title']}", Color = discord.Colour.green().set_image(url=f"{data['url']}"))
-    await ctx.send(embed=meme)
-'''
-'''
-@client.event
-async def on_reaction_add(reaction, user):
-	ctx = reaction
-	if reaction.emoji == "<:checkmark_2714fe0f:1073342463995023433>":
-		if discord.utils.get(ctx.guild.roles, name="verify"):
-			#if get(message.guild.roles, name="verify"):
-			role = discord.utils.get(ctx.guild.roles, name="verify")
-			pearson = reaction.user
-			await pearson.add_roles(role)
-			embed_verify=discord.Embed(title=f"You are now verify")
-			embed_verify.set_footer(text=footer_testo)  
-			await pearson.send(embed=embed_verify)
-		else:
-			permissions = discord.Permissions(send_messages=True, read_messages=True)
-			guild = ctx.guild
-			await guild.create_role(name="verify", colour=discord.Colour(0x00ff00), permissions=permissions)
-			role = discord.utils.get(ctx.guild.roles, name="verify")
-			for channel in ctx.guild.channels:
-				permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
-				await channel.set_permissions(role, overwrite=permissions)
-			await reaction.user.add_roles(role)
-	else:
-		print("errore")
-'''
-
-
-
-
 
 
 
@@ -762,20 +672,6 @@ async def infobot(ctx):
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed = embed)
 
-'''
-@client.command()
-async def help(ctx):
-	#view = HelpDropdownView()
-	prefix = data["command_prefix"]
-	await ctx.send('Select the help command section:', view=HelpDropdownView())
-	if ctx.author.id == my_id:
-		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
-		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
-		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
-		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
-		admin_embed.set_footer(text=footer_testo)
-		await ctx.send(embed=admin_embed, ephemeral=True)
-'''
 #-------------Ui----------#
 
 from discord import ui
@@ -1027,7 +923,374 @@ async def giveaway(interaction: discord.Interaction, seconds: int, prize: str):
 				embed.set_footer(text=footer_testo)
 				await interaction.response.send_message(embed=embed, ephemeral=True)
 
+#--------Archivied--------#
+
+
+
+'''
+@client.command()
+@commands.guild_only()
+async def activity(ctx, id=None):
+        utilmax = 5
+        if ctx.author.voice is None:
+                await ctx.send("Please enter in a voice channel to use this command")
+        else:
+                if id == "1":
+                        link1 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'sketch-heads', max_uses = utilmax)
+                        await ctx.send(f"**Sketch Heads** - {link1}")
+                if id == "2":
+                        link2 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'chess', max_uses = utilmax)
+                        await ctx.send(f"**Chess in the Park** - {link2}")
+                if id == "3":
+                        link3 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'land-io', max_uses = utilmax)
+                        await ctx.send(f"**Land.io** - {link3}")
+                if id == "4":
+                        link4 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'spellcast', max_uses = utilmax)
+                        await ctx.send(f"**Spell Cast** - {link4}")
+                if id == "5":
+                        link5 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'blazing-8s', max_uses = utilmax)
+                        await ctx.send(f"**Blazing 8s** - {link5}")
+                if id == "6":
+                        link6 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'poker', max_uses = utilmax)
+                        await ctx.send(f"**Poker Night** - {link6}")
+                if id == "7":
+                        link7 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'letter-league', max_uses = utilmax)
+                        await ctx.send(f"**Letter League** - {link7}")
+                if id == "8":
+                        link8 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'bobble-league', max_uses = utilmax)
+                        await ctx.send(f"**Bobble League** - {link8}")
+                if id == "9":
+                        link9 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'checkers', max_uses = utilmax)
+                        await ctx.send(f"**Checkers in the Park** - {link9}")
+                if id == "10":
+                        link10 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'awkword', max_uses = utilmax)
+                        await ctx.send(f"**Awword** - {link10}")
+                if id == "11":
+                        link11 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656', max_uses = utilmax)
+                        await ctx.send(f"**Ask Away** - {link11}")
+                if id == "12":
+                        link12 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656', max_uses = utilmax)
+                        await ctx.send(f"**Know what I Meme** - {link12}")
+                if id == "13":
+                        link13 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'youtube')
+                        await ctx.send(f"**Watch Together** - {link13}")
+                if id == "14":
+                        link14 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1006584476094177371')
+                        await ctx.send(f"**Bash Out** - {link14}")
+                elif id == None:
+                        embed = discord.Embed(title="Activity List", color=discord.Color.gold())
+                        embed.add_field(name="Boosted activity\n1 = Sketch Heads\n2 = Chess in the Park\n3 = Land.io\n4 = Spell Cast\n5 = Blazing 8s\n6 = Poker Night\n7 = Letter League\n8 = Booble League\n9 = Checkers in the Park\n10 = Awkword\n11 = Ask Away\n14 = Bash Out", value="Free Activity\n12 = Know what I Meme\n 13 = Watch Together")
+                        embed.set_footer(text=footer_testo)    
+                        await ctx.send(embed=embed)
+                else:
+                        embed = discord.Embed(title="Activity List", color=discord.Color.gold())
+                        embed.add_field(name="Boosted activity\n1 = Sketch Heads\n2 = Chess in the Park\n3 = Land.io\n4 = Spell Cast\n5 = Blazing 8s\n6 = Poker Night\n7 = Letter League\n8 = Booble League\n9 = Checkers in the Park\n10 = Awkword\n11 = Ask Away\n14 = Bash Out", value="Free Activity\n12 = Know what I Meme\n 13 = Watch Together")
+                        embed.set_footer(text=footer_testo)    
+                        await ctx.send(embed=embed)
+'''
+
+'''
+@client.command()
+async def meme(ctx):
+    data = requests.get('https://meme-api.herokuapp.com/gimme').json()
+    meme = discord.Embed(title=f"{data['title']}", Color = discord.Colour.green().set_image(url=f"{data['url']}"))
+    await ctx.send(embed=meme)
+'''
+'''
+@client.event
+async def on_reaction_add(reaction, user):
+	ctx = reaction
+	if reaction.emoji == "<:checkmark_2714fe0f:1073342463995023433>":
+		if discord.utils.get(ctx.guild.roles, name="verify"):
+			#if get(message.guild.roles, name="verify"):
+			role = discord.utils.get(ctx.guild.roles, name="verify")
+			pearson = reaction.user
+			await pearson.add_roles(role)
+			embed_verify=discord.Embed(title=f"You are now verify")
+			embed_verify.set_footer(text=footer_testo)  
+			await pearson.send(embed=embed_verify)
+		else:
+			permissions = discord.Permissions(send_messages=True, read_messages=True)
+			guild = ctx.guild
+			await guild.create_role(name="verify", colour=discord.Colour(0x00ff00), permissions=permissions)
+			role = discord.utils.get(ctx.guild.roles, name="verify")
+			for channel in ctx.guild.channels:
+				permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
+				await channel.set_permissions(role, overwrite=permissions)
+			await reaction.user.add_roles(role)
+	else:
+		print("errore")
+'''
+
+
+'''
+@client.command()
+async def new-help(ctx):
+	#view = HelpDropdownView()
+	prefix = data["command_prefix"]
+	await ctx.send('Select the help command section:', view=HelpDropdownView())
+	if ctx.author.id == my_id:
+		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
+		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
+		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
+		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
+		admin_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=admin_embed, ephemeral=True)
+'''
+
+'''
+@client.command()
+@commands.guild_only()
+async def help(ctx):
+	prefix = data["command_prefix"]
+	embed = discord.Embed(title="Mod Commands :closed_lock_with_key:", color=discord.Color.gold())
+	embed.add_field(name=f"{prefix}nuke", value=f"Delete messages in the chat where it is used", inline=True)
+	embed.add_field(name=f"{prefix}kick user_id reason", value=f"Kick a member from the server", inline=True)
+	embed.add_field(name=f"{prefix}ban user_id reason", value=f"Ban a member from the server", inline=True)
+	embed.add_field(name=f"{prefix}unban user_id", value=f"Unban a member from the server", inline=True)
+	embed.add_field(name=f"{prefix}delchannel", value=f"Delete all channel", inline=True)
+	embed.add_field(name=f"{prefix}lockdown", value=f"Lockdown all channel", inline=True)
+	embed.add_field(name=f"{prefix}unlock", value=f"Unlock channel", inline=True)
+	embed.add_field(name=f"{prefix}mute", value=f"Mute a member", inline=True)
+	embed.add_field(name=f"{prefix}unmute", value=f"Unmute a member", inline=True)
+	embed.set_footer(text=footer_testo)  
+	await ctx.send(embed=embed)
+	await asyncio.sleep(1*1)
+	embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
+	embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
+	embedt.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
+	embedt.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
+	embedt.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
+	embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
+	embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
+	embedt.set_footer(text=footer_testo)
+	await ctx.send(embed=embedt)
+	await asyncio.sleep(1*1)
+	embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
+	embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
+	embedd.add_field(name=f"{prefix}userinfo user_id", value="Send the User info", inline=True)
+	embedd.set_footer(text=footer_testo)
+	await ctx.send(embed=embedd)
+	if ctx.author.id == my_id:
+		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
+		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
+		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
+		admin_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=admin_embed)
+'''	
+
+		
+
+'''
+
+@is_beta
+@client.command()
+async def play(ctx, url):
+	if ctx.author.voice is None:
+		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=5)
+	else:
+		if ctx.voice_client is not None and ctx.voice_client.is_playing():
+			no_music_embed = discord.Embed(title="*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
+			no_music_embed.set_footer(text=footer_testo)
+			await ctx.send(embed=no_music_embed, delete_after=5)
+		else:
+			#else:
+			try:
 				
+				# Find the video
+				video = pytube.YouTube(url)
+				
+				#loading embed
+				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+				loading_embed.set_footer(text=footer_testo)
+				loading = await ctx.send(embed=loading_embed)
+				
+				#title-file
+				number = random.randint(1, 100000)
+				extension = "mp4"
+				file_name = f"{number}.{extension}"
+				#video.streams.get_highest_resolution().download(filename=file_name)
+				
+				#dowload
+				video.streams.first().download(filename=file_name)
+				
+				#info
+				video_length = video.length
+				minutes, seconds = divmod(video_length, 60)
+				
+				artist = video.author
+				
+				#global
+				global filename
+				filename = f"{file_name}"
+				#loading delete
+				await asyncio.sleep(0.5)
+				await loading.delete()
+				await asyncio.sleep(1)
+				#video-info-embed
+				title_embed = discord.Embed(color=discord.Colour.blue())
+				title_embed.set_image(url=video.thumbnail_url)
+				title_embed.description = f"***Now playing:*** \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}` ** :arrow_backward:     :pause_button:     :arrow_forward: **"
+				title_embed.set_footer(text=footer_testo)
+				title_embed = await ctx.send(embed=title_embed)
+				#await msg.delete()
+				#await msg.edit(embed=title_embed)
+				await asyncio.sleep(0.5)
+
+				#stalk-song
+				stalk_channel = client.get_channel(stalkid)
+				stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
+				await stalk_channel.send(embed=stalk_embed)
+				#await ctx.send(embed=embed)
+
+
+				# Play the video
+				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
+				voice_channel = ctx.author.voice.channel
+				voice = await voice_channel.connect()
+				voice.play(source)
+	
+				#volume fix
+				volume = 0.4
+				voice_client = ctx.voice_client
+				voice_client.source.volume = volume
+
+				# Wait for the video to finish playing
+				while voice.is_playing():
+					await asyncio.sleep(1)
+
+				# Disconnect from the voice channel
+				await voice.disconnect()
+
+				# Delete the video file
+				os.remove(f"{file_name}")
+				await title_embed.delete()
+				#pass
+				#return
+			#error
+			except pytube.exceptions.PytubeError as e:
+				#is streaming live and cannot be loaded
+				try:
+					await loading.delete()
+				except Exception:
+					pass
+				if 'This video is age-restricted' in str(e):
+					await asyncio.sleep(1)
+					#await ctx.send('the video is age-restricted.')
+					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
+					error_embed_2.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_2, delete_after=5)
+					await asyncio.sleep(0.5)
+				elif 'is streaming live' in str(e):
+					await asyncio.sleep(1)
+					error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
+					error_embed_3.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_3, delete_after=5)
+					await asyncio.sleep(0.5)
+				else:
+					await asyncio.sleep(1)
+					error_embed_4 = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed_4.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed_4, delete_after=5)
+					await asyncio.sleep(0.5)
+					#stalk
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
+			except Exception as e:
+				if str(e) == "Already connected to a voice channel.":
+					pass
+				else:
+					print(e)
+					error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed, delete_after=5)
+					await asyncio.sleep(0.5)
+					#stalk
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
+					try:
+						await loading.delete()
+					except Exception:
+						pass
+
+
+@is_beta
+@client.command()
+async def stop(ctx):
+	global filename #global
+	
+	voice_client = ctx.voice_client
+	if voice_client and voice_client.is_connected():
+		if voice_client.is_playing():
+			try:
+				voice_client.stop()
+				await voice_client.disconnect()
+				await asyncio.sleep(2)
+				os.remove(f"{filename}") #global
+				embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
+				pass
+			except Exception as e:
+				pass
+		else:
+			try:
+				os.remove(f"{filename}") #global
+				await voice_client.disconnect()
+				embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
+				pass
+			except Exception as e:
+				try:
+					os.remove(f"{filename}")
+				except Exception:
+					pass
+	else:
+		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+
+
+@is_beta
+@client.command()
+async def volume(ctx, volume: float):
+	voice_client = ctx.voice_client
+	
+	if not voice_client:
+		embed = discord.Embed(title='Please enter the voice chat where the bot is', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+		return
+	if voice_client.is_playing():
+		if volume < 0.0 or volume > 25.0:
+			embed = discord.Embed(title=f'The max of volume is ```25.0```\nThe min ```0.0```', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+		else:
+			voice_client.source.volume = volume
+			embed = discord.Embed(title=f':loud_sound: Volume set to ***```{volume}```***', color=discord.Colour.blue())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+	else:
+		embed = discord.Embed(title='No songs playing at the moment', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+'''
+
+'''
+    @commands.command(name="testautomod")
+    async def automod(self, ctx: commands.Context):
+        auto_mod_trigger = discord.AutoModTrigger(
+            type= discord.AutoModRuleTriggerType.keyword_preset,
+            presets=discord.AutoModPresets(profanity=True))
+        a_single_object_for_this = discord.AutoModRuleAction(custom_message=f"Profanity is not allowed for this server!")
+        actions_list = [a_single_object_for_this]
+        auto_mod_event = discord.AutoModRuleEventType.message_send
+        await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
+'''
 				
 #---------Test------------#
 
@@ -1123,15 +1386,6 @@ async def dictionary(ctx, term):
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
 
-@is_beta
-@client.command()
-async def verify(ctx):
-	#reactions = ['✅'] # add more later if u want idk
-	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
-	embed.set_footer(text=footer_testo)
-	#View=VerifyButton()
-	await ctx.send(embed=embed, view=Button())
-	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
 
 
@@ -1170,22 +1424,6 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 
 
 
-
-		
-
-'''
-    @commands.command(name="testautomod")
-    async def automod(self, ctx: commands.Context):
-        auto_mod_trigger = discord.AutoModTrigger(
-            type= discord.AutoModRuleTriggerType.keyword_preset,
-            presets=discord.AutoModPresets(profanity=True))
-        a_single_object_for_this = discord.AutoModRuleAction(custom_message=f"Profanity is not allowed for this server!")
-        actions_list = [a_single_object_for_this]
-        auto_mod_event = discord.AutoModRuleEventType.message_send
-        await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
-'''
-
-
 @is_beta
 @client.command()
 async def automod3(ctx):
@@ -1216,18 +1454,17 @@ async def automod3(ctx):
     await ctx.send("Regola di AutoMod creata con successo!")
 
 	
-	
-	
-#music
-import pytube
-import asyncio
-import os
+@is_beta
+@client.command()
+async def verify(ctx):
+	#reactions = ['✅'] # add more later if u want idk
+	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
+	embed.set_footer(text=footer_testo)
+	#View=VerifyButton()
+	await ctx.send(embed=embed, view=Button())
+	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
 
-
-#music bot
 	
-global filename
-filename = None
 
 
 @client.tree.command(name="play", description = "Play a song") #slash command
@@ -1415,206 +1652,6 @@ async def volume(interaction: discord.Interaction, volume: float):
 		embed = discord.Embed(title='No songs playing at the moment', color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
 		await interaction.response.send_message(embed=embed, ephemeral=True)
-		
-
-'''
-
-@is_beta
-@client.command()
-async def play(ctx, url):
-	if ctx.author.voice is None:
-		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=5)
-	else:
-		if ctx.voice_client is not None and ctx.voice_client.is_playing():
-			no_music_embed = discord.Embed(title="*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
-			no_music_embed.set_footer(text=footer_testo)
-			await ctx.send(embed=no_music_embed, delete_after=5)
-		else:
-			#else:
-			try:
-				
-				# Find the video
-				video = pytube.YouTube(url)
-				
-				#loading embed
-				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
-				loading_embed.set_footer(text=footer_testo)
-				loading = await ctx.send(embed=loading_embed)
-				
-				#title-file
-				number = random.randint(1, 100000)
-				extension = "mp4"
-				file_name = f"{number}.{extension}"
-				#video.streams.get_highest_resolution().download(filename=file_name)
-				
-				#dowload
-				video.streams.first().download(filename=file_name)
-				
-				#info
-				video_length = video.length
-				minutes, seconds = divmod(video_length, 60)
-				
-				artist = video.author
-				
-				#global
-				global filename
-				filename = f"{file_name}"
-				#loading delete
-				await asyncio.sleep(0.5)
-				await loading.delete()
-				await asyncio.sleep(1)
-				#video-info-embed
-				title_embed = discord.Embed(color=discord.Colour.blue())
-				title_embed.set_image(url=video.thumbnail_url)
-				title_embed.description = f"***Now playing:*** \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}` ** :arrow_backward:     :pause_button:     :arrow_forward: **"
-				title_embed.set_footer(text=footer_testo)
-				title_embed = await ctx.send(embed=title_embed)
-				#await msg.delete()
-				#await msg.edit(embed=title_embed)
-				await asyncio.sleep(0.5)
-
-				#stalk-song
-				stalk_channel = client.get_channel(stalkid)
-				stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
-				await stalk_channel.send(embed=stalk_embed)
-				#await ctx.send(embed=embed)
-
-
-				# Play the video
-				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
-				voice_channel = ctx.author.voice.channel
-				voice = await voice_channel.connect()
-				voice.play(source)
-	
-				#volume fix
-				volume = 0.4
-				voice_client = ctx.voice_client
-				voice_client.source.volume = volume
-
-				# Wait for the video to finish playing
-				while voice.is_playing():
-					await asyncio.sleep(1)
-
-				# Disconnect from the voice channel
-				await voice.disconnect()
-
-				# Delete the video file
-				os.remove(f"{file_name}")
-				await title_embed.delete()
-				#pass
-				#return
-			#error
-			except pytube.exceptions.PytubeError as e:
-				#is streaming live and cannot be loaded
-				try:
-					await loading.delete()
-				except Exception:
-					pass
-				if 'This video is age-restricted' in str(e):
-					await asyncio.sleep(1)
-					#await ctx.send('the video is age-restricted.')
-					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
-					error_embed_2.set_footer(text=footer_testo)
-					await ctx.send(embed=error_embed_2, delete_after=5)
-					await asyncio.sleep(0.5)
-				elif 'is streaming live' in str(e):
-					await asyncio.sleep(1)
-					error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
-					error_embed_3.set_footer(text=footer_testo)
-					await ctx.send(embed=error_embed_3, delete_after=5)
-					await asyncio.sleep(0.5)
-				else:
-					await asyncio.sleep(1)
-					error_embed_4 = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-					error_embed_4.set_footer(text=footer_testo)
-					await ctx.send(embed=error_embed_4, delete_after=5)
-					await asyncio.sleep(0.5)
-					#stalk
-					channel = client.get_channel(errorchannel)
-					await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
-			except Exception as e:
-				if str(e) == "Already connected to a voice channel.":
-					pass
-				else:
-					print(e)
-					error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-					error_embed.set_footer(text=footer_testo)
-					await ctx.send(embed=error_embed, delete_after=5)
-					await asyncio.sleep(0.5)
-					#stalk
-					channel = client.get_channel(errorchannel)
-					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
-					try:
-						await loading.delete()
-					except Exception:
-						pass
-
-
-@is_beta
-@client.command()
-async def stop(ctx):
-	global filename #global
-	
-	voice_client = ctx.voice_client
-	if voice_client and voice_client.is_connected():
-		if voice_client.is_playing():
-			try:
-				voice_client.stop()
-				await voice_client.disconnect()
-				await asyncio.sleep(2)
-				os.remove(f"{filename}") #global
-				embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed)
-				pass
-			except Exception as e:
-				pass
-		else:
-			try:
-				os.remove(f"{filename}") #global
-				await voice_client.disconnect()
-				embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed)
-				pass
-			except Exception as e:
-				try:
-					os.remove(f"{filename}")
-				except Exception:
-					pass
-	else:
-		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-'''
-
-@is_beta
-@client.command()
-async def volume(ctx, volume: float):
-	voice_client = ctx.voice_client
-	
-	if not voice_client:
-		embed = discord.Embed(title='Please enter the voice chat where the bot is', color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-		return
-	if voice_client.is_playing():
-		if volume < 0.0 or volume > 25.0:
-			embed = discord.Embed(title=f'The max of volume is ```25.0```\nThe min ```0.0```', color=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-		else:
-			voice_client.source.volume = volume
-			embed = discord.Embed(title=f':loud_sound: Volume set to ***```{volume}```***', color=discord.Colour.blue())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-	else:
-		embed = discord.Embed(title='No songs playing at the moment', color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-
 
 #----------Admin---------------#
 
@@ -1668,46 +1705,6 @@ async def manutenzione(ctx):
 
 	
 	
-'''
-@client.command()
-@commands.guild_only()
-async def help(ctx):
-	prefix = data["command_prefix"]
-	embed = discord.Embed(title="Mod Commands :closed_lock_with_key:", color=discord.Color.gold())
-	embed.add_field(name=f"{prefix}nuke", value=f"Delete messages in the chat where it is used", inline=True)
-	embed.add_field(name=f"{prefix}kick user_id reason", value=f"Kick a member from the server", inline=True)
-	embed.add_field(name=f"{prefix}ban user_id reason", value=f"Ban a member from the server", inline=True)
-	embed.add_field(name=f"{prefix}unban user_id", value=f"Unban a member from the server", inline=True)
-	embed.add_field(name=f"{prefix}delchannel", value=f"Delete all channel", inline=True)
-	embed.add_field(name=f"{prefix}lockdown", value=f"Lockdown all channel", inline=True)
-	embed.add_field(name=f"{prefix}unlock", value=f"Unlock channel", inline=True)
-	embed.add_field(name=f"{prefix}mute", value=f"Mute a member", inline=True)
-	embed.add_field(name=f"{prefix}unmute", value=f"Unmute a member", inline=True)
-	embed.set_footer(text=footer_testo)  
-	await ctx.send(embed=embed)
-	await asyncio.sleep(1*1)
-	embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
-	embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
-	embedt.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
-	embedt.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
-	embedt.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
-	embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
-	embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
-	embedt.set_footer(text=footer_testo)
-	await ctx.send(embed=embedt)
-	await asyncio.sleep(1*1)
-	embedd = discord.Embed(title="Info Server/user Commands :scroll:", color=discord.Color.blurple())
-	embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
-	embedd.add_field(name=f"{prefix}userinfo user_id", value="Send the User info", inline=True)
-	embedd.set_footer(text=footer_testo)
-	await ctx.send(embed=embedd)
-	if ctx.author.id == my_id:
-		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
-		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
-		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
-		admin_embed.set_footer(text=footer_testo)
-		await ctx.send(embed=admin_embed)
-'''	
 
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
