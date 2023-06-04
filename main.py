@@ -789,6 +789,8 @@ class HelpDropdown(discord.ui.Select):
 			embedt.add_field(name=f"{prefix}chat `request`", value="Answer your questions using Openai", inline=True)
 			embedt.add_field(name=f"{prefix}generate_image `request`", value="Generate image using Openai", inline=True)
 			embedt.add_field(name=f"{prefix}translate `language` `text`", value="Translates text into any supported language", inline=True)
+			embedt.add_field(name=f"{prefix}custom_emoji_info `custom_emoji`", value="Tells you the information of a custom emoji", inline=True)
+			embedt.add_field(name=f"{prefix}dictionary `word`", value="Tells you the meaning of a word", inline=True)
 			embedt.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embedt, ephemeral=True)
 		elif self.values[0] == "Server/user Commands":
@@ -803,6 +805,9 @@ class HelpDropdown(discord.ui.Select):
 			embed.add_field(name="</reportbug:1093483925533368361>", value="Report a Ultimate-Bot Bug", inline=True)
 			embed.add_field(name="</suggestion:1079857792095105044>", value="Send a suggestion for Ultimate-Bot", inline=True)
 			embed.add_field(name="</giveaway:1096547565601828946>", value="Make a giveaway for all member in a server", inline=True)
+			embed.add_field(name="</play:1114559886995509268>", value="Play a song", inline=True)
+			embed.add_field(name="</stop:1114604126861525132>", value="Stop a song", inline=True)
+			embed.add_field(name="</volume:1114604126861525133>", value="Set the volume of a song", inline=True)
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 
@@ -1023,20 +1028,6 @@ async def on_reaction_add(reaction, user):
 '''
 
 
-'''
-@client.command()
-async def new-help(ctx):
-	#view = HelpDropdownView()
-	prefix = data["command_prefix"]
-	await ctx.send('Select the help command section:', view=HelpDropdownView())
-	if ctx.author.id == my_id:
-		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
-		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
-		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
-		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
-		admin_embed.set_footer(text=footer_testo)
-		await ctx.send(embed=admin_embed, ephemeral=True)
-'''
 
 '''
 @client.command()
@@ -1361,112 +1352,6 @@ async def traslate(interaction: discord.Interaction, message: discord.Message):
 
 
 
-@is_beta
-@client.command()
-async def dictionary(ctx, term):
-	url = f"https://api.urbandictionary.com/v0/define?term={term}"
-	response = requests.get(url).json()
-	if "list" in response:
-		if response["list"]:
-			definition = response["list"][0]["definition"]
-			example = response["list"][0]["example"]
-			
-			#await ctx.send(f"**{term}**:\n\n{definition}\n\n*Esempio:* {example}")
-			embed = discord.Embed(title=" :notebook_with_decorative_cover: Dictionary :notebook_with_decorative_cover: ", colour=discord.Colour.green())
-			embed.add_field(name="Definition", value=f"{definition}", inline=False)
-			embed.add_field(name="Example", value=f"{example}", inline=False)
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-		else:
-			embed = discord.Embed(title="Error: No definitions found for the specified word or phrase", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-	else:
-		embed = discord.Embed(title="Error: An error occurred while searching for the definition", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-
-
-
-
-@is_beta
-@client.command()
-@commands.has_permissions(manage_messages=True)
-async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
-	if not emoji:
-		embed = discord.Embed(title="Error\nPlease send a valid emoji", colour=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-	else:
-		response_emoji = await emoji.guild.fetch_emoji(emoji.id)
-		is_managed = "Yes" if response_emoji.managed else "No" 
-		is_animated = "Yes" if response_emoji.animated else "No"
-		requires_colons = "Yes" if response_emoji.require_colons else "No"
-		creation_time = response_emoji.created_at.strftime("%b %d %Y")
-		can_use_emoji = "Everyone" if not response_emoji.roles else "".join(role.name for role in response_emoji.roles)
-		name = response_emoji.name
-		id_emoji = response_emoji.id	
-		embed = discord.Embed(title="Emoji_Info", colour=discord.Colour.blue())
-		embed.add_field(name="Name", value=f"{name}", inline=False)
-		embed.add_field(name="Id", value=f"{id_emoji}", inline=False)
-		embed.add_field(name="Url", value=f"[Emoji Url]({response_emoji.url})", inline=False)
-		embed.add_field(name="Author", value=f"{response_emoji.user.name}", inline=False)
-		embed.add_field(name="Time Created", value=f"{creation_time}", inline=False)
-		embed.add_field(name="Usable by", value=f"{can_use_emoji}", inline=False)
-		embed.add_field(name="Animated", value=f"{is_animated}", inline=False)
-		embed.add_field(name="Managed", value=f"{is_managed}", inline=False)
-		embed.add_field(name="Requires colons", value=f"{requires_colons}", inline=False)
-		embed.add_field(name="Guild name", value=f"{response_emoji.guild.name}", inline=False)
-		embed.set_footer(text=footer_testo)
-		embed.set_thumbnail(url=response_emoji.url)
-		await ctx.send(embed=embed)
-
-
-
-
-@is_beta
-@client.command()
-async def automod3(ctx):
-    # Crea un trigger personalizzato per la parola "spam"
-    trigger = discord.AutoModTrigger(
-        type=discord.AutoModRuleTriggerType.keyword,
-        keyword_filter=["spam"]
-    )
-
-    # Crea un'azione personalizzata per bloccare i messaggi contenenti la parola "spam"
-    action = discord.AutoModRuleAction(
-        action_type=discord.AutoModRuleActionType.block_message,
-        custom_message="Messaggi contenenti la parola 'spam' non sono ammessi in questo canale."
-    )
-
-    # Crea una regola di AutoMod personalizzata utilizzando il trigger e l'azione creati
-    rule = discord.AutoModRule(
-        name="spam_filter",
-        event_type=discord.AutoModRuleEventType.message_send,
-        trigger=trigger,
-        actions=[action]
-    )
-
-    # Aggiungi la regola di AutoMod personalizzata al canale corrente
-    await ctx.channel.create_automod_rule(rule=rule)
-
-    # Invia un messaggio di conferma al canale
-    await ctx.send("Regola di AutoMod creata con successo!")
-
-	
-@is_beta
-@client.command()
-async def verify(ctx):
-	#reactions = ['✅'] # add more later if u want idk
-	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
-	embed.set_footer(text=footer_testo)
-	#View=VerifyButton()
-	await ctx.send(embed=embed, view=Button())
-	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
-
-	
-
-
 @client.tree.command(name="play", description = "Play a song") #slash command
 async def play(interaction: discord.Interaction, url: str):
 	if interaction.user.voice is None:
@@ -1652,6 +1537,128 @@ async def volume(interaction: discord.Interaction, volume: float):
 		embed = discord.Embed(title='No songs playing at the moment', color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
 		await interaction.response.send_message(embed=embed, ephemeral=True)
+
+		
+		
+@is_beta
+@client.command()
+async def help(ctx):
+	#view = HelpDropdownView()
+	prefix = data["command_prefix"]
+	await ctx.send('Select the help command section:', view=HelpDropdownView())
+	if ctx.author.id == my_id:
+		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
+		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
+		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
+		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
+		admin_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=admin_embed, ephemeral=True)
+		
+@is_beta
+@client.command()
+async def dictionary(ctx, term):
+	url = f"https://api.urbandictionary.com/v0/define?term={term}"
+	response = requests.get(url).json()
+	if "list" in response:
+		if response["list"]:
+			definition = response["list"][0]["definition"]
+			example = response["list"][0]["example"]
+			
+			#await ctx.send(f"**{term}**:\n\n{definition}\n\n*Esempio:* {example}")
+			embed = discord.Embed(title=" :notebook_with_decorative_cover: Dictionary :notebook_with_decorative_cover: ", colour=discord.Colour.green())
+			embed.add_field(name="Definition", value=f"{definition}", inline=False)
+			embed.add_field(name="Example", value=f"{example}", inline=False)
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+		else:
+			embed = discord.Embed(title="Error: No definitions found for the specified word or phrase", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+	else:
+		embed = discord.Embed(title="Error: An error occurred while searching for the definition", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+
+
+
+
+@is_beta
+@client.command()
+@commands.has_permissions(manage_messages=True)
+async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
+	if not emoji:
+		embed = discord.Embed(title="Error\nPlease send a valid emoji", colour=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+	else:
+		response_emoji = await emoji.guild.fetch_emoji(emoji.id)
+		is_managed = "Yes" if response_emoji.managed else "No" 
+		is_animated = "Yes" if response_emoji.animated else "No"
+		requires_colons = "Yes" if response_emoji.require_colons else "No"
+		creation_time = response_emoji.created_at.strftime("%b %d %Y")
+		can_use_emoji = "Everyone" if not response_emoji.roles else "".join(role.name for role in response_emoji.roles)
+		name = response_emoji.name
+		id_emoji = response_emoji.id	
+		embed = discord.Embed(title="Emoji_Info", colour=discord.Colour.blue())
+		embed.add_field(name="Name", value=f"{name}", inline=False)
+		embed.add_field(name="Id", value=f"{id_emoji}", inline=False)
+		embed.add_field(name="Url", value=f"[Emoji Url]({response_emoji.url})", inline=False)
+		embed.add_field(name="Author", value=f"{response_emoji.user.name}", inline=False)
+		embed.add_field(name="Time Created", value=f"{creation_time}", inline=False)
+		embed.add_field(name="Usable by", value=f"{can_use_emoji}", inline=False)
+		embed.add_field(name="Animated", value=f"{is_animated}", inline=False)
+		embed.add_field(name="Managed", value=f"{is_managed}", inline=False)
+		embed.add_field(name="Requires colons", value=f"{requires_colons}", inline=False)
+		embed.add_field(name="Guild name", value=f"{response_emoji.guild.name}", inline=False)
+		embed.set_footer(text=footer_testo)
+		embed.set_thumbnail(url=response_emoji.url)
+		await ctx.send(embed=embed)
+
+
+
+
+@is_beta
+@client.command()
+async def automod3(ctx):
+    # Crea un trigger personalizzato per la parola "spam"
+    trigger = discord.AutoModTrigger(
+        type=discord.AutoModRuleTriggerType.keyword,
+        keyword_filter=["spam"]
+    )
+
+    # Crea un'azione personalizzata per bloccare i messaggi contenenti la parola "spam"
+    action = discord.AutoModRuleAction(
+        action_type=discord.AutoModRuleActionType.block_message,
+        custom_message="Messaggi contenenti la parola 'spam' non sono ammessi in questo canale."
+    )
+
+    # Crea una regola di AutoMod personalizzata utilizzando il trigger e l'azione creati
+    rule = discord.AutoModRule(
+        name="spam_filter",
+        event_type=discord.AutoModRuleEventType.message_send,
+        trigger=trigger,
+        actions=[action]
+    )
+
+    # Aggiungi la regola di AutoMod personalizzata al canale corrente
+    await ctx.channel.create_automod_rule(rule=rule)
+
+    # Invia un messaggio di conferma al canale
+    await ctx.send("Regola di AutoMod creata con successo!")
+
+	
+@is_beta
+@client.command()
+async def verify(ctx):
+	#reactions = ['✅'] # add more later if u want idk
+	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
+	embed.set_footer(text=footer_testo)
+	#View=VerifyButton()
+	await ctx.send(embed=embed, view=Button())
+	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
+
+	
+
 
 #----------Admin---------------#
 
