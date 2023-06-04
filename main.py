@@ -783,7 +783,7 @@ class HelpDropdown(discord.ui.Select):
 			embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
 			embedt.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
 			embedt.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
-			embedt.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
+			#embedt.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
 			embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
 			embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
 			embedt.add_field(name=f"{prefix}chat `request`", value="Answer your questions using Openai", inline=True)
