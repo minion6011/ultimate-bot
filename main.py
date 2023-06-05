@@ -257,7 +257,8 @@ async def userinfo(ctx, *, user: discord.Member = None):
 		role = "N/A"
 	embed = discord.Embed(title=f"***User*** - Info", color=discord.Colour.blue())
 	embed.add_field(name=':id: - User ID', value=f"{user.id}", inline=False)
-	embed.add_field(name=':bust_in_silhouette: - User Name', value=f"{user.name}#{user.discriminator}", inline=False)
+	embed.add_field(name=':bust_in_silhouette: - UserName', value=f"<@{user.id}>", inline=False)
+	embed.add_field(name=':bust_in_silhouette: - Old - User Name', value=f"{user.name}#{user.discriminator}", inline=False)
 	#embed.add_field(name=':bust_in_silhouette: - User Nick', value=f"{user.display_name}", inline=False)
 	#embed.add_field(name=':radio_button: - User Status', value=f"**{user.status}**", inline=False)
 	#embed.add_field(name=':video_game: - User Game', value=f"**{user.activity}**", inline=False)
