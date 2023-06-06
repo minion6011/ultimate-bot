@@ -1,30 +1,36 @@
-# Version 1.6
+# Version 1.7
 
 #### 🛠️ Fixed:
 
-Fixed a bug in /help
+Fixed a bug with translate command the button of list of language doesn't working
 
-Updated help
+Fixed a bug with generate_image command
+
+Fixed a bug with generate_image command the command did not send the error message in case the image did not respect the safety system rules
 
 #### 📂 Added:
 
-Added the section of Slash Commands in  /help
+/play
 
-?slowmode (Need permission to: manage messages)
+/stop
 
-?chat (It is used to ask things to a modified version of chat-gpt)
+/volume
 
-?generate_image (It is used to get image to a beta version of DALL-E [the images last less than 24h])
+?custom_emoji_info
 
-?translate (translates text into any supported language)
+?help has been reinstated
 
-Now the bot during code issues or update has maintenance status
+?dictionary (tells you the meaning of a word)
 
-#### ❌ Removed:
+Now you can translate a message into English, you need to click on the message > go to the app section > click on Translate
 
-I removed the version of help that is used with '?'
+Now you can ban a member of your server, you need to click on the message of the member you want to ban > go to the app section > click on Ban User
 
-I removed the ?activity command (due to discord adding that you need nitro to use it and no more boost to the server)
+Improved image quality in ?generate_image
+
+?translate command now have a message if you exceed the maximum of characters
+
+?generate_image command now have a message if you exceed the maximum of characters
 
 
 ## Remember to vote for ultimate bot on https://top.gg/bot/1009106161104072726
