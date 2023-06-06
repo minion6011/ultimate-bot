@@ -1,6 +1,6 @@
 # Version 1.7
 
-#### 🛠️ Fixed:
+### 🛠️ Fixed:
 
 Fixed a bug with translate command the button of list of language doesn't working
 
@@ -8,7 +8,7 @@ Fixed a bug with generate_image command
 
 Fixed a bug with generate_image command the command did not send the error message in case the image did not respect the safety system rules
 
-#### 📂 Added:
+### 📂 Added:
 
 /play
 
