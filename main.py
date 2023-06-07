@@ -1090,7 +1090,7 @@ async def play(interaction: discord.Interaction, url: str):
 				
 				
 				#loading embed
-				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+				loading_embed = discord.Embed(title=":arrows_clockwise: Downloading song :musical_note:", color=discord.Colour.blue())
 				loading_embed.set_footer(text=footer_testo)
 				await interaction.response.send_message(embed=loading_embed, ephemeral=True)
 				
@@ -1103,7 +1103,7 @@ async def play(interaction: discord.Interaction, url: str):
 				file_name = f"{number}.{extension}"
 				#video.streams.get_highest_resolution().download(filename=file_name)
 				
-				#dowload
+				#download
 				video.streams.first().download(filename=file_name)
 				
 				#info
@@ -1427,7 +1427,7 @@ async def play(ctx, url):
 				video = pytube.YouTube(url)
 				
 				#loading embed
-				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+				loading_embed = discord.Embed(title=":arrows_clockwise: Downloading song :musical_note:", color=discord.Colour.blue())
 				loading_embed.set_footer(text=footer_testo)
 				loading = await ctx.send(embed=loading_embed)
 				
@@ -1437,7 +1437,7 @@ async def play(ctx, url):
 				file_name = f"{number}.{extension}"
 				#video.streams.get_highest_resolution().download(filename=file_name)
 				
-				#dowload
+				#download
 				video.streams.first().download(filename=file_name)
 				
 				#info
@@ -1624,24 +1624,24 @@ async def volume(ctx, volume: float):
 
 @is_beta
 @client.command()
-async def dowload(ctx, url):
+async def download(ctx, url):
 		try:
 			
 			# Find the video
 			video = pytube.YouTube(url)
 			
 			#loading embed
-			loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+			loading_embed = discord.Embed(title=":arrows_clockwise: Downloading song :musical_note:", color=discord.Colour.blue())
 			loading_embed.set_footer(text=footer_testo)
 			loading = await ctx.send(embed=loading_embed)
 			
 			#title-file
-			number = random.randint(1, 100000)
+			number = random.randint(110000, 100000000)
 			extension = "mp4"
 			file_name = f"{number}.{extension}"
 			#video.streams.get_highest_resolution().download(filename=file_name)
 			
-			#dowload
+			#download
 			video.streams.first().download(filename=file_name)
 			
 			#info
@@ -1657,7 +1657,7 @@ async def dowload(ctx, url):
 			#video-info-embed
 			title_embed = discord.Embed(color=discord.Colour.blue())
 			title_embed.set_image(url=video.thumbnail_url)
-			title_embed.description = f"***I have dowloaded:*** \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}`"
+			title_embed.description = f"***I have downloaded:*** \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}`"
 			title_embed.set_footer(text=footer_testo)
 			
 			title_embed = await ctx.send(embed=title_embed, file=discord.File(f"{file_name}"))
@@ -1686,7 +1686,7 @@ async def dowload(ctx, url):
 				await asyncio.sleep(0.5)
 			else:
 				await asyncio.sleep(1)
-				error_embed_4 = discord.Embed(title="***An error occurred while dowloading the video.***", color=discord.Colour.red())
+				error_embed_4 = discord.Embed(title="***An error occurred while downloading the video.***", color=discord.Colour.red())
 				error_embed_4.set_footer(text=footer_testo)
 				await ctx.send(embed=error_embed_4, delete_after=5)
 				await asyncio.sleep(0.5)
