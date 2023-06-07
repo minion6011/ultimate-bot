@@ -1693,14 +1693,6 @@ async def dowload(ctx, url):
 				#stalk
 				channel = client.get_channel(errorchannel)
 				await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
-			except Exception as e:
-				error_embed = discord.Embed(title="***An error occurred while dowloading the video.***", color=discord.Colour.red())
-				error_embed.set_footer(text=footer_testo)
-				await ctx.send(embed=error_embed, delete_after=5)
-				await asyncio.sleep(0.5)
-				#stalk
-				channel = client.get_channel(errorchannel)
-				await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
 
 
 
