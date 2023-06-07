@@ -673,6 +673,83 @@ async def infobot(ctx):
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed = embed)
 
+	
+
+@client.command()
+@commands.guild_only()
+async def help(ctx):
+	#view = HelpDropdownView()
+	prefix = data["command_prefix"]
+	await ctx.send('Select the help command section:', view=HelpDropdownView())
+	if ctx.author.id == my_id:
+		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
+		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
+		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
+		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
+		admin_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=admin_embed, ephemeral=True)
+		
+
+@client.command()
+@commands.guild_only()
+async def dictionary(ctx, term):
+	url = f"https://api.urbandictionary.com/v0/define?term={term}"
+	response = requests.get(url).json()
+	if "list" in response:
+		if response["list"]:
+			definition = response["list"][0]["definition"]
+			example = response["list"][0]["example"]
+			
+			#await ctx.send(f"**{term}**:\n\n{definition}\n\n*Esempio:* {example}")
+			embed = discord.Embed(title=" :notebook_with_decorative_cover: Dictionary :notebook_with_decorative_cover: ", colour=discord.Colour.green())
+			embed.add_field(name="Definition", value=f"{definition}", inline=False)
+			embed.add_field(name="Example", value=f"{example}", inline=False)
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+		else:
+			embed = discord.Embed(title="Error: No definitions found for the specified word or phrase", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+	else:
+		embed = discord.Embed(title="Error: An error occurred while searching for the definition", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+
+
+
+
+
+@client.command()
+@commands.has_permissions(manage_messages=True)
+async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
+	if not emoji:
+		embed = discord.Embed(title="Error\nPlease send a valid emoji", colour=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed)
+	else:
+		response_emoji = await emoji.guild.fetch_emoji(emoji.id)
+		is_managed = "Yes" if response_emoji.managed else "No" 
+		is_animated = "Yes" if response_emoji.animated else "No"
+		requires_colons = "Yes" if response_emoji.require_colons else "No"
+		creation_time = response_emoji.created_at.strftime("%b %d %Y")
+		can_use_emoji = "Everyone" if not response_emoji.roles else "".join(role.name for role in response_emoji.roles)
+		name = response_emoji.name
+		id_emoji = response_emoji.id	
+		embed = discord.Embed(title="Emoji_Info", colour=discord.Colour.blue())
+		embed.add_field(name="Name", value=f"{name}", inline=False)
+		embed.add_field(name="Id", value=f"{id_emoji}", inline=False)
+		embed.add_field(name="Url", value=f"[Emoji Url]({response_emoji.url})", inline=False)
+		embed.add_field(name="Author", value=f"{response_emoji.user.name}", inline=False)
+		embed.add_field(name="Time Created", value=f"{creation_time}", inline=False)
+		embed.add_field(name="Usable by", value=f"{can_use_emoji}", inline=False)
+		embed.add_field(name="Animated", value=f"{is_animated}", inline=False)
+		embed.add_field(name="Managed", value=f"{is_managed}", inline=False)
+		embed.add_field(name="Requires colons", value=f"{requires_colons}", inline=False)
+		embed.add_field(name="Guild name", value=f"{response_emoji.guild.name}", inline=False)
+		embed.set_footer(text=footer_testo)
+		embed.set_thumbnail(url=response_emoji.url)
+		await ctx.send(embed=embed)
+	
 #-------------Ui----------#
 
 from discord import ui
@@ -929,6 +1006,261 @@ async def giveaway(interaction: discord.Interaction, seconds: int, prize: str):
 				embed.set_footer(text=footer_testo)
 				await interaction.response.send_message(embed=embed, ephemeral=True)
 
+
+@client.tree.context_menu(name="Ban User") #message contex command
+async def ban(interaction: discord.Interaction, message: discord.Message):
+	if interaction.user.guild_permissions.administrator:
+		try:
+			target = message.author
+		
+			# Banna l'utente
+			await interaction.guild.ban(target)
+		
+			# Invia un messaggio di conferma
+			embed = discord.Embed(title="The user has been banned!", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			
+		except Exception as e:
+			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			#error-chat
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+			print(e)
+		except discord.ext.commands.errors.MissingPermissions as e:
+			embed = discord.Embed(title="Error: I don't have permission to ban this member", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+	else:
+		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+		
+		
+
+@client.tree.context_menu(name="Traslate message") #message contex command
+async def traslate(interaction: discord.Interaction, message: discord.Message):
+	text = message.content
+	lang = "en"
+	try:
+		if len(text) > 1998:
+			embed = discord.Embed(title="Error: The text is too long must not exceed 1998 characters", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			#await ctx.send(embed=embed, delete_after=4)
+		else:
+			if len(text) > 1024:
+				traduttore = GoogleTranslator(source='auto', target=lang)
+				risultato = traduttore.translate(text)
+				await interaction.response.send_message(f"```{risultato}```", ephemeral=True)
+				#await ctx.send(f"```{risultato}```")
+			else:
+				traduttore = GoogleTranslator(source='auto', target=lang)
+				risultato = traduttore.translate(text)
+				embed=discord.Embed(color=discord.Color.green())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, content=f"```{risultato}```", ephemeral=True)
+	except Exception as e:
+		embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+		#error-chat
+		channel = client.get_channel(errorchannel)
+		await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+		print(e)
+
+
+
+@client.tree.command(name="play", description = "Play a song") #slash command
+async def play(interaction: discord.Interaction, url: str):
+	if interaction.user.voice is None:
+		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+	else:
+		if interaction.guild.voice_client is not None and interaction.guild.voice_client.is_playing():
+			no_music_embed = discord.Embed(title="*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
+			no_music_embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=no_music_embed, ephemeral=True)
+		else:
+			#else:
+			try:
+				
+				
+				#loading embed
+				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+				loading_embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=loading_embed, ephemeral=True)
+				
+				#find-video
+				video = pytube.YouTube(url)
+				
+				#title-file
+				number = random.randint(1, 100000)
+				extension = "mp4"
+				file_name = f"{number}.{extension}"
+				#video.streams.get_highest_resolution().download(filename=file_name)
+				
+				#dowload
+				video.streams.first().download(filename=file_name)
+				
+				#info
+				video_length = video.length
+				minutes, seconds = divmod(video_length, 60)
+				
+				artist = video.author
+				
+				#global
+				global filename
+				filename = f"{file_name}"
+
+				#video-info-embed
+				title_embed = discord.Embed(color=discord.Colour.blue())
+				title_embed.set_image(url=video.thumbnail_url)
+				title_embed.description = f"***Now playing:*** \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}` ** :arrow_backward:     :pause_button:     :arrow_forward: **"
+				title_embed.set_footer(text=footer_testo)
+				await interaction.edit_original_response(embed=title_embed)
+				#await msg.delete()
+				#await msg.edit(embed=title_embed)
+				await asyncio.sleep(0.5)
+
+				#stalk-song
+				stalk_channel = client.get_channel(stalkid)
+				stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
+				await stalk_channel.send(embed=stalk_embed)
+				#await ctx.send(embed=embed)
+
+
+				# Play the video
+				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
+				voice_channel = interaction.user.voice.channel
+				voice = await voice_channel.connect()
+				voice.play(source)
+	
+				#volume fix
+				volume = 0.4
+				voice_client = interaction.guild.voice_client
+				voice_client.source.volume = volume
+
+				# Wait for the video to finish playing
+				while voice.is_playing():
+					await asyncio.sleep(1)
+
+				# Disconnect from the voice channel
+				await voice.disconnect()
+
+				# Delete the video file
+				os.remove(f"{file_name}")
+				end_embed = discord.Embed(title="***:cd: The song is ended***", color=discord.Colour.red())
+				end_embed.set_footer(text=footer_testo)
+				await interaction.edit_original_response(embed=end_embed)
+				#pass
+				#return
+			#error
+			except pytube.exceptions.PytubeError as e:
+				if 'is age restricted' in str(e):
+					await asyncio.sleep(1)
+					#await ctx.send('the video is age-restricted.')
+					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
+					error_embed_2.set_footer(text=footer_testo)
+					await interaction.edit_original_response(embed=error_embed_2)
+					await asyncio.sleep(0.5)
+				elif 'is streaming live' in str(e):
+					await asyncio.sleep(1)
+					error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
+					error_embed_3.set_footer(text=footer_testo)
+					await interaction.edit_original_response(embed=error_embed_3)
+					await asyncio.sleep(0.5)
+				else:
+					await asyncio.sleep(1)
+					error_embed_4 = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed_4.set_footer(text=footer_testo)
+					await interaction.edit_original_response(embed=error_embed_4)
+					await asyncio.sleep(0.5)
+					#stalk
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
+			except Exception as e:
+				if str(e) == "Already connected to a voice channel.":
+					pass
+				else:
+					print(e)
+					error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed.set_footer(text=footer_testo)
+					await interaction.edit_original_response(embed=error_embed)
+					await asyncio.sleep(0.5)
+					#stalk
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
+
+
+
+@client.tree.command(name="stop", description = "Stop a song") #slash command
+async def stop(interaction: discord.Interaction):				
+	global filename #global
+	
+	voice_client = interaction.guild.voice_client
+	if voice_client and voice_client.is_connected():
+		if voice_client.is_playing():
+			try:
+				embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+				voice_client.stop()
+				await voice_client.disconnect()
+				#await asyncio.sleep(2)
+				os.remove(f"{filename}") #global
+			except Exception as e:
+				pass
+		else:
+			try:
+				embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+				os.remove(f"{filename}") #global
+				await voice_client.disconnect()
+			except Exception as e:
+				try:
+					os.remove(f"{filename}")
+				except Exception:
+					pass
+	else:
+		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+
+		
+		
+		
+		
+@client.tree.command(name="volume", description = "Set the volume of the song") #slash command
+async def volume(interaction: discord.Interaction, volume: float):				
+	voice_client = interaction.guild.voice_client
+	
+	if not voice_client:
+		embed = discord.Embed(title='Please enter the voice chat where the bot is', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+		return
+	if voice_client.is_playing():
+		if volume < 0.0 or volume > 25.0:
+			embed = discord.Embed(title=f'The max of volume is ```25.0```\nThe min ```0.0```', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+		else:
+			voice_client.source.volume = volume
+			embed = discord.Embed(title=f':loud_sound: Volume set to ***```{volume}```***', color=discord.Colour.blue())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+	else:
+		embed = discord.Embed(title='No songs playing at the moment', color=discord.Colour.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
+				
 #--------Archivied--------#
 
 
@@ -1287,333 +1619,92 @@ async def volume(ctx, volume: float):
 #---------Test------------#
 
 
-@client.tree.context_menu(name="Ban User") #message contex command
-async def ban(interaction: discord.Interaction, message: discord.Message):
-	if interaction.user.guild_permissions.administrator:
+		
+		
+
+@is_beta
+@client.command()
+async def dowload(ctx, url):
 		try:
-			target = message.author
-		
-			# Banna l'utente
-			await interaction.guild.ban(target)
-		
-			# Invia un messaggio di conferma
-			embed = discord.Embed(title="The user has been banned!", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
 			
-		except Exception as e:
-			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-			#error-chat
-			channel = client.get_channel(errorchannel)
-			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
-			print(e)
-		except discord.ext.commands.errors.MissingPermissions as e:
-			embed = discord.Embed(title="Error: I don't have permission to ban this member", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-	else:
-		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed, ephemeral=True)
-		
-		
+			# Find the video
+			video = pytube.YouTube(url)
+			
+			#loading embed
+			loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
+			loading_embed.set_footer(text=footer_testo)
+			loading = await ctx.send(embed=loading_embed)
+			
+			#title-file
+			number = random.randint(1, 100000)
+			extension = "mp4"
+			file_name = f"{number}.{extension}"
+			#video.streams.get_highest_resolution().download(filename=file_name)
+			
+			#dowload
+			video.streams.first().download(filename=file_name)
+			
+			#info
+			video_length = video.length
+			minutes, seconds = divmod(video_length, 60)
+			
+			artist = video.author
+			
+			#loading delete
+			await asyncio.sleep(0.5)
+			await loading.delete()
+			await asyncio.sleep(1)
+			#video-info-embed
+			title_embed = discord.Embed(color=discord.Colour.blue())
+			title_embed.set_image(url=video.thumbnail_url)
+			title_embed.description = f"***I have dowloaded:*** \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}`"
+			title_embed.set_footer(text=footer_testo)
+			
+			title_embed = await ctx.send(embed=title_embed, file=discord.File(f"{file_name}"))
 
-@client.tree.context_menu(name="Traslate message") #message contex command
-async def traslate(interaction: discord.Interaction, message: discord.Message):
-	text = message.content
-	lang = "en"
-	try:
-		if len(text) > 1998:
-			embed = discord.Embed(title="Error: The text is too long must not exceed 1998 characters", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-			#await ctx.send(embed=embed, delete_after=4)
-		else:
-			if len(text) > 1024:
-				traduttore = GoogleTranslator(source='auto', target=lang)
-				risultato = traduttore.translate(text)
-				await interaction.response.send_message(f"```{risultato}```", ephemeral=True)
-				#await ctx.send(f"```{risultato}```")
-			else:
-				traduttore = GoogleTranslator(source='auto', target=lang)
-				risultato = traduttore.translate(text)
-				embed=discord.Embed(color=discord.Color.green())
-				embed.set_footer(text=footer_testo)
-				await interaction.response.send_message(embed=embed, content=f"```{risultato}```", ephemeral=True)
-	except Exception as e:
-		embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed, ephemeral=True)
-		#error-chat
-		channel = client.get_channel(errorchannel)
-		await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
-		print(e)
-
-
-
-@client.tree.command(name="play", description = "Play a song") #slash command
-async def play(interaction: discord.Interaction, url: str):
-	if interaction.user.voice is None:
-		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed, ephemeral=True)
-	else:
-		if interaction.guild.voice_client is not None and interaction.guild.voice_client.is_playing():
-			no_music_embed = discord.Embed(title="*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
-			no_music_embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=no_music_embed, ephemeral=True)
-		else:
-			#else:
-			try:
+			await asyncio.sleep(20)
 				
-				
-				#loading embed
-				loading_embed = discord.Embed(title=":arrows_clockwise: Dowloading song :musical_note:", color=discord.Colour.blue())
-				loading_embed.set_footer(text=footer_testo)
-				await interaction.response.send_message(embed=loading_embed, ephemeral=True)
-				
-				#find-video
-				video = pytube.YouTube(url)
-				
-				#title-file
-				number = random.randint(1, 100000)
-				extension = "mp4"
-				file_name = f"{number}.{extension}"
-				#video.streams.get_highest_resolution().download(filename=file_name)
-				
-				#dowload
-				video.streams.first().download(filename=file_name)
-				
-				#info
-				video_length = video.length
-				minutes, seconds = divmod(video_length, 60)
-				
-				artist = video.author
-				
-				#global
-				global filename
-				filename = f"{file_name}"
-
-				#video-info-embed
-				title_embed = discord.Embed(color=discord.Colour.blue())
-				title_embed.set_image(url=video.thumbnail_url)
-				title_embed.description = f"***Now playing:*** \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}` ** :arrow_backward:     :pause_button:     :arrow_forward: **"
-				title_embed.set_footer(text=footer_testo)
-				await interaction.edit_original_response(embed=title_embed)
-				#await msg.delete()
-				#await msg.edit(embed=title_embed)
-				await asyncio.sleep(0.5)
-
-				#stalk-song
-				stalk_channel = client.get_channel(stalkid)
-				stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
-				await stalk_channel.send(embed=stalk_embed)
-				#await ctx.send(embed=embed)
-
-
-				# Play the video
-				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
-				voice_channel = interaction.user.voice.channel
-				voice = await voice_channel.connect()
-				voice.play(source)
-	
-				#volume fix
-				volume = 0.4
-				voice_client = interaction.guild.voice_client
-				voice_client.source.volume = volume
-
-				# Wait for the video to finish playing
-				while voice.is_playing():
-					await asyncio.sleep(1)
-
-				# Disconnect from the voice channel
-				await voice.disconnect()
-
-				# Delete the video file
-				os.remove(f"{file_name}")
-				end_embed = discord.Embed(title="***:cd: The song is ended***", color=discord.Colour.red())
-				end_embed.set_footer(text=footer_testo)
-				await interaction.edit_original_response(embed=end_embed)
-				#pass
-				#return
+			# Delete the video file
+			os.remove(f"{file_name}")
+			await title_embed.delete()
+			#pass
+			#return
 			#error
-			except pytube.exceptions.PytubeError as e:
-				if 'is age restricted' in str(e):
-					await asyncio.sleep(1)
-					#await ctx.send('the video is age-restricted.')
-					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
-					error_embed_2.set_footer(text=footer_testo)
-					await interaction.edit_original_response(embed=error_embed_2)
-					await asyncio.sleep(0.5)
-				elif 'is streaming live' in str(e):
-					await asyncio.sleep(1)
-					error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
-					error_embed_3.set_footer(text=footer_testo)
-					await interaction.edit_original_response(embed=error_embed_3)
-					await asyncio.sleep(0.5)
-				else:
-					await asyncio.sleep(1)
-					error_embed_4 = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-					error_embed_4.set_footer(text=footer_testo)
-					await interaction.edit_original_response(embed=error_embed_4)
-					await asyncio.sleep(0.5)
-					#stalk
-					channel = client.get_channel(errorchannel)
+		except pytube.exceptions.PytubeError as e:
+			if 'This video is age-restricted' in str(e):
+				await asyncio.sleep(1)
+				#await ctx.send('the video is age-restricted.')
+				error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
+				error_embed_2.set_footer(text=footer_testo)
+				await ctx.send(embed=error_embed_2, delete_after=5)
+				await asyncio.sleep(0.5)
+			elif 'is streaming live' in str(e):
+				await asyncio.sleep(1)
+				error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
+				error_embed_3.set_footer(text=footer_testo)
+				await ctx.send(embed=error_embed_3, delete_after=5)
+				await asyncio.sleep(0.5)
+			else:
+				await asyncio.sleep(1)
+				error_embed_4 = discord.Embed(title="***An error occurred while dowloading the video.***", color=discord.Colour.red())
+				error_embed_4.set_footer(text=footer_testo)
+				await ctx.send(embed=error_embed_4, delete_after=5)
+				await asyncio.sleep(0.5)
+				#stalk
+				channel = client.get_channel(errorchannel)
 					await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
 			except Exception as e:
-				if str(e) == "Already connected to a voice channel.":
-					pass
-				else:
-					print(e)
-					error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
-					error_embed.set_footer(text=footer_testo)
-					await interaction.edit_original_response(embed=error_embed)
-					await asyncio.sleep(0.5)
-					#stalk
-					channel = client.get_channel(errorchannel)
-					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
-
-
-
-@client.tree.command(name="stop", description = "Stop a song") #slash command
-async def stop(interaction: discord.Interaction):				
-	global filename #global
-	
-	voice_client = interaction.guild.voice_client
-	if voice_client and voice_client.is_connected():
-		if voice_client.is_playing():
-			try:
-				embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
-				embed.set_footer(text=footer_testo)
-				await interaction.response.send_message(embed=embed, ephemeral=True)
-				voice_client.stop()
-				await voice_client.disconnect()
-				#await asyncio.sleep(2)
-				os.remove(f"{filename}") #global
-			except Exception as e:
-				pass
-		else:
-			try:
-				embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
-				embed.set_footer(text=footer_testo)
-				await interaction.response.send_message(embed=embed, ephemeral=True)
-				os.remove(f"{filename}") #global
-				await voice_client.disconnect()
-			except Exception as e:
-				try:
-					os.remove(f"{filename}")
-				except Exception:
-					pass
-	else:
-		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed, ephemeral=True)
-
-		
-		
-		
-		
-@client.tree.command(name="volume", description = "Set the volume of the song") #slash command
-async def volume(interaction: discord.Interaction, volume: float):				
-	voice_client = interaction.guild.voice_client
-	
-	if not voice_client:
-		embed = discord.Embed(title='Please enter the voice chat where the bot is', color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed, ephemeral=True)
-		return
-	if voice_client.is_playing():
-		if volume < 0.0 or volume > 25.0:
-			embed = discord.Embed(title=f'The max of volume is ```25.0```\nThe min ```0.0```', color=discord.Colour.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-		else:
-			voice_client.source.volume = volume
-			embed = discord.Embed(title=f':loud_sound: Volume set to ***```{volume}```***', color=discord.Colour.blue())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-	else:
-		embed = discord.Embed(title='No songs playing at the moment', color=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed, ephemeral=True)
-
-		
-		
-@is_beta
-@client.command()
-async def help(ctx):
-	#view = HelpDropdownView()
-	prefix = data["command_prefix"]
-	await ctx.send('Select the help command section:', view=HelpDropdownView())
-	if ctx.author.id == my_id:
-		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
-		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
-		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
-		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
-		admin_embed.set_footer(text=footer_testo)
-		await ctx.send(embed=admin_embed, ephemeral=True)
-		
-@is_beta
-@client.command()
-async def dictionary(ctx, term):
-	url = f"https://api.urbandictionary.com/v0/define?term={term}"
-	response = requests.get(url).json()
-	if "list" in response:
-		if response["list"]:
-			definition = response["list"][0]["definition"]
-			example = response["list"][0]["example"]
-			
-			#await ctx.send(f"**{term}**:\n\n{definition}\n\n*Esempio:* {example}")
-			embed = discord.Embed(title=" :notebook_with_decorative_cover: Dictionary :notebook_with_decorative_cover: ", colour=discord.Colour.green())
-			embed.add_field(name="Definition", value=f"{definition}", inline=False)
-			embed.add_field(name="Example", value=f"{example}", inline=False)
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-		else:
-			embed = discord.Embed(title="Error: No definitions found for the specified word or phrase", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-	else:
-		embed = discord.Embed(title="Error: An error occurred while searching for the definition", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
+				error_embed = discord.Embed(title="***An error occurred while dowloading the video.***", color=discord.Colour.red())
+				error_embed.set_footer(text=footer_testo)
+				await ctx.send(embed=error_embed, delete_after=5)
+				await asyncio.sleep(0.5)
+				#stalk
+				channel = client.get_channel(errorchannel)
+				await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
 
 
 
 
-@is_beta
-@client.command()
-@commands.has_permissions(manage_messages=True)
-async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
-	if not emoji:
-		embed = discord.Embed(title="Error\nPlease send a valid emoji", colour=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-	else:
-		response_emoji = await emoji.guild.fetch_emoji(emoji.id)
-		is_managed = "Yes" if response_emoji.managed else "No" 
-		is_animated = "Yes" if response_emoji.animated else "No"
-		requires_colons = "Yes" if response_emoji.require_colons else "No"
-		creation_time = response_emoji.created_at.strftime("%b %d %Y")
-		can_use_emoji = "Everyone" if not response_emoji.roles else "".join(role.name for role in response_emoji.roles)
-		name = response_emoji.name
-		id_emoji = response_emoji.id	
-		embed = discord.Embed(title="Emoji_Info", colour=discord.Colour.blue())
-		embed.add_field(name="Name", value=f"{name}", inline=False)
-		embed.add_field(name="Id", value=f"{id_emoji}", inline=False)
-		embed.add_field(name="Url", value=f"[Emoji Url]({response_emoji.url})", inline=False)
-		embed.add_field(name="Author", value=f"{response_emoji.user.name}", inline=False)
-		embed.add_field(name="Time Created", value=f"{creation_time}", inline=False)
-		embed.add_field(name="Usable by", value=f"{can_use_emoji}", inline=False)
-		embed.add_field(name="Animated", value=f"{is_animated}", inline=False)
-		embed.add_field(name="Managed", value=f"{is_managed}", inline=False)
-		embed.add_field(name="Requires colons", value=f"{requires_colons}", inline=False)
-		embed.add_field(name="Guild name", value=f"{response_emoji.guild.name}", inline=False)
-		embed.set_footer(text=footer_testo)
-		embed.set_thumbnail(url=response_emoji.url)
-		await ctx.send(embed=embed)
 
 
 
