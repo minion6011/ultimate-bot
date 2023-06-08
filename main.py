@@ -1,21 +1,22 @@
-#estremo funzionamento del bot
+#needed for start the bot
 import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import has_permissions, CheckFailure, NoPrivateMessage
 from discord.utils import get
 
-#discord py slash
-from discord import app_commands
+from discord import app_commands #disord slash
 
-#command
-import random #per estrazzione
-from random import choice #per estrazzione
-import asyncio #per attesa di tempo
-import os #per azioni sul pc
+import random #random exractor
+from random import choice #random exractor
+
+import asyncio #time
+
+import os #botinfo
+
 import aiohttp #https
 import requests #https
 from requests import get #https
-import json #json
+import json #htpps
 
 #system-info
 import psutil
@@ -37,7 +38,6 @@ import pytube
 import asyncio
 import os
 
-#global-music-bot
 
 
 #config
@@ -73,8 +73,6 @@ intents.reactions = True
 pre = data["command_prefix"]
 client = commands.Bot(command_prefix=(pre), intents=intents, case_insensitive=True)
 client.remove_command('help')
-#tree = app_commands.CommandTree(client)
-
 
 #dati generali
 
@@ -91,12 +89,11 @@ openai.api_key = data["access_token"]
 @client.event
 async def on_ready():
 	change_status.start()
-	#tree.sync(force=True)
 	print(f"Bot logged into {client.user}.")
 	#slash_sync = await client.tree.sync()
 	#print(f"Synced app command (tree) {len(slash_sync)}.")
 	token_json = data["discord_token"]
-	client.togetherControl = await DiscordTogether(token_json)
+	client.togetherControl = await DiscordTogether(token_json) #activity command - old 
 
 
 #-----------Stalker--------------#
