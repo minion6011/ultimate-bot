@@ -105,6 +105,8 @@ async def on_ready():
 async def on_message(message):
 	if message.author.bot:
 		return
+	if len(message.content) > 1998:
+		return
 	if message.channel.type == discord.ChannelType.private:
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\nDm: `Yes`", color=discord.Color.green())
@@ -124,6 +126,8 @@ async def on_message(message):
 async def on_message_delete(message):
 	if message.author.bot:
 		return
+	if len(message.content) > 1998:
+		return
 	if message.channel.type == discord.ChannelType.private:
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio Eliminato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Dm: `Yes`", color=discord.Color.red())
@@ -139,6 +143,8 @@ async def on_message_delete(message):
 @client.event
 async def on_message_edit(before, after):
 	if after.author.bot:
+		return
+	if len(message.content) > 1998:
 		return
 	if after.channel.type == discord.ChannelType.private:
 		channel = client.get_channel(stalkid)
@@ -340,8 +346,8 @@ async def serverinfo(ctx):
 
  
 
-#test
 @client.command()
+@commands.guild_only()
 async def meme(ctx):
 		embed = discord.Embed(title="Meme", color=discord.Colour.green())
 		async with aiohttp.ClientSession() as cs:
@@ -720,6 +726,7 @@ async def dictionary(ctx, term):
 
 
 @client.command()
+@commands.guild_only()
 @commands.has_permissions(manage_messages=True)
 async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 	if not emoji:
