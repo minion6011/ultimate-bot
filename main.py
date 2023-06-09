@@ -1630,15 +1630,20 @@ repo = "ultimate-bot"
 
 
 def get_commit_info():
+	# Ottieni la prima pagina di commit.
 	response = requests.get(f"https://api.github.com/repos/{owner}/{repo}/commits",
+				headers={"Authorization": f"Token {access_token}"}, params={"per_page": "1"})
+	# Utilizza l'hash della commit più recente per ottenere la descrizione completa.
+	commit_sha = response.json()[0]['sha']
+	response = requests.get(f"https://api.github.com/repos/{owner}/{repo}/commits/{commit_sha}",
 				headers={"Authorization": f"Token {access_token}"})
-	commit = response.json()[0]
+	commit = response.json()
 	message = commit['commit']['message']
-	message_description = commit['sha']
 	author = commit['commit']['author']['name']
-	description = commit.get('commit', {}).get('body', '')
-	#email = commit['commit']['author']['email']
-	return f"Autore: {author}\nMessaggio: {message}\nSha {message_description}\ntest {description}"
+	email = commit['commit']['author']['email']
+	description = commit.get('commit', {}).get('body', '') or 'None'
+	return f"Autore: {author}\nEmail: {email}\nMessaggio: {message}\nDescrizione: {description}"
+
 
 
 @is_beta
