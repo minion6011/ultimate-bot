@@ -1640,9 +1640,8 @@ def get_commit_info():
 	commit = response.json()
 	message = commit['commit']['message']
 	author = commit['commit']['author']['name']
-	email = commit['commit']['author']['email']
 	description = commit.get('commit', {}).get('body', '') or 'None'
-	return f"Autore: {author}\nEmail: {email}\nMessaggio: {message}\nDescrizione: {description}"
+	return f"Autore: {author}\nMessaggio: {message}\nDescrizione: {description}"
 
 
 
