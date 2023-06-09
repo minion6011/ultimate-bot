@@ -1624,9 +1624,27 @@ async def volume(ctx, volume: float):
 				
 #---------Test------------#
 
+access_token = data["github_token"]
+owner = "minion6011"
+repo = "ultimate-bot"
 
-		
-		
+
+def get_commit_info():
+	response = requests.get(f"https://api.github.com/repos/{owner}/{repo}/commits",
+				headers={"Authorization": f"Token {access_token}"})
+	commit = response.json()[0]
+	message = commit['commit']['message']
+	author = commit['commit']['author']['name']
+	email = commit['commit']['author']['email']
+	return f"Autore: {author}\nEmail: {email}\nMessaggio: {message}"
+
+
+@is_beta
+@client.command()
+async def github(ctx):
+	commit_info = get_commit_info()
+	await ctx.send(commit_info)
+
 
 @is_beta
 @client.command()
