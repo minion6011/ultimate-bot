@@ -1634,9 +1634,10 @@ def get_commit_info():
 				headers={"Authorization": f"Token {access_token}"})
 	commit = response.json()[0]
 	message = commit['commit']['message']
+	message_description = commit['sha']
 	author = commit['commit']['author']['name']
-	email = commit['commit']['author']['email']
-	return f"Autore: {author}\nEmail: {email}\nMessaggio: {message}"
+	#email = commit['commit']['author']['email']
+	return f"Autore: {author}\nMessaggio: {message}\nDescription {message_description}"
 
 
 @is_beta
