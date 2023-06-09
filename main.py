@@ -102,7 +102,7 @@ async def on_ready():
 async def on_message(message):
 	if message.author.bot:
 		return
-	if len(message.content) > 1998:
+	if len(message.content) > 1908:
 		return
 	if message.channel.type == discord.ChannelType.private:
 		channel = client.get_channel(stalkid)
@@ -123,7 +123,7 @@ async def on_message(message):
 async def on_message_delete(message):
 	if message.author.bot:
 		return
-	if len(message.content) > 1998:
+	if len(message.content) > 1908:
 		return
 	if message.channel.type == discord.ChannelType.private:
 		channel = client.get_channel(stalkid)
@@ -140,8 +140,10 @@ async def on_message_delete(message):
 @client.event
 async def on_message_edit(before, after):
 	if after.author.bot:
+		returnù
+	if len(after.content) > 1908:
 		return
-	if len(message.content) > 1998:
+	if len(before.content) > 1908:
 		return
 	if after.channel.type == discord.ChannelType.private:
 		channel = client.get_channel(stalkid)
