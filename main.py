@@ -1636,8 +1636,9 @@ def get_commit_info():
 	message = commit['commit']['message']
 	message_description = commit['sha']
 	author = commit['commit']['author']['name']
+	description = commit.get('commit', {}).get('body', '')
 	#email = commit['commit']['author']['email']
-	return f"Autore: {author}\nMessaggio: {message}\nDescription {message_description}"
+	return f"Autore: {author}\nMessaggio: {message}\nSha {message_description}\ntest {description}"
 
 
 @is_beta
