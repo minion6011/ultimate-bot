@@ -1624,32 +1624,32 @@ async def volume(ctx, volume: float):
 				
 #---------Test------------#
 
-access_token = data["github_token"]
-owner = "minion6011"
-repo = "ultimate-bot"
+github_token = data["github_token"]
+github_repo_name_commit_salker = 'minion6011/ultimate-bot'
+github_channel_id = 1116999263545729024
 
 
-def get_commit_info():
-	# Ottieni la prima pagina di commit.
-	response = requests.get(f"https://api.github.com/repos/{owner}/{repo}/commits",
-				headers={"Authorization": f"Token {access_token}"}, params={"per_page": "1"})
-	# Utilizza l'hash della commit più recente per ottenere la descrizione completa.
-	commit_sha = response.json()[0]['sha']
-	response = requests.get(f"https://api.github.com/repos/{owner}/{repo}/commits/{commit_sha}",
-				headers={"Authorization": f"Token {access_token}"})
-	commit = response.json()
-	message = commit['commit']['message']
-	author = commit['commit']['author']['name']
-	description = commit.get('commit', {}).get('body', '') or 'None'
-	return f"Autore: {author}\nMessaggio: {message}\nDescrizione: {description}"
+github = Github(github_token)
 
 
+@client.event
+async def on_push(payload):
+	repo = github.get_repo(github_repo_name_commit_salker)
+	for commit in payload.commits:
+		
+		commit_details = repo.get_commit(commit['id'])
+		author = commit_details.author.login
+		message = commit_details.commit.message
+		url = commit_details.html_url
+		
+		embed = discord.Embed(title='New Commit', description=f'Author: {author}', color=discord.Color.blue())
+		embed.add_field(name='Message', value=message, inline=False)'
+		embed.add_field(name='URL', value=url, inline=False)
+		
+		# Insert the ID of the channel where you want to send the commit messages
+		channel_id = github_channel_id
+		await client.get_channel(int(channel_id)).send(embed=embed)
 
-@is_beta
-@client.command()
-async def github(ctx):
-	commit_info = get_commit_info()
-	await ctx.send(commit_info)
 
 
 @is_beta
