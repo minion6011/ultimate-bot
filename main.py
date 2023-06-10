@@ -1644,7 +1644,8 @@ async def on_push(payload):
 		message = commit_details.commit.message
 		url = commit_details.html_url
 		
-		embed = discord.Embed(title='New Commit', description=f'Author: {author}', color=discord.Color.blue())
+		embed = discord.Embed(title='New Commit', description=f'Author: {author}', color=0x808080)
+		embed.set_author(name="GitHub", icon_url="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png")
 		embed.add_field(name='Message', value=message, inline=False)
 		embed.add_field(name='URL', value=url, inline=False)
 		
