@@ -1624,6 +1624,8 @@ async def volume(ctx, volume: float):
 				
 #---------Test------------#
 
+from github import Github
+
 github_token = data["github_token"]
 github_repo_name_commit_salker = 'minion6011/ultimate-bot'
 github_channel_id = 1116999263545729024
@@ -1643,7 +1645,7 @@ async def on_push(payload):
 		url = commit_details.html_url
 		
 		embed = discord.Embed(title='New Commit', description=f'Author: {author}', color=discord.Color.blue())
-		embed.add_field(name='Message', value=message, inline=False)'
+		embed.add_field(name='Message', value=message, inline=False)
 		embed.add_field(name='URL', value=url, inline=False)
 		
 		# Insert the ID of the channel where you want to send the commit messages
