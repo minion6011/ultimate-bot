@@ -1699,14 +1699,20 @@ async def download(ctx, url):
 
 
 
-
+@is_beta
+@client.command()
+async def automod2(ctx):
+	await ctx.guild.create_automod_rule(name="Spam Block",
+					    event_type=AutoModRuleEventType.message_send,
+					    trigger=AutomodTrigger.spam,
+					    actions=[AutoModRuleActionType.block_message], enabled=True)
 
 
 
 
 @is_beta
 @client.command()
-async def automod3(ctx):
+async def automod(ctx):
     # Crea un trigger personalizzato per la parola "spam"
     trigger = discord.AutoModTrigger(
         type=discord.AutoModRuleTriggerType.keyword,
