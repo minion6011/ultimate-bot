@@ -105,12 +105,14 @@ async def on_message(message):
 	if len(message.content) > 1908:
 		return
 	if message.channel.type == discord.ChannelType.private:
+		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\nDm: `Yes`", color=discord.Color.green())
 		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
 		await channel.send(embed=embed)
 		await client.process_commands(message) 
 	else:
+		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.green())
 		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
@@ -126,11 +128,13 @@ async def on_message_delete(message):
 	if len(message.content) > 1908:
 		return
 	if message.channel.type == discord.ChannelType.private:
+		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio Eliminato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Dm: `Yes`", color=discord.Color.red())
 		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
 		await channel.send(embed=embed)
 	else:
+		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio Eliminato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
 		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
@@ -146,12 +150,14 @@ async def on_message_edit(before, after):
 	if len(before.content) > 1908:
 		return
 	if after.channel.type == discord.ChannelType.private:
+		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio Editato\nUtente: `{after.author.display_name}#{after.author.discriminator}`\nDm: `Yes`", color=discord.Color.gold())
 		embed.add_field(name = 'Contenuto:', value=f"Prima: `{before.content}`, Dopo: `{after.content}`", inline = True)
 		await channel.send(embed=embed)
 		await client.process_commands(after)
 	else:
+		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio Editato\nUtente: `{after.author.display_name}#{after.author.discriminator}`\n Server: `{after.guild.name}`", color=discord.Color.gold())
 		embed.add_field(name = 'Contenuto:', value=f"Prima: `{before.content}`, Dopo: `{after.content}`", inline = True)
@@ -163,12 +169,14 @@ async def on_message_edit(before, after):
 
 @client.event
 async def on_member_ban(guild, user):
+	await asyncio.sleep(20)
 	channel = client.get_channel(stalkid)
 	embed = discord.Embed(title=f"**[Stalker]**\nUtente bannato\nUtente: `{user.display_name}#{user.discriminator}`\n Server: `{guild.name}`", color=discord.Color.red())
 
 
 @client.event
 async def on_member_unban(guild, user):
+	await asyncio.sleep(20)
 	channel = client.get_channel(stalkid)
 	embed = discord.Embed(title=f"**[Stalker]**\nUtente sbannato\nUtente: `{user.display_name}#{user.discriminator}`\n Server: `{guild.name}`", color=discord.Color.red())
 
@@ -176,6 +184,7 @@ async def on_member_unban(guild, user):
 
 @client.event
 async def on_member_remove(member):
+	await asyncio.sleep(20)
 	guild = member.guild
 	channel = client.get_channel(stalkid)
 	embed = discord.Embed(title=f"**[Stalker]**\nMembro rimosso / quit\nUtente: `{member.display_name}#{member.discriminator}`\n Server: `{member.guild.name}`", color=discord.Color.red())
@@ -184,6 +193,7 @@ async def on_member_remove(member):
 @client.event
 async def on_member_join(member):
 	try:
+		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nNuovo utente nel server\nUtente: `{member.display_name}#{member.discriminator}`\n Server: `{member.guild.name}`", color=discord.Color.orange())
 		await channel.send(embed=embed)
@@ -191,6 +201,7 @@ async def on_member_join(member):
 		embed = discord.Embed(title=f"Hi {member.name}, welcome to {member.guild}!", color=discord.Color.orange())
 		await member.dm_channel.send(embed=embed)
 	except:
+		await asyncio.sleep(20)
 		channel = client.get_channel(errorchannel)
 		embed = discord.Embed(title=f"**[Errore]**\nOn_Member_Join error (private user)", color=discord.Color.red())
 		await channel.send(embed=embed)
@@ -202,6 +213,7 @@ async def on_member_join(member):
 '''
 @client.event
 async def on_member_update(before, after):
+	await asyncio.sleep(20)
 	channel = client.get_channel(stalkid)
 	embed = discord.Embed(title=f"**[Stalker]**\n Server: `{after.guild.name}`", color=discord.Color.purple())
 	embed.add_field(name = 'Status:', value=f"Prima: `{before.status}`, Dopo: `{after.status}`", inline = False)
@@ -215,26 +227,31 @@ async def on_member_update(before, after):
 @client.event
 async def on_voice_state_update(member, before, after):
 	if before.channel is None and after.channel is not None:
+		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nUtente in Chat vocale\nUtente: `{member.display_name}#{member.discriminator}`\nServer: `{member.guild.name}`", color=discord.Color.blue())
 		embed.add_field(name = 'Canale:', value=f"<#{after.channel.id}>", inline = True)
 		await channel.send(embed=embed)
 	if before.channel is not None and after.channel is None:
+		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nUtente in Chat vocale\nUtente: `{member.display_name}#{member.discriminator}`\nServer: `{member.guild.name}`", color=discord.Color.red())
 		embed.add_field(name = 'Canale:', value=f"<#{before.channel.id}>", inline = True)
 		await channel.send(embed=embed)
+	
 
 #ruoli
 
 @client.event
 async def on_guild_role_delete(role):
+	await asyncio.sleep(20)
 	channel = client.get_channel(stalkid)
 	embed = discord.Embed(title=f"**[Stalker]**\nRuolo eliminato\nServer: `{role.guild.name}`", color=discord.Color.red())
 	embed.add_field(name = 'Nome:', value=f"`{role.name}`", inline = True)
 '''
 @client.event
 async def on_guild_role_update(before, after):
+	await asyncio.sleep(20)
 	channel = client.get_channel(stalkid)
 	embed = discord.Embed(title=f"**[Stalker]**\nUpdate ruolo\nServer: `{before.guild.name}`", color=discord.Color.gold())
 	embed.add_field(name = 'Nome:', value=f"Prima: `{before.name}` Dopo:  `{after.name}`", inline = False)
@@ -244,6 +261,7 @@ async def on_guild_role_update(before, after):
 
 @client.event
 async def on_guild_role_create(role):
+	await asyncio.sleep(20)
 	channel = client.get_channel(stalkid)
 	embed = discord.Embed(title=f"**[Stalker]**\nRuolo creato\nServer: `{role.guild.name}`", color=discord.Color.green())
 	embed.add_field(name = 'Nome:', value=f"`{role.name}`", inline = True)
