@@ -144,7 +144,7 @@ async def on_message_delete(message):
 @client.event
 async def on_message_edit(before, after):
 	if after.author.bot:
-		returnù
+		return
 	if len(after.content) > 1908:
 		return
 	if len(before.content) > 1908:
