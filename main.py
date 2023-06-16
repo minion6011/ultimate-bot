@@ -698,19 +698,6 @@ async def infobot(ctx):
 
 	
 
-@client.command()
-@commands.guild_only()
-async def help(ctx):
-	#view = HelpDropdownView()
-	prefix = data["command_prefix"]
-	await ctx.send('Select the help command section:', view=HelpDropdownView())
-	if ctx.author.id == my_id:
-		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
-		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
-		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
-		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
-		admin_embed.set_footer(text=footer_testo)
-		await ctx.send(embed=admin_embed, ephemeral=True)
 		
 
 @client.command()
@@ -860,7 +847,7 @@ class HelpDropdownView(discord.ui.View):
 		
 class HelpDropdown(discord.ui.Select):
 	def __init__(self):
-		options = [discord.SelectOption(label='Mod Commands'), discord.SelectOption(label='Utilty Commands'), discord.SelectOption(label='Server/user Commands'), discord.SelectOption(label='Slash Commands')]
+		options = [discord.SelectOption(label='Mod Commands'), discord.SelectOption(label='Utilty Commands'), discord.SelectOption(label='Fun Commands'), discord.SelectOption(label='Slash Commands')]
 		
 		super().__init__(placeholder='Choose help section...', min_values=1, max_values=1, options=options)
 
@@ -882,23 +869,23 @@ class HelpDropdown(discord.ui.Select):
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 		elif self.values[0] == "Utilty Commands":
 			embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
-			embedt.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
-			embedt.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
-			embedt.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
-			#embedt.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
 			embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
-			embedt.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
 			embedt.add_field(name=f"{prefix}chat `request`", value="Answer your questions using Openai", inline=True)
-			embedt.add_field(name=f"{prefix}generate_image `request`", value="Generate image using Openai", inline=True)
+			embedt.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
+			embedt.add_field(name=f"{prefix}userinfo `user_id`", value="Send the User info", inline=True)
 			embedt.add_field(name=f"{prefix}translate `language` `text`", value="Translates text into any supported language", inline=True)
 			embedt.add_field(name=f"{prefix}custom_emoji_info `custom_emoji`", value="Tells you the information of a custom emoji", inline=True)
 			embedt.add_field(name=f"{prefix}dictionary `word`", value="Tells you the meaning of a word", inline=True)
 			embedt.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embedt, ephemeral=True)
-		elif self.values[0] == "Server/user Commands":
-			embedd = discord.Embed(title="Server/user Commands :scroll:", color=discord.Color.blurple())
-			embedd.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
-			embedd.add_field(name=f"{prefix}userinfo `user_id`", value="Send the User info", inline=True)
+		elif self.values[0] == "Fun Commands":
+			embedd = discord.Embed(title="Fun Commands :tada:", color=discord.Color.blurple())
+			embedd.add_field(name=f"{prefix}meme", value="Send a random meme", inline=True)
+			embedd.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
+			embedd.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
+			embedd.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
+			embedd.add_field(name=f"{prefix}generate_image `request`", value="Generate image using Openai", inline=True)
+			#embedd.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
 			embedd.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embedd, ephemeral=True)
 		elif self.values[0] == "Slash Commands":
@@ -966,7 +953,6 @@ class TraslateButton(discord.ui.View):
 		
 
 #------------Slash------------#
-
 
 
 @client.tree.command(name="help", description = "Show the list of command for Ultimate-Bot")
@@ -1772,6 +1758,22 @@ async def verify(ctx):
 
 
 #----------Admin---------------#
+
+@is_me
+@client.command()
+@commands.guild_only()
+async def help(ctx):
+	#view = HelpDropdownView()
+	prefix = data["command_prefix"]
+	await ctx.send('Select the help command section:', view=HelpDropdownView())
+	if ctx.author.id == my_id:
+		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
+		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
+		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
+		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
+		admin_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=admin_embed, ephemeral=True)
+
 
 @is_me
 @client.command()
