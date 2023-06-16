@@ -1627,18 +1627,11 @@ async def volume(ctx, volume: float):
 '''
 				
 #---------Test------------#
+from typing import List #for tictactoe
 
-from typing import List
 
-# Defines a custom button that contains the logic of the game.
-# The ['TicTacToe'] bit is for type hinting purposes to tell your IDE or linter
-# what the type of `self.view` is. It is not required.
 class TicTacToeButton(discord.ui.Button['TicTacToe']):
     def __init__(self, x: int, y: int):
-        # A label is required, but we don't need one so a zero-width space is used
-        # The row parameter tells the View which row to place the button under.
-        # A View can only contain up to 5 rows -- each row can only have 5 buttons.
-        # Since a Tic Tac Toe grid is 3x3 that means we have 3 rows and 3 columns.
         super().__init__(style=discord.ButtonStyle.secondary, label='\u200b', row=y)
         self.x = x
         self.y = y
@@ -1646,6 +1639,10 @@ class TicTacToeButton(discord.ui.Button['TicTacToe']):
     # This function is called whenever this particular button is pressed
     # This is part of the "meat" of the game logic
     async def callback(self, interaction: discord.Interaction):
+        
+        global player1
+        global player2
+
         assert self.view is not None
         view: TicTacToe = self.view
         state = view.board[self.y][self.x]
@@ -1653,19 +1650,26 @@ class TicTacToeButton(discord.ui.Button['TicTacToe']):
             return
 
         if view.current_player == view.X:
-            self.style = discord.ButtonStyle.danger
-            self.label = 'X'
-            self.disabled = True
-            view.board[self.y][self.x] = view.X
-            view.current_player = view.O
-            content = "It is now O's turn"
+            if interaction.user != player1:
+                await interaction.response.send_message("Its not your Turn!", ephemeral=True)
+            else:
+                self.style = discord.ButtonStyle.danger
+                self.label = 'X'
+                self.disabled = True
+                view.board[self.y][self.x] = view.X
+                view.current_player = view.O
+                content = "It is now O's turn"
+        
         else:
-            self.style = discord.ButtonStyle.success
-            self.label = 'O'
-            self.disabled = True
-            view.board[self.y][self.x] = view.O
-            view.current_player = view.X
-            content = "It is now X's turn"
+            if interaction.user != player2:
+                await interaction.response.send_message("Its not your Turn!", ephemeral=True)
+            else:
+                self.style = discord.ButtonStyle.success
+                self.label = 'O'
+                self.disabled = True
+                view.board[self.y][self.x] = view.O
+                view.current_player = view.X
+                content = "It is now X's turn"
 
         winner = view.check_board_winner()
         if winner is not None:
@@ -1747,11 +1751,14 @@ class TicTacToe(discord.ui.View):
 
 
 
-
-
 @client.command()
-async def tic(ctx: commands.Context):
+async def tic(ctx, enemy: discord.Member):
 	await ctx.send('Tic Tac Toe: X goes first', view=TicTacToe())
+        global player1
+        global player2
+
+        player1 = ctx.message.author
+        player2 = enemy
 
 @is_beta
 @client.command()
