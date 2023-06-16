@@ -1775,7 +1775,7 @@ async def verify(ctx):
 
 @is_me
 @client.command()
-async def dm(ctx, username=None, message=None):
+async def dm(ctx, username, message):
 	if username is None:
 		await ctx.send('Missing username')
 	elif message is None:
