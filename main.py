@@ -1754,11 +1754,10 @@ class TicTacToe(discord.ui.View):
 @client.command()
 async def tic(ctx, enemy: discord.Member):
 	await ctx.send('Tic Tac Toe: X goes first', view=TicTacToe())
-        global player1
-        global player2
-
-        player1 = ctx.message.author
-        player2 = enemy
+	global player1
+	global player2
+	player1 = ctx.message.author
+	player2 = enemy
 
 @is_beta
 @client.command()
