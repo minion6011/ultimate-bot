@@ -1775,25 +1775,6 @@ async def verify(ctx):
 
 @is_me
 @client.command()
-async def dm(ctx, username, message):
-	if username is None:
-		await ctx.send('Missing username')
-	elif message is None:
-		await ctx.send('Missing message')
-	else:
-		try:
-			user = ctx.guild.get_member_named(username)
-			await ctx.send(f"L'ID di {username} è {user.id}")
-			user_msg = await client.fetch_user(user.id)
-			await user_msg.send(message)
-			await ctx.send(f"\n\n messaggio inviato {message} a {username} il suo id è {user.id}")
-		except Exception as e:
-			await ctx.send(f"Non ho trovato l'utente specificato.\n\n {e}")
-
-
-
-@is_me
-@client.command()
 @commands.guild_only()
 async def servers(ctx):
 	try:
