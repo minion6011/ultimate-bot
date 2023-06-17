@@ -1739,7 +1739,7 @@ class TicTacToe(discord.ui.View):
 		return None
 
 
-
+@is_beta
 @client.command()
 async def tic(ctx, enemy: discord.Member):
 	start_embed = discord.Embed(title="***Tic Tac Toe: X goes first***", color=discord.Colour.blue())
