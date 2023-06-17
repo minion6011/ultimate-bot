@@ -2043,13 +2043,21 @@ async def on_command_error(ctx, error):
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
 	else:
-		embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=4)
-		#error-chat
-		channel = client.get_channel(errorchannel)
-		await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")
-		raise error
+		if 'not found.' in str(error):
+			embed = discord.Embed(title="Error: Member not found", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+			#error-chat
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")      
+		else:
+			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+			#error-chat
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")
+			raise error
       
 
 
