@@ -1649,8 +1649,8 @@ class TicTacToeButton(discord.ui.Button['TicTacToe']):
 			
 		if view.current_player == view.X:
 			if interaction.user != player1:
-				embed_p1_error = discord.Embed(title="***Its not your Turn!***", color=discord.Colour.yellow())
-				await interaction.response.send_message(embeds=[embed_p1_error], ephemeral=True)
+				embed = discord.Embed(title="***Its not your Turn!***", color=discord.Colour.yellow())
+				await interaction.response.send_message(embed=embed, ephemeral=True)
 			else:
 				self.style = discord.ButtonStyle.danger
 				self.label = 'X'
@@ -1660,8 +1660,8 @@ class TicTacToeButton(discord.ui.Button['TicTacToe']):
 				embed = discord.Embed(title="***It is now O's turn***", color=discord.Colour.blue())
 		else:
 			if interaction.user != player2:
-				embed_p2_error = discord.Embed(title="***Its not your Turn!***", color=discord.Colour.yellow())
-				await interaction.response.send_message(embeds=[embed_p2_error], ephemeral=True)
+				embed = discord.Embed(title="***Its not your Turn!***", color=discord.Colour.yellow())
+				await interaction.response.send_message(embed=embed, ephemeral=True)
 			else:
 				self.style = discord.ButtonStyle.success
 				self.label = 'O'
@@ -1683,6 +1683,7 @@ class TicTacToeButton(discord.ui.Button['TicTacToe']):
 				child.disabled = True
 			
 			view.stop()
+			
 		await interaction.response.edit_message(embed=embed, view=view)
 
 
