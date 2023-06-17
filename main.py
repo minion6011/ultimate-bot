@@ -1637,8 +1637,10 @@ class TicTacToeButton(discord.ui.Button['TicTacToe']):
 		self.y = y
 		
 	async def callback(self, interaction: discord.Interaction):
+		
 		global player1
 		global player2
+		
 		assert self.view is not None
 		view: TicTacToe = self.view
 		state = view.board[self.y][self.x]
