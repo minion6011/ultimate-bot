@@ -1765,7 +1765,7 @@ async def verify(ctx):
 async def help(ctx):
 	#view = HelpDropdownView()
 	prefix = data["command_prefix"]
-	await ctx.send('Select the help command section: ✨', view=HelpDropdownView())
+	await ctx.send('Select the help command section: ', view=HelpDropdownView())
 	if ctx.author.id == my_id:
 		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
