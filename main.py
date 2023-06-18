@@ -1627,127 +1627,7 @@ async def volume(ctx, volume: float):
 '''
 				
 #---------Test------------#
-from typing import List #for tictactoe
 
-
-class TicTacToeButton(discord.ui.Button['TicTacToe']):
-	def __init__(self, x: int, y: int):
-		super().__init__(style=discord.ButtonStyle.secondary, label='\u200b', row=y)
-		self.x = x
-		self.y = y
-		
-	async def callback(self, interaction: discord.Interaction):
-		
-		global player1
-		global player2
-		
-		assert self.view is not None
-		view: TicTacToe = self.view
-		state = view.board[self.y][self.x]
-		if state in (view.X, view.O):
-			return
-			
-		if view.current_player == view.X:
-			if interaction.user != player1:
-				embed = discord.Embed(title="***Its not your Turn!***", color=discord.Colour.yellow())
-				await interaction.response.send_message(embed=embed, ephemeral=True)
-			else:
-				self.style = discord.ButtonStyle.danger
-				self.label = 'X'
-				self.disabled = True
-				view.board[self.y][self.x] = view.X
-				view.current_player = view.O
-				embed = discord.Embed(title="***It is now O's turn***", color=discord.Colour.blue())
-		else:
-			if interaction.user != player2:
-				embed = discord.Embed(title="***Its not your Turn!***", color=discord.Colour.yellow())
-				await interaction.response.send_message(embed=embed, ephemeral=True)
-			else:
-				self.style = discord.ButtonStyle.success
-				self.label = 'O'
-				self.disabled = True
-				view.board[self.y][self.x] = view.O
-				view.current_player = view.X
-				embed = discord.Embed(title="***It is now X's turn***", color=discord.Colour.blue())
-				
-		winner = view.check_board_winner()
-		if winner is not None:
-			if winner == view.X:
-				embed = discord.Embed(title="***X won!***", color=discord.Colour.red())
-			elif winner == view.O:
-				embed = discord.Embed(title="***O won!***", color=discord.Colour.green())
-			else:
-				content = "> ***It's a tie!***"
-			
-			for child in view.children:
-				child.disabled = True
-			
-			view.stop()
-			
-		await interaction.response.edit_message(embed=embed, view=view)
-
-
-
-class TicTacToe(discord.ui.View):
-	children: List[TicTacToeButton]
-	X = -1
-	O = 1
-	Tie = 2
-	
-	def __init__(self):
-		super().__init__()
-		self.current_player = self.X
-		self.board = [
-			[0, 0, 0],
-			[0, 0, 0],
-			[0, 0, 0],
-		]
-		for x in range(3):
-			for y in range(3):
-				self.add_item(TicTacToeButton(x, y))
-				
-	def check_board_winner(self):
-		for across in self.board:
-			value = sum(across)
-			if value == 3:
-				return self.O
-			elif value == -3:
-				return self.X
-		
-		for line in range(3):
-			value = self.board[0][line] + self.board[1][line] + self.board[2][line]
-			if value == 3:
-				return self.O
-			elif value == -3:
-				return self.X
-				
-		diag = self.board[0][2] + self.board[1][1] + self.board[2][0]
-		if diag == 3:
-			return self.O
-		elif diag == -3:
-			return self.X
-			
-		diag = self.board[0][0] + self.board[1][1] + self.board[2][2]
-		if diag == 3:
-			return self.O
-		elif diag == -3:
-			return self.X
-			
-		if all(i != 0 for row in self.board for i in row):
-			return self.Tie
-			
-		return None
-
-
-@is_beta
-@client.command()
-async def tic(ctx, enemy: discord.Member):
-	start_embed = discord.Embed(title="***Tic Tac Toe: X goes first***", color=discord.Colour.blue())
-	await ctx.send(embed=start_embed, view=TicTacToe())
-	global player1
-	global player2
-	player1 = ctx.message.author
-	player2 = enemy
 
 @is_beta
 @client.command()
@@ -1885,7 +1765,7 @@ async def verify(ctx):
 async def help(ctx):
 	#view = HelpDropdownView()
 	prefix = data["command_prefix"]
-	await ctx.send('Select the help command section:', view=HelpDropdownView())
+	await ctx.send('Select the help command section: ✨', view=HelpDropdownView())
 	if ctx.author.id == my_id:
 		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
 		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
