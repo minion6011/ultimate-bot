@@ -4,11 +4,12 @@ import time
 import json
 import sys
 import os
+import codecs
 
 def AddNewKey(data: dict, new: dict) -> dict:
     result = data.copy()
-    for key,value in new.items():
-        if type(value) ==  dict:
+    for key, value in new.items():
+        if isinstance(value, dict):
             result[key] = AddNewKey(result.get(key, {}), value)
         result.setdefault(key, value)
     return result
@@ -20,14 +21,14 @@ def CheckUpdate(filename: str, githuburl: str) -> bool:
             os.makedirs("/".join(filename.split("/")[:-1]), exist_ok=True)
         for count, text in enumerate(filename[::-1]):
             if text == ".":
-                filename_ = filename[:len(filename)-count-1]
-                extension = filename[-count-1:]
+                filename_ = filename[:len(filename) - count - 1]
+                extension = filename[-count - 1:]
                 break
         else:
             extension = ""
         if extension in [".py", ".bat", ".txt", ".md", ".sh", ""]:
             if os.path.isfile(filename):
-                with open(filename, "r", encoding='utf-8') as f:
+                with codecs.open(filename, "r", encoding='utf-8') as f:
                     current = f.read()
             else:
                 github = requests.get(githuburl + filename)
@@ -36,9 +37,9 @@ def CheckUpdate(filename: str, githuburl: str) -> bool:
                     return None
                 github.encoding = github.apparent_encoding
                 github = github.text.encode(encoding='utf-8')
-                with open(filename, "wb") as f:
+                with codecs.open(filename, "wb") as f:
                     f.write(github)
-                with open(filename, "r", encoding='utf-8') as f:
+                with codecs.open(filename, "r", encoding='utf-8') as f:
                     current = f.read()
             github = requests.get(githuburl + filename)
             if github.status_code != 200:
@@ -46,7 +47,7 @@ def CheckUpdate(filename: str, githuburl: str) -> bool:
                 return None
             github.encoding = github.apparent_encoding
             github = github.text.encode(encoding='utf-8')
-            if current.replace('\n','').replace('\r','').encode(encoding='utf-8') != github.decode().replace('\n','').replace('\r','').encode(encoding='utf-8'):
+            if current.replace('\n', '').replace('\r', '').encode(encoding='utf-8') != github.decode().replace('\n', '').replace('\r', '').encode(encoding='utf-8'):
                 print(f'Update found for {filename}!')
                 print(f'Backuping {filename}...\n')
                 if os.path.isfile(f'{filename_}_old{extension}'):
@@ -61,7 +62,7 @@ def CheckUpdate(filename: str, githuburl: str) -> bool:
                     print(f'Failed to backup file {filename}\n')
                     print(traceback.format_exc())
                 else:
-                    with open(filename, "wb") as f:
+                    with codecs.open(filename, "wb") as f:
                         f.write(github)
                     print(f'Update for {filename} done!\n')
                     return True
@@ -70,7 +71,7 @@ def CheckUpdate(filename: str, githuburl: str) -> bool:
                 return False
         elif extension == ".json":
             if os.path.isfile(filename):
-                with open(filename, "r", encoding='utf-8') as f:
+                with codecs.open(filename, "r", encoding='utf-8') as f:
                     current = json.load(f)
             else:
                 github = requests.get(githuburl + filename)
@@ -79,41 +80,37 @@ def CheckUpdate(filename: str, githuburl: str) -> bool:
                     return None
                 github.encoding = github.apparent_encoding
                 github = github.text.encode(encoding='utf-8')
-                with open(filename, "wb") as f:
+                with codecs.open(filename, "wb") as f:
                     f.write(github)
                 try:
-                    with open(filename, "r", encoding='utf-8') as f:
+                    with codecs.open(filename, "r", encoding='utf-8') as f:
                         current = json.load(f)
                 except json.decoder.JSONDecodeError:
-                    with open(filename, "r", encoding='utf-8-sig') as f:
+                    with codecs.open(filename, "r", encoding='utf-8-sig') as f:
                         current = json.load(f)
             github = requests.get(githuburl + filename)
             if github.status_code != 200:
                 print(f'Failed to get data for {filename}\n')
                 return None
             github.encoding = github.apparent_encoding
-            github = github.text
-            
-            github = json.loads(github)
-            new = AddNewKey(current, github)
-            if current != new:
+            github = github.text.encode(encoding='utf-8')
+            if current != json.loads(github.decode()):
                 print(f'Update found for {filename}!')
                 print(f'Backuping {filename}...\n')
+                if os.path.isfile(f'{filename_}_old{extension}'):
+                    try:
+                        os.remove(f'{filename_}_old{extension}')
+                    except PermissionError:
+                        print(f'Failed to remove file {filename}\n')
+                        print(traceback.format_exc())
                 try:
-                    if os.path.isfile(f'{filename_}_old{extension}'):
-                        try:
-                            os.remove(f'{filename_}_old{extension}')
-                        except PermissionError:
-                            print(f'Failed to remove file {filename_}_old{extension}')
-                            print(f'{traceback.format_exc()}\n')
                     os.rename(filename, f'{filename_}_old{extension}')
                 except PermissionError:
-                    print(f'Failed to backup file {filename}')
-                    print(f'{traceback.format_exc()}\n')
-                    return None
+                    print(f'Failed to backup file {filename}\n')
+                    print(traceback.format_exc())
                 else:
-                    with open(filename, 'w', encoding="utf-8") as f:
-                        json.dump(new, f, indent=4, ensure_ascii=False)
+                    with codecs.open(filename, "wb") as f:
+                        f.write(github)
                     print(f'Update for {filename} done!\n')
                     return True
             else:
@@ -161,41 +158,25 @@ def CheckUpdate(filename: str, githuburl: str) -> bool:
                 print(f'No update for {filename}!\n')
                 return False
         else:
-            print(f'Extension {extension} not supported\n')
+            print(f'Extension {extension} not supported!\n')
             return None
     except Exception:
-        print("Update failed")
-        print(f'{traceback.format_exc()}\n')
+        print(f'Error while checking update for {filename}\n')
+        print(traceback.format_exc())
         return None
 
-if "-beta" in sys.argv:
-    githuburl = "https://raw.githubusercontent.com/minion6011/ultimate-bot/beta/"
-else:
-    githuburl = "https://raw.githubusercontent.com/minion6011/ultimate-bot/master/"
+if __name__ == "__main__":
+    if len(sys.argv) < 3:
+        print("Usage: python main.py <githuburl> <filenames...>")
+        sys.exit(1)
 
+    githuburl = sys.argv[1]
+    filenames = sys.argv[2:]
 
-flag = False
-CheckUpdate("main.py", githuburl)
-CheckUpdate("requirements.txt", githuburl)
-CheckUpdate("main.py", githuburl)
-CheckUpdate("requirements.txt", githuburl)
-CheckUpdate("main.py", githuburl)
-CheckUpdate("requirements.txt", githuburl)
-CheckUpdate("main.py", githuburl)
-CheckUpdate("requirements.txt", githuburl)
-CheckUpdate("main.py", githuburl)
-CheckUpdate("requirements.txt", githuburl)
-CheckUpdate("main.py", githuburl)
-CheckUpdate("requirements.txt", githuburl)
-CheckUpdate("main.py", githuburl)
-CheckUpdate("requirements.txt", githuburl)
-CheckUpdate("main.py", githuburl)
-CheckUpdate("requirements.txt", githuburl)
-CheckUpdate("main.py", githuburl)
-CheckUpdate("requirements.txt", githuburl)
-
-print("All update finished")
-if flag:
-    os.chdir(os.getcwd())
-    os.execv(os.sys.executable,['python3', "-m", "pip", "install", "--user", "-U", "-r", "requirements.txt"])
-    sys.exit(0)
+    while True:
+        for filename in filenames:
+            CheckUpdate(filename, githuburl)
+        print("All update finished")
+        os.chdir(os.getcwd())
+        os.execv(os.sys.executable,['python3', "-m", "pip", "install", "--user", "-U", "-r", "requirements.txt"])
+        sys.exit(0)
