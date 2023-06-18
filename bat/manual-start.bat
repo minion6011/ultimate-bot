@@ -4,12 +4,12 @@ color f0
 
 
 :MENU
-title Minions Bot 4.0
+title Manual start
 cls
 mode 86,30
 echo.
 echo.
-echo                       ******* Minions dev bot *******
+echo                       ******* Manul Start *******
 echo.
 echo.
 echo.
@@ -64,7 +64,7 @@ pause >nul
 ::###########################################################  B
 
 :B
-py -3 updater.py
+python updater.py https://raw.githubusercontent.com/minion6011/ultimate-bot/master/ main.py requirements.txt
 echo.
 pause
 cls
