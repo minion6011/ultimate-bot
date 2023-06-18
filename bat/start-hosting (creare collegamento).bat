@@ -2,7 +2,7 @@
 :A
 color 02
 mode 86,30
-python updater.py https://raw.githubusercontent.com/minion6011/ultimate-bot/master/ main.py requirements.txt
+py -3 updater.py
 cls
 py -3 -m pip install -U pip
 py -3 -m pip install -U --user -r requirements.txt
