@@ -105,20 +105,20 @@ async def on_message(message):
 	if len(message.content) > 1908:
 		return
 	if message.channel.type == discord.ChannelType.private:
+		await client.process_commands(message) 
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\nDm: `Yes`", color=discord.Color.green())
 		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
 		await channel.send(embed=embed)
-		await client.process_commands(message) 
 	else:
+		await client.process_commands(message)
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.green())
 		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
 		embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
 		await channel.send(embed=embed)
-		await client.process_commands(message)
 
 
 @client.event
@@ -150,20 +150,20 @@ async def on_message_edit(before, after):
 	if len(before.content) > 1908:
 		return
 	if after.channel.type == discord.ChannelType.private:
+		await client.process_commands(after)
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio Editato\nUtente: `{after.author.display_name}#{after.author.discriminator}`\nDm: `Yes`", color=discord.Color.gold())
 		embed.add_field(name = 'Contenuto:', value=f"Prima: `{before.content}`, Dopo: `{after.content}`", inline = True)
 		await channel.send(embed=embed)
-		await client.process_commands(after)
 	else:
+		await client.process_commands(after)
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio Editato\nUtente: `{after.author.display_name}#{after.author.discriminator}`\n Server: `{after.guild.name}`", color=discord.Color.gold())
 		embed.add_field(name = 'Contenuto:', value=f"Prima: `{before.content}`, Dopo: `{after.content}`", inline = True)
 		embed.add_field(name = 'Canale:', value=f"<#{after.channel.id}>", inline = True)
 		await channel.send(embed=embed)
-		await client.process_commands(after)
 
 
 
