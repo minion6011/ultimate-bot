@@ -197,9 +197,12 @@ async def on_member_join(member):
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nNuovo utente nel server\nUtente: `{member.display_name}#{member.discriminator}`\n Server: `{member.guild.name}`", color=discord.Color.orange())
 		await channel.send(embed=embed)
-		#await member.create_dm()
-		#embed = discord.Embed(title=f"Hi {member.name}, welcome to {member.guild}!", color=discord.Color.orange())
-		#await member.dm_channel.send(embed=embed)
+		if member.guild.id == "1043925344312381550"
+			await member.create_dm()
+			embed = discord.Embed(title=f"Hi {member.name}, welcome to {member.guild}!", color=discord.Color.orange())
+			await member.dm_channel.send(embed=embed)
+		else:
+			return
 	except:
 		await asyncio.sleep(20)
 		channel = client.get_channel(errorchannel)
