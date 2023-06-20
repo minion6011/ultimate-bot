@@ -1761,20 +1761,12 @@ async def verify(ctx):
 #----------Admin---------------#
 
 
-@is_me
 @client.command()
 @commands.guild_only()
 async def help(ctx):
-	#view = HelpDropdownView()
-	prefix = data["command_prefix"]
-	await ctx.send('Select the help command section: ', view=HelpDropdownView())
-	if ctx.author.id == my_id:
-		admin_embed = discord.Embed(title="Admin Command :money_with_wings:", color=discord.Color.blue())
-		admin_embed.add_field(name=f"{prefix}update", value="Update Bot code", inline=True)
-		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
-		admin_embed.add_field(name=f"{prefix}verify", value="In test", inline=True)
-		admin_embed.set_footer(text=footer_testo)
-		await ctx.send(embed=admin_embed, ephemeral=True)
+	embed = discord.Embed(title="`?help` has been disabled\nTry using </help:1094994368445816934>", color=discord.Color.greyple())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, ephemeral=True)
 
 
 @is_me
