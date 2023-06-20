@@ -201,8 +201,6 @@ async def on_member_join(member):
 			await member.create_dm()
 			embed = discord.Embed(title=f"Hi {member.name}, welcome to {member.guild}!", color=discord.Color.orange())
 			await member.dm_channel.send(embed=embed)
-		else:
-			return
 	except:
 		await asyncio.sleep(20)
 		channel = client.get_channel(errorchannel)
