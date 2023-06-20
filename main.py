@@ -237,7 +237,7 @@ async def on_voice_state_update(member, before, after):
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nUtente in Chat vocale\nUtente: `{member.display_name}#{member.discriminator}`\nServer: `{member.guild.name}`", color=discord.Color.red())
-		embed.add_field(name = 'Canale:', value=f"<#{before.channel.id}>", inline = True)
+		embed.add_field(name = 'Canale:', value="Nessuno", inline = True)
 		await channel.send(embed=embed)
 	
 
