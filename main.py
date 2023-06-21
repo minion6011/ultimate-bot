@@ -1697,7 +1697,7 @@ async def verify(ctx):
 
 
 #----------Admin---------------#
-
+'''
 @client.command()
 @commands.guild_only()
 async def activity(ctx, id=None):
@@ -1754,6 +1754,7 @@ async def activity(ctx, id=None):
                         await ctx.send(embed=embed)
                 else:
 			await ctx.send(embed=embed)
+'''
 
 @client.command()
 @commands.guild_only()
