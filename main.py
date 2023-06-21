@@ -102,7 +102,7 @@ async def on_ready():
 async def on_message(message):
 	if message.author.bot:
 		return
-	if len(message.content) > 1908:
+	if len(message.content) > 1800:
 		return
 	if message.channel.type == discord.ChannelType.private:
 		await client.process_commands(message) 
