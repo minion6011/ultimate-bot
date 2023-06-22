@@ -1697,18 +1697,18 @@ async def verify(ctx):
 
 
 #----------Admin---------------#
-'''
+
 @client.command()
 @commands.guild_only()
 async def activity(ctx, id=None):
         utilmax = 5
 	embed = discord.Embed(title="Activity List", color=discord.Color.gold())
-        embed.add_field(name="Boosted activity", value="\n7 = dev = iframe-playground\n8 = Chef Showdown\n9 = Bobble Land: Scrappies\n10 = Guestbook\n11 = Ask Away\n12 = Know what I Meme\n 13 = Project K(Known as Krunker)\n14 = Bash Out")
-        embed.set_footer(text=footer_testo)    
-        if ctx.author.voice is None:
-                await ctx.send("Please enter in a voice channel to use this command")
-        else:
-                if id == "1":
+	embed.add_field(name="Boosted activity", value="\n7 = dev = iframe-playground\n8 = Chef Showdown\n9 = Bobble Land: Scrappies\n10 = Guestbook\n11 = Ask Away\n12 = Know what I Meme\n 13 = Project K(Known as Krunker)\n14 = Bash Out")
+	embed.set_footer(text=footer_testo)    
+	if ctx.author.voice is None:
+		await ctx.send("Please enter in a voice channel to use this command")
+	else:
+		if id == "1":
                         link1 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'sketch-heads', max_uses = utilmax)
                         await ctx.send(f"**Sketch Heads** - {link1}")
                 if id == "2":
@@ -1754,7 +1754,6 @@ async def activity(ctx, id=None):
                         await ctx.send(embed=embed)
                 else:
 			await ctx.send(embed=embed)
-'''
 
 @client.command()
 @commands.guild_only()
