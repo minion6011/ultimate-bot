@@ -1708,51 +1708,33 @@ async def activity(ctx, id=None):
 	if ctx.author.voice is None:
 		await ctx.send("Please enter in a voice channel to use this command")
 	else:
-		if id == "1":
-                        link1 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'sketch-heads', max_uses = utilmax)
-                        await ctx.send(f"**Sketch Heads** - {link1}")
-                if id == "2":
-                        link2 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'chess', max_uses = utilmax)
-                        await ctx.send(f"**Chess in the Park** - {link2}")
-                if id == "3":
-                        link3 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'land-io', max_uses = utilmax)
-                        await ctx.send(f"**Land.io** - {link3}")
-                if id == "4":
-                        link4 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'spellcast', max_uses = utilmax)
-                        await ctx.send(f"**Spell Cast** - {link4}")
-                if id == "5":
-                        link5 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'blazing-8s', max_uses = utilmax)
-                        await ctx.send(f"**Blazing 8s** - {link5}")
-                if id == "6":
-                        link6 = await client.togetherControl.create_link(ctx.author.voice.channel.id, 'poker', max_uses = utilmax)
-                        await ctx.send(f"**Poker Night** - {link6}")
-                if id == "7":
-                        link7 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '880559245471408169', max_uses = utilmax)
-                        await ctx.send(f"**dev - iframe-playground** - {link7}")
-                if id == "8":
-                        link8 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1037680572660727838')
-                        await ctx.send(f"**Chef Showdown** - {link8}")
-                if id == "9":
-                        link9 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1000100849122553977')
-                        await ctx.send(f"**Bobble Land: Scrappies** - {link9}")
-                if id == "10":
-                        link10 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1001529884625088563')
-                        await ctx.send(f"**Guestbook** - {link10}")
-                if id == "11":
-                        link11 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
-                        await ctx.send(f"**Ask Away** - {link11}")
-                if id == "12":
-                        link12 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
-                        await ctx.send(f"**Know what I Meme** - {link12}")
-                if id == "13":
-                        link13 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1011683823555199066')
-                        await ctx.send(f"**Project K(Known as Krunker)** - {link13}")
-                if id == "14":
-                        link14 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1006584476094177371')
-                        await ctx.send(f"**Bash Out** - {link14}")
-                elif id == None: 
-                        await ctx.send(embed=embed)
-                else:
+		if id == "7":
+			link7 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '880559245471408169', max_uses = utilmax)
+			await ctx.send(f"**dev - iframe-playground** - {link7}")
+		if id == "8":
+			link8 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1037680572660727838')
+			await ctx.send(f"**Chef Showdown** - {link8}")
+		if id == "9":
+			link9 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1000100849122553977')
+			await ctx.send(f"**Bobble Land: Scrappies** - {link9}")
+		if id == "10":
+			link10 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1001529884625088563')
+			await ctx.send(f"**Guestbook** - {link10}")
+		if id == "11":
+			link11 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
+			await ctx.send(f"**Ask Away** - {link11}")
+		if id == "12":
+			link12 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
+			await ctx.send(f"**Know what I Meme** - {link12}")
+		if id == "13":
+			link13 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1011683823555199066')
+			await ctx.send(f"**Project K(Known as Krunker)** - {link13}")
+		if id == "14":
+			link14 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1006584476094177371')
+			await ctx.send(f"**Bash Out** - {link14}")
+		elif id == None: 
+			await ctx.send(embed=embed)
+		else:
 			await ctx.send(embed=embed)
 
 @client.command()
