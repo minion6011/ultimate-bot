@@ -554,64 +554,6 @@ async def slowmode(ctx, seconds: int):
 
 @client.command()
 @commands.guild_only()
-async def chat(ctx, *, request):
-	async with ctx.typing():
-		response = openai.Completion.create(
-			engine="text-davinci-003", 
-			prompt=request,
-			temperature=0.7, #creativita' coerenza
-			max_tokens=1000, #max parole
-			top_p=0.85, #considera le possibilita' di risposta
-			frequency_penalty=0.75, #penalizza uso parole comuni
-			presence_penalty=0.6 #uso di parole specifiche(specializzate)
-		)
-		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, content=f"```{response.choices[0].text}```")	
-
-@client.command()
-@commands.guild_only()
-async def generate_image(ctx, *, request):
-	async with ctx.typing():
-		if len(request) > 80:
-			embed = discord.Embed(title="Error: The text is too long must not exceed 80 characters", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed, delete_after=4)
-		else:
-			try:
-				prompt = request
-
-				#image-alpha-001, image-beta-001, image-beta-002, image-beta-003
-				
-				response = openai.Image.create(
-					prompt=prompt,
-					#model="image-beta-002",
-					n=1,
-					size="1024x1024",
-					response_format="url"
-				)
-				image_url = response["data"][0]["url"]
-
-				#await ctx.send(file=discord.File(byte_array, "image.png"))
-				embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
-				embed.set_image(url=image_url)
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed)
-			except Exception as e:
-				if 'safety system' in str(e):
-					embed = discord.Embed(title=f"Error:\n the request: {request} contains text that is not allowed by the security rules", color=discord.Color.red())
-					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed, delete_after=4)
-				else:
-					embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
-					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed, delete_after=4)
-					channel = client.get_channel(errorchannel)
-					await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
-					print(e)
-
-@client.command()
-@commands.guild_only()
 async def translate(ctx, language, *, request):
 	text = request
 	lang = language
@@ -1698,6 +1640,93 @@ async def verify(ctx):
 
 #----------Admin---------------#
 
+'''
+@is_me
+@client.command()
+@commands.guild_only()
+async def chat(ctx, *, request):
+	async with ctx.typing():
+		response = openai.Completion.create(
+			engine="text-davinci-003", 
+			prompt=request,
+			temperature=0.7, #creativita' coerenza
+			max_tokens=1000, #max parole
+			top_p=0.85, #considera le possibilita' di risposta
+			frequency_penalty=0.75, #penalizza uso parole comuni
+			presence_penalty=0.6 #uso di parole specifiche(specializzate)
+		)
+		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, content=f"```{response.choices[0].text}```")	
+
+@is_me
+@client.command()
+@commands.guild_only()
+async def generate_image(ctx, *, request):
+	async with ctx.typing():
+		if len(request) > 80:
+			embed = discord.Embed(title="Error: The text is too long must not exceed 80 characters", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			try:
+				prompt = request
+
+				#image-alpha-001, image-beta-001, image-beta-002, image-beta-003
+				
+				response = openai.Image.create(
+					prompt=prompt,
+					#model="image-beta-002",
+					n=1,
+					size="1024x1024",
+					response_format="url"
+				)
+				image_url = response["data"][0]["url"]
+
+				#await ctx.send(file=discord.File(byte_array, "image.png"))
+				embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+				embed.set_image(url=image_url)
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
+			except Exception as e:
+				if 'safety system' in str(e):
+					embed = discord.Embed(title=f"Error:\n the request: {request} contains text that is not allowed by the security rules", color=discord.Color.red())
+					embed.set_footer(text=footer_testo)
+					await ctx.send(embed=embed, delete_after=4)
+				else:
+					embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+					embed.set_footer(text=footer_testo)
+					await ctx.send(embed=embed, delete_after=4)
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+					print(e)
+'''
+
+@client.command()
+@commands.guild_only()
+async def chat(ctx):
+	embed = discord.Embed(title="`?chat` has been disabled\nTry to check announcements to know when the command will be reactivated", color=discord.Color.greyple())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, delete_after=20)	
+
+@client.command()
+@commands.guild_only()
+async def generate_image(ctx,):
+	embed = discord.Embed(title="`?generate_image` has been disabled\nTry to check announcements to know when the command will be reactivated", color=discord.Color.greyple())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, delete_after=20)
+
+
+
+@client.command()
+@commands.guild_only()
+async def help(ctx):
+	embed = discord.Embed(title="`?help` has been disabled\nTry using </help:1094994368445816934>", color=discord.Color.greyple())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, delete_after=20)
+
+
+@is_beta
 @client.command()
 @commands.guild_only()
 async def activity(ctx, id=None):
@@ -1737,12 +1766,6 @@ async def activity(ctx, id=None):
 		else:
 			await ctx.send(embed=embed)
 
-@client.command()
-@commands.guild_only()
-async def help(ctx):
-	embed = discord.Embed(title="`?help` has been disabled\nTry using </help:1094994368445816934>", color=discord.Color.greyple())
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, ephemeral=True)
 
 
 @is_me
