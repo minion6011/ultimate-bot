@@ -714,7 +714,7 @@ from discord import app_commands
 
 class BugModal(ui.Modal, title='Report Bug'):
     bug_name = ui.TextInput(label='Bugged Command name')
-    #options = [discord.SelectOption(discord.SelectOption(label='Slash Bug')), discord.SelectOption(label='Message components Bug')), discord.SelectOption(label='Command Bug'))]
+    #options = [discord.SelectOption(label='Option 1', value='1'), discord.SelectOption(label='Option 2', value='2'), discord.SelectOption(label='Option 3', value='3')]
     #type_of_bug = ui.Select(placeholder="Bug Type", min_values=1, max_values=1, options=options)
     answer = ui.TextInput(label='Description of the bug', style=discord.TextStyle.paragraph)
 
