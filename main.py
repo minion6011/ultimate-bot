@@ -388,6 +388,11 @@ async def unmute(ctx, user: discord.Member = None):
 		else:
 			role = discord.utils.get(ctx.guild.roles, name="mute")
 			await user.remove_roles(role)
+			check_voice_member = ctx.guild.get_member(int(user.id))
+			if check_voice_member and check_voice_member.voice:
+				await check_voice_member.move_to(None)
+			else:
+				return
 			embed = discord.Embed(title = 'I unmuted', description = f'{user}', color=discord.Color.blue())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed)
