@@ -968,7 +968,7 @@ async def giveaway(interaction: discord.Interaction, seconds: int, prize: str):
 			await interaction.response.send_message(embed=warning_embed, ephemeral=True)
 		else:
 			if interaction.user.guild_permissions.administrator:
-				start_embed = discord.Embed(title=f":tada: Giveaway start in {time} seconds :tada:\nThe prize is {prize} :moneybag:", color=0xe91e63)
+				start_embed = discord.Embed(title=f":tada: Giveaway start in {time} seconds :tada:\nThe prize is `{prize}` :moneybag:", color=0xe91e63)
 				await interaction.response.send_message(embed=start_embed)
 				await asyncio.sleep(time)
 				results = [member for member in interaction.guild.members if not member.bot]
