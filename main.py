@@ -546,7 +546,7 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 async def slowmode(ctx, seconds: int):
 	await ctx.channel.edit(slowmode_delay=seconds)
 	slowmode_embed = discord.Embed(title="Slowmode", description="A slowmode was set for this channel", colour=discord.Colour.green())
-	embed.set_footer(text=footer_testo)
+	slowmode_embed.set_footer(text=footer_testo)
 	await ctx.send(embed=slowmode_embed, delete_after=10)
 
 
