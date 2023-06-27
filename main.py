@@ -410,7 +410,7 @@ async def mute(ctx, user: discord.Member = None, reason = None):
 		if user == None:
 			embed = discord.Embed(title="Please send the user id", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
+			await ctx.send(embed=embed, delete_after=4)
 		else:
 			guild = ctx.guild
 			if discord.utils.get(ctx.guild.roles, name="mute"):
@@ -423,7 +423,7 @@ async def mute(ctx, user: discord.Member = None, reason = None):
 					await user.add_roles(role)
 					embed = discord.Embed(title = 'I muted', description = f'{user}', color=discord.Color.blue())
 					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed)
+					await ctx.send(embed=embed, delete_after=7)
 					name = str(ctx.guild.name)
 					check_voice_member = ctx.guild.get_member(int(user.id))
 					if check_voice_member and check_voice_member.voice:
@@ -443,7 +443,7 @@ async def mute(ctx, user: discord.Member = None, reason = None):
 					await user.add_roles(role)
 					embed = discord.Embed(title = f'I muted {user}', description = f'For reason: {reason}', color=discord.Color.blue())
 					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed)
+					await ctx.send(embed=embed, delete_after=7)
 					name = str(ctx.guild.name)
 					check_voice_member = ctx.guild.get_member(int(user.id))
 					if check_voice_member and check_voice_member.voice:
@@ -466,7 +466,7 @@ async def mute(ctx, user: discord.Member = None, reason = None):
 					await user.add_roles(role)
 					embed = discord.Embed(title = 'I muted', description = f'{user}', color=discord.Color.blue())
 					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed)
+					await ctx.send(embed=embed, delete_after=7)
 					name = str(ctx.guild.name)
 					check_voice_member = ctx.guild.get_member(int(user.id))
 					if check_voice_member and check_voice_member.voice:
@@ -487,7 +487,7 @@ async def mute(ctx, user: discord.Member = None, reason = None):
 					await user.add_roles(role)
 					embed = discord.Embed(title = f'I muted {user}', description = f'For reason: {reason}', color=discord.Color.blue())	
 					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed)
+					await ctx.send(embed=embed, delete_after=7)
 					name = str(ctx.guild.name)
 					check_voice_member = ctx.guild.get_member(int(user.id))
 					if check_voice_member and check_voice_member.voice:
