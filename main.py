@@ -1669,7 +1669,7 @@ async def verify(ctx):
 
 #----------Admin---------------#
 
-
+'''
 @is_me
 @client.command()
 @commands.guild_only()
@@ -1745,7 +1745,6 @@ async def generate_image(ctx,):
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed, delete_after=20)
 
-'''
 
 @client.command()
 @commands.guild_only()
