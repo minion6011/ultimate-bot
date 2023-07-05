@@ -9,6 +9,5 @@ openai
 deep_translator
 pytube
 discord.py[voice]
-io
 craiyon.py
-PIL
+base64
