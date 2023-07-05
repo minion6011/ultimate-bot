@@ -1682,7 +1682,7 @@ async def generate_image2(ctx, *, request: str):
 	embed.set_footer(text=footer_testo)
 	message = await ctx.send(embed=embed)
 	async with aiohttp.request("POST", "https://backend.craiyon.com/generate", json={"prompt": request}) as resp:
-		r = wait resp.json()
+		r = await resp.json()
 		images = r['images']
 		image = BytesIO(base64.decodebytes(images[0].encode("utf-8")))
 		file = discord.File(image, "generatedImage.png")
