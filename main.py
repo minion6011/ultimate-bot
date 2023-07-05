@@ -1689,7 +1689,7 @@ async def generate_image2(ctx, *, request: str):
 		image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
 		image_embed.set_image(url="attachment://generatedImage.png")
 		image_embed.set_footer(text=footer_testo)
-		return await msg.edit(embed=image_embed)
+		return await message.edit(embed=image_embed)
 
 '''
 @is_me
