@@ -10,4 +10,3 @@ deep_translator
 pytube
 discord.py[voice]
 craiyon.py
-base64
