@@ -1674,8 +1674,8 @@ from PIL import Image
 from io import BytesIO
 import time
 
-
-@client.command
+@is_me
+@client.command()
 async def generate_image2(ctx, *, request: str):
 	ETA = int(time.time() + 60)
 	embed = discord.Embed(title=f"Loading the image... \nTime = <t:{ETA}:R>", color=discord.Color.red())
