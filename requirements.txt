@@ -10,5 +10,5 @@ deep_translator
 pytube
 discord.py[voice]
 io
-craiyon
+craiyon.py
 PIL
