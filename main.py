@@ -1674,6 +1674,16 @@ from PIL import Image
 from io import BytesIO
 import time
 
+@client.command()
+async def generate_image3(ctx, *, request: str):
+    generator = Craiyon()
+    result = generator.generate(request)
+    image = discord.File(result, filename="generated_image.png")
+    embed = discord.Embed(title="Generated Image")
+    embed.set_image(url="attachment://generated_image.png")
+    await ctx.send(file=image, embed=embed)
+
+
 @is_me
 @client.command()
 async def generate_image2(ctx, *, request: str):
@@ -1685,7 +1695,7 @@ async def generate_image2(ctx, *, request: str):
 		r = await resp.json()
 		images = r['images']
 		image = BytesIO(base64.decodebytes(images[0].encode("utf-8")))
-		file = discord.File(image, filename="generatedImage.png")
+		file = discord.File(image, "generatedImage.png")
 		image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
 		image_embed.set_image(url="attachment://generatedImage.png")
 		image_embed.set_footer(text=footer_testo)
