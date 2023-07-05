@@ -1668,6 +1668,28 @@ async def verify(ctx):
 
 
 #----------Admin---------------#
+from craiyon import Craiyon
+from PIL import Image
+from io import BytesIO
+import time
+
+
+@client.command
+async def generate_image2(ctx, *, request: str):
+	ETA = int(time.time() + 60)
+	embed = discord.Embed(title=f"Loading the image... \nTime = <t:{ETA}:R>", color=discord.Color.red())
+	embed.set_footer(text=footer_testo)
+	message = await ctx.send(embed=embed)
+	generator = Craiyon()
+	result = generator.generate(request)
+	images = result.images
+	for i in images:
+		image = BytesIO(base64.decodebytes(i.encode("utf-8")))
+		file = discord.File(image, "generatedImage.png")
+		image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+		image_embed.set_image(url="attachment://generatedImage.png")
+		image_embed.set_footer(text=footer_testo)
+		return await msg.edit(embed=image_embed)
 
 '''
 @is_me
