@@ -1668,6 +1668,7 @@ async def verify(ctx):
 
 
 #----------Admin---------------#
+import base64
 from craiyon import Craiyon
 from PIL import Image
 from io import BytesIO
