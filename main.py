@@ -1678,11 +1678,12 @@ import time
 async def generate_image3(ctx, *, request: str):
     generator = Craiyon()
     result = generator.generate(request)
-    image = discord.File(result, filename="generated_image.png")
+    filename = "generated_image.png"
+    result.save(filename)
+    image = discord.File(filename)
     embed = discord.Embed(title="Generated Image")
     embed.set_image(url="attachment://generated_image.png")
     await ctx.send(file=image, embed=embed)
-
 
 @is_me
 @client.command()
