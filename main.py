@@ -1675,32 +1675,45 @@ from io import BytesIO
 import time
 
 @client.command()
-async def generate_image3(ctx, *, request: str):
-    generator = Craiyon()
-    result = generator.generate(request)
-    filename = "generated_image.png"
-    result.save(filename)
-    image = discord.File(filename)
-    embed = discord.Embed(title="Generated Image")
-    embed.set_image(url="attachment://generated_image.png")
-    await ctx.send(file=image, embed=embed)
-
-@is_me
-@client.command()
 async def generate_image2(ctx, *, request: str):
-	ETA = int(time.time() + 60)
-	embed = discord.Embed(title=f"Loading the image... \nTime = <t:{ETA}:R>", color=discord.Color.red())
-	embed.set_footer(text=footer_testo)
-	message = await ctx.send(embed=embed)
-	async with aiohttp.request("POST", "https://backend.craiyon.com/generate", json={"prompt": request}) as resp:
-		r = await resp.json()
-		images = r['images']
-		image = BytesIO(base64.decodebytes(images[0].encode("utf-8")))
-		file = discord.File(image, "generatedImage.png")
-		image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
-		image_embed.set_image(url="attachment://generatedImage.png")
-		image_embed.set_footer(text=footer_testo)
-		return await message.edit(embed=image_embed)
+    ETA = int(time.time() + 60)
+    embed = discord.Embed(title=f"Loading the image... \nTime = <t:{ETA}:R>", colour=discord.Color.blue())
+    embed.set_footer(text=footer_testo)
+    msg = await ctx.send(embed=embed)
+    try:
+        async with aiohttp.request("POST", "https://backend.craiyon.com/generate", json={"prompt": request}) as resp:
+            if resp.status == 200:
+                r = await resp.json()
+                images = r['images']
+                image = BytesIO(base64.decodebytes(images[0].encode("utf-8")))
+
+                await msg.delete()
+
+                file = discord.File(image, "generatedImage.png")
+                image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+                image_embed.set_image(url="attachment://generatedImage.png")
+                image_embed.set_footer(text=footer_testo)
+                await ctx.send(embed=image_embed)
+                #await ctx.send("Here's the generated image:", file=discord.File(image, "generatedImage.png"))
+            else:
+                response_text = await resp.text()
+                embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
+                embed.set_footer(text=footer_testo)
+                await ctx.send(embed=embed, delete_after=4)
+                #error-chat
+                channel = client.get_channel(errorchannel)
+                response_text = await resp.text()
+                embed = discord.Embed(title=f"**[Errore]** \nisinstance:\nText: {response_text}", color=discord.Color.red())
+                await channel.send(embed=embed)
+    except aiohttp.ContentTypeError as e:
+        embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
+        embed.set_footer(text=footer_testo)
+        await ctx.send(embed=embed, delete_after=4)
+        #error-chat
+        channel = client.get_channel(errorchannel)
+        response_text = await resp.text()
+        embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```\nText: {response_text}", color=discord.Color.red())
+        await channel.send(embed=embed)
 
 '''
 @is_me
