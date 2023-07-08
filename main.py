@@ -1676,44 +1676,43 @@ import time
 
 @client.command()
 async def generate_image2(ctx, *, request: str):
-    ETA = int(time.time() + 60)
-    embed = discord.Embed(title=f"Loading the image... \nTime = <t:{ETA}:R>", colour=discord.Color.blue())
-    embed.set_footer(text=footer_testo)
-    msg = await ctx.send(embed=embed)
-    try:
-        async with aiohttp.request("POST", "https://backend.craiyon.com/generate", json={"prompt": request}) as resp:
-            if resp.status == 200:
-                r = await resp.json()
-                images = r['images']
-                image = BytesIO(base64.decodebytes(images[0].encode("utf-8")))
-
-                await msg.delete()
-
-                file = discord.File(image, "generatedImage.png")
-                image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
-                image_embed.set_image(url="attachment://generatedImage.png")
-                image_embed.set_footer(text=footer_testo)
-                await ctx.send(file=file, embed=image_embed)
-                #await ctx.send("Here's the generated image:", file=discord.File(image, "generatedImage.png"))
-            else:
-                response_text = await resp.text()
-                embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
-                embed.set_footer(text=footer_testo)
-                await ctx.send(embed=embed, delete_after=4)
-                #error-chat
-                channel = client.get_channel(errorchannel)
-                response_text = await resp.text()
-                embed = discord.Embed(title=f"**[Errore]** \nisinstance:\nText: {response_text}", color=discord.Color.red())
-                await channel.send(embed=embed)
-    except aiohttp.ContentTypeError as e:
-        embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
-        embed.set_footer(text=footer_testo)
-        await ctx.send(embed=embed, delete_after=4)
-        #error-chat
-        channel = client.get_channel(errorchannel)
-        response_text = await resp.text()
-        embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```\nText: {response_text}", color=discord.Color.red())
-        await channel.send(embed=embed)
+	#ETA = int(time.time() + 60)
+	embed = discord.Embed(title=f"Loading the image...", colour=discord.Color.blue())
+	embed.set_footer(text=footer_testo)
+	msg = await ctx.send(embed=embed)
+	async with ctx.typing():
+		try:
+			async with aiohttp.request("POST", "https://backend.craiyon.com/generate", json={"prompt": request}) as resp:
+				if resp.status == 200:
+					r = await resp.json()
+					images = r['images']
+					image = BytesIO(base64.decodebytes(images[0].encode("utf-8")))
+					await msg.delete()
+					file = discord.File(image, "generatedImage.png")
+					image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+					image_embed.set_image(url="attachment://generatedImage.png")
+					image_embed.set_footer(text=footer_testo)
+					await ctx.send(file=file, embed=image_embed)
+					#await ctx.send("Here's the generated image:", file=discord.File(image, "generatedImage.png"))
+				else:
+					response_text = await resp.text()
+					embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
+					embed.set_footer(text=footer_testo)
+					await ctx.send(embed=embed, delete_after=4)
+					#error-chat
+					channel = client.get_channel(errorchannel)
+					response_text = await resp.text()
+					embed = discord.Embed(title=f"**[Errore]** \nisinstance:\nText: {response_text}", color=discord.Color.red())
+					await channel.send(embed=embed)
+			except aiohttp.ContentTypeError as e:
+				embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed, delete_after=4)
+				#error-chat
+				channel = client.get_channel(errorchannel)
+				response_text = await resp.text()
+				embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```\nText: {response_text}", color=discord.Color.red())
+				await channel.send(embed=embed)
 
 '''
 @is_me
