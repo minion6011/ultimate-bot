@@ -1704,7 +1704,7 @@ async def generate_image2(ctx, *, request: str):
 					response_text = await resp.text()
 					embed = discord.Embed(title=f"**[Errore]** \nisinstance:\nText: {response_text}", color=discord.Color.red())
 					await channel.send(embed=embed)
-			except aiohttp.ContentTypeError as e:
+		except aiohttp.ContentTypeError as e:
 				embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
 				embed.set_footer(text=footer_testo)
 				await ctx.send(embed=embed, delete_after=4)
