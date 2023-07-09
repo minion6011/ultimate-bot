@@ -1934,14 +1934,14 @@ async def change_status():
 
 @ban.error
 async def ban_error(ctx, error):
-	if isinstance(error, discord.Forbidden):
-		embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
+	if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(error):
+		embed = discord.Embed(title="Error: I don't have permission to unban this user", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
 
 @unban.error
 async def unban_error(ctx, error):
-	if isinstance(error, discord.Forbidden):
+	if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(error):
 		embed = discord.Embed(title="Error: I don't have permission to unban this user", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
