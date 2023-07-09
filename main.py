@@ -536,7 +536,7 @@ async def kick(ctx, member : discord.Member, *, reason = None):
 			await ctx.send(embed=embed)
 			await member.kick(reason=f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'")
 	except Exception as e:
-		if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(e):
+		if 'error code: 50013' in str(e):
 			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed, delete_after=4)
@@ -578,7 +578,7 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 			embed.set_footer(text=footer_testo)  
 			await ctx.send(embed=embed)
 	except Exception as e:
-		if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(e):
+		if 'error code: 50013' in str(e):
 			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed, delete_after=4)
@@ -651,7 +651,7 @@ async def unban(ctx, user: discord.User):
 			embed.set_footer(text=footer_testo)  
 			await ctx.send(embed=embed)
 	except Exception as e:
-		if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(e):
+		if 'error code: 50013' in str(e):
 			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed, delete_after=4)
@@ -1038,7 +1038,7 @@ async def ban(interaction: discord.Interaction, message: discord.Message):
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 			
 		except Exception as e:
-			if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(e):
+			if 'error code: 50013' in str(e):
 				embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
 				embed.set_footer(text=footer_testo)
 				await interaction.response.send_message(embed=embed, ephemeral=True)
