@@ -1535,7 +1535,60 @@ async def volume(ctx, volume: float):
         auto_mod_event = discord.AutoModRuleEventType.message_send
         await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
 '''
+
+'''
+@client.command()
+@commands.guild_only()
+async def generate_image(ctx,):
+	embed = discord.Embed(title="`?generate_image` has been disabled\nTry to check announcements to know when the command will be reactivated", color=discord.Color.greyple())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, delete_after=20)
+
+
+
+@is_me
+@client.command()
+@commands.guild_only()
+async def generate_image(ctx, *, request):
+	async with ctx.typing():
+		if len(request) > 80:
+			embed = discord.Embed(title="Error: The text is too long must not exceed 80 characters", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			try:
+				prompt = request
+
+				#image-alpha-001, image-beta-001, image-beta-002, image-beta-003
 				
+				response = openai.Image.create(
+					prompt=prompt,
+					#model="image-beta-002",
+					n=1,
+					size="1024x1024",
+					response_format="url"
+				)
+				image_url = response["data"][0]["url"]
+
+				#await ctx.send(file=discord.File(byte_array, "image.png"))
+				embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+				embed.set_image(url=image_url)
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
+			except Exception as e:
+				if 'safety system' in str(e):
+					embed = discord.Embed(title=f"Error:\n the request: {request} contains text that is not allowed by the security rules", color=discord.Color.red())
+					embed.set_footer(text=footer_testo)
+					await ctx.send(embed=embed, delete_after=4)
+				else:
+					embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+					embed.set_footer(text=footer_testo)
+					await ctx.send(embed=embed, delete_after=4)
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+					print(e)
+ 
+'''
 #---------Test------------#
 
 
@@ -1674,8 +1727,9 @@ from PIL import Image
 from io import BytesIO
 import time
 
+@commands.guild_only()
 @client.command()
-async def generate_image2(ctx, *, request: str):
+async def generate_image(ctx, *, request: str):
 	#ETA = int(time.time() + 60)
 	embed = discord.Embed(title=f"Loading the image...", colour=discord.Color.blue())
 	embed.set_footer(text=footer_testo)
@@ -1733,47 +1787,6 @@ async def chat(ctx, *, request):
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, content=f"```{response.choices[0].text}```")	
 
-@is_me
-@client.command()
-@commands.guild_only()
-async def generate_image(ctx, *, request):
-	async with ctx.typing():
-		if len(request) > 80:
-			embed = discord.Embed(title="Error: The text is too long must not exceed 80 characters", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed, delete_after=4)
-		else:
-			try:
-				prompt = request
-
-				#image-alpha-001, image-beta-001, image-beta-002, image-beta-003
-				
-				response = openai.Image.create(
-					prompt=prompt,
-					#model="image-beta-002",
-					n=1,
-					size="1024x1024",
-					response_format="url"
-				)
-				image_url = response["data"][0]["url"]
-
-				#await ctx.send(file=discord.File(byte_array, "image.png"))
-				embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
-				embed.set_image(url=image_url)
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed)
-			except Exception as e:
-				if 'safety system' in str(e):
-					embed = discord.Embed(title=f"Error:\n the request: {request} contains text that is not allowed by the security rules", color=discord.Color.red())
-					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed, delete_after=4)
-				else:
-					embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
-					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed, delete_after=4)
-					channel = client.get_channel(errorchannel)
-					await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
-					print(e)
 '''
 
 @client.command()
@@ -1783,12 +1796,6 @@ async def chat(ctx):
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed, delete_after=20)	
 
-@client.command()
-@commands.guild_only()
-async def generate_image(ctx,):
-	embed = discord.Embed(title="`?generate_image` has been disabled\nTry to check announcements to know when the command will be reactivated", color=discord.Color.greyple())
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, delete_after=20)
 
 
 @client.command()
