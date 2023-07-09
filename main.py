@@ -507,66 +507,85 @@ async def mute(ctx, user: discord.Member = None, reason = None):
 @commands.guild_only()
 @has_permissions(kick_members=True)
 async def kick(ctx, member : discord.Member, *, reason = None):
-	if member == None:
-		embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-	elif reason == None:
+	try:
 		if member == None:
 			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)  
 			await ctx.send(embed=embed)
+		elif reason == None:
+			if member == None:
+				embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)  
+				await ctx.send(embed=embed)
+			else:
+				#embed2 = discord.Embed(title=f"You have been kicked from the server: {ctx.guild.name}", color=discord.Color.red())
+				#embed2.set_footer(text=footer_testo)
+				#await member.send(embed2)
+				#await member.send(f"You have been kicked from the server: {ctx.guild.name}")
+				embed = discord.Embed(title=":warning: Member was kicked :warning:", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)  
+				await ctx.send(embed=embed)
+				await member.kick(reason=f"You have been banned from the server: {ctx.guild.name}")
 		else:
-			#embed2 = discord.Embed(title=f"You have been kicked from the server: {ctx.guild.name}", color=discord.Color.red())
+			#embed2 = discord.Embed(title=f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'", color=discord.Color.red())
 			#embed2.set_footer(text=footer_testo)
 			#await member.send(embed2)
-			#await member.send(f"You have been kicked from the server: {ctx.guild.name}")
+			#await member.send(f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'")
 			embed = discord.Embed(title=":warning: Member was kicked :warning:", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)  
 			await ctx.send(embed=embed)
-			await member.kick(reason=f"You have been banned from the server: {ctx.guild.name}")
-	else:
-		#embed2 = discord.Embed(title=f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'", color=discord.Color.red())
-		#embed2.set_footer(text=footer_testo)
-		#await member.send(embed2)
-		#await member.send(f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'")
-		embed = discord.Embed(title=":warning: Member was kicked :warning:", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-		await member.kick(reason=f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'")
+			await member.kick(reason=f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'")
+	except Exception as e:
+		if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(e):
+			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+			raise e
 
 @client.command()
 @commands.guild_only()
 @has_permissions(ban_members=True)
 async def ban(ctx, member : discord.Member, *, reason = None):
-	if member == None:
-		embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-	elif reason == None:
+	try:
 		if member == None:
 			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)  
 			await ctx.send(embed=embed)
+		elif reason == None:
+			if member == None:
+				embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)  
+				await ctx.send(embed=embed)
+			else:
+				#embed2 = discord.Embed(title=f"You have been banned from the server: {ctx.guild.name}", color=discord.Color.red())
+				#embed2.set_footer(text=footer_testo)
+				#await member.send(embed2)
+				#await member.send(f"You have been banned from the server: {ctx.guild.name}")
+				await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}")
+				embed = discord.Embed(title=":warning: Member was banned :warning:", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)  
+				await ctx.send(embed=embed)
 		else:
-			#embed2 = discord.Embed(title=f"You have been banned from the server: {ctx.guild.name}", color=discord.Color.red())
+			#embed2 = discord.Embed(title=f"You have been banned from the server: {ctx.guild.name}/nFor: '{reason}'", color=discord.Color.red())
 			#embed2.set_footer(text=footer_testo)
 			#await member.send(embed2)
-			#await member.send(f"You have been banned from the server: {ctx.guild.name}")
+			#await member.send(f"You have been banned from the server: {ctx.guild.name}/nFor: '{reason}'")
+			await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}, For: '{reason}'")
 			embed = discord.Embed(title=":warning: Member was banned :warning:", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)  
 			await ctx.send(embed=embed)
-			await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}")
-	else:
-		#embed2 = discord.Embed(title=f"You have been banned from the server: {ctx.guild.name}/nFor: '{reason}'", color=discord.Color.red())
-		#embed2.set_footer(text=footer_testo)
-		#await member.send(embed2)
-		#await member.send(f"You have been banned from the server: {ctx.guild.name}/nFor: '{reason}'")
-		embed = discord.Embed(title=":warning: Member was banned :warning:", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)  
-		await ctx.send(embed=embed)
-		await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}, For: '{reason}'")
-
+	except Exception as e:
+		if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(e):
+			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+			raise e
 
 
 @client.command()
@@ -621,10 +640,25 @@ async def delchannel(ctx):
 @commands.guild_only()
 @has_permissions(ban_members=True)
 async def unban(ctx, user: discord.User):
-	await ctx.guild.unban(user)
-	embed = discord.Embed(title=f":warning: `{user}` has been unbanned :warning:", color=discord.Color.red())
-	embed.set_footer(text=footer_testo)  
-	await ctx.send(embed=embed)
+	try:
+		if member == None:
+			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)  
+			await ctx.send(embed=embed)
+		else:
+			await ctx.guild.unban(user)
+			embed = discord.Embed(title=f":warning: `{user}` has been unbanned :warning:", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)  
+			await ctx.send(embed=embed)
+	except Exception as e:
+		if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(e):
+			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+			raise e
 
 @client.command()
 @commands.guild_only()
@@ -1004,19 +1038,19 @@ async def ban(interaction: discord.Interaction, message: discord.Message):
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 			
 		except Exception as e:
-			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-			#error-chat
-			channel = client.get_channel(errorchannel)
-			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
-			print(e)
+			if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(e):
+				embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+			else:
+				embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+				channel = client.get_channel(errorchannel)
+				await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+				raise e
 		except discord.ext.commands.errors.MissingPermissions as e:
 			embed = discord.Embed(title="Error: I don't have permission to ban", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-		except discord.Forbidden:
-			embed = discord.Embed(title="Error: I don't have permission to ban this member", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 	else:
@@ -1928,23 +1962,6 @@ async def change_status():
 
 
 #----------Error--------#
-
-
-
-
-@ban.error
-async def ban_error(ctx, error):
-	if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(error):
-		embed = discord.Embed(title="Error: I don't have permission to unban this user", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=4)
-
-@unban.error
-async def unban_error(ctx, error):
-	if 'Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions' in str(error):
-		embed = discord.Embed(title="Error: I don't have permission to unban this user", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=4)
 
 
 
