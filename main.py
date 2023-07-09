@@ -1012,6 +1012,10 @@ async def ban(interaction: discord.Interaction, message: discord.Message):
 			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
 			print(e)
 		except discord.ext.commands.errors.MissingPermissions as e:
+			embed = discord.Embed(title="Error: I don't have permission to ban", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+		except discord.Forbidden:
 			embed = discord.Embed(title="Error: I don't have permission to ban this member", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
@@ -1924,7 +1928,27 @@ async def change_status():
 
 
 #----------Error--------#
-	
+
+
+
+
+@ban.error
+async def ban_error(ctx, error):
+	if isinstance(error, discord.Forbidden):
+		embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
+
+@unban.error
+async def unban_error(ctx, error):
+	if isinstance(error, discord.Forbidden):
+		embed = discord.Embed(title="Error: I don't have permission to unban this user", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
+
+
+
+
 @client.event
 async def on_command_error(ctx, error):
 	if isinstance(error, discord.ext.commands.errors.CommandNotFound):
