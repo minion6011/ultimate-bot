@@ -325,13 +325,17 @@ async def unlock(ctx):
 @client.command()
 @commands.guild_only()
 @commands.has_permissions(manage_messages=True)
-async def nuke(ctx, amount=100):
-        embed = discord.Embed(title=f"{amount} messages deleted", color=discord.Color.red())
-        embed.set_image(url="https://www.19fortyfive.com/wp-content/uploads/2021/10/Nuclear-Weapons-Test.jpg")
-        await ctx.channel.purge(limit=amount + 1)
-        embed.set_footer(text=footer_testo)  
-        await ctx.send(embed=embed, delete_after=4)
-
+async def nuke(ctx, , amount: int = 100):
+	if amount > 500:
+        	embed = discord.Embed(title=f"{amount} messages deleted", color=discord.Color.red())
+        	embed.set_image(url="https://www.19fortyfive.com/wp-content/uploads/2021/10/Nuclear-Weapons-Test.jpg")
+        	await ctx.channel.purge(limit=amount + 1)
+        	embed.set_footer(text=footer_testo)  
+        	await ctx.send(embed=embed, delete_after=4)
+	else:
+        	embed = discord.Embed(title=f"Unable to delete messages, maximum is 450", color=discord.Color.red())
+        	embed.set_footer(text=footer_testo)  
+        	await ctx.send(embed=embed, delete_after=4)
 
 
 
