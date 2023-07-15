@@ -96,7 +96,7 @@ async def on_ready():
 	change_status.start()
 	print(f"Bot logged into {client.user}.")
 	channel = client.get_channel(statuschannel)
-	embed = discord.Embed(title=f"**Bot Online 🟢 - Start d'avvio**", color=discord.Color.red())
+	embed = discord.Embed(title=f"**Bot Online 🟢 - Start d'avvio**", color=discord.Color.green())
 	await channel.send(embed=embed)
 	#slash_sync = await client.tree.sync()
 	#print(f"Synced app command (tree) {len(slash_sync)}.")
