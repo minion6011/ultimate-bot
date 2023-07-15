@@ -1777,9 +1777,10 @@ from PIL import Image
 from io import BytesIO
 import time
 
+@is_beta
 @commands.guild_only()
 @client.command()
-async def generate_image(ctx, *, request: str):
+async def generate_image2(ctx, *, request: str):
 	#ETA = int(time.time() + 60)
 	embed = discord.Embed(title=f"Loading the image...", colour=discord.Color.blue())
 	embed.set_footer(text=footer_testo)
@@ -1818,10 +1819,10 @@ async def generate_image(ctx, *, request: str):
 				embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```\nText: {response_text}", color=discord.Color.red())
 				await channel.send(embed=embed)
 
-@is_me
+
 @commands.guild_only()
 @client.command()
-async def generate_image2(ctx, *, request: str):
+async def generate_image(ctx, *, request: str):
     # ETA = int(time.time() + 60)
     embed = discord.Embed(title="Loading the image...", colour=discord.Color.blue())
     embed.set_footer(text=footer_testo)
