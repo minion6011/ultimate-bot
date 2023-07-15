@@ -80,6 +80,7 @@ client.remove_command('help')
 footer_testo = data["footer_embed"]
 stalkid = 1045020366751404172
 errorchannel = 1046796347870826496
+statuschannel = 1129639048735117342
 
 #openai
 openai.api_key = data["access_token"]
@@ -88,12 +89,25 @@ openai.api_key = data["access_token"]
 
 @client.event
 async def on_ready():
-	change_status.start()
-	print(f"Bot logged into {client.user}.")
-	#slash_sync = await client.tree.sync()
-	#print(f"Synced app command (tree) {len(slash_sync)}.")
-	token_json = data["discord_token"]
-	client.togetherControl = await DiscordTogether(token_json) #activity command - old 
+	if change_status.ctive():
+		print(f"Bot re-logged into {client.user}.")
+		channel = client.get_channel(statuschannel)
+		embed = discord.Embed(title=f"**Bot Online 🟡 - Re-start**", color=discord.Color.red())
+		await channel.send(embed=embed)
+		#slash_sync = await client.tree.sync()
+		#print(f"Synced app command (tree) {len(slash_sync)}.")
+		token_json = data["discord_token"]
+		client.togetherControl = await DiscordTogether(token_json) #activity command - old 
+	else:
+		change_status.start()
+		print(f"Bot logged into {client.user}.")
+		channel = client.get_channel(statuschannel)
+		embed = discord.Embed(title=f"**Bot Online 🟢 - Start d'avvio**", color=discord.Color.red())
+		await channel.send(embed=embed)
+		#slash_sync = await client.tree.sync()
+		#print(f"Synced app command (tree) {len(slash_sync)}.")
+		token_json = data["discord_token"]
+		client.togetherControl = await DiscordTogether(token_json) #activity command - old 
 
 
 #-----------Stalker--------------#
