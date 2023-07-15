@@ -89,7 +89,7 @@ openai.api_key = data["access_token"]
 
 @client.event
 async def on_ready():
-	if change_status.ctive():
+	if change_status.active():
 		print(f"Bot re-logged into {client.user}.")
 		channel = client.get_channel(statuschannel)
 		embed = discord.Embed(title=f"**Bot Online 🟡 - Re-start**", color=discord.Color.red())
