@@ -91,8 +91,9 @@ openai.api_key = data["access_token"]
 async def on_ready():
 	try:
 		change_status.cancel()
+		change_status.start()
 	except:
-		pass
+		return
 	change_status.start()
 	print(f"Bot logged into {client.user}.")
 	channel = client.get_channel(statuschannel)
