@@ -94,7 +94,6 @@ async def on_ready():
 		change_status.start()
 	except:
 		return
-	change_status.start()
 	print(f"Bot logged into {client.user}.")
 	channel = client.get_channel(statuschannel)
 	embed = discord.Embed(title=f"**Bot Online 🟢 - Start d'avvio**", color=discord.Color.green())
