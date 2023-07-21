@@ -21,8 +21,6 @@ import json #htpps
 #system-info
 import psutil
 
-#open-ai
-import openai
 
 #activity
 from discord_together import DiscordTogether
@@ -83,7 +81,8 @@ errorchannel = 1046796347870826496
 statuschannel = 1129639048735117342
 
 #openai
-openai.api_key = data["access_token"]
+#import openai
+#openai.api_key = data["access_token"]
 
 
 
@@ -1587,6 +1586,27 @@ async def volume(ctx, volume: float):
 '''
 
 '''
+@is_me
+@client.command()
+@commands.guild_only()
+async def chat(ctx, *, request):
+	async with ctx.typing():
+		response = openai.Completion.create(
+			engine="text-davinci-003", 
+			prompt=request,
+			temperature=0.7, #creativita' coerenza
+			max_tokens=1000, #max parole
+			top_p=0.85, #considera le possibilita' di risposta
+			frequency_penalty=0.75, #penalizza uso parole comuni
+			presence_penalty=0.6 #uso di parole specifiche(specializzate)
+		)
+		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, content=f"```{response.choices[0].text}```")	
+
+'''
+
+'''
 @client.command()
 @commands.guild_only()
 async def generate_image(ctx,):
@@ -1870,25 +1890,18 @@ async def generate_image(ctx, *, request: str):
             )
             await channel.send(embed=embed)
 
+from bard import Bard
+bard = Bard()
 
-'''
 @is_me
 @client.command()
 @commands.guild_only()
 async def chat(ctx, *, request):
 	async with ctx.typing():
-		response = openai.Completion.create(
-			engine="text-davinci-003", 
-			prompt=request,
-			temperature=0.7, #creativita' coerenza
-			max_tokens=1000, #max parole
-			top_p=0.85, #considera le possibilita' di risposta
-			frequency_penalty=0.75, #penalizza uso parole comuni
-			presence_penalty=0.6 #uso di parole specifiche(specializzate)
-		)
+		response = bard.query(request)
 		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
 		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, content=f"```{response.choices[0].text}```")	
+		await ctx.send(embed=embed, content=f"```{response}```")	
 
 '''
 
@@ -1898,7 +1911,7 @@ async def chat(ctx):
 	embed = discord.Embed(title="`?chat` has been disabled\nTry to check announcements to know when the command will be reactivated", color=discord.Color.greyple())
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed, delete_after=20)	
-
+'''
 
 
 @client.command()
