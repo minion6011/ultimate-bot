@@ -1889,7 +1889,7 @@ async def generate_image(ctx, *, request: str):
                 color=discord.Color.red(),
             )
             await channel.send(embed=embed)
-
+'''
 from bard import Bard
 bard = Bard()
 
@@ -1902,7 +1902,7 @@ async def chat(ctx, *, request):
 		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, content=f"```{response}```")	
-
+'''
 '''
 
 @client.command()
