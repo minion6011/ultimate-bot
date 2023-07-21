@@ -5,7 +5,7 @@ requests
 aiohttp
 PyNaCl
 datetime
-python-bard
+bard
 deep_translator
 pytube
 discord.py[voice]
