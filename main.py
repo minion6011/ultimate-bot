@@ -1112,7 +1112,7 @@ async def play(interaction: discord.Interaction, url: str):
 		await interaction.response.send_message(embed=embed, ephemeral=True)
 	else:
 		if interaction.guild.voice_client is not None and interaction.guild.voice_client.is_playing():
-			no_music_embed = discord.Embed(title="*** Please wait until the song is finished to start another one, If you want to stop the song you can use ```?stop``` ***", color=discord.Colour.red())
+			no_music_embed = discord.Embed(title="*** Please wait until the song is finished to start another one, If you want to stop the song you can use </stop:1114604126861525132> ***", color=discord.Colour.red())
 			no_music_embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=no_music_embed, ephemeral=True)
 		else:
