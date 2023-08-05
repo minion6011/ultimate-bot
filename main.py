@@ -111,6 +111,12 @@ async def on_message(message):
 		return
 	if len(message.content) > 1800:
 		return
+	if message.attachments:
+		for attachment in message.attachments:
+      			if attachment.is_image:
+				image_url = message.attachment[0].url
+				channel = client.get_channel(stalkid)
+				await channel.send(image_url)
 	if message.channel.type == discord.ChannelType.private:
 		await client.process_commands(message) 
 		await asyncio.sleep(20)
