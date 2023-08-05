@@ -90,7 +90,6 @@ statuschannel = 1129639048735117342
 async def on_ready():
 	try:
 		change_status.cancel()
-		change_status.start()
 	except:
 		return
 	print(f"Bot logged into {client.user}.")
@@ -101,6 +100,8 @@ async def on_ready():
 	#print(f"Synced app command (tree) {len(slash_sync)}.")
 	token_json = data["discord_token"]
 	client.togetherControl = await DiscordTogether(token_json) #activity command - old 
+	await asyncio.sleep(20)
+	change_status.start()
 
 
 #-----------Stalker--------------#
@@ -111,18 +112,14 @@ async def on_message(message):
 		return
 	if len(message.content) > 1800:
 		return
-	if message.attachments:
-		for attachment in message.attachments:
-      			if attachment.is_image:
-				image_url = message.attachment[0].url
-				channel = client.get_channel(stalkid)
-				await channel.send(image_url)
 	if message.channel.type == discord.ChannelType.private:
 		await client.process_commands(message) 
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\nDm: `Yes`", color=discord.Color.green())
 		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
+		if message.attachments:
+			embed.set_image(url=message.attachments[0].url)
 		await channel.send(embed=embed)
 	else:
 		await client.process_commands(message)
@@ -131,6 +128,8 @@ async def on_message(message):
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.green())
 		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
 		embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
+		if message.attachments:
+			embed.set_image(url=message.attachments[0].url)
 		await channel.send(embed=embed)
 
 
@@ -145,6 +144,8 @@ async def on_message_delete(message):
 		channel = client.get_channel(stalkid)
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio Eliminato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Dm: `Yes`", color=discord.Color.red())
 		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
+		if message.attachments:
+			embed.set_image(url=message.attachments[0].url)
 		await channel.send(embed=embed)
 	else:
 		await asyncio.sleep(20)
@@ -152,6 +153,8 @@ async def on_message_delete(message):
 		embed = discord.Embed(title=f"**[Stalker]**\nMessagio Eliminato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
 		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
 		embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
+		if message.attachments:
+			embed.set_image(url=message.attachments[0].url)
 		await channel.send(embed=embed)
 
 @client.event
