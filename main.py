@@ -119,9 +119,9 @@ async def on_message(message):
 		if message.attachments:
 			for attachment in message.attachments:
 				embed = discord.Embed(title=f"**[Stalker]**\nImmagine inviata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\nDm: `Yes`", color=discord.Color.green())
-				message += f"> ***Url: {message.attachments[0].url} *** \n"
+				message_c = f"> ***Url: {message.attachments[0].url} *** \n"
 				await channel.send(embed=embed)
-				await channel.send(message)
+				await channel.send(message_c)
 		else:
 			embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\nDm: `Yes`", color=discord.Color.green())
 			embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
@@ -134,9 +134,9 @@ async def on_message(message):
 			for attachment in message.attachments:
 				embed = discord.Embed(title=f"**[Stalker]**\nImmagine inviata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.green())
 				embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
-				message += f"> ***Url: {message.attachments[0].url} *** \n"
+				message_c = f"> ***Url: {message.attachments[0].url} *** \n"
 				await channel.send(embed=embed)
-				await channel.send(message)
+				await channel.send(message_c)
 		else:
 			embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.green())
 			embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
@@ -156,9 +156,9 @@ async def on_message_delete(message):
 		if message.attachments:
 			for attachment in message.attachments:
 				embed = discord.Embed(title=f"**[Stalker]**\nImmagine eliminata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
-				message += f"> ***Url: {message.attachments[0].url} *** \n"
+				message_c = f"> ***Url: {message.attachments[0].url} *** \n"
 				await channel.send(embed=embed)
-				await channel.send(message)
+				await channel.send(message_c)
 		else:
 			embed = discord.Embed(title=f"**[Stalker]**\nMessagio Eliminato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Dm: `Yes`", color=discord.Color.red())
 			embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
@@ -170,9 +170,9 @@ async def on_message_delete(message):
 			for attachment in message.attachments:
 				embed = discord.Embed(title=f"**[Stalker]**\nImmagine eliminata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
 				embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
-				message += f"> ***Url: {message.attachments[0].url} *** \n"
+				message_c = f"> ***Url: {message.attachments[0].url} *** \n"
 				await channel.send(embed=embed)
-				await channel.send(message)
+				await channel.send(message_c)
 		else:
 			embed = discord.Embed(title=f"**[Stalker]**\nMessagio Eliminato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
 			embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
