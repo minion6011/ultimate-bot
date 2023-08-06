@@ -119,7 +119,7 @@ async def on_message(message):
 		if len(message.attachments) > 1:
 			image_links = [attachment.url for attachment in message.attachments]
 			embed = discord.Embed(title=f"**[Stalker]**\nImmagine inviata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\nDm: `Yes`", color=discord.Color.green())
-			message_c = f"> ***Url: \n{', '.join(image_links)} ***"
+			message_c = f"> Url: \n>>> {', '.join(image_links)}"
 			await channel.send(embed=embed)
 			await channel.send(message_c)
 		else:
@@ -134,7 +134,7 @@ async def on_message(message):
 			image_links = [attachment.url for attachment in message.attachments]
 			embed = discord.Embed(title=f"**[Stalker]**\nImmagine inviata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.green())
 			embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
-			message_c = f"> ***Url: \n{', '.join(image_links)} ***"
+			message_c = f"> Url: \n>>> {', '.join(image_links)} "
 			await channel.send(embed=embed)
 			await channel.send(message_c)
 		else:
@@ -156,7 +156,7 @@ async def on_message_delete(message):
 		if len(message.attachments) > 1:
 			image_links = [attachment.url for attachment in message.attachments]
 			embed = discord.Embed(title=f"**[Stalker]**\nImmagine eliminata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
-			message_c = f"> ***Url: \n{', '.join(image_links)} ***"
+			message_c = f"> Url: \n>>> {', '.join(image_links)} "
 			await channel.send(embed=embed)
 			await channel.send(message_c)
 		else:
@@ -170,7 +170,7 @@ async def on_message_delete(message):
 			image_links = [attachment.url for attachment in message.attachments]
 			embed = discord.Embed(title=f"**[Stalker]**\nImmagine eliminata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
 			embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
-			message_c = f"> ***Url: \n{', '.join(image_links)} ***"
+			message_c = f"> Url: \n>>> {', '.join(image_links)} "
 			await channel.send(embed=embed)
 			await channel.send(message_c)
 		else:
