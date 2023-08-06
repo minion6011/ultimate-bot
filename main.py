@@ -119,7 +119,9 @@ async def on_message(message):
 		if message.attachments:
 			for attachment in message.attachments:
 				embed = discord.Embed(title=f"**[Stalker]**\nImmagine inviata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\nDm: `Yes`", color=discord.Color.green())
-				await channel.send(embed=embed, file=discord.File(attachment.filename))
+				message += f"> ***Url: {message.attachments[0].url} *** \n"
+				await channel.send(embed=embed)
+				await channel.send(message)
 		else:
 			embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\nDm: `Yes`", color=discord.Color.green())
 			embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
@@ -132,7 +134,9 @@ async def on_message(message):
 			for attachment in message.attachments:
 				embed = discord.Embed(title=f"**[Stalker]**\nImmagine inviata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.green())
 				embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
-				await channel.send(embed=embed, file=discord.File(attachment.filename))
+				message += f"> ***Url: {message.attachments[0].url} *** \n"
+				await channel.send(embed=embed)
+				await channel.send(message)
 		else:
 			embed = discord.Embed(title=f"**[Stalker]**\nMessagio inviato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.green())
 			embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
@@ -152,10 +156,13 @@ async def on_message_delete(message):
 		if message.attachments:
 			for attachment in message.attachments:
 				embed = discord.Embed(title=f"**[Stalker]**\nImmagine eliminata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
-				await channel.send(embed=embed, file=discord.File(attachment.filename))
-		embed = discord.Embed(title=f"**[Stalker]**\nMessagio Eliminato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Dm: `Yes`", color=discord.Color.red())
-		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
-		await channel.send(embed=embed)
+				message += f"> ***Url: {message.attachments[0].url} *** \n"
+				await channel.send(embed=embed)
+				await channel.send(message)
+		else:
+			embed = discord.Embed(title=f"**[Stalker]**\nMessagio Eliminato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Dm: `Yes`", color=discord.Color.red())
+			embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
+			await channel.send(embed=embed)
 	else:
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
@@ -163,11 +170,14 @@ async def on_message_delete(message):
 			for attachment in message.attachments:
 				embed = discord.Embed(title=f"**[Stalker]**\nImmagine eliminata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
 				embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
-				await channel.send(embed=embed, file=discord.File(attachment.filename))
-		embed = discord.Embed(title=f"**[Stalker]**\nMessagio Eliminato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
-		embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
-		embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
-		await channel.send(embed=embed)
+				message += f"> ***Url: {message.attachments[0].url} *** \n"
+				await channel.send(embed=embed)
+				await channel.send(message)
+		else:
+			embed = discord.Embed(title=f"**[Stalker]**\nMessagio Eliminato\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
+			embed.add_field(name = 'Contenuto:', value=f"`{message.content}`", inline = True)
+			embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
+			await channel.send(embed=embed)
 
 @client.event
 async def on_message_edit(before, after):
