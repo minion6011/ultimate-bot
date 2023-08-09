@@ -183,9 +183,9 @@ async def on_message_delete(message):
 async def on_message_edit(before, after):
 	if after.author.bot:
 		return
-	if len(after.content) > 1908:
+	if len(after.content) > 1000:
 		return
-	if len(before.content) > 1908:
+	if len(before.content) > 1000:
 		return
 	if after.channel.type == discord.ChannelType.private:
 		await client.process_commands(after)
