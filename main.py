@@ -116,7 +116,7 @@ async def on_message(message):
 		await client.process_commands(message) 
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
-		if len(message.attachments) > 1:
+		if message.attachments:
 			image_links = [attachment.url for attachment in message.attachments]
 			embed = discord.Embed(title=f"**[Stalker]**\nImmagine inviata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\nDm: `Yes`", color=discord.Color.green())
 			message_c = f"> Url: \n>>> {', '.join(image_links)}"
@@ -130,7 +130,7 @@ async def on_message(message):
 		await client.process_commands(message)
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
-		if len(message.attachments) > 1:
+		if message.attachments:
 			image_links = [attachment.url for attachment in message.attachments]
 			embed = discord.Embed(title=f"**[Stalker]**\nImmagine inviata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.green())
 			embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
@@ -153,7 +153,7 @@ async def on_message_delete(message):
 	if message.channel.type == discord.ChannelType.private:
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
-		if len(message.attachments) > 1:
+		if message.attachments:
 			image_links = [attachment.url for attachment in message.attachments]
 			embed = discord.Embed(title=f"**[Stalker]**\nImmagine eliminata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
 			message_c = f"> Url: \n>>> {', '.join(image_links)} "
@@ -166,7 +166,7 @@ async def on_message_delete(message):
 	else:
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
-		if len(message.attachments) > 1:
+		if message.attachments:
 			image_links = [attachment.url for attachment in message.attachments]
 			embed = discord.Embed(title=f"**[Stalker]**\nImmagine eliminata\nUtente: `{message.author.display_name}#{message.author.discriminator}`\n Server: `{message.guild.name}`", color=discord.Color.red())
 			embed.add_field(name = 'Canale:', value=f"<#{message.channel.id}>", inline = True)
