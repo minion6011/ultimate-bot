@@ -1137,6 +1137,7 @@ async def traslate(interaction: discord.Interaction, message: discord.Message):
 
 @client.tree.command(name="play", description = "Play a song") #slash command
 async def play(interaction: discord.Interaction, url: str):
+	global filename
 	if interaction.user.voice is None:
 		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
@@ -1176,7 +1177,7 @@ async def play(interaction: discord.Interaction, url: str):
 					artist = video.author
 					
 					#global
-					global filename
+					
 					filename = f"{file_name}"
 	
 					#video-info-embed
@@ -1246,7 +1247,7 @@ async def play(interaction: discord.Interaction, url: str):
 					artist = video.author
 					
 					#global
-					global filename
+					
 					filename = f"{file_name}"
 	
 					#video-info-embed
