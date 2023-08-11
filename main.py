@@ -1150,7 +1150,7 @@ async def play(interaction: discord.Interaction, url: str):
 		else:
 			#else:
 			try:
-				share_link_text = url.content
+				share_link_text = url
 				if share_link_text.content.startswith("https://youtu.be/"):
 					share_video_id = url.replace("https://youtu.be/", "")
 					share_video_url = "youtube.com/watch?v=" + f"{share_video_id}"
