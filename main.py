@@ -1134,10 +1134,8 @@ async def traslate(interaction: discord.Interaction, message: discord.Message):
 		print(e)
 
 
-
 @client.tree.command(name="play", description = "Play a song") #slash command
 async def play(interaction: discord.Interaction, url: str):
-	global filename
 	if interaction.user.voice is None:
 		embed = discord.Embed(title="*** You are not currently in a voice channel. ***", color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
@@ -1150,148 +1148,78 @@ async def play(interaction: discord.Interaction, url: str):
 		else:
 			#else:
 			try:
-				if url.startswith("https://youtu.be/"):
-					share_video_id = url.replace("https://youtu.be/", "")
-					share_video_url = "youtube.com/watch?v=" + f"{share_video_id}"
-					loading_embed = discord.Embed(title=":arrows_clockwise: Downloading song :musical_note:", color=discord.Colour.blue())
-					loading_embed.set_footer(text=footer_testo)
-					await interaction.response.send_message(embed=loading_embed, ephemeral=True)
-					
-					#find-video
-					video = pytube.YouTube(share_video_url)
-					
-					#title-file
-					number = random.randint(1, 100000)
-					extension = "mp4"
-					file_name = f"{number}.{extension}"
-					#video.streams.get_highest_resolution().download(filename=file_name)
-					
-					#download
-					video.streams.first().download(filename=file_name)
-					
-					#info
-					video_length = video.length
-					minutes, seconds = divmod(video_length, 60)
-					
-					artist = video.author
-					
-					#global
-					
-					filename = f"{file_name}"
+				
+				
+				#loading embed
+				loading_embed = discord.Embed(title=":arrows_clockwise: Downloading song :musical_note:", color=discord.Colour.blue())
+				loading_embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=loading_embed, ephemeral=True)
+				
+				#find-video
+				video = pytube.YouTube(url)
+				
+				#title-file
+				number = random.randint(1, 100000)
+				extension = "mp4"
+				file_name = f"{number}.{extension}"
+				#video.streams.get_highest_resolution().download(filename=file_name)
+				
+				#download
+				video.streams.first().download(filename=file_name)
+				
+				#info
+				video_length = video.length
+				minutes, seconds = divmod(video_length, 60)
+				
+				artist = video.author
+				
+				#global
+				global filename
+				filename = f"{file_name}"
+
+				#video-info-embed
+				title_embed = discord.Embed(color=discord.Colour.blue())
+				title_embed.set_image(url=video.thumbnail_url)
+				title_embed.description = f"***Now playing:*** \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}` ** :arrow_backward:     :pause_button:     :arrow_forward: **"
+				title_embed.set_footer(text=footer_testo)
+				await interaction.edit_original_response(embed=title_embed)
+				#await msg.delete()
+				#await msg.edit(embed=title_embed)
+				await asyncio.sleep(0.5)
+
+				#stalk-song
+				stalk_channel = client.get_channel(stalkid)
+				stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
+				await stalk_channel.send(embed=stalk_embed)
+				#await ctx.send(embed=embed)
+
+
+				# Play the video
+				source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
+				voice_channel = interaction.user.voice.channel
+				voice = await voice_channel.connect()
+				voice.play(source)
 	
-					#video-info-embed
-					title_embed = discord.Embed(color=discord.Colour.blue())
-					title_embed.set_image(url=video.thumbnail_url)
-					title_embed.description = f"***Now playing:*** \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}` ** :arrow_backward:     :pause_button:     :arrow_forward: **"
-					title_embed.set_footer(text=footer_testo)
-					await interaction.edit_original_response(embed=title_embed)
-					#await msg.delete()
-					#await msg.edit(embed=title_embed)
-					await asyncio.sleep(0.5)
-	
-					#stalk-song
-					stalk_channel = client.get_channel(stalkid)
-					stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
-					await stalk_channel.send(embed=stalk_embed)
-					#await ctx.send(embed=embed)
-	
-	
-					# Play the video
-					source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
-					voice_channel = interaction.user.voice.channel
-					voice = await voice_channel.connect()
-					voice.play(source)
-		
-					#volume fix
-					volume = 0.4
-					voice_client = interaction.guild.voice_client
-					voice_client.source.volume = volume
-	
-					# Wait for the video to finish playing
-					while voice.is_playing():
-						await asyncio.sleep(1)
-	
-					# Disconnect from the voice channel
-					await voice.disconnect()
-	
-					# Delete the video file
-					os.remove(f"{file_name}")
-					end_embed = discord.Embed(title="***:cd: The song is ended***", color=discord.Colour.red())
-					end_embed.set_footer(text=footer_testo)
-					await interaction.edit_original_response(embed=end_embed)
-					#pass
-					#return
-				else:
-					#loading embed
-					loading_embed = discord.Embed(title=":arrows_clockwise: Downloading song :musical_note:", color=discord.Colour.blue())
-					loading_embed.set_footer(text=footer_testo)
-					await interaction.response.send_message(embed=loading_embed, ephemeral=True)
-					
-					#find-video
-					video = pytube.YouTube(url)
-					
-					#title-file
-					number = random.randint(1, 100000)
-					extension = "mp4"
-					file_name = f"{number}.{extension}"
-					#video.streams.get_highest_resolution().download(filename=file_name)
-					
-					#download
-					video.streams.first().download(filename=file_name)
-					
-					#info
-					video_length = video.length
-					minutes, seconds = divmod(video_length, 60)
-					
-					artist = video.author
-					
-					#global
-					
-					filename = f"{file_name}"
-	
-					#video-info-embed
-					title_embed = discord.Embed(color=discord.Colour.blue())
-					title_embed.set_image(url=video.thumbnail_url)
-					title_embed.description = f"***Now playing:*** \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}` ** :arrow_backward:     :pause_button:     :arrow_forward: **"
-					title_embed.set_footer(text=footer_testo)
-					await interaction.edit_original_response(embed=title_embed)
-					#await msg.delete()
-					#await msg.edit(embed=title_embed)
-					await asyncio.sleep(0.5)
-	
-					#stalk-song
-					stalk_channel = client.get_channel(stalkid)
-					stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone attivata: ```{file_name}```", color=discord.Color.blue())
-					await stalk_channel.send(embed=stalk_embed)
-					#await ctx.send(embed=embed)
-	
-	
-					# Play the video
-					source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{file_name}"))
-					voice_channel = interaction.user.voice.channel
-					voice = await voice_channel.connect()
-					voice.play(source)
-		
-					#volume fix
-					volume = 0.4
-					voice_client = interaction.guild.voice_client
-					voice_client.source.volume = volume
-	
-					# Wait for the video to finish playing
-					while voice.is_playing():
-						await asyncio.sleep(1)
-	
-					# Disconnect from the voice channel
-					await voice.disconnect()
-	
-					# Delete the video file
-					os.remove(f"{file_name}")
-					end_embed = discord.Embed(title="***:cd: The song is ended***", color=discord.Colour.red())
-					end_embed.set_footer(text=footer_testo)
-					await interaction.edit_original_response(embed=end_embed)
-					#pass
-					#return
-					#error
+				#volume fix
+				volume = 0.4
+				voice_client = interaction.guild.voice_client
+				voice_client.source.volume = volume
+
+				# Wait for the video to finish playing
+				while voice.is_playing():
+					await asyncio.sleep(1)
+
+				# Disconnect from the voice channel
+				await voice.disconnect()
+
+				# Delete the video file
+				os.remove(f"{file_name}")
+				end_embed = discord.Embed(title="***:cd: The song is ended***", color=discord.Colour.red())
+				end_embed.set_footer(text=footer_testo)
+				await interaction.edit_original_response(embed=end_embed)
+				#pass
+				#return
+			#error
 			except pytube.exceptions.PytubeError as e:
 				if 'is age restricted' in str(e):
 					await asyncio.sleep(1)
@@ -1327,6 +1255,7 @@ async def play(interaction: discord.Interaction, url: str):
 					#stalk
 					channel = client.get_channel(errorchannel)
 					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
+
 
 
 
