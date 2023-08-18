@@ -2078,8 +2078,9 @@ async def servers(ctx):
 		message = "I server in cui sono stato invitato sono:\n\n"
 		for guild in client.guilds:
 			channel = guild.text_channels[0]
-			invite = await channel.create_invite()
-			message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: ***[Url]({invite.url}) \n\n"
+			#invite = await channel.create_invite()
+			#message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: ***[Url]({invite.url}) \n\n"
+			message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n  *** \n"
 		await ctx.send(message)
 	except:
 		message = "I server in cui sono stato invitato sono:\n\n"
