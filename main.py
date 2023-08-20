@@ -341,6 +341,7 @@ async def userinfo(ctx, *, user: discord.Member = None):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 20, commands.BucketType.user)
 @commands.has_permissions(manage_channels = True)
 async def lockdown(ctx):
 	await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=False, view_channel=False)
@@ -350,6 +351,7 @@ async def lockdown(ctx):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(manage_channels=True)
 async def unlock(ctx):
 	await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=True, view_channel=True)
@@ -363,6 +365,7 @@ async def unlock(ctx):
 @client.command()
 @commands.guild_only()
 @commands.has_permissions(manage_messages=True)
+@commands.cooldown(1, 20, commands.BucketType.user)
 async def nuke(ctx, amount: int = 100):
 	if amount < 500:
         	embed = discord.Embed(title=f"{amount} messages deleted", color=discord.Color.red())
@@ -633,6 +636,7 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 @client.command()
 @commands.guild_only()
 @commands.has_permissions(manage_messages=True)
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def slowmode(ctx, seconds: int):
 	await ctx.channel.edit(slowmode_delay=seconds)
 	slowmode_embed = discord.Embed(title="Slowmode", description="A slowmode was set for this channel", colour=discord.Colour.green())
@@ -644,6 +648,7 @@ async def slowmode(ctx, seconds: int):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def translate(ctx, language, *, request):
 	text = request
 	lang = language
@@ -674,6 +679,7 @@ async def translate(ctx, language, *, request):
 @client.command()
 @commands.guild_only()
 @has_permissions(administrator = True)
+@commands.cooldown(1, 60, commands.BucketType.user)
 async def delchannel(ctx):
     for c in ctx.guild.channels: # iterating through each guild channel
         await c.delete()
@@ -704,6 +710,7 @@ async def unban(ctx, user: discord.User):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def casual(ctx):
 	list1 = ["yes", "no"]
 	r = random.choice(list1)
@@ -713,6 +720,7 @@ async def casual(ctx):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def coinflip(ctx):
 	coin = ['heads  :coin:','tails  :coin:']
 	r = random.choice(coin)
@@ -725,6 +733,7 @@ async def coinflip(ctx):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def num_extractor(ctx):
 	number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 	r = random.choice(number)
@@ -735,6 +744,7 @@ async def num_extractor(ctx):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 25, commands.BucketType.user)
 async def infobot(ctx):
 	embed = discord.Embed(title = 'System Resource Usage', description = 'See CPU and memory usage of the system.', color=discord.Color.blue())
 	embed.add_field(name = ':computer: **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
@@ -750,6 +760,7 @@ async def infobot(ctx):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 10, commands.BucketType.user)
 async def dictionary(ctx, term):
 	url = f"https://api.urbandictionary.com/v0/define?term={term}"
 	response = requests.get(url).json()
@@ -780,6 +791,7 @@ async def dictionary(ctx, term):
 @client.command()
 @commands.guild_only()
 @commands.has_permissions(manage_messages=True)
+@commands.cooldown(1, 15, commands.BucketType.user)
 async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 	if not emoji:
 		embed = discord.Embed(title="Error\nPlease send a valid emoji", colour=discord.Colour.red())
@@ -1902,10 +1914,10 @@ from PIL import Image
 from io import BytesIO
 import time
 
-@is_beta
+@commands.cooldown(1, 5, commands.BucketType.user)
 @commands.guild_only()
 @client.command()
-async def generate_image2(ctx, *, request: str):
+async def generate_image(ctx, *, request: str):
 	#ETA = int(time.time() + 60)
 	embed = discord.Embed(title=f"Loading the image...", colour=discord.Color.blue())
 	embed.set_footer(text=footer_testo)
@@ -1944,10 +1956,10 @@ async def generate_image2(ctx, *, request: str):
 				embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```\nText: {response_text}", color=discord.Color.red())
 				await channel.send(embed=embed)
 
-
+'''
 @commands.guild_only()
 @client.command()
-async def generate_image(ctx, *, request: str):
+async def generate_image_brutto(ctx, *, request: str):
     # ETA = int(time.time() + 60)
     embed = discord.Embed(title="Loading the image...", colour=discord.Color.blue())
     embed.set_footer(text=footer_testo)
@@ -1995,7 +2007,7 @@ async def generate_image(ctx, *, request: str):
                 color=discord.Color.red(),
             )
             await channel.send(embed=embed)
-		
+'''		
 '''
 from bard import Bard
 bard = Bard()
@@ -2019,7 +2031,7 @@ async def chat(ctx):
 	await ctx.send(embed=embed, delete_after=20)	
 '''
 
-
+@commands.cooldown(1, 5, commands.BucketType.user)
 @client.command()
 @commands.guild_only()
 async def help(ctx):
@@ -2220,6 +2232,11 @@ async def on_command_error(ctx, error):
 	elif isinstance(error, discord.NotFound):
 		embed = discord.Embed(title="Error\nNo emoji founded", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, delete_after=4)
+	elif isinstance(error, commands.CommandOnCooldown):
+		await asyncio.sleep(5)
+		embed = discord.Embed(title="Error", color=discord.Color.red())
+		embed.add_field(name=f'You cannot use this command for', value=f'**{error.retry_after:.2f} seconds**', inline=False)
 		await ctx.send(embed=embed, delete_after=4)
 	else:
 		if 'not found.' in str(error):
