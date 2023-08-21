@@ -2021,7 +2021,7 @@ async def chat(ctx, *, request):
 		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, content=f"```{response}```")	
-
+'''
 
 @client.command()
 @commands.guild_only()
@@ -2029,7 +2029,7 @@ async def chat(ctx):
 	embed = discord.Embed(title="`?chat` has been disabled\nTry to check announcements to know when the command will be reactivated", color=discord.Color.greyple())
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed, delete_after=20)	
-'''
+
 
 @commands.cooldown(1, 5, commands.BucketType.user)
 @client.command()
