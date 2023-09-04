@@ -1926,10 +1926,10 @@ async def generate_image(ctx, *, request: str):
 		try:
 			async with aiohttp.request("POST", f"https://image.pollinations.ai/prompt/{request}") as resp:
 				if resp.status == 200:
-					#image = BytesIO(base64.decodebytes(resp[0].encode("utf-8")))
+					image = BytesIO(base64.decodebytes(resp.encode("utf-8")))
 					await msg.delete()
-					#file = discord.File(image, "generatedImage.png")
-					file = discord.File(resp, "generatedImage.png")
+					file = discord.File(image, "generatedImage.png")
+					#file = discord.File(resp, "generatedImage.png")
 					image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
 					image_embed.set_image(url="attachment://generatedImage.png")
 					image_embed.set_footer(text=footer_testo)
