@@ -1914,7 +1914,7 @@ from PIL import Image
 from io import BytesIO
 import time
 
-@commands.cooldown(1, 5, commands.BucketType.user)
+@commands.cooldown(1, 10, commands.BucketType.user)
 @commands.guild_only()
 @client.command()
 async def generate_image(ctx, *, request: str):
@@ -1924,11 +1924,9 @@ async def generate_image(ctx, *, request: str):
 	msg = await ctx.send(embed=embed)
 	async with ctx.typing():
 		try:
-			async with aiohttp.request("POST", "https://backend.craiyon.com/generate", json={"prompt": request}) as resp:
+			async with aiohttp.request("POST", f"https://image.pollinations.ai/prompt/{request}" as resp:
 				if resp.status == 200:
-					r = await resp.json()
-					images = r['images']
-					image = BytesIO(base64.decodebytes(images[0].encode("utf-8")))
+					image = BytesIO(base64.decodebytes(resp[0].encode("utf-8")))
 					await msg.delete()
 					file = discord.File(image, "generatedImage.png")
 					image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
