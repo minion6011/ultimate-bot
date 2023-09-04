@@ -1924,7 +1924,7 @@ async def generate_image(ctx, *, request: str):
 	msg = await ctx.send(embed=embed)
 	async with ctx.typing():
 		try:
-			async with aiohttp.request("POST", f"https://image.pollinations.ai/prompt/{request}" as resp:
+			async with aiohttp.request("POST", f"https://image.pollinations.ai/prompt/{request}") as resp:
 				if resp.status == 200:
 					image = BytesIO(base64.decodebytes(resp[0].encode("utf-8")))
 					await msg.delete()
