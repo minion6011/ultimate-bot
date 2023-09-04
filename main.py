@@ -1927,16 +1927,17 @@ async def generate_image(ctx, *, request: str):
 			seed = random.randint(1, 1000)
 			image_url = f"https://image.pollinations.ai/prompt/{request}?seed={seed}"
 			async with session.get(image_url) as response:
-				image_data = await response.read()
-				image_io = io.BytesIO(image_data)
-				await msg.delete()
-				file = discord.File(image_io, "generatedImage.png")
-				#file = discord.File(resp, "generatedImage.png")
-				image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
-				image_embed.set_image(url="attachment://generatedImage.png")
-				image_embed.set_footer(text=footer_testo)
-				await ctx.send(file=file, embed=image_embed)
-				#await ctx.send("Here's the generated image:", file=discord.File(image, "generatedImage.png"))
+				if response.status == 200:
+					image_data = await response.read()
+					image_io = io.BytesIO(image_data)
+					await msg.delete()
+					file = discord.File(image_io, "generatedImage.png")
+					#file = discord.File(resp, "generatedImage.png")
+					image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+					image_embed.set_image(url="attachment://generatedImage.png")
+					image_embed.set_footer(text=footer_testo)
+					await ctx.send(file=file, embed=image_embed)
+					#await ctx.send("Here's the generated image:", file=discord.File(image, "generatedImage.png"))
 				else:
 					response_text = await resp.text()
 					embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
