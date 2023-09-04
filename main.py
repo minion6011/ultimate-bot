@@ -1926,7 +1926,7 @@ async def generate_image(ctx, *, request: str):
 		try:
 			seed = random.randint(1, 1000)
 			image_url = f"https://image.pollinations.ai/prompt/{request}?seed={seed}"
-			async with session.get(image_url) as response:
+			async with aiohttp.request("POST", image_url) as response:
 				if response.status == 200:
 					image_data = await response.read()
 					image_io = io.BytesIO(image_data)
