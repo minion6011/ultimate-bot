@@ -1924,17 +1924,19 @@ async def generate_image(ctx, *, request: str):
 	msg = await ctx.send(embed=embed)
 	async with ctx.typing():
 		try:
-			async with aiohttp.request("POST", f"https://image.pollinations.ai/prompt/{request}") as resp:
-				if resp.status == 200:
-					image = BytesIO(base64.decodebytes(resp.encode("utf-8")))
-					await msg.delete()
-					file = discord.File(image, "generatedImage.png")
-					#file = discord.File(resp, "generatedImage.png")
-					image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
-					image_embed.set_image(url="attachment://generatedImage.png")
-					image_embed.set_footer(text=footer_testo)
-					await ctx.send(file=file, embed=image_embed)
-					#await ctx.send("Here's the generated image:", file=discord.File(image, "generatedImage.png"))
+			seed = random.randint(1, 1000)
+			image_url = f"https://image.pollinations.ai/prompt/{request}?seed={seed}"
+			async with session.get(image_url) as response:
+				image_data = await response.read()
+				image_io = io.BytesIO(image_data)
+				await msg.delete()
+				file = discord.File(image_io, "generatedImage.png")
+				#file = discord.File(resp, "generatedImage.png")
+				image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+				image_embed.set_image(url="attachment://generatedImage.png")
+				image_embed.set_footer(text=footer_testo)
+				await ctx.send(file=file, embed=image_embed)
+				#await ctx.send("Here's the generated image:", file=discord.File(image, "generatedImage.png"))
 				else:
 					response_text = await resp.text()
 					embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
