@@ -28,9 +28,6 @@ from discord_together import DiscordTogether
 #traduttore
 from deep_translator import GoogleTranslator
 
-#openai
-import openai
-
 #music-bot
 import pytube
 import asyncio
@@ -1704,6 +1701,10 @@ async def volume(ctx, volume: float):
 '''
 
 '''
+#openai
+import openai
+
+
 @is_me
 @client.command()
 @commands.guild_only()
@@ -1926,28 +1927,29 @@ async def generate_image(ctx, *, request: str):
 		try:
 			seed = random.randint(1, 1000)
 			image_url = f"https://image.pollinations.ai/prompt/{request}?seed={seed}"
-			async with aiohttp.request("POST", image_url) as response:
-				if response.status == 200:
-					image_data = await response.read()
-					image_io = io.BytesIO(image_data)
-					await msg.delete()
-					file = discord.File(image_io, "generatedImage.png")
-					#file = discord.File(resp, "generatedImage.png")
-					image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
-					image_embed.set_image(url="attachment://generatedImage.png")
-					image_embed.set_footer(text=footer_testo)
-					await ctx.send(file=file, embed=image_embed)
-					#await ctx.send("Here's the generated image:", file=discord.File(image, "generatedImage.png"))
-				else:
-					response_text = await resp.text()
-					embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
-					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed, delete_after=4)
-					#error-chat
-					channel = client.get_channel(errorchannel)
-					response_text = await resp.text()
-					embed = discord.Embed(title=f"**[Errore]** \nisinstance:\nText: {response_text}", color=discord.Color.red())
-					await channel.send(embed=embed)
+			async with aiohttp.ClientSession() as session:
+				async with session.get(image_url) as response:
+					if response.status == 200:
+						image_data = await response.read()
+						image_io = io.BytesIO(image_data)
+						await msg.delete()
+						file = discord.File(image_io, "generatedImage.png")
+						#file = discord.File(resp, "generatedImage.png")
+						image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+						image_embed.set_image(url="attachment://generatedImage.png")
+						image_embed.set_footer(text=footer_testo)
+						await ctx.send(file=file, embed=image_embed)
+						#await ctx.send("Here's the generated image:", file=discord.File(image, "generatedImage.png"))
+					else:
+						response_text = await resp.text()
+						embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
+						embed.set_footer(text=footer_testo)
+						await ctx.send(embed=embed, delete_after=4)
+						#error-chat
+						channel = client.get_channel(errorchannel)
+						response_text = await resp.text()
+						embed = discord.Embed(title=f"**[Errore]** \nisinstance:\nText: {response_text}", color=discord.Color.red())
+						await channel.send(embed=embed)
 		except aiohttp.ContentTypeError as e:
 				embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
 				embed.set_footer(text=footer_testo)
