@@ -1914,6 +1914,7 @@ import base64
 from PIL import Image
 from io import BytesIO
 import time
+import io
 
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.guild_only()
