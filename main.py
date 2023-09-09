@@ -1911,9 +1911,7 @@ async def verify(ctx):
 
 #----------Admin---------------#
 import base64
-from PIL import Image
 from io import BytesIO
-import time
 import io
 
 @commands.cooldown(1, 10, commands.BucketType.user)
