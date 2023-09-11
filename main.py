@@ -1783,7 +1783,7 @@ async def generate_image(ctx, *, request):
 from bardapi import Bard
 
 token = data["access_token"]
-bard = Bard(token=token)
+bard = Bard(token_from_browser=True, token=token, timeout=30)
 
 
 @is_beta
