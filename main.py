@@ -77,9 +77,7 @@ stalkid = 1045020366751404172
 errorchannel = 1046796347870826496
 statuschannel = 1129639048735117342
 
-#openai
-#import openai
-#openai.api_key = data["access_token"]
+
 
 
 
@@ -1782,6 +1780,19 @@ async def generate_image(ctx, *, request):
  
 '''
 #---------Test------------#
+from bardapi import Bard
+
+os.environ = data["access_token"]
+
+@is_beta
+@client.command()
+async def bard(ctx, message):
+	out = Bard().get_answer(str(message))['content']
+	await ctx.send(out)
+
+
+
+
 
 
 @is_beta
