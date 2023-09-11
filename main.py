@@ -1782,7 +1782,7 @@ async def generate_image(ctx, *, request):
 #---------Test------------#
 from bardapi import Bard
 
-os.environ["_BARD_API_KEY"] = f"{data["access_token"]}"
+os.environ["_BARD_API_KEY"] = data["access_token"]
 
 @is_beta
 @client.command()
