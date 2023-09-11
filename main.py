@@ -1780,21 +1780,16 @@ async def generate_image(ctx, *, request):
  
 '''
 #---------Test------------#
-from bardapi import Bard
-
-os.environ['_BARD_API_KEY'] = data["access_token"]
-
-#token = data["access_token"]
-#bard = Bard(token_from_browser=True, token=token, timeout=30)
 
 
+'''
 @is_beta
 @client.command()
 async def bard(ctx, message):
 	out = Bard().get_answer(message)
 	#out = bard.get_answer(message)['content']
 	await ctx.send(out)
-
+'''
 
 
 
