@@ -1701,30 +1701,6 @@ async def volume(ctx, volume: float):
         await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
 '''
 
-'''
-#openai
-import openai
-
-
-@is_me
-@client.command()
-@commands.guild_only()
-async def chat(ctx, *, request):
-	async with ctx.typing():
-		response = openai.Completion.create(
-			engine="text-davinci-003", 
-			prompt=request,
-			temperature=0.7, #creativita' coerenza
-			max_tokens=1000, #max parole
-			top_p=0.85, #considera le possibilita' di risposta
-			frequency_penalty=0.75, #penalizza uso parole comuni
-			presence_penalty=0.6 #uso di parole specifiche(specializzate)
-		)
-		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, content=f"```{response.choices[0].text}```")	
-
-'''
 
 '''
 @client.command()
@@ -1780,16 +1756,17 @@ async def generate_image(ctx, *, request):
  
 '''
 #---------Test------------#
+import google_bard
+
+API_KEY = data["access_token"] 
 
 
-'''
 @is_beta
 @client.command()
-async def bard(ctx, message):
-	out = Bard().get_answer(message)
-	#out = bard.get_answer(message)['content']
-	await ctx.send(out)
-'''
+async def bard(ctx, query):
+	response = google_bard.generate_text(query, api_key=API_KEY)
+	await ctx.send(response)
+
 
 
 
