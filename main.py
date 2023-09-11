@@ -1756,6 +1756,7 @@ async def generate_image(ctx, *, request):
  
 '''
 #---------Test------------#
+'''
 import google_bard
 
 API_KEY = data["access_token"] 
@@ -1767,7 +1768,7 @@ async def bard(ctx, query):
 	response = google_bard.generate_text(query, api_key=API_KEY)
 	await ctx.send(response)
 
-
+'''
 
 
 
