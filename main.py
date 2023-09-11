@@ -1095,6 +1095,7 @@ async def ban(interaction: discord.Interaction, message: discord.Message):
 				await interaction.response.send_message(embed=embed, ephemeral=True)
 			else:
 				embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+				embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 				embed.set_footer(text=footer_testo)
 				await interaction.response.send_message(embed=embed, ephemeral=True)
 				channel = client.get_channel(errorchannel)
@@ -1319,6 +1320,7 @@ async def play(interaction: discord.Interaction, url: str):
 				else:
 					await asyncio.sleep(1)
 					error_embed_4 = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed_4.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 					error_embed_4.set_footer(text=footer_testo)
 					await interaction.edit_original_response(embed=error_embed_4)
 					await asyncio.sleep(0.5)
@@ -1331,6 +1333,7 @@ async def play(interaction: discord.Interaction, url: str):
 				else:
 					print(e)
 					error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 					error_embed.set_footer(text=footer_testo)
 					await interaction.edit_original_response(embed=error_embed)
 					await asyncio.sleep(0.5)
@@ -2177,7 +2180,8 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.ext.commands.errors.CommandInvokeError):
-		embed = discord.Embed(title=f"Error: Unknown", color=discord.Color.red())
+		embed = discord.Embed(title=f"Error: Command Invoke Error", color=discord.Color.red())
+		embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
@@ -2227,6 +2231,7 @@ async def on_command_error(ctx, error):
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.errors.HTTPException):
 		embed = discord.Embed(title="Error", color=discord.Color.red())
+		embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
 		#error-chat
@@ -2251,6 +2256,7 @@ async def on_command_error(ctx, error):
 			await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")      
 		else:
 			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+			embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed, delete_after=4)
 			#error-chat
