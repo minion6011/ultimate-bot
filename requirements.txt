@@ -9,4 +9,4 @@ deep_translator
 pytube
 discord.py[voice]
 pillow
-bardapi
+GoogleBard
