@@ -825,10 +825,10 @@ from discord import app_commands
 #-ReportBug
 
 class BugModal(ui.Modal, title='Report Bug'):
-    bug_name = ui.TextInput(label='Bugged Command name')
-    #options = [discord.SelectOption(label='Option 1', value='1'), discord.SelectOption(label='Option 2', value='2'), discord.SelectOption(label='Option 3', value='3')]
+    bug_name = ui.TextInput(label='Bugged Command name',required=True,placeholder='Bugged command name...', max_length=50)
+    #options = [discord.SelectOption(label='Option 1', value='1'), discord.SelectOption(label='Option 2', value='2')]
     #type_of_bug = ui.Select(placeholder="Bug Type", min_values=1, max_values=1, options=options)
-    answer = ui.TextInput(label='Description of the bug', style=discord.TextStyle.paragraph)
+    answer = ui.TextInput(label='Description of the bug', style=discord.TextStyle.paragraph, max_length=300,placeholder='Bug description...')
 
     async def on_submit(self, interaction: discord.Interaction):
         channel = client.get_channel(1043931423360430190)
@@ -838,7 +838,7 @@ class BugModal(ui.Modal, title='Report Bug'):
         embed.add_field(name="Description of the bug", value=self.children[1].value)
         embed.add_field(name="User:", value=f"`{interaction.user}`")
         await channel.send(embed=embed)
-        embed1 = discord.Embed(title="Bug report sent", color=discord.Color.red())
+        embed1 = discord.Embed(title="Bug report sent", color=discord.Color.green())
         embed1.set_footer(text=footer_testo)
         await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
