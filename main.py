@@ -33,7 +33,14 @@ import pytube
 import asyncio
 import os
 
+#generate image
+import base64
+from io import BytesIO
+import io
 
+#discord-ui
+from discord import ui
+from discord import app_commands
 
 #config
 with open("config.json") as f:
@@ -43,6 +50,8 @@ with open("config.json") as f:
         print("Errore in config.json")
         print(e)
         exit(1)
+
+
 
 	
 my_id = 598119406731657216
@@ -815,11 +824,56 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 		embed.set_footer(text=footer_testo)
 		embed.set_thumbnail(url=response_emoji.url)
 		await ctx.send(embed=embed)
-	
+
+
+
+@commands.cooldown(1, 10, commands.BucketType.user)
+@commands.guild_only()
+@client.command()
+async def generate_image(ctx, *, request: str):
+	#ETA = int(time.time() + 60)
+	embed = discord.Embed(title=f"Loading the image...", colour=discord.Color.blue())
+	embed.set_footer(text=footer_testo)
+	msg = await ctx.send(embed=embed)
+	async with ctx.typing():
+		try:
+			seed = random.randint(1, 1000)
+			image_url = f"https://image.pollinations.ai/prompt/{request}?seed={seed}"
+			async with aiohttp.ClientSession() as session:
+				async with session.get(image_url) as response:
+					if response.status == 200:
+						image_data = await response.read()
+						image_io = io.BytesIO(image_data)
+						await msg.delete()
+						file = discord.File(image_io, "generatedImage.png")
+						#file = discord.File(resp, "generatedImage.png")
+						image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
+						image_embed.set_image(url="attachment://generatedImage.png")
+						image_embed.set_footer(text=footer_testo)
+						await ctx.send(file=file, embed=image_embed)
+						#await ctx.send("Here's the generated image:", file=discord.File(image, "generatedImage.png"))
+					else:
+						response_text = await resp.text()
+						embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
+						embed.set_footer(text=footer_testo)
+						await ctx.send(embed=embed, delete_after=4)
+						#error-chat
+						channel = client.get_channel(errorchannel)
+						response_text = await resp.text()
+						embed = discord.Embed(title=f"**[Errore]** \nisinstance:\nText: {response_text}", color=discord.Color.red())
+						await channel.send(embed=embed)
+		except aiohttp.ContentTypeError as e:
+				embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed, delete_after=4)
+				#error-chat
+				channel = client.get_channel(errorchannel)
+				response_text = await resp.text()
+				embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```\nText: {response_text}", color=discord.Color.red())
+				await channel.send(embed=embed)
+
 #-------------Ui----------#
 
-from discord import ui
-from discord import app_commands
 
 
 #-ReportBug
@@ -1755,7 +1809,24 @@ async def generate_image(ctx, *, request):
 					print(e)
  
 '''
-#---------Test------------#
+
+'''
+from bard import Bard
+bard = Bard()
+
+@is_me
+@client.command()
+@commands.guild_only()
+async def chat(ctx, *, request):
+	async with ctx.typing():
+		response = bard.query(request)
+		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
+		embed.set_footer(text=footer_testo)
+		await ctx.send(embed=embed, content=f"```{response}```")	
+'''
+
+
+#--------Working-Progress--------#
 '''
 import google_bard
 
@@ -1771,6 +1842,39 @@ async def bard(ctx, query):
 '''
 
 
+
+	
+@is_beta
+@client.command()
+async def verify(ctx):
+	#reactions = ['✅'] # add more later if u want idk
+	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
+	embed.set_footer(text=footer_testo)
+	#View=VerifyButton()
+	await ctx.send(embed=embed, view=Button())
+	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
+
+
+
+
+@client.command()
+@commands.guild_only()
+async def chat(ctx):
+	embed = discord.Embed(title="`?chat` has been disabled\nTry to check announcements to know when the command will be reactivated", color=discord.Color.greyple())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, delete_after=20)	
+
+
+@commands.cooldown(1, 5, commands.BucketType.user)
+@client.command()
+@commands.guild_only()
+async def help(ctx):
+	embed = discord.Embed(title="`?help` has been disabled\nTry using </help:1094994368445816934>", color=discord.Color.greyple())
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed, delete_after=20)
+
+
+#----------Admin---------------#
 
 
 @is_beta
@@ -1887,102 +1991,9 @@ async def automod(ctx):
     # Invia un messaggio di conferma al canale
     await ctx.send("Regola di AutoMod creata con successo!")
 
-	
-@is_beta
-@client.command()
-async def verify(ctx):
-	#reactions = ['✅'] # add more later if u want idk
-	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
-	embed.set_footer(text=footer_testo)
-	#View=VerifyButton()
-	await ctx.send(embed=embed, view=Button())
-	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
-
-	
-
-
-#----------Admin---------------#
-import base64
-from io import BytesIO
-import io
-
-@commands.cooldown(1, 10, commands.BucketType.user)
-@commands.guild_only()
-@client.command()
-async def generate_image(ctx, *, request: str):
-	#ETA = int(time.time() + 60)
-	embed = discord.Embed(title=f"Loading the image...", colour=discord.Color.blue())
-	embed.set_footer(text=footer_testo)
-	msg = await ctx.send(embed=embed)
-	async with ctx.typing():
-		try:
-			seed = random.randint(1, 1000)
-			image_url = f"https://image.pollinations.ai/prompt/{request}?seed={seed}"
-			async with aiohttp.ClientSession() as session:
-				async with session.get(image_url) as response:
-					if response.status == 200:
-						image_data = await response.read()
-						image_io = io.BytesIO(image_data)
-						await msg.delete()
-						file = discord.File(image_io, "generatedImage.png")
-						#file = discord.File(resp, "generatedImage.png")
-						image_embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.green())
-						image_embed.set_image(url="attachment://generatedImage.png")
-						image_embed.set_footer(text=footer_testo)
-						await ctx.send(file=file, embed=image_embed)
-						#await ctx.send("Here's the generated image:", file=discord.File(image, "generatedImage.png"))
-					else:
-						response_text = await resp.text()
-						embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
-						embed.set_footer(text=footer_testo)
-						await ctx.send(embed=embed, delete_after=4)
-						#error-chat
-						channel = client.get_channel(errorchannel)
-						response_text = await resp.text()
-						embed = discord.Embed(title=f"**[Errore]** \nisinstance:\nText: {response_text}", color=discord.Color.red())
-						await channel.send(embed=embed)
-		except aiohttp.ContentTypeError as e:
-				embed = discord.Embed(title="Error: Unknow", color=discord.Color.red())
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed, delete_after=4)
-				#error-chat
-				channel = client.get_channel(errorchannel)
-				response_text = await resp.text()
-				embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```\nText: {response_text}", color=discord.Color.red())
-				await channel.send(embed=embed)
 
 
 
-'''
-from bard import Bard
-bard = Bard()
-
-@is_me
-@client.command()
-@commands.guild_only()
-async def chat(ctx, *, request):
-	async with ctx.typing():
-		response = bard.query(request)
-		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, content=f"```{response}```")	
-'''
-
-@client.command()
-@commands.guild_only()
-async def chat(ctx):
-	embed = discord.Embed(title="`?chat` has been disabled\nTry to check announcements to know when the command will be reactivated", color=discord.Color.greyple())
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, delete_after=20)	
-
-
-@commands.cooldown(1, 5, commands.BucketType.user)
-@client.command()
-@commands.guild_only()
-async def help(ctx):
-	embed = discord.Embed(title="`?help` has been disabled\nTry using </help:1094994368445816934>", color=discord.Color.greyple())
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, delete_after=20)
 
 
 @is_beta
@@ -2088,7 +2099,7 @@ async def manutenzione(ctx):
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
 
-#--------Presence------------#
+#--------Staus------------#
 
 @tasks.loop(seconds=18)
 async def change_status():
