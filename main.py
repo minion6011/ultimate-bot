@@ -38,6 +38,12 @@ import base64
 from io import BytesIO
 import io
 
+#verifydelete - captcha - setupverify
+import random #captcha-image-text
+from PIL import Image, ImageDraw, ImageFont #captcha-image
+import io #captcha-image
+
+
 #discord-ui
 from discord import ui
 from discord import app_commands
@@ -871,6 +877,192 @@ async def generate_image(ctx, *, request: str):
 				response_text = await resp.text()
 				embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```\nText: {response_text}", color=discord.Color.red())
 				await channel.send(embed=embed)
+
+
+#------------Verify-------#
+
+@client.tree.command(name="verifydelete", description = "Delete the verification system in the server") #slash command
+async def delverify(interaction: discord.Interaction):
+	if interaction.user.guild_permissions.manage_roles:
+		if not discord.utils.get(interaction.guild.roles, name="verify"):
+			embed2 = discord.Embed(title="The verify role does not exist on this server", color=discord.Color.blue())
+			embed2.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed2, ephemeral=True)
+		elif discord.utils.get(interaction.guild.roles, name="verify"):
+			embed = discord.Embed(title="I deleted the verify role", color=discord.Color.blue())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			#role delete
+			role = discord.utils.get(interaction.guild.roles, name="verify")
+			everyone_role = interaction.guild.default_role
+			for channel in interaction.guild.channels:
+				overwrites = channel.overwrites_for(role)
+				if overwrites.view_channel is True:
+					await channel.set_permissions(everyone_role, view_channel=True)
+					await channel.set_permissions(role, view_channel=None)
+			# del the role
+			for channel in interaction.guild.channels:
+				overwrites = channel.overwrites_for(role)
+				if overwrites.view_channel is True:
+					return
+			await role.delete()
+	else:
+		embed_e = discord.Embed(title='Error: You need the permission to use this command `"manage roles"`', color=discord.Color.red())
+		embed_e.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed_e, ephemeral=True)
+
+
+
+
+@client.tree.command(name="verifysetup", description = "Set up the system for verification on the server") #slash command
+async def verify(interaction: discord.Interaction):
+	if interaction.user.guild_permissions.manage_roles:
+		embed = discord.Embed(title="Setup Verify", description="You need to press the first two buttons if you have never set up this verification system on your server", color=discord.Color.blue())
+		embed.add_field(name="Press the green button to add the verify role in the server\nand set this channel as verify channel", value=":green_circle:",inline=True)
+		#embed.add_field(name="Press the blue button to send the message to verify", value=":blue_circle:",inline=True)
+		embed.add_field(name="\n\nUse this command to delete the Verify system in the server:", value="/verifydelete",inline=False)
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True, view=Verify_Button())
+	else:
+		embed = discord.Embed(title='Error: You need the permission to use this command `"manage roles"`', color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+
+	
+class Verify_Button(discord.ui.View):
+	def __init__(self):
+		super().__init__()
+		self.value = None
+
+	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
+	async def Verify_Button1(self, interaction: discord.Interaction, button: discord.ui.Button):
+		ctx=interaction
+		if discord.utils.get(ctx.guild.roles, name="verify"):
+			#if get(message.guild.roles, name="verify"):
+			embed_ex=discord.Embed(title="The role already exists on the server", color=discord.Color.red())
+			embed_ex.set_footer(text=footer_testo)  
+			await interaction.response.send_message(embed=embed_ex, ephemeral=True)
+		else:
+			permissions = discord.Permissions(send_messages=True, read_messages=True) #da-cambiare
+			guild = interaction.guild
+			await guild.create_role(name="verify", colour=discord.Colour(0x00ff00), permissions=permissions)
+			role = discord.utils.get(ctx.guild.roles, name="verify")
+			#all channel no-private set verify can see - everyone
+			#message ephereal
+			embed_m_f=discord.Embed(title="I have set up the Verify role on the server.\nI set this channel to be the one where people can Verify", color=discord.Color.green())
+			embed_m_f.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed_m_f, ephemeral=True)
+			await asyncio.sleep(2)
+			#message visible
+			embed_ex=discord.Embed(title="To become verified run the `?captcha` command", color=discord.Color.green())
+			embed_ex.set_footer(text=footer_testo) 
+			channel = interaction.channel
+			await channel.send(embed=embed_ex)
+			await asyncio.sleep(0.5)
+			#set role
+			for channel in ctx.guild.channels:
+				overwrites = channel.overwrites_for(ctx.guild.default_role)
+				if overwrites.is_empty() or overwrites.view_channel is None or overwrites.view_channel:
+					role_overwrites = channel.overwrites_for(role)
+					role_overwrites.view_channel = True
+					await channel.set_permissions(role, overwrite=role_overwrites)
+					everyone_overwrites = channel.overwrites_for(ctx.guild.default_role)
+					everyone_overwrites.view_channel = False
+					await channel.set_permissions(ctx.guild.default_role, overwrite=everyone_overwrites)
+					#verify_channel can be seen
+					channel_v = interaction.channel
+					role_v_e = discord.utils.get(ctx.guild.roles, name="@everyone")
+					role_v_v = discord.utils.get(ctx.guild.roles, name="verify")
+					permissions_v_e = discord.PermissionOverwrite(view_channel=True)
+					permissions_v_v = discord.PermissionOverwrite(view_channel=False)
+					await channel_v.set_permissions(role_v_e, overwrite=permissions_v_e)
+					await channel_v.set_permissions(role_v_v, overwrite=permissions_v_v)
+
+
+
+@client.command()
+async def captcha(ctx):
+	if not discord.utils.get(ctx.guild.roles, name="verify"):
+		await ctx.message.delete()
+		i_e_embed = discord.Embed(title=" :no_entry_sign: Error: Verify has not been set :no_entry_sign: ", colour=discord.Color.red())
+		if ctx.author.guild_permissions.manage_roles:
+			i_e_embed.add_field(name="Set up Verify using:", value="</verifysetup:0000>", inline=True) #verifysetup id
+		i_e_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=i_e_embed, delete_after=4)
+		return
+	if discord.utils.get(ctx.guild.roles, name="verify") in ctx.author.roles:
+		await ctx.message.delete()
+		v_e_embed = discord.Embed(title=" :x: You have already been verified :x: ", colour=discord.Color.red())
+		v_e_embed.set_footer(text=footer_testo)
+		await ctx.send(embed=v_e_embed, delete_after=4)
+		return
+	image = Image.new('RGB', (350, 100), (255, 255, 255))
+	draw = ImageDraw.Draw(image)
+	text = random.choice(["J3PKL2", "8QGT2V", "T3FWR6", "VF7NY2", "UPA2XZ", "I5CYWJ", "BVT6NC"])
+	font = ImageFont.truetype("captcha.ttf", 60)
+	draw.text((80, 25), text, font=font, fill=(0, 0, 0))
+	buffer = io.BytesIO()
+	image.save(buffer, format='PNG')
+	buffer.seek(0)
+	file = discord.File(buffer, filename='captcha.png')
+	#file = discord.File(resp, "generatedImage.png")
+	image_embed = discord.Embed(title=" :robot: Captcha :white_check_mark: ", colour=discord.Color.green())
+	image_embed.add_field(name=" :warning: Warning :warning: ", value="All characters must be written in capital letters", inline=True)
+	image_embed.set_image(url="attachment://captcha.png")
+	image_embed.set_footer(text="Write the characters in the image")
+	start_embed = await ctx.send(file=file, embed=image_embed)
+	await asyncio.sleep(1)
+	await ctx.message.delete()
+
+	def check(m: discord.Message):
+		return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
+	
+	try:
+		response = await client.wait_for('message', check=check, timeout=15.0)
+		#print(response.content)
+		#print(text)
+		if response.content == text:
+			await response.delete()
+			await start_embed.delete()
+			c_embed = discord.Embed(title=" :white_check_mark: Correct CAPTCHA :white_check_mark: ", colour=discord.Color.green())
+			c_embed.set_footer(text=footer_testo)
+			c_edit = await ctx.send(embed=c_embed, delete_after=2)
+			await asyncio.sleep(3)
+			if discord.utils.get(ctx.guild.roles, name="verify"):
+				if not discord.utils.get(ctx.guild.roles, name="verify") in ctx.author.roles:
+					role = discord.utils.get(ctx.guild.roles, name="verify")
+					await ctx.author.add_roles(role)
+				else:
+					error1_embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+					error1_embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
+					error1_embed.set_footer(text=footer_testo)
+					await c_edit.edit(embed=error1_embed, delete_after=3)
+			else:
+				error2_embed = discord.Embed(title="Error: Verify has not been set", color=discord.Color.red())
+				error2_embed.add_field(name="Set up Verify using:", value="</verifysetup:0000>", inline=True) #verifysetup id
+				error2_embed.set_footer(text=footer_testo)
+				await c_edit.edit(embed=error2_embed, delete_after=3)
+		else:
+			await response.delete()
+			await start_embed.delete()
+			w_embed = discord.Embed(title=" :x: Wrong CAPTCHA :x: ", colour=discord.Color.red())
+			w_embed.set_footer(text=footer_testo)
+			await ctx.send(embed=w_embed, delete_after=5)
+	except asyncio.TimeoutError:
+			await start_embed.delete()
+			t_embed = discord.Embed(title=f" :clock2: You have run out of time to answer the CAPTCHA.\nPlease try again :clock2: ", colour=discord.Color.gold())
+			t_embed.set_footer(text=footer_testo)
+			await ctx.send(embed=t_embed, delete_after=5)
+	except Exception as e:
+			error3_embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+			error3_embed.add_field(name="Set up Verify using:", value="</verifysetup:0000>", inline=True) #verifysetup id
+			error3_embed.set_footer(text=footer_testo)
+			await ctx.send(embed=error3_embed, delete_after=4)
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** captcha/verify \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+			raise e
+
+
 
 #-------------Ui----------#
 
