@@ -1139,7 +1139,7 @@ class SuggestionModal(ui.Modal, title='Suggest a command'):
         await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
-#-Help
+#-Help-
 		
 class HelpDropdownView(discord.ui.View):
 	def __init__(self):
@@ -1161,18 +1161,18 @@ class HelpDropdown(discord.ui.Select):
 			embed.add_field(name=f"{prefix}ban `user_id` `reason`", value=f"Ban a member from the server", inline=True)
 			embed.add_field(name=f"{prefix}unban `user_id`", value=f"Unban a member from the server", inline=True)
 			embed.add_field(name=f"{prefix}delchannel", value=f"Delete all channel", inline=True)
-			embed.add_field(name=f"{prefix}lockdown", value=f"Lockdown all channel", inline=True)
-			embed.add_field(name=f"{prefix}unlock", value=f"Unlock channel", inline=True)
+			embed.add_field(name=f"{prefix}lockdown", value=f"Lockdown the channel", inline=True)
+			embed.add_field(name=f"{prefix}unlock", value=f"Unlock the channel", inline=True)
 			embed.add_field(name=f"{prefix}mute `user_id`", value=f"Mute a member", inline=True)
 			embed.add_field(name=f"{prefix}unmute `user_id`", value=f"Unmute a member", inline=True)
-			embed.add_field(name=f"{prefix}slowmode `seconds`", value=f"Unmute a member", inline=True)
+			embed.add_field(name=f"{prefix}slowmode `seconds`", value=f"Sets the slowmode of the channel", inline=True)
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 		elif self.values[0] == "Utilty Commands":
 			embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
 			embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
 			embedt.add_field(name=f"{prefix}chat `request`", value="Answer your questions using Openai", inline=True)
-			embedt.add_field(name=f"{prefix}serverinfo", value="Send the server info", inline=True)
+			embedt.add_field(name=f"{prefix}serverinfo", value="Send the Server info", inline=True)
 			embedt.add_field(name=f"{prefix}userinfo `user_id`", value="Send the User info", inline=True)
 			embedt.add_field(name=f"{prefix}translate `language` `text`", value="Translates text into any supported language", inline=True)
 			embedt.add_field(name=f"{prefix}custom_emoji_info `custom_emoji`", value="Tells you the information of a custom emoji", inline=True)
@@ -1185,7 +1185,7 @@ class HelpDropdown(discord.ui.Select):
 			embedd.add_field(name=f"{prefix}casual", value="Extracts Yes or No", inline=True)
 			embedd.add_field(name=f"{prefix}coinflip", value="Extracts heads or tails", inline=True)
 			embedd.add_field(name=f"{prefix}num_extractor", value="Extracts a number from 1 to 10", inline=True)
-			embedd.add_field(name=f"{prefix}generate_image `request`", value="Generate image using Openai", inline=True)
+			embedd.add_field(name=f"{prefix}generate_image `request`", value="Generate an image", inline=True)
 			#embedd.add_field(name=f"{prefix}activity", value="Send the No-Nitro and the Nitro Activity", inline=True)
 			embedd.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embedd, ephemeral=True)
