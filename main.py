@@ -1198,6 +1198,8 @@ class HelpDropdown(discord.ui.Select):
 			embed.add_field(name="</play:1114559886995509268>", value="Play a song", inline=True)
 			embed.add_field(name="</stop:1114604126861525132>", value="Stop a song", inline=True)
 			embed.add_field(name="</volume:1114604126861525133>", value="Set the volume of a song", inline=True)
+			embed.add_field(name="</verifydelete:1165565902633324545>", value="Delete the verification system in the server", inline=True)
+			embed.add_field(name="</verifysetup:1165565902633324546>", value="Create the verification system in the server", inline=True)
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 
