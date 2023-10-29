@@ -115,7 +115,7 @@ async def on_ready():
 
 
 #-----------Stalker--------------#
-
+'''
 @client.event
 async def on_message(message):
 	if message.author.bot:
@@ -213,7 +213,7 @@ async def on_message_edit(before, after):
 		embed.add_field(name = 'Canale:', value=f"<#{after.channel.id}>", inline = True)
 		await channel.send(embed=embed)
 
-
+'''
 
 @client.event
 async def on_member_ban(guild, user):
