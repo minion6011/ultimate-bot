@@ -2,11 +2,11 @@
 ﻿
 ### 📂﻿﻿ Added:
 ﻿
-/verifysetup
+<h8>/verifysetup</h8>
 ﻿
-/verifydelete
+<h8>/verifydelete</h8>
 ﻿
-?captcha is used to generate a CAPTCHA to verify the user
+<h8>?captcha is used to generate a CAPTCHA to verify the user</h8>
 ﻿
 ﻿
 ﻿
