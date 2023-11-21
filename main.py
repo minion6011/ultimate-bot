@@ -2036,7 +2036,7 @@ openai.api_key = data["access_token"]
 @is_beta
 @client.command()
 async def chat3(ctx, query):
-	response = openai.Completion.create(engine='davinci',prompt=query,max_tokens=500)
+	response = openai.Completion.create(engine='tts-1',prompt=query,max_tokens=500)
 	await ctx.send(response.choices[0].text.strip())
 
 
