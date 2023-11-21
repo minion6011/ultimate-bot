@@ -2021,19 +2021,24 @@ async def chat(ctx, *, request):
 
 
 #--------Working-Progress--------#
-'''
-import google_bard
 
-API_KEY = data["access_token"] 
+
+
+import openai
+
+openai.api_key = data["access_token"]
+
+
+
+        
 
 
 @is_beta
 @client.command()
-async def bard(ctx, query):
-	response = google_bard.generate_text(query, api_key=API_KEY)
-	await ctx.send(response)
+async def chat(ctx, query):
+	response = openai.Completion.create(engine='davinci',prompt=query,max_tokens=500)
+	await ctx.send(response.choices[0].text.strip())
 
-'''
 
 
 
