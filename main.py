@@ -1165,7 +1165,7 @@ class HelpDropdown(discord.ui.Select):
 			embed.add_field(name=f"{prefix}unlock", value=f"Unlock the channel", inline=True)
 			embed.add_field(name=f"{prefix}mute `user_id`", value=f"Mute a member", inline=True)
 			embed.add_field(name=f"{prefix}unmute `user_id`", value=f"Unmute a member", inline=True)
-			embed.add_field(name=f"{prefix}slowmode `seconds`", value=f"Sets the slowmode of the channel", inline=True)
+			embed.add_field(name=f"{prefix}slowmode `seconds`", value=f"Set the slowmode of the channel", inline=True)
 			embed.set_footer(text=footer_testo)
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 		elif self.values[0] == "Utilty Commands":
