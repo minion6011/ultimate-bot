@@ -1,4 +1,5 @@
 discord
+discord.py
 discord-together~=1.2.2
 psutil
 requests
