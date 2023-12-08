@@ -10,3 +10,4 @@ pytube
 discord.py[voice]
 pillow
 GoogleBard
+openai
