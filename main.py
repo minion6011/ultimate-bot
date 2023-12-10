@@ -1089,36 +1089,6 @@ class BugModal(ui.Modal, title='Report Bug'):
         await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
-#-Verify
-	
-class Button(discord.ui.View):
-	def __init__(self):
-		super().__init__()
-		self.value = None
-
-	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
-	async def Button1(self, interaction: discord.Interaction, button: discord.ui.Button):
-		ctx=interaction
-		if discord.utils.get(ctx.guild.roles, name="verify"):
-			#if get(message.guild.roles, name="verify"):
-			role = discord.utils.get(ctx.guild.roles, name="verify")
-			pearson = interaction.user
-			await pearson.add_roles(role)
-			embed_verify=discord.Embed(title=f"You are now verify", color=discord.Color.green())
-			embed_verify.set_footer(text=footer_testo)  
-			await interaction.response.send_message(embed=embed_verify, ephemeral=True)
-		else:
-			permissions = discord.Permissions(send_messages=True, read_messages=True)
-			guild = interaction.guild
-			await guild.create_role(name="verify", colour=discord.Colour(0x00ff00), permissions=permissions)
-			role = discord.utils.get(ctx.guild.roles, name="verify")
-			for channel in ctx.guild.channels:
-				permissions = discord.PermissionOverwrite(send_messages=True, read_messages=True, speak=True)
-				await channel.set_permissions(role, overwrite=permissions)
-				role1 = discord.utils.get(ctx.guild.roles, name="@everyone")
-				permissions1 = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
-				await channel.set_permissions(role1, overwrite=permissions1)
-			await ctx.user.add_roles(role)
 			
 
 #-Suggestion
@@ -1171,7 +1141,6 @@ class HelpDropdown(discord.ui.Select):
 		elif self.values[0] == "Utilty Commands":
 			embedt = discord.Embed(title="Utilty :chart_with_downwards_trend:", color=discord.Color.green())
 			embedt.add_field(name=f"{prefix}infobot", value="Send the bot stats (cpu, memory, ping)", inline=True)
-			embedt.add_field(name=f"{prefix}chat `request`", value="Answer your questions using Openai", inline=True)
 			embedt.add_field(name=f"{prefix}serverinfo", value="Send the Server info", inline=True)
 			embedt.add_field(name=f"{prefix}userinfo `user_id`", value="Send the User info", inline=True)
 			embedt.add_field(name=f"{prefix}translate `language` `text`", value="Translates text into any supported language", inline=True)
@@ -2020,18 +1989,12 @@ async def chat(ctx, *, request):
 '''
 
 
-#--------Working-Progress--------#
+'''CHAT GPT command
 
-
-
+#
 import openai
 
 openai.api_key = data["access_token"]
-
-
-
-        
-
 
 @is_beta
 @client.command()
@@ -2039,29 +2002,65 @@ async def chat3(ctx, query):
 	response = openai.Completion.create(engine='tts-1',prompt=query,max_tokens=500)
 	await ctx.send(response.choices[0].text.strip())
 
-
-
-
-	
-@is_beta
-@client.command()
-async def verify(ctx):
-	#reactions = ['✅'] # add more later if u want idk
-	embed = discord.Embed(title="Click the button to verify", color=discord.Color.green())
-	embed.set_footer(text=footer_testo)
-	#View=VerifyButton()
-	await ctx.send(embed=embed, view=Button())
-	#await message.add_reaction("<:checkmark_2714fe0f:1073342463995023433>")
-
-
-
-
 @client.command()
 @commands.guild_only()
 async def chat(ctx):
 	embed = discord.Embed(title="`?chat` has been disabled\nTry to check announcements to know when the command will be reactivated", color=discord.Color.greyple())
 	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, delete_after=20)	
+	await ctx.send(embed=embed, delete_after=20)
+
+'''
+
+
+#--------Working-Progress--------#
+
+
+
+
+@is_beta
+@client.command()
+async def automod2(ctx):
+	await ctx.guild.create_automod_rule(name="Spam Block",
+					    event_type=AutoModRuleEventType.message_send,
+					    trigger=AutomodTrigger.spam,
+					    actions=[AutoModRuleActionType.block_message], enabled=True)
+
+
+
+
+@is_beta
+@client.command()
+async def automod(ctx):
+    # Crea un trigger personalizzato per la parola "spam"
+    trigger = discord.AutoModTrigger(
+        type=discord.AutoModRuleTriggerType.keyword,
+        keyword_filter=["spam"]
+    )
+
+    # Crea un'azione personalizzata per bloccare i messaggi contenenti la parola "spam"
+    action = discord.AutoModRuleAction(
+        action_type=discord.AutoModRuleActionType.block_message,
+        custom_message="Messaggi contenenti la parola 'spam' non sono ammessi in questo canale."
+    )
+
+    # Crea una regola di AutoMod personalizzata utilizzando il trigger e l'azione creati
+    rule = discord.AutoModRule(
+        name="spam_filter",
+        event_type=discord.AutoModRuleEventType.message_send,
+        trigger=trigger,
+        actions=[action]
+    )
+
+    # Aggiungi la regola di AutoMod personalizzata al canale corrente
+    await ctx.channel.create_automod_rule(rule=rule)
+
+    # Invia un messaggio di conferma al canale
+    await ctx.send("Regola di AutoMod creata con successo!")
+
+
+
+
+
 
 
 @commands.cooldown(1, 5, commands.BucketType.user)
@@ -2148,47 +2147,6 @@ async def download(ctx, url):
 				channel = client.get_channel(errorchannel)
 				await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
 
-
-
-@is_beta
-@client.command()
-async def automod2(ctx):
-	await ctx.guild.create_automod_rule(name="Spam Block",
-					    event_type=AutoModRuleEventType.message_send,
-					    trigger=AutomodTrigger.spam,
-					    actions=[AutoModRuleActionType.block_message], enabled=True)
-
-
-
-
-@is_beta
-@client.command()
-async def automod(ctx):
-    # Crea un trigger personalizzato per la parola "spam"
-    trigger = discord.AutoModTrigger(
-        type=discord.AutoModRuleTriggerType.keyword,
-        keyword_filter=["spam"]
-    )
-
-    # Crea un'azione personalizzata per bloccare i messaggi contenenti la parola "spam"
-    action = discord.AutoModRuleAction(
-        action_type=discord.AutoModRuleActionType.block_message,
-        custom_message="Messaggi contenenti la parola 'spam' non sono ammessi in questo canale."
-    )
-
-    # Crea una regola di AutoMod personalizzata utilizzando il trigger e l'azione creati
-    rule = discord.AutoModRule(
-        name="spam_filter",
-        event_type=discord.AutoModRuleEventType.message_send,
-        trigger=trigger,
-        actions=[action]
-    )
-
-    # Aggiungi la regola di AutoMod personalizzata al canale corrente
-    await ctx.channel.create_automod_rule(rule=rule)
-
-    # Invia un messaggio di conferma al canale
-    await ctx.send("Regola di AutoMod creata con successo!")
 
 
 
