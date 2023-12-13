@@ -1,5 +1,5 @@
 
-<img src="logo/">
+<img src="logo/xmas-banner">
 
 
 # Version 1.8
