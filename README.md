@@ -1,5 +1,5 @@
 
-<img src="logo/xmas-banner.png">
+<img src="logo/xmas-banner.png"height="85%"/>
 
 
 # Version 1.8
