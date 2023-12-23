@@ -64,7 +64,7 @@ my_id = [598119406731657216, 1181630796759564358]
 beta_list = [598119406731657216, 829022689338851389]
 
 
-is_me = commands.check(lambda ctx: ctx.author.id == my_id) 
+is_me = commands.check(lambda ctx: ctx.author.id in my_id) 
 
 is_beta = commands.check(lambda ctx: ctx.author.id in beta_list )
 
