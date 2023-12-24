@@ -1391,8 +1391,6 @@ async def play(interaction: discord.Interaction, name: str):
 							share_video_id = url.replace("https://youtu.be/", "")
 							share_video_url = "youtube.com/watch?v=" + f"{share_video_id}"
 
-							channel = interaction.user.voice.channel
-							voice_channel = await channel.connect()
 
 
 							# Scarica l'audio da YouTube
@@ -1400,6 +1398,8 @@ async def play(interaction: discord.Interaction, name: str):
 							stream = yt.streams.get_audio_only() #w
 							stream_url = stream.url
 
+							channel = interaction.user.voice.channel
+							voice_channel = await channel.connect()
 
 							#----FFMPEG_OPTION
 			
@@ -1455,8 +1455,6 @@ async def play(interaction: discord.Interaction, name: str):
 
 						else:
 
-							channel = interaction.user.voice.channel
-							voice_channel = await channel.connect()
 
 
 							# Scarica l'audio da YouTube
@@ -1465,6 +1463,10 @@ async def play(interaction: discord.Interaction, name: str):
 							stream_url = stream.url
 
 
+							channel = interaction.user.voice.channel
+							voice_channel = await channel.connect()
+
+							
 							#----FFMPEG_OPTION
 			
 							#permette la canzone di essere completata quando si ha un delay nell'app di ffmpeg
@@ -1521,8 +1523,7 @@ async def play(interaction: discord.Interaction, name: str):
 						for v in s.results:
 							searchResults.append(v.watch_url)
 						share_video_url = searchResults[0]
-						channel = interaction.user.voice.channel
-						voice_channel = await channel.connect()
+
 
 
 						# Scarica l'audio da YouTube
@@ -1530,6 +1531,8 @@ async def play(interaction: discord.Interaction, name: str):
 						stream = yt.streams.get_audio_only() #w
 						stream_url = stream.url
 
+						channel = interaction.user.voice.channel
+						voice_channel = await channel.connect()
 
 						#----FFMPEG_OPTION
 			
