@@ -30,6 +30,8 @@ from deep_translator import GoogleTranslator
 
 #music-bot
 import pytube
+from pytube import YouTube
+from pytube import Search
 import asyncio
 import os
 
