@@ -908,6 +908,9 @@ async def delverify(interaction: discord.Interaction):
 				if overwrites.view_channel is True:
 					return
 			await role.delete()
+			def check(msg):
+				return msg.author == client.user
+			await interaction.channel.purge(limit=100, check=check)
 	else:
 		embed_e = discord.Embed(title='Error: You need the permission to use this command `"manage roles"`', color=discord.Color.red())
 		embed_e.set_footer(text=footer_testo)
