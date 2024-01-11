@@ -701,7 +701,7 @@ async def delchannel(ctx):
 @has_permissions(ban_members=True)
 async def unban(ctx, user: discord.User):
 	try:
-		if member == None:
+		if user == None:
 			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)  
 			await ctx.send(embed=embed)
