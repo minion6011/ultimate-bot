@@ -2352,6 +2352,7 @@ async def change_status():
 @client.event
 async def on_command_error(ctx, error):
 	if isinstance(error, discord.ext.commands.errors.CommandNotFound):
+		await ctx.message.delete()
 		embed = discord.Embed(title="Error: This command does not exist", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
@@ -2360,6 +2361,7 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.ext.commands.errors.CommandInvokeError):
+		await ctx.message.delete()
 		embed = discord.Embed(title=f"Error: Command Invoke Error", color=discord.Color.red())
 		embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 		embed.set_footer(text=footer_testo)
@@ -2378,6 +2380,7 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.ext.commands.errors.MemberNotFound):
+		await ctx.message.delete()
 		embed = discord.Embed(title="Error: Member not found", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
@@ -2386,6 +2389,7 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.ext.commands.errors.UserNotFound):
+		await ctx.message.delete()
 		embed = discord.Embed(title="Error: User not found", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
@@ -2394,6 +2398,7 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+		await ctx.message.delete()
 		embed = discord.Embed(title="Error: Missing required argument", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
@@ -2410,7 +2415,8 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.errors.HTTPException):
-		embed = discord.Embed(title="Error", color=discord.Color.red())
+		await ctx.message.delete()
+		embed = discord.Embed(title="Error HTTP", color=discord.Color.red())
 		embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
@@ -2418,16 +2424,19 @@ async def on_command_error(ctx, error):
 		channel = client.get_channel(errorchannel)
 		await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")
 	elif isinstance(error, discord.NotFound):
+		await ctx.message.delete()
 		embed = discord.Embed(title="Error\nNo emoji founded", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
 	elif isinstance(error, commands.CommandOnCooldown):
 		await asyncio.sleep(5)
+		await ctx.message.delete()
 		embed = discord.Embed(title="Error", color=discord.Color.red())
 		embed.add_field(name=f'You cannot use this command for', value=f'**{error.retry_after:.2f} seconds**', inline=False)
 		await ctx.send(embed=embed, delete_after=4)
 	else:
 		if 'not found.' in str(error):
+			await ctx.message.delete()
 			embed = discord.Embed(title="Error: Member not found", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed, delete_after=4)
@@ -2435,6 +2444,7 @@ async def on_command_error(ctx, error):
 			channel = client.get_channel(errorchannel)
 			await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")      
 		else:
+			await ctx.message.delete()
 			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
 			embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 			embed.set_footer(text=footer_testo)
