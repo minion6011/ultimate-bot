@@ -324,6 +324,7 @@ async def on_guild_role_create(role):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 10, commands.BucketType.user)
 async def userinfo(ctx, *, user: discord.Member = None):
 	voice_state = None if not user.voice else user.voice.channel
 	role = user.top_role.name
@@ -395,6 +396,7 @@ async def nuke(ctx, amount: int = 100):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 10, commands.BucketType.user)
 async def serverinfo(ctx):
 	#check_forum = discord.utils.get(ctx.guild.forum_channels)
 	check_text = discord.utils.get(ctx.guild.text_channels)
@@ -423,6 +425,7 @@ async def serverinfo(ctx):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def meme(ctx):
 		embed = discord.Embed(title="Meme", color=discord.Colour.green())
 		async with aiohttp.ClientSession() as cs:
@@ -436,6 +439,8 @@ async def meme(ctx):
 
 @client.command()
 @commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
+@commands.has_permissions(moderate_members=True)
 async def unmute(ctx, user: discord.Member = None):
 	if ctx.message.author.guild_permissions.administrator:
 		if user == None:
@@ -459,7 +464,9 @@ async def unmute(ctx, user: discord.Member = None):
 		await ctx.send(embed=embed, delete_after=4)
 
 @client.command()
-@commands.guild_only() 
+@commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
+@commands.has_permissions(moderate_members=True)
 async def mute(ctx, user: discord.Member = None, reason = None):
 	if ctx.message.author.guild_permissions.administrator:
 		#channel1 = ctx.guild.channels
@@ -647,7 +654,7 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 
 @client.command()
 @commands.guild_only()
-@commands.has_permissions(manage_messages=True)
+@commands.has_permissions(manage_channels=True)
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def slowmode(ctx, seconds: int):
 	await ctx.channel.edit(slowmode_delay=seconds)
@@ -802,7 +809,6 @@ async def dictionary(ctx, term):
 
 @client.command()
 @commands.guild_only()
-@commands.has_permissions(manage_messages=True)
 @commands.cooldown(1, 15, commands.BucketType.user)
 async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 	if not emoji:
@@ -835,7 +841,7 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 
 
 
-@commands.cooldown(1, 10, commands.BucketType.user)
+@commands.cooldown(1, 20, commands.BucketType.user)
 @commands.guild_only()
 @client.command()
 async def generate_image(ctx, *, request: str):
@@ -934,54 +940,6 @@ async def verify(interaction: discord.Interaction):
 		await interaction.response.send_message(embed=embed, ephemeral=True)
 
 	
-class Verify_Button(discord.ui.View):
-	def __init__(self):
-		super().__init__()
-		self.value = None
-
-	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
-	async def Verify_Button1(self, interaction: discord.Interaction, button: discord.ui.Button):
-		ctx=interaction
-		if discord.utils.get(ctx.guild.roles, name="verify"):
-			#if get(message.guild.roles, name="verify"):
-			embed_ex=discord.Embed(title="The role already exists on the server", color=discord.Color.red())
-			embed_ex.set_footer(text=footer_testo)  
-			await interaction.response.send_message(embed=embed_ex, ephemeral=True)
-		else:
-			permissions = discord.Permissions(send_messages=True, read_messages=True) #da-cambiare
-			guild = interaction.guild
-			await guild.create_role(name="verify", colour=discord.Colour(0x00ff00), permissions=permissions)
-			role = discord.utils.get(ctx.guild.roles, name="verify")
-			#all channel no-private set verify can see - everyone
-			#message ephereal
-			embed_m_f=discord.Embed(title="I have set up the Verify role on the server.\nI set this channel to be the one where people can Verify", color=discord.Color.green())
-			embed_m_f.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed_m_f, ephemeral=True)
-			await asyncio.sleep(2)
-			#message visible
-			embed_ex=discord.Embed(title="To become verified run the `?captcha` command", color=discord.Color.green())
-			embed_ex.set_footer(text=footer_testo) 
-			channel = interaction.channel
-			await channel.send(embed=embed_ex)
-			await asyncio.sleep(0.5)
-			#set role
-			for channel in ctx.guild.channels:
-				overwrites = channel.overwrites_for(ctx.guild.default_role)
-				if overwrites.is_empty() or overwrites.view_channel is None or overwrites.view_channel:
-					role_overwrites = channel.overwrites_for(role)
-					role_overwrites.view_channel = True
-					await channel.set_permissions(role, overwrite=role_overwrites)
-					everyone_overwrites = channel.overwrites_for(ctx.guild.default_role)
-					everyone_overwrites.view_channel = False
-					await channel.set_permissions(ctx.guild.default_role, overwrite=everyone_overwrites)
-					#verify_channel can be seen
-					channel_v = interaction.channel
-					role_v_e = discord.utils.get(ctx.guild.roles, name="@everyone")
-					role_v_v = discord.utils.get(ctx.guild.roles, name="verify")
-					permissions_v_e = discord.PermissionOverwrite(view_channel=True)
-					permissions_v_v = discord.PermissionOverwrite(view_channel=False)
-					await channel_v.set_permissions(role_v_e, overwrite=permissions_v_e)
-					await channel_v.set_permissions(role_v_v, overwrite=permissions_v_v)
 
 
 
@@ -1070,6 +1028,57 @@ async def captcha(ctx):
 
 
 #-------------Ui----------#
+
+#-verify-setup-confierm-button
+
+class Verify_Button(discord.ui.View):
+	def __init__(self):
+		super().__init__()
+		self.value = None
+
+	@discord.ui.button(label="Verify", style=discord.ButtonStyle.green)
+	async def Verify_Button1(self, interaction: discord.Interaction, button: discord.ui.Button):
+		ctx=interaction
+		if discord.utils.get(ctx.guild.roles, name="verify"):
+			#if get(message.guild.roles, name="verify"):
+			embed_ex=discord.Embed(title="The role already exists on the server", color=discord.Color.red())
+			embed_ex.set_footer(text=footer_testo)  
+			await interaction.response.send_message(embed=embed_ex, ephemeral=True)
+		else:
+			permissions = discord.Permissions(send_messages=True, read_messages=True) #da-cambiare
+			guild = interaction.guild
+			await guild.create_role(name="verify", colour=discord.Colour(0x00ff00), permissions=permissions)
+			role = discord.utils.get(ctx.guild.roles, name="verify")
+			#all channel no-private set verify can see - everyone
+			#message ephereal
+			embed_m_f=discord.Embed(title="I have set up the Verify role on the server.\nI set this channel to be the one where people can Verify", color=discord.Color.green())
+			embed_m_f.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed_m_f, ephemeral=True)
+			await asyncio.sleep(2)
+			#message visible
+			embed_ex=discord.Embed(title="To become verified run the `?captcha` command", color=discord.Color.green())
+			embed_ex.set_footer(text=footer_testo) 
+			channel = interaction.channel
+			await channel.send(embed=embed_ex)
+			await asyncio.sleep(0.5)
+			#set role
+			for channel in ctx.guild.channels:
+				overwrites = channel.overwrites_for(ctx.guild.default_role)
+				if overwrites.is_empty() or overwrites.view_channel is None or overwrites.view_channel:
+					role_overwrites = channel.overwrites_for(role)
+					role_overwrites.view_channel = True
+					await channel.set_permissions(role, overwrite=role_overwrites)
+					everyone_overwrites = channel.overwrites_for(ctx.guild.default_role)
+					everyone_overwrites.view_channel = False
+					await channel.set_permissions(ctx.guild.default_role, overwrite=everyone_overwrites)
+					#verify_channel can be seen
+					channel_v = interaction.channel
+					role_v_e = discord.utils.get(ctx.guild.roles, name="@everyone")
+					role_v_v = discord.utils.get(ctx.guild.roles, name="verify")
+					permissions_v_e = discord.PermissionOverwrite(view_channel=True)
+					permissions_v_v = discord.PermissionOverwrite(view_channel=False)
+					await channel_v.set_permissions(role_v_e, overwrite=permissions_v_e)
+					await channel_v.set_permissions(role_v_v, overwrite=permissions_v_v)
 
 
 
@@ -1230,111 +1239,6 @@ class TraslateButton(discord.ui.View):
 		
 
 #------------Slash------------#
-
-#ticket
-
-
-class TicketModal(ui.Modal, title='Ticket message'):
-	title_name = ui.TextInput(label='Message Title',required=True,placeholder='Message title...', max_length=50)
-	description_name = ui.TextInput(label='Message Description',required=True, style=discord.TextStyle.paragraph, max_length=300,placeholder='Use ?ticket to use a ticket...')
-	async def on_submit(self, interaction: discord.Interaction):
-		channel = interaction.channel
-		embed = discord.Embed(title=f"{self.children[0].value}",description=f"{self.children[1].value}", color=discord.Color.green())
-		await channel.send(embed=embed)
-		channel_id = interaction.channel.id
-		with open('ticket_channels.json', 'r') as f:
-			channels = json.load(f)
-		channels[str(channel_id)] = True
-		with open('ticket_channels.json', 'w') as f:
-			json.dump(channels, f)
-		embed_r = discord.Embed(title='The verification system has been set up', color=discord.Color.green())
-		embed_r.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed_r, ephemeral=True)
-
-
-class Ticket_Button(discord.ui.View):
-	def __init__(self):
-		super().__init__()
-		self.value = None
-
-	@discord.ui.button(label="Add", emoji="➕", style=discord.ButtonStyle.green)
-	async def Ticket_add(self, interaction: discord.Interaction, button: discord.ui.Button):
-		await interaction.response.send_modal(TicketModal())
-
-
-
-	@discord.ui.button(label="Remove",emoji="➖", style=discord.ButtonStyle.red)
-	async def Ticket_remove(self, interaction: discord.Interaction, button: discord.ui.Button):
-		channel_id = interaction.channel.id
-		with open('ticket_channels.json', 'r') as f:
-			channels = json.load(f)
-		if str(channel_id) in channels:
-			del channels[str(channel_id)]
-		with open('ticket_channels.json', 'w') as f:
-			json.dump(channels, f)
-		embed = discord.Embed(title=f'The verification system in the channel: <#{channel_id}> as been removed', color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed, ephemeral=True)
-		def check(msg):
-			return msg.author == client.user
-		await interaction.channel.purge(limit=100, check=check)
-
-
-@client.tree.command(name="ticketsetup", description = "Set up the ticket system on the server") #slash command
-async def ticketsetup(interaction: discord.Interaction):
-	if interaction.user.guild_permissions.manage_roles:
-		embed = discord.Embed(title="Ticket System Setup", color=discord.Color.blue())
-		embed.add_field(name="Press add to add the Ticket system in this channel", value=":green_circle:",inline=True)
-		embed.add_field(name="\nPress remove to remove the Ticket system from this channel", value=":red_circle:",inline=True)
-		embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed, ephemeral=True, view=Ticket_Button())
-	else:
-		embed = discord.Embed(title='Error: You need the permission to use this command `"manage roles"`', color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await interaction.response.send_message(embed=embed, ephemeral=True)
-          
-
-
-
-@client.command()
-async def ticket(ctx):
-	await ctx.message.delete()
-	with open('ticket_channels.json', 'r') as f:
-		channels = json.load(f)
-	if str(ctx.channel.id) in channels:
-		guild = ctx.guild
-		ticket_channel = await guild.create_text_channel(name=f'ticket-{ctx.author.name}')
-		await ticket_channel.set_permissions(guild.get_role(guild.id), send_messages=False, read_messages=False)
-		await ticket_channel.set_permissions(ctx.author, attach_files=True, send_messages=True, read_messages=True, read_message_history=True, add_reactions=True)
-		
-		embed = discord.Embed(title=f'`{ctx.author.name}` ***Ticket***\n\nFor the admin: Use ?close to close the ticket', color=discord.Color.blue())
-		embed.set_footer(text=footer_testo)
-		await ticket_channel.send(embed=embed)
-	else:
-		embed = discord.Embed(title=f'Error: This channel has not been set to initiate tickets', color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed,delete_after=5)
-
-
-		
-@client.command()
-async def close(ctx):
-	if ctx.author.guild_permissions.manage_roles:
-		if 'ticket-' in ctx.channel.name:
-			embed = discord.Embed(title='The ticket will be closed in 5 seconds', color=discord.Color.dark_blue())
-			await ctx.send(embed=embed)
-			await asyncio.sleep(5)
-			await ctx.channel.delete()
-		else:
-			await ctx.message.delete()
-			embed = discord.Embed(title=f'Error: This channel is not a ticket', color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed,delete_after=5)
-	else:
-		await ctx.message.delete()
-		embed = discord.Embed(title='Error: You need the permission to use this command `"manage roles"`', color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed,delete_after=5)    
 
 
 
