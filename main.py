@@ -1376,6 +1376,362 @@ async def close(ctx):
 
 #----Ticket---stop
 
+#----Automod---start
+
+
+#automod d
+
+from typing import Literal
+from datetime import timedelta
+
+
+
+
+@client.tree.command(name="automod_delete", description = "Delete an AutoMod rule from the server")
+async def automod_delete(interaction: discord.Interaction):
+	try:
+		rules = await interaction.guild.fetch_automod_rules()
+		rule_opf = []
+		for rule in rules:
+			rule_op = discord.SelectOption(label=str(rule.name))  # Convert rule.name to string
+			rule_opf.append(rule_op)
+		view = Automod_D_Dropdown_View(rule_opf)
+		embed = discord.Embed(title='Choose the Automod rule to delete', color=discord.Color.red())
+		await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
+	except Exception as e:
+		if "In data.components.0.components.0.options:" in str(e):
+			embed = discord.Embed(title="Error: There are no automod rules in the server", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+		else:
+			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+			embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			#error-chat
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(e)}```")
+			raise e
+
+
+
+class Automod_D_Dropdown_View(discord.ui.View):
+	def __init__(self, options):
+		super().__init__()
+		self.add_item(Automod_D_Dropdown(options))
+
+
+class Automod_D_Dropdown(discord.ui.Select):
+	def __init__(self, options):
+		super().__init__(placeholder='Choose the Automod rule...', min_values=1, max_values=1, options=options)
+
+	async def callback(self, interaction: discord.Interaction):
+		try:
+			rules = await interaction.guild.fetch_automod_rules()
+			for rule in rules:
+				if self.values[0] == rule.name:
+					await rule.delete()
+					embed = discord.Embed(title=f'I deleted `{rule.name}`', color=discord.Color.red())
+					await interaction.response.edit_message(embed=embed, view=None)
+		except Exception as e:
+			if "In data.components.0.components.0.options:" in str(e):
+				embed = discord.Embed(title="Error: There are no automod rules in the server", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+			else:
+				embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+				embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+				#error-chat
+				channel = client.get_channel(errorchannel)
+				await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(e)}```")
+				raise e
+
+
+
+#automod c
+
+@client.tree.command(name="automod_create", description = "Adds AutoMod rules to the server")
+@app_commands.describe(type='The type of rule you want', timeout_time='The time the person violating the rule will be put in timeout', log_channel="The channel where alerts will be sent when someone violates a rule")
+async def automod_create(interaction: discord.Interaction, type: Literal['Spam', 'Mention Spam', 'Custom Keyword', 'Keyword Preset'], timeout_time: Literal['60 sec', '5 min.','10 min.', '1 hour', '1 day', '1 week'], log_channel: discord.TextChannel):
+	if interaction.user.guild_permissions.manage_messages:
+		time_value = {
+			"60 sec": timedelta(seconds=60),
+			"5 min.": timedelta(minutes=5),
+			"10 min.": timedelta(minutes=10),
+			"1 hour": timedelta(hours=1),
+			"1 day": timedelta(days=1),
+			"1 week": timedelta(weeks=1)
+		}
+		embed = discord.Embed(title=f'I created a `{type}` rule in automod, the timeout time is `{timeout_time}` , the log channel is `#{log_channel}`', color=discord.Color.green())
+		embed.set_footer(text=footer_testo)
+		if timeout_time in time_value:
+			time = time_value[timeout_time]
+			try:
+				if type == 'Custom Keyword':
+					global timeout_time_f
+					global time_f
+					global log_channel_f
+					timeout_time_f = timeout_time
+					time_f = time
+					log_channel_f = log_channel
+					await interaction.response.send_modal(AutomodCustom_Keyword_Modal())
+				elif type == 'Spam':
+					actions = [
+						discord.AutoModRuleAction(),
+						discord.AutoModRuleAction(channel_id=log_channel.id),
+						]
+					await interaction.guild.create_automod_rule(
+						name="Spam Rule",
+						event_type=discord.AutoModRuleEventType.message_send,
+						trigger=discord.AutoModTrigger(
+						type=discord.AutoModRuleTriggerType.spam
+						),
+						enabled=True,
+						actions=actions
+					)
+					await interaction.response.send_message(embed=embed, ephemeral=True)
+				elif type == 'Mention Spam':
+					actions = [
+						discord.AutoModRuleAction(),
+						discord.AutoModRuleAction(channel_id=log_channel.id),
+						discord.AutoModRuleAction(duration=time),
+						discord.AutoModRuleAction(custom_message=">>> **You are sending too many mentions**")
+						]
+					await interaction.guild.create_automod_rule(
+						name="Mention Spam Rule",
+						event_type=discord.AutoModRuleEventType.message_send,
+						trigger=discord.AutoModTrigger(
+						type=discord.AutoModRuleTriggerType.mention_spam, mention_limit=5
+						),
+						enabled=True,
+						actions=actions
+					)
+					await interaction.response.send_message(embed=embed, ephemeral=True)
+				elif type == 'Keyword Preset':
+					global timeout_time_d
+					global time_d
+					global log_channel_d
+					timeout_time_d = timeout_time
+					time_d = time
+					log_channel_d = log_channel
+					embed_key = discord.Embed(title=f'Select a Keyword preset for the rule', color=discord.Color.blue())
+					embed_key.set_footer(text="\nWarning:\nIn the Keyword preset the isn't a timeout time because the message will be blocked")
+					await interaction.response.send_message(embed=embed_key, view=AutomodKeyword_Preset_Dropdown_View(), ephemeral=True)
+			except Exception as e:
+				if "AUTO_MODERATION_MAX_RULES_OF_TYPE_EXCEEDED" in str(e):
+					embed = discord.Embed(title="Error: Auto-mod Max Rules of this type\n\nYou have reached the maximum number of rules of this type", color=discord.Color.red())
+					embed.set_footer(text=footer_testo)
+					await interaction.response.send_message(embed=embed, ephemeral=True)
+				else:
+					embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+					embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
+					embed.set_footer(text=footer_testo)
+					await interaction.response.send_message(embed=embed, ephemeral=True)
+					#error-chat
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(e)}```")
+					raise e
+	else:
+		embed = discord.Embed(title="Error: You need the permission to use this command (`manage_messages`)", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)
+		await interaction.response.send_message(embed=embed, ephemeral=True)
+		
+
+
+
+class AutomodCustom_Keyword_Modal(ui.Modal, title='AutoMod Customod Keyword'):
+	w1 = ui.TextInput(label='First word',required=True,placeholder='A bad word...', max_length=50)
+	w2 = ui.TextInput(label='Second word',required=False,placeholder='A bad word...', max_length=50)
+	w3 = ui.TextInput(label='Third word',required=False,placeholder='A bad word...', max_length=50)
+	w4 = ui.TextInput(label='Fourth word',required=False,placeholder='A bad word...', max_length=50)
+	w5 = ui.TextInput(label='Fifth word',required=False,placeholder='A bad word...', max_length=50)
+
+	async def on_submit(self, interaction: discord.Interaction):
+		try:
+			global timeout_time_f
+			global time_f
+			global log_channel_f
+			timeout_time = timeout_time_f
+			time = time_f
+			log_channel = log_channel_f
+			type = "Custom Keyword"
+
+			w1_f = self.children[0].value
+			w2_f = self.children[1].value
+			w3_f = self.children[2].value
+			w4_f = self.children[3].value
+			w5_f = self.children[4].value
+			w_c_d = [f"{w1_f}" if w1_f is not None else None,
+				f"{w2_f}" if w2_f is not None else None,
+				f"{w3_f}" if w3_f is not None else None,
+				f"{w4_f}" if w4_f is not None else None,
+				f"{w5_f}" if w5_f is not None else None]
+
+			# Rimuovi gli elementi None da w_c
+			w_c = [f"*{item}*" if item is not None else None for item in w_c_d]
+			time_value = {
+				w1_f: timedelta(seconds=60),
+				w2_f: timedelta(minutes=5),
+				w3_f: timedelta(minutes=10),
+				w4_f: timedelta(hours=1),
+				w5_f: timedelta(days=1)
+			}
+			print(w_c)
+			actions = [
+				discord.AutoModRuleAction(),
+				discord.AutoModRuleAction(channel_id=log_channel.id),
+				discord.AutoModRuleAction(duration=time),
+				]
+			await interaction.guild.create_automod_rule(
+				name="Custom Keywords Rule",
+				event_type=discord.AutoModRuleEventType.message_send,
+				trigger=discord.AutoModTrigger(
+				type=discord.AutoModRuleTriggerType.keyword, keyword_filter=w_c
+				),
+				enabled=True,
+				actions=actions
+			)
+
+			embed = discord.Embed(title=f'I created a `{type}` rule in automod, the timeout time is `{timeout_time}` , the log channel is `#{log_channel}`', color=discord.Color.green())
+			embed.set_footer(text=footer_testo)
+
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+		except Exception as e:
+			if "AUTO_MODERATION_MAX_RULES_OF_TYPE_EXCEEDED" in str(e):
+				embed = discord.Embed(title="Error: Auto-mod Max Rules of this type\n\nYou have reached the maximum number of rules of this type", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+			else:
+				embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+				embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+				#error-chat
+				channel = client.get_channel(errorchannel)
+				await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(e)}```")
+				raise e
+
+
+
+
+class AutomodKeyword_Preset_Dropdown_View(discord.ui.View):
+	def __init__(self):
+		super().__init__()
+		self.add_item(AutomodKeyword_Preset_Dropdown())
+
+
+class AutomodKeyword_Preset_Dropdown(discord.ui.Select):
+	def __init__(self):
+		options = [discord.SelectOption(label='Profanity', emoji='🗣️'), discord.SelectOption(label='Sexual content', emoji='💋'), discord.SelectOption(label='Slurs', emoji='🗨️'), discord.SelectOption(label='All', emoji='📁')]
+		super().__init__(placeholder='Choose the automod preset for the keyword...', min_values=1, max_values=1, options=options)
+
+	async def callback(self, interaction: discord.Interaction):
+		try:
+			type = f"{self.values[0]} keyword preset rule"
+
+			#global -- info
+			global timeout_time_d
+			global time_d
+			global log_channel_d
+			timeout_time = timeout_time_d
+			time = time_d
+			log_channel = log_channel_d
+
+			embed = discord.Embed(title=f"I created a `{type}` rule in automod, there isn't a timeout time for this rule, the log channel is `#{log_channel}`", color=discord.Color.green())
+			embed.set_footer(text=footer_testo)
+			if self.values[0] == "Profanity":
+				actions = [
+					discord.AutoModRuleAction(),
+					discord.AutoModRuleAction(channel_id=log_channel.id),
+					discord.AutoModRuleAction(custom_message=">>> **Profanity messages are not allowed**")
+					]
+				await interaction.guild.create_automod_rule(
+					name="Profanity Rule",
+					event_type=discord.AutoModRuleEventType.message_send,
+					trigger=discord.AutoModTrigger(
+					type=discord.AutoModRuleTriggerType.keyword_preset, presets = discord.AutoModPresets(profanity=True)
+					),
+					enabled=True,
+					actions=actions
+				)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+			elif self.values[0] == "Sexual content":
+				actions = [
+					discord.AutoModRuleAction(),
+					discord.AutoModRuleAction(channel_id=log_channel.id),
+					discord.AutoModRuleAction(custom_message=">>> **Sexual content messages are not allowed**")
+					]
+				await interaction.guild.create_automod_rule(
+					name="Sexual content Rule",
+					event_type=discord.AutoModRuleEventType.message_send,
+					trigger=discord.AutoModTrigger(
+					type=discord.AutoModRuleTriggerType.keyword_preset, presets = discord.AutoModPresets(sexual_content=True)
+					),
+					enabled=True,
+					actions=actions
+				)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+			elif self.values[0] == "Slurs":
+				actions = [
+					discord.AutoModRuleAction(),
+					discord.AutoModRuleAction(channel_id=log_channel.id),
+					discord.AutoModRuleAction(custom_message=">>> **Slurs messages are not allowed**")
+					]
+				await interaction.guild.create_automod_rule(
+					name="Slurs Rule",
+					event_type=discord.AutoModRuleEventType.message_send,
+					trigger=discord.AutoModTrigger(
+					type=discord.AutoModRuleTriggerType.keyword_preset, presets = discord.AutoModPresets(slurs=True)
+					),
+					enabled=True,
+					actions=actions
+				)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+			elif self.values[0] == "All":
+				actions = [
+					discord.AutoModRuleAction(),
+					discord.AutoModRuleAction(channel_id=log_channel.id),
+					discord.AutoModRuleAction(custom_message=">>> **Slurs, Profanity and Sexual content messages are not allowed**")
+					]
+				await interaction.guild.create_automod_rule(
+					name="All Keywords Presets Rule",
+					event_type=discord.AutoModRuleEventType.message_send,
+					trigger=discord.AutoModTrigger(
+					type=discord.AutoModRuleTriggerType.keyword_preset, presets = discord.AutoModPresets.all()
+					),
+					enabled=True,
+					actions=actions
+				)
+				embed_a = discord.Embed(title=f"I created a rule in automod with all of keywords presets, there isn't a timeout time for this rule, the log channel is `#{log_channel}`", color=discord.Color.green())
+				embed_a.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed_a, ephemeral=True)
+		except Exception as e:
+			if "AUTO_MODERATION_MAX_RULES_OF_TYPE_EXCEEDED" in str(e):
+				embed = discord.Embed(title="Error: Auto-mod Max Rules of this type\n\nYou have reached the maximum number of rules of this type", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+			else:
+				embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+				embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
+				embed.set_footer(text=footer_testo)
+				await interaction.response.send_message(embed=embed, ephemeral=True)
+				#error-chat
+				channel = client.get_channel(errorchannel)
+				await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(e)}```")
+				raise e
+
+
+
+
+
+#----Automod---stop
+
+
+
+
+
 @client.tree.command(name="reportbug", description="Report a bug of a Ultimate-Bot command") #slash command
 async def report_bug(interaction: discord.Interaction):
 	modal = BugModal
