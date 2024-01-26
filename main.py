@@ -45,6 +45,9 @@ import random #captcha-image-text
 from PIL import Image, ImageDraw, ImageFont #captcha-image
 import io #captcha-image
 
+#automod
+from typing import Literal #slash preset-option
+from datetime import timedelta #timeout time
 
 #discord-ui
 from discord import ui
@@ -1380,10 +1383,6 @@ async def close(ctx):
 
 
 #automod d
-
-from typing import Literal
-from datetime import timedelta
-
 
 
 
