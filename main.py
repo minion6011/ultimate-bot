@@ -1928,7 +1928,7 @@ async def play(interaction: discord.Interaction, name: str):
 
 							# Wait for the video to finish playing
 							while voice_channel.is_playing():
-								await asyncio.sleep(0)
+								await asyncio.sleep(1)
 						
 							await voice_channel.disconnect()
 			
@@ -1994,7 +1994,7 @@ async def play(interaction: discord.Interaction, name: str):
 
 							# Wait for the video to finish playing
 							while voice_channel.is_playing():
-								await asyncio.sleep(0)
+								await asyncio.sleep(1)
 						
 							await voice_channel.disconnect()
 			
@@ -2061,7 +2061,7 @@ async def play(interaction: discord.Interaction, name: str):
 
 						# Wait for the video to finish playing
 						while voice_channel.is_playing():
-							await asyncio.sleep(0)
+							await asyncio.sleep(1)
 
 						await voice_channel.disconnect()
 			
