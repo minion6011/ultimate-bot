@@ -2115,23 +2115,17 @@ async def stop(interaction: discord.Interaction):
 	voice_client = interaction.guild.voice_client
 	if voice_client and voice_client.is_connected():
 		if voice_client.is_playing():
-			try:
-				embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
-				embed.set_footer(text=footer_testo)
-				await interaction.response.send_message(embed=embed, ephemeral=True)
-				voice_client.stop()
-				await voice_client.disconnect()
-				#await asyncio.sleep(2)
-			except Exception as e:
-				pass
+			embed = discord.Embed(title=':cd: The song has been stopped', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			voice_client.stop()
+			await voice_client.disconnect()
+			#await asyncio.sleep(2)
 		else:
-			try:
-				embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
-				embed.set_footer(text=footer_testo)
-				await interaction.response.send_message(embed=embed, ephemeral=True)
-				await voice_client.disconnect()
-			except Exception as e:
-				pass
+			embed = discord.Embed(title=':x: The bot has been disconnected', color=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			await voice_client.disconnect()
 	else:
 		embed = discord.Embed(title='Please enter the voice chat where the bot is or play a song and enter in the voice chat where the bot is', color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
