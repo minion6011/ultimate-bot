@@ -278,12 +278,14 @@ async def on_member_update(before, after):
 	await channel.send(embed=embed)
 '''
 
+
+
 @client.event
 async def on_voice_state_update(member, before, after):
-	voice_client = after.guild.voice_client
+	voice_client = member.guild.voice_client
 	if member.display_name == channel.bot.user.name:
 		if voice_client.is_playing():
-			voice_client.stop()		
+			voice_client.stop()   	
 	if before.channel is None and after.channel is not None:
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
