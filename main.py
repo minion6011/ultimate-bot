@@ -283,7 +283,7 @@ async def on_member_update(before, after):
 @client.event
 async def on_voice_state_update(member, before, after):
 	voice_client = member.guild.voice_client
-	if member.display_name == channel.bot.user.name:
+	if member.display_name == member.bot.user.name:
 		if voice_client.is_playing():
 			voice_client.stop()   	
 	if before.channel is None and after.channel is not None:
