@@ -1200,7 +1200,7 @@ class Admin_Button_View(discord.ui.View):
 
 	@discord.ui.button(label="Off", style=discord.ButtonStyle.red)
 	async def Off_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
-		if interaction.user.id == my_id:
+		if interaction.user.id in my_id:
 			change_status.start()
 			embed = discord.Embed(title="Maintenance Mod Off", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
