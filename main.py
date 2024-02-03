@@ -280,7 +280,7 @@ async def on_member_update(before, after):
 
 @client.event
 async def on_voice_state_update(member, before, after):
-	voice_client = channel.guild.voice_client
+	voice_client = after.guild.voice_client
 	if member.display_name == channel.bot.user.name:
 		if voice_client.is_playing():
 			voice_client.stop()		
@@ -1216,7 +1216,7 @@ class Admin_Button_View(discord.ui.View):
 			
 	@discord.ui.button(label="On", style=discord.ButtonStyle.green)
 	async def On_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
-		if interaction.user.id == my_id:
+		if interaction.user.id in my_id:
 			change_status.cancel()
 			await asyncio.sleep(2)
 			await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name=f"maintenance"))
