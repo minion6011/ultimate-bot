@@ -280,6 +280,10 @@ async def on_member_update(before, after):
 
 @client.event
 async def on_voice_state_update(member, before, after):
+	voice_client = channel.guild.voice_client
+	if member.display_name == channel.bot.user.name:
+		if voice_client.is_playing():
+			voice_client.stop()		
 	if before.channel is None and after.channel is not None:
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
@@ -289,7 +293,7 @@ async def on_voice_state_update(member, before, after):
 	if before.channel is not None and after.channel is None:
 		await asyncio.sleep(20)
 		channel = client.get_channel(stalkid)
-		embed = discord.Embed(title=f"**[Stalker]**\nUtente in Chat vocale\nUtente: `{member.display_name}#{member.discriminator}`\nServer: `{member.guild.name}`", color=discord.Color.red())
+		embed = discord.Embed(title=f"**[Stalker]**\nUtente uscito dalla Chat vocale\nUtente: `{member.display_name}#{member.discriminator}`\nServer: `{member.guild.name}`", color=discord.Color.red())
 		embed.add_field(name = 'Canale:', value=f"<#{before.channel}>", inline = True)
 		await channel.send(embed=embed)
 	
