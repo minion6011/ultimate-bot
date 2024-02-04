@@ -658,7 +658,7 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 				await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}")
 				embed = discord.Embed(title=":warning: Member was banned :warning:", color=discord.Color.red())
 				embed.set_footer(text=footer_testo)  
-				await ctx.send(embed=embed)
+				await ctx.send(embed=embed,delete_after=10)
 		else:
 			#embed2 = discord.Embed(title=f"You have been banned from the server: {ctx.guild.name}/nFor: '{reason}'", color=discord.Color.red())
 			#embed2.set_footer(text=footer_testo)
@@ -667,7 +667,7 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 			await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}, For: '{reason}'")
 			embed = discord.Embed(title=":warning: Member was banned :warning:", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)  
-			await ctx.send(embed=embed)
+			await ctx.send(embed=embed,delete_after=10)
 	except Exception as e:
 		if 'error code: 50013' in str(e):
 			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
@@ -677,7 +677,6 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 			channel = client.get_channel(errorchannel)
 			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
 			raise e
-
 
 @client.command()
 @commands.guild_only()
