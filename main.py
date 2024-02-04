@@ -2772,7 +2772,6 @@ async def change_status():
 @client.event
 async def on_command_error(ctx, error):
 	if isinstance(error, discord.ext.commands.errors.CommandNotFound):
-		await ctx.message.delete()
 		embed = discord.Embed(title="Error: This command does not exist", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
