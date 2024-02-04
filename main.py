@@ -407,6 +407,7 @@ async def nuke(ctx, amount: int = 50):
 
 
 
+
 @client.command()
 @commands.guild_only()
 @commands.cooldown(1, 10, commands.BucketType.user)
@@ -416,21 +417,21 @@ async def serverinfo(ctx):
 	check_voice = discord.utils.get(ctx.guild.voice_channels)
 	check_category = discord.utils.get(ctx.guild.categories)
 	embed = discord.Embed(title=f"***{ctx.guild.name}*** - Info", description="Information of this Server", color=discord.Colour.blue())
-	embed.add_field(name=':page_facing_up: - Name', value=f'{str(ctx.guild.name)} Server Name', inline=False)
-	embed.add_field(name=':bookmark_tabs: - Description', value=f'{str(ctx.guild.description)} Server Description', inline=False)
-	embed.add_field(name=':id: - Server ID', value=f"{ctx.guild.id}", inline=False)
-	embed.add_field(name=':calendar: - Created On', value=ctx.guild.created_at.strftime("%b %d %Y"), inline=False)
-	embed.add_field(name=':crown: - Owner', value=f"<@{ctx.guild.owner_id}>", inline=False)
-	embed.add_field(name=':busts_in_silhouette: - Members', value=f'{ctx.guild.member_count} Members', inline=False)
+	embed.add_field(name=':page_facing_up: - Server Name', value=f'`{str(ctx.guild.name)}`', inline=True)
+	embed.add_field(name=':bookmark_tabs: -  Server Description', value=f'`{str(ctx.guild.description)}`', inline=True)
+	embed.add_field(name=':id: - Server ID', value=f"`{ctx.guild.id}`", inline=True)
+	embed.add_field(name=':busts_in_silhouette: - Members', value=f'{ctx.guild.member_count} Members', inline=True)
+	embed.add_field(name=':crown: - Owner', value=f"<@{ctx.guild.owner_id}>", inline=True)
+	embed.add_field(name=':bust_in_silhouette: - Role', value=f'{len(ctx.guild.roles)} Role count', inline=True)
 	#if check_forum is not None:
 	#	embed.add_field(name=f':speech_left: - Forum {len(ctx.guild.forum_channels)}', inline=False)
 	if check_text is not None:
-		embed.add_field(name=f':speech_balloon: - Text ', value=f'{len(ctx.guild.text_channels)}', inline=False)
+		embed.add_field(name=f':speech_balloon: - Text ', value=f'{len(ctx.guild.text_channels)}', inline=True)
 	if check_voice is not None:
-		embed.add_field(name=f':speaker: - Voice ', value=f'{len(ctx.guild.voice_channels)}', inline=False)
+		embed.add_field(name=f':speaker: - Voice ', value=f'{len(ctx.guild.voice_channels)}', inline=True)
 	if check_category is not None:
-		embed.add_field(name=':open_file_folder: - Category', value=f'{len(ctx.guild.categories)}', inline=False)
-	embed.add_field(name=':bust_in_silhouette: - Role', value=f'{len(ctx.guild.roles)} Role count', inline=False)
+		embed.add_field(name=':open_file_folder: - Category', value=f'{len(ctx.guild.categories)}', inline=True)
+	embed.add_field(name=':calendar: - Created On', value=ctx.guild.created_at.strftime("%b %d %Y"), inline=False)
 	embed.set_footer(text=footer_testo)    
 	await ctx.send(embed=embed)
 
