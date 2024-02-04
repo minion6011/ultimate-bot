@@ -441,9 +441,15 @@ async def serverinfo(ctx):
 @commands.guild_only()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def meme(ctx):
+		link_list = [
+			"https://www.reddit.com/r/memes/new.json",
+			"https://www.reddit.com/r/dankmemes/new.json",
+			"https://www.reddit.com/r/meme/new.json",
+		]
+		link = random.choice(link_list)
 		embed = discord.Embed(title="Meme", color=discord.Colour.green())
 		async with aiohttp.ClientSession() as cs:
-			async with cs.get('https://www.reddit.com/r/dankmemes/new.json?sort=new') as r:
+			async with cs.get(link) as r:
 				res = await r.json()
 				embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
 				embed.set_footer(text=footer_testo)  
