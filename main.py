@@ -73,9 +73,6 @@ is_me = commands.check(lambda ctx: ctx.author.id in my_id )
 
 is_beta = commands.check(lambda ctx: ctx.author.id in beta_list )
 
-#is_beta = str(message.author.id) in [str(id) for id in beta_list]
-#if not is_beta:
-#    await message.author.send("Non sei ancora autorizzato ad accedere alla funzionalità beta.")
 
 #intent
 intents = discord.Intents.default()
@@ -330,30 +327,31 @@ async def on_guild_role_create(role):
 #----------Commands--------#
 
 
-
 @client.command()
 @commands.guild_only()
-@commands.cooldown(1, 10, commands.BucketType.user)
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def userinfo(ctx, *, user: discord.Member = None):
 	voice_state = None if not user.voice else user.voice.channel
+	#role = user.top_role.name
 	role = user.top_role.name
+	acc_created = user.created_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
+	server_join = user.joined_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
 	if role == "@everyone":
-		role = "N/A"
-	embed = discord.Embed(title=f"***User*** - Info", color=discord.Colour.blue())
-	embed.add_field(name=':id: - User ID', value=f"{user.id}", inline=False)
-	embed.add_field(name=':bust_in_silhouette: - UserName', value=f"<@{user.id}>", inline=False)
-	embed.add_field(name=':bust_in_silhouette: - Old - User Name', value=f"{user.name}#{user.discriminator}", inline=False)
-	#embed.add_field(name=':bust_in_silhouette: - User Nick', value=f"{user.display_name}", inline=False)
-	#embed.add_field(name=':radio_button: - User Status', value=f"**{user.status}**", inline=False)
-	#embed.add_field(name=':video_game: - User Game', value=f"**{user.activity}**", inline=False)
-	embed.add_field(name=':robot: - Robot?', value=f"**{user.bot}**", inline=False)
-	embed.add_field(name=':loud_sound:  - Is in voice', value=f"**In:** **{voice_state}**", inline=False)
-	embed.add_field(name=':radio_button:  - Highest Role', value=f"**{role}**", inline=False)
-	embed.add_field(name=':calendar: - Account Created', value=user.created_at.__format__('***Date:*** %A, %d. %B %Y ***Time:*** %H:%M:%S'), inline=False)
-	embed.add_field(name=':calendar: - Join Server Date', value=user.joined_at.__format__('***Date:*** %A, %d. %B %Y ***Time:*** %H:%M:%S'), inline=False)
+		role = None
+	embed = discord.Embed(title=f"**User Info**", color=discord.Colour.blue())
+	embed.add_field(name=':id: - User ID', value=f"`{user.id}`", inline=False)
+	embed.add_field(name=":bust_in_silhouette: - Displayed Server Name", value=user.mention, inline=False)
+	embed.add_field(name=':bust_in_silhouette: - User Name', value=f"`{user.name}`", inline=False)
+	embed.add_field(name=':video_game: - User Game', value=f"**{user.activity}**", inline=False)
+	embed.add_field(name=':robot: - Robot?', value=f"`{user.bot}`", inline=False)
+	embed.add_field(name=':loud_sound:  - Is in voice', value=f"**In:** `{voice_state}`", inline=False)
+	embed.add_field(name=':radio_button:  - Highest Role', value=f"`{role}`", inline=False)
+	embed.add_field(name=':calendar: - Account Created', value=f"`{acc_created}`", inline=False)
+	embed.add_field(name=':calendar: - Join Server Date', value=f"`{server_join}`", inline=False)
 	embed.set_thumbnail(url=user.avatar)
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed)
+
 
 
 
