@@ -457,135 +457,142 @@ async def meme(ctx):
 
 
 
+
 @client.command()
 @commands.guild_only()
 @commands.cooldown(1, 5, commands.BucketType.user)
 @commands.has_permissions(moderate_members=True)
 async def unmute(ctx, user: discord.Member = None):
-	if ctx.message.author.guild_permissions.administrator:
-		if user == None:
-			embed = discord.Embed(title="Please send the user id", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-		else:
-			role = discord.utils.get(ctx.guild.roles, name="mute")
-			await user.remove_roles(role)
-			check_voice_member = ctx.guild.get_member(int(user.id))
-			if check_voice_member and check_voice_member.voice:
-				await check_voice_member.move_to(None)
+	try:
+			if user == None:
+				embed = discord.Embed(title="Please send the user id", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
 			else:
-				return
-			embed = discord.Embed(title = 'I unmuted', description = f'{user}', color=discord.Color.blue())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed)
-	else:
-		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=4)
+				role = discord.utils.get(ctx.guild.roles, name="mute")
+				await user.remove_roles(role)
+				check_voice_member = ctx.guild.get_member(int(user.id))
+				if check_voice_member and check_voice_member.voice:
+					await check_voice_member.move_to(None)
+				else:
+					return
+				embed = discord.Embed(title = 'I unmuted', description = f'{user}', color=discord.Color.blue())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed)
+	except Exception as e:
+			if "target parameter must be either Member or Role" in str(e):
+				embed = discord.Embed(title="Error: You need to ping the user to mute it", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed, delete_after=4)
+			else:
+				channel = client.get_channel(errorchannel)
+				await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(e)}```")
+				raise e
+
 
 @client.command()
 @commands.guild_only()
 @commands.cooldown(1, 5, commands.BucketType.user)
 @commands.has_permissions(moderate_members=True)
 async def mute(ctx, user: discord.Member = None, reason = None):
-	if ctx.message.author.guild_permissions.administrator:
-		#channel1 = ctx.guild.channels
-		permissions = discord.Permissions(send_messages=False, read_messages=True, speak=False)
-		if user == None:
-			embed = discord.Embed(title="Please send the user id", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed, delete_after=4)
-		else:
-			guild = ctx.guild
-			if discord.utils.get(ctx.guild.roles, name="mute"):
-				if reason == None:
-					role = discord.utils.get(ctx.guild.roles, name="mute")
-					guild = ctx.guild
-					for channel in ctx.guild.channels:
-						permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
-						await channel.set_permissions(role, overwrite=permissions)
-					await user.add_roles(role)
-					embed = discord.Embed(title = 'I muted', description = f'{user}', color=discord.Color.blue())
-					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed, delete_after=7)
-					name = str(ctx.guild.name)
-					check_voice_member = ctx.guild.get_member(int(user.id))
-					if check_voice_member and check_voice_member.voice:
-						await check_voice_member.move_to(None)
-					else:
-						return
-					try:
-						await user.send(f"You have been muted in the server: **{name}**")
-					except:
-						pass
-				else:
-					role = discord.utils.get(ctx.guild.roles, name="mute")
-					guild = ctx.guild
-					for channel in ctx.guild.channels:
-						permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
-						await channel.set_permissions(role, overwrite=permissions)
-					await user.add_roles(role)
-					embed = discord.Embed(title = f'I muted {user}', description = f'For reason: {reason}', color=discord.Color.blue())
-					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed, delete_after=7)
-					name = str(ctx.guild.name)
-					check_voice_member = ctx.guild.get_member(int(user.id))
-					if check_voice_member and check_voice_member.voice:
-						await check_voice_member.move_to(None)
-					else:
-						return
-					try:
-						await user.send(f"You have been muted in the server: **{name}** because:\n{reason}")
-					except:
-						pass
+		try:
+			if user == None:
+				embed = discord.Embed(title="Please send the user id", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed, delete_after=4)
 			else:
-				if reason == None:
-					role = discord.utils.get(ctx.guild.roles, name="mute")
-					permissions = discord.Permissions(send_messages=False, read_messages=True, speak=False)
-					await guild.create_role(name="mute", colour=discord.Colour(0x444949), permissions=permissions)
-					guild = ctx.guild
-					for channel in ctx.guild.channels:
-						permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
-						await channel.set_permissions(role, overwrite=permissions)
-					await user.add_roles(role)
-					embed = discord.Embed(title = 'I muted', description = f'{user}', color=discord.Color.blue())
-					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed, delete_after=7)
-					name = str(ctx.guild.name)
-					check_voice_member = ctx.guild.get_member(int(user.id))
-					if check_voice_member and check_voice_member.voice:
-						await check_voice_member.move_to(None)
+				guild = ctx.guild
+				if discord.utils.get(ctx.guild.roles, name="mute"):
+					if reason == None:
+						role = discord.utils.get(ctx.guild.roles, name="mute")
+						guild = ctx.guild
+						for channel in ctx.guild.channels:
+							permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
+							await channel.set_permissions(role, overwrite=permissions)
+						await user.add_roles(role)
+						embed = discord.Embed(title = 'I muted', description = f'{user}', color=discord.Color.blue())
+						embed.set_footer(text=footer_testo)
+						await ctx.send(embed=embed, delete_after=7)
+						name = str(ctx.guild.name)
+						check_voice_member = ctx.guild.get_member(int(user.id))
+						if check_voice_member and check_voice_member.voice:
+							await check_voice_member.move_to(None)
+						try:
+							await user.send(f"You have been muted in the server: **{name}**")
+						except:
+							return
 					else:
-						return
-					try:
-						await user.send(f"You have been muted in the server: **{name}**")
-					except:
-						pass
+						role = discord.utils.get(ctx.guild.roles, name="mute")
+						guild = ctx.guild
+						for channel in ctx.guild.channels:
+							permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
+							await channel.set_permissions(role, overwrite=permissions)
+						await user.add_roles(role)
+						embed = discord.Embed(title = f'I muted {user}', description = f'For reason: {reason}', color=discord.Color.blue())
+						embed.set_footer(text=footer_testo)
+						await ctx.send(embed=embed, delete_after=7)
+						name = str(ctx.guild.name)
+						check_voice_member = ctx.guild.get_member(int(user.id))
+						if check_voice_member and check_voice_member.voice:
+							await check_voice_member.move_to(None)
+						try:
+							await user.send(f"You have been muted in the server: **{name}** because:\n{reason}")
+						except:
+							return
 				else:
-					role = discord.utils.get(ctx.guild.roles, name="mute")
-					permissions = discord.Permissions(send_messages=False, read_messages=True, speak=False)
-					await guild.create_role(name="mute", colour=discord.Colour(0x444949), permissions=permissions)
-					for channel in ctx.guild.channels:
-						permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
-						await channel.set_permissions(role, overwrite=permissions)
-					await user.add_roles(role)
-					embed = discord.Embed(title = f'I muted {user}', description = f'For reason: {reason}', color=discord.Color.blue())	
-					embed.set_footer(text=footer_testo)
-					await ctx.send(embed=embed, delete_after=7)
-					name = str(ctx.guild.name)
-					check_voice_member = ctx.guild.get_member(int(user.id))
-					if check_voice_member and check_voice_member.voice:
-						await check_voice_member.move_to(None)
+					if reason == None:
+						role = discord.utils.get(ctx.guild.roles, name="mute")
+						permissions = discord.Permissions(send_messages=False, read_messages=True, speak=False)
+						await guild.create_role(name="mute", colour=discord.Colour(0x444949), permissions=permissions)
+						guild = ctx.guild
+						for channel in ctx.guild.channels:
+							permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
+							await channel.set_permissions(role, overwrite=permissions)
+						await user.add_roles(role)
+						embed = discord.Embed(title = 'I muted', description = f'{user}', color=discord.Color.blue())
+						embed.set_footer(text=footer_testo)
+						await ctx.send(embed=embed, delete_after=7)
+						name = str(ctx.guild.name)
+						check_voice_member = ctx.guild.get_member(int(user.id))
+						if check_voice_member and check_voice_member.voice:
+							await check_voice_member.move_to(None)
+						else:
+							return
+						try:
+							await user.send(f"You have been muted in the server: **{name}**")
+						except:
+							pass
 					else:
-						return
-					try:
-						await user.send(f"You have been muted in the server: **{name}** because:\n{reason}")
-					except:
-						pass
-	else:
-		embed = discord.Embed(title="Error: You need the permission to use this command", color=discord.Color.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed, delete_after=4)
+						role = discord.utils.get(ctx.guild.roles, name="mute")
+						permissions = discord.Permissions(send_messages=False, read_messages=True, speak=False)
+						await guild.create_role(name="mute", colour=discord.Colour(0x444949), permissions=permissions)
+						for channel in ctx.guild.channels:
+							permissions = discord.PermissionOverwrite(send_messages=False, read_messages=True, speak=False)
+							await channel.set_permissions(role, overwrite=permissions)
+						await user.add_roles(role)
+						embed = discord.Embed(title = f'I muted {user}', description = f'For reason: {reason}', color=discord.Color.blue())	
+						embed.set_footer(text=footer_testo)
+						await ctx.send(embed=embed, delete_after=7)
+						name = str(ctx.guild.name)
+						check_voice_member = ctx.guild.get_member(int(user.id))
+						if check_voice_member and check_voice_member.voice:
+							await check_voice_member.move_to(None)
+						else:
+							return
+						try:
+							await user.send(f"You have been muted in the server: **{name}** because:\n{reason}")
+						except:
+							pass
+		except Exception as e:
+			if "target parameter must be either Member or Role" in str(e):
+				embed = discord.Embed(title="Error: You need to ping the user to mute it", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed, delete_after=4)
+			else:
+				channel = client.get_channel(errorchannel)
+				await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(e)}```")
+				raise e
+
 
 @client.command()
 @commands.guild_only()
