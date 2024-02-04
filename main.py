@@ -681,6 +681,30 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 
 @client.command()
 @commands.guild_only()
+@has_permissions(ban_members=True)
+async def unban(ctx, user: discord.User):
+	try:
+		if user == None:
+			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)  
+			await ctx.send(embed=embed)
+		else:
+			await ctx.guild.unban(user)
+			embed = discord.Embed(title=f":warning: `{user}` has been unbanned :warning:", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)  
+			await ctx.send(embed=embed)
+	except Exception as e:
+		if 'error code: 50013' in str(e):
+			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+			raise e
+
+@client.command()
+@commands.guild_only()
 @commands.has_permissions(manage_channels=True)
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def slowmode(ctx, seconds: int):
@@ -730,29 +754,6 @@ async def delchannel(ctx):
     for c in ctx.guild.channels: # iterating through each guild channel
         await c.delete()
 
-@client.command()
-@commands.guild_only()
-@has_permissions(ban_members=True)
-async def unban(ctx, user: discord.User):
-	try:
-		if user == None:
-			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)  
-			await ctx.send(embed=embed)
-		else:
-			await ctx.guild.unban(user)
-			embed = discord.Embed(title=f":warning: `{user}` has been unbanned :warning:", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)  
-			await ctx.send(embed=embed)
-	except Exception as e:
-		if 'error code: 50013' in str(e):
-			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed, delete_after=4)
-		else:
-			channel = client.get_channel(errorchannel)
-			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
-			raise e
 
 @client.command()
 @commands.guild_only()
