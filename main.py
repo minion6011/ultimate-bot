@@ -357,27 +357,28 @@ async def userinfo(ctx, *, user: discord.Member = None):
 
 
 
-
-
 @client.command()
 @commands.guild_only()
-@commands.cooldown(1, 20, commands.BucketType.user)
+@commands.cooldown(1, 5, commands.BucketType.user)
 @commands.has_permissions(manage_channels = True)
 async def lockdown(ctx):
+	await ctx.message.delete()
+	for role in ctx.guild.roles:
+		if role.permissions.manage_channels:
+			await ctx.channel.set_permissions(role, attach_files=True, send_messages=True, read_messages=True, read_message_history=True, add_reactions=True)
 	await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=False, view_channel=False)
-	await ctx.send(ctx.channel.mention + " ***is now in lockdown.*** :lock:")   
-    #embed = discord.Embed(title=ctx.channel.mention + " ***is now in lockdown.*** :lock:", color=discord.Color.red())
-    #await ctx.send(embed)
+	embed = discord.Embed(title=f"***{ctx.channel.mention} is now in lockdown.*** :lock:", color=discord.Color.yellow())
+	await ctx.send(embed=embed, delete_after=5)
 
 @client.command()
 @commands.guild_only()
-@commands.cooldown(1, 10, commands.BucketType.user)
+@commands.cooldown(1, 5, commands.BucketType.user)
 @commands.has_permissions(manage_channels=True)
 async def unlock(ctx):
+	await ctx.message.delete()
 	await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=True, view_channel=True)
-	await ctx.send(ctx.channel.mention + " ***has been unlocked.*** :unlock:")   
-	#embed = discord.Embed(title=ctx.channel.mention + " ***has been unlocked.*** :unlock:", color=discord.Color.red())
-	#await ctx.send(embed)
+	embed = discord.Embed(title=f"***{ctx.channel.mention} has been unlocked.*** :unlock:", color=discord.Color.yellow())
+	await ctx.send(embed=embed, delete_after=5)
 
 
 
@@ -386,17 +387,22 @@ async def unlock(ctx):
 @commands.guild_only()
 @commands.has_permissions(manage_messages=True)
 @commands.cooldown(1, 20, commands.BucketType.user)
-async def nuke(ctx, amount: int = 100):
-	if amount < 500:
-        	embed = discord.Embed(title=f"{amount} messages deleted", color=discord.Color.red())
-        	embed.set_image(url="https://www.19fortyfive.com/wp-content/uploads/2021/10/Nuclear-Weapons-Test.jpg")
-        	await ctx.channel.purge(limit=amount + 1)
-        	embed.set_footer(text=footer_testo)  
-        	await ctx.send(embed=embed, delete_after=4)
+async def nuke(ctx, amount: int = 50):
+	if amount == 0:
+		embed = discord.Embed(title=f"Unable to delete messages, you must select a number between 1 and 450", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)  
+		await ctx.send(embed=embed, delete_after=4)
+		return
+	if amount < 400:
+		embed = discord.Embed(title=f"{amount} messages deleted", color=discord.Color.red())
+		embed.set_image(url="https://www.19fortyfive.com/wp-content/uploads/2021/10/Nuclear-Weapons-Test.jpg")
+		await ctx.channel.purge(limit=amount)
+		embed.set_footer(text=footer_testo)  
+		await ctx.send(embed=embed, delete_after=4)
 	else:
-        	embed = discord.Embed(title=f"Unable to delete messages, maximum is 450", color=discord.Color.red())
-        	embed.set_footer(text=footer_testo)  
-        	await ctx.send(embed=embed, delete_after=4)
+		embed = discord.Embed(title=f"Unable to delete messages, the maximum is 450", color=discord.Color.red())
+		embed.set_footer(text=footer_testo)  
+		await ctx.send(embed=embed, delete_after=4)
 
 
 
