@@ -10,5 +10,3 @@ deep_translator
 pytube
 discord.py[voice]
 pillow
-GoogleBard
-openai
