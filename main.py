@@ -117,6 +117,18 @@ async def on_ready():
 
 
 #-----------Stalker--------------#
+
+
+@client.event
+async def on_message_edit(before, after):
+	if after.author.bot:
+		return
+	elif before.author.bot:
+		return
+	else:
+		await client.process_commands(after)
+
+
 '''
 @client.event
 async def on_message(message):
