@@ -2600,7 +2600,7 @@ async def chat(ctx):
 async def help(ctx):
 	embed = discord.Embed(title="`?help` has been disabled\nTry using </help:1094994368445816934>", color=discord.Color.greyple())
 	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, delete_after=20)
+	await ctx.send(embed=embed, delete_after=10)
 
 
 #----------Admin---------------#
