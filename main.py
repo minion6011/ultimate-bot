@@ -837,7 +837,7 @@ async def dictionary(ctx, term):
 
 @client.command()
 @commands.guild_only()
-@commands.cooldown(1, 15, commands.BucketType.user)
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 	if not emoji:
 		embed = discord.Embed(title="Error\nPlease send a valid emoji", colour=discord.Colour.red())
@@ -845,29 +845,34 @@ async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
 		await ctx.send(embed=embed)
 	else:
 		response_emoji = await emoji.guild.fetch_emoji(emoji.id)
+		
 		is_managed = "Yes" if response_emoji.managed else "No" 
 		is_animated = "Yes" if response_emoji.animated else "No"
 		requires_colons = "Yes" if response_emoji.require_colons else "No"
 		creation_time = response_emoji.created_at.strftime("%b %d %Y")
 		can_use_emoji = "Everyone" if not response_emoji.roles else "".join(role.name for role in response_emoji.roles)
 		name = response_emoji.name
-		id_emoji = response_emoji.id	
-		embed = discord.Embed(title="Emoji_Info", colour=discord.Colour.blue())
-		embed.add_field(name="Name", value=f"{name}", inline=False)
-		embed.add_field(name="Id", value=f"{id_emoji}", inline=False)
-		embed.add_field(name="Url", value=f"[Emoji Url]({response_emoji.url})", inline=False)
-		embed.add_field(name="Author", value=f"{response_emoji.user.name}", inline=False)
-		embed.add_field(name="Time Created", value=f"{creation_time}", inline=False)
-		embed.add_field(name="Usable by", value=f"{can_use_emoji}", inline=False)
-		embed.add_field(name="Animated", value=f"{is_animated}", inline=False)
-		embed.add_field(name="Managed", value=f"{is_managed}", inline=False)
-		embed.add_field(name="Requires colons", value=f"{requires_colons}", inline=False)
-		embed.add_field(name="Guild name", value=f"{response_emoji.guild.name}", inline=False)
+		id_emoji = response_emoji.id
+
+		embed = discord.Embed(title="Emoji - Info", colour=discord.Colour.blue())
+		embed.add_field(name=":scroll: Name", value=f"`{name}`", inline=True)
+		embed.add_field(name=":id: Id", value=f"`{id_emoji}`", inline=True)
+		embed.add_field(name=":camera: Url", value=f"[Emoji Url]({response_emoji.url})", inline=True)
+
+		embed.add_field(name=":page_facing_up: Guild name", value=f"`{response_emoji.guild.name}`", inline=True)
+		embed.add_field(name=":busts_in_silhouette: Author", value=f"`{response_emoji.user.name}`", inline=True)
+		embed.add_field(name=":calendar: Time Created", value=f"`{creation_time}`", inline=True)
+
+		embed.add_field(name="Animated", value=f"`{is_animated}`", inline=True)
+		embed.add_field(name="Managed", value=f"`{is_managed}`", inline=True)
+		embed.add_field(name="Requires colons", value=f"`{requires_colons}`", inline=True)
+
+		embed.add_field(name=":busts_in_silhouette: Usable by", value=f"`{can_use_emoji}`", inline=False)
+
 		embed.set_footer(text=footer_testo)
 		embed.set_thumbnail(url=response_emoji.url)
 		await ctx.send(embed=embed)
-
-
+		
 
 @commands.cooldown(1, 20, commands.BucketType.user)
 @commands.guild_only()
