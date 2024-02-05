@@ -806,7 +806,7 @@ async def infobot(ctx):
 
 @client.command()
 @commands.guild_only()
-@commands.cooldown(1, 10, commands.BucketType.user)
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def dictionary(ctx, term):
 	url = f"https://api.urbandictionary.com/v0/define?term={term}"
 	response = requests.get(url).json()
@@ -827,6 +827,7 @@ async def dictionary(ctx, term):
 			await ctx.send(embed=embed)
 	else:
 		embed = discord.Embed(title="Error: An error occurred while searching for the definition", color=discord.Color.red())
+		embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
 
