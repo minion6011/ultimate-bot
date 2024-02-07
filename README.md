@@ -7,8 +7,8 @@
 ### 📂﻿﻿ Added:
 
 <h8>Added more meme types to the ?meme command</h8>
-﻿
-﻿### 🛠️﻿﻿ Fixed:
+
+### 🛠️ Fixed:
 
 <h8>Removed Old - User Name form ?userinfo</h8>
 
