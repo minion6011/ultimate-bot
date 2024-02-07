@@ -2,17 +2,19 @@
 <img src="logo/xmas-banner.png" />
 
 
-# Version 1.8
+# Version 1.9
 ﻿
 ### 📂﻿﻿ Added:
+
+<h8>Added more meme types to the ?meme command</h8>
 ﻿
-<h8>/verifysetup</h8>
-﻿
-<h8>/verifydelete</h8>
-﻿
-<h8>?captcha is used to generate a CAPTCHA to verify the user</h8>
-﻿
-﻿
+﻿### 🛠️﻿﻿ Fixed:
+
+<h8>Removed Old - User Name form ?userinfo</h8>
+
+<h8>From now on the ?lockdown command will show the channel to all the people who have permission to  Manage the channels</h8>
+
+<h8>Modified the embed of the ?serverinfo command</h8>
 ﻿
 ## Remember to vote for ultimate bot on:
 [Top.gg](<https://top.gg/bot/1009106161104072726>)
