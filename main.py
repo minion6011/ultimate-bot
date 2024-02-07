@@ -19,7 +19,7 @@ from requests import get #https
 import json #htpps
 
 #system-info
-import psutil
+import psutil, datetime
 
 
 #activity
@@ -804,11 +804,13 @@ async def num_extractor(ctx):
 @commands.guild_only()
 @commands.cooldown(1, 25, commands.BucketType.user)
 async def infobot(ctx):
+	time_boot = datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("**Date: `%Y-%m-%d`  Time: `%H:%M:%S`**")
 	embed = discord.Embed(title = 'System Resource Usage', description = 'See CPU and memory usage of the system.', color=discord.Color.blue())
 	embed.add_field(name = ':computer: **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
 	embed.add_field(name = ':floppy_disk: **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
 	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
 	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
+	embed.add_field(name = ':timer: **Last Boot**', value =time_boot)
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed = embed)
 
