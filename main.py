@@ -2610,77 +2610,147 @@ async def help(ctx):
 
 @is_beta
 @client.command()
-async def download(ctx, url):
-		try:
-			
-			# Find the video
-			video = pytube.YouTube(url)
-			
-			#loading embed
-			loading_embed = discord.Embed(title=":arrows_clockwise: Downloading song :musical_note:", color=discord.Colour.blue())
-			loading_embed.set_footer(text=footer_testo)
-			loading = await ctx.send(embed=loading_embed)
-			
-			#title-file
-			number = random.randint(110000, 100000000)
-			extension = "mp4"
-			file_name = f"{number}.{extension}"
-			#video.streams.get_highest_resolution().download(filename=file_name)
-			
-			#download
-			video.streams.first().download(filename=file_name)
-			
-			#info
-			video_length = video.length
-			minutes, seconds = divmod(video_length, 60)
-			
-			artist = video.author
-			
-			#loading delete
-			await asyncio.sleep(0.5)
-			await loading.delete()
-			await asyncio.sleep(1)
-			#video-info-embed
-			title_embed = discord.Embed(color=discord.Colour.blue())
-			title_embed.set_image(url=video.thumbnail_url)
-			title_embed.description = f"***I have downloaded:*** \n\n***Title: ***`{video.title}`\n\n`{artist}` \n\n `{minutes}:{seconds}`"
-			title_embed.set_footer(text=footer_testo)
-			
-			title_embed = await ctx.send(embed=title_embed, file=discord.File(f"{file_name}"))
-
-			await asyncio.sleep(20)
-				
-			# Delete the video file
-			os.remove(f"{file_name}")
-			await title_embed.delete()
-			#pass
-			#return
-			#error
-		except pytube.exceptions.PytubeError as e:
-			if 'This video is age-restricted' in str(e):
-				await asyncio.sleep(1)
-				#await ctx.send('the video is age-restricted.')
-				error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
-				error_embed_2.set_footer(text=footer_testo)
-				await ctx.send(embed=error_embed_2, delete_after=5)
-				await asyncio.sleep(0.5)
-			elif 'is streaming live' in str(e):
-				await asyncio.sleep(1)
-				error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
-				error_embed_3.set_footer(text=footer_testo)
-				await ctx.send(embed=error_embed_3, delete_after=5)
-				await asyncio.sleep(0.5)
-			else:
-				await asyncio.sleep(1)
-				error_embed_4 = discord.Embed(title="***An error occurred while downloading the video.***", color=discord.Colour.red())
-				error_embed_4.set_footer(text=footer_testo)
-				await ctx.send(embed=error_embed_4, delete_after=5)
-				await asyncio.sleep(0.5)
-				#stalk
-				channel = client.get_channel(errorchannel)
-				await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
+async def download(ctx,type:str, name: str):
+			url = name
+			try:
+				loading_embed = discord.Embed(title=":arrows_clockwise: Downloading song :musical_note:", color=discord.Colour.blue())
+				loading_embed.set_footer(text=footer_testo)
+				loading = await ctx.send(embed=loading_embed, ephemeral=True)
+				if "playlist?list=" in url:
+					error_embed = discord.Embed(title="***Playlists cannot be played***", color=discord.Colour.red())
+					error_embed.set_footer(text=footer_testo)
+					await ctx.send(embed=error_embed)
+				else:
+					if url.startswith("https://"):
+						if url.startswith("https://youtu.be/"):
+							share_video_id = url.replace("https://youtu.be/", "")
+							share_video_url = "youtube.com/watch?v=" + f"{share_video_id}"
 
 
+
+							# Scarica l'audio da YouTube
+							yt = pytube.YouTube(share_video_url)
+
+							number = random.randint(1, 100000000)
+							extension = type
+							file_name = f"{number}.{extension}"
+
+							yt.streams.first().download(filename=file_name)
+
+							title_embed = discord.Embed(color=discord.Colour.blue())
+							video = yt
+							title_embed.set_image(url=video.thumbnail_url)
+							title_embed.description = f"***I have downloaded:*** \n\n***Title: ***`{video.title}`"
+							title_embed.set_footer(text=footer_testo)
+							await loading.delete()
+							await ctx.send(embed=title_embed, file=discord.File(f"{file_name}"),delete_after=10)
+
+			
+			
+							#stalk-song
+							stalk_channel = client.get_channel(stalkid)
+							stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone Scaricata", color=discord.Color.blue())
+							await stalk_channel.send(embed=stalk_embed)
+
+						else:
+
+
+							# Scarica l'audio da YouTube
+							yt = pytube.YouTube(url)
+
+							number = random.randint(1, 100000000)
+							extension = type
+							file_name = f"{number}.{extension}"
+
+							yt.streams.first().download(filename=file_name)
+
+
+							title_embed = discord.Embed(color=discord.Colour.blue())
+							video = yt
+							title_embed.set_image(url=video.thumbnail_url)
+							title_embed.description = f"***I have downloaded:*** \n\n***Title: ***`{video.title}`"
+							title_embed.set_footer(text=footer_testo)
+							await loading.delete()
+							await ctx.send(embed=title_embed, file=discord.File(f"{file_name}"),delete_after=10)
+
+			
+			
+							#stalk-song
+							stalk_channel = client.get_channel(stalkid)
+							stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone Scaricata", color=discord.Color.blue())
+							await stalk_channel.send(embed=stalk_embed)
+
+					else:	
+						s = Search(url)
+						searchResults = []
+						for v in s.results:
+							searchResults.append(v.watch_url)
+						share_video_url = searchResults[0]
+
+
+
+
+						# Scarica l'audio da YouTube
+						yt = pytube.YouTube(share_video_url)
+
+						number = random.randint(1, 100000000)
+						extension = type
+						file_name = f"{number}.{extension}"
+
+						yt.streams.first().download(filename=file_name)
+
+						title_embed = discord.Embed(color=discord.Colour.blue())
+						video = yt
+						title_embed.set_image(url=video.thumbnail_url)
+						title_embed.description = f"***I have downloaded:*** \n\n***Title: ***`{video.title}`"
+						title_embed.set_footer(text=footer_testo)
+						await loading.delete()
+						await ctx.send(embed=title_embed, file=discord.File(f"{file_name}"),delete_after=10)
+
+			
+			
+						#stalk-song
+						stalk_channel = client.get_channel(stalkid)
+						stalk_embed = discord.Embed(title=f"**[Stalker]**\n :cd: Canzone Scaricata", color=discord.Color.blue())
+						await stalk_channel.send(embed=stalk_embed)
+
+			except pytube.exceptions.PytubeError as e:
+				if 'is age restricted' in str(e):
+					await asyncio.sleep(1)
+					#await ctx.send('the video is age-restricted.')
+					error_embed_2 = discord.Embed(title="***Error: The video is ```age-restricted```.***", color=discord.Colour.red())
+					error_embed_2.set_footer(text=footer_testo)
+					await loading.edit(embed=error_embed_2)
+					await asyncio.sleep(0.5)
+				elif 'is streaming live' in str(e):
+					await asyncio.sleep(1)
+					error_embed_3 = discord.Embed(title="***Error: The video is a ```live``` or a ```premiere```.***", color=discord.Colour.red())
+					error_embed_3.set_footer(text=footer_testo)
+					await loading.edit(embed=error_embed_3)
+					await asyncio.sleep(0.5)
+				else:
+					await asyncio.sleep(1)
+					error_embed_4 = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed_4.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
+					error_embed_4.set_footer(text=footer_testo)
+					await loading.edit(embed=error_embed_4)
+					await asyncio.sleep(0.5)
+					#stalk
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \naudio isinstance: (pytube) ```{e}```")
+			except Exception as e:
+				if str(e) == "Already connected to a voice channel.":
+					pass
+				else:
+					print(e)
+					error_embed = discord.Embed(title="***An error occurred while playing the video.***", color=discord.Colour.red())
+					error_embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
+					error_embed.set_footer(text=footer_testo)
+					await loading.edit(embed=error_embed)
+					await asyncio.sleep(0.5)
+					#stalk
+					channel = client.get_channel(errorchannel)
+					await channel.send(f"**[Errore]** \naudio isinstance: (discord.py) ```{e}```")
 
 
 
