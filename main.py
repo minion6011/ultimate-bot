@@ -2645,7 +2645,7 @@ async def download(ctx,type:str, name: str):
 							await loading.delete()
 							await ctx.send(embed=title_embed, file=discord.File(f"{file_name}"),delete_after=10)
 
-			
+							os.remove(f"{file_name}")
 			
 							#stalk-song
 							stalk_channel = client.get_channel(stalkid)
@@ -2673,7 +2673,7 @@ async def download(ctx,type:str, name: str):
 							await loading.delete()
 							await ctx.send(embed=title_embed, file=discord.File(f"{file_name}"),delete_after=10)
 
-			
+							os.remove(f"{file_name}")
 			
 							#stalk-song
 							stalk_channel = client.get_channel(stalkid)
@@ -2707,7 +2707,7 @@ async def download(ctx,type:str, name: str):
 						await loading.delete()
 						await ctx.send(embed=title_embed, file=discord.File(f"{file_name}"),delete_after=10)
 
-			
+						os.remove(f"{file_name}")
 			
 						#stalk-song
 						stalk_channel = client.get_channel(stalkid)
@@ -2842,6 +2842,9 @@ async def update(ctx):
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed, delete_after=4)
 	await asyncio.sleep(5)
+	channel = client.get_channel(statuschannel)
+	embed = discord.Embed(title=f"**Bot Online 🔴 - Spegnimento Update**", color=discord.Color.green())
+	await channel.send(embed=embed)
 	exit(1)
 
 	
