@@ -2800,6 +2800,23 @@ async def activity(ctx, id=None):
 
 @is_me
 @client.command()
+async def server2(ctx):
+  guilds = client.guilds
+  server_list = ""
+  for guild in guilds:
+    server_list += f"- {guild.name}: {guild.member_count} membri\n"
+  if len(server_list) <= 2000:
+    await ctx.send(f"Sono in {len(guilds)} server:\n{server_list}")
+  else:
+    part1 = f"Sono in {len(guilds)} server:\n"
+    part2 = server_list[2000:]
+
+    await ctx.send(part1)
+    await ctx.send(part2)
+
+
+@is_me
+@client.command()
 @commands.guild_only()
 async def servers(ctx):
 	try:
