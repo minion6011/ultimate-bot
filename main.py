@@ -53,6 +53,7 @@ from datetime import timedelta #timeout time
 from discord import ui
 from discord import app_commands
 
+
 #config
 with open("config.json") as f:
     try:
@@ -61,17 +62,6 @@ with open("config.json") as f:
         print("Errore in config.json")
         print(e)
         exit(1)
-
-
-
-	
-my_id = [598119406731657216, 1181630796759564358]
-beta_list = [598119406731657216, 829022689338851389, 1181630796759564358]
-
-
-is_me = commands.check(lambda ctx: ctx.author.id in my_id )
-
-is_beta = commands.check(lambda ctx: ctx.author.id in beta_list )
 
 
 #intent
@@ -86,9 +76,13 @@ pre = data["command_prefix"]
 client = commands.Bot(command_prefix=(pre), intents=intents, case_insensitive=True)
 client.remove_command('help')
 
+
+
 #dati generali
 
-#discord
+my_id = [598119406731657216, 1181630796759564358]
+beta_list = [598119406731657216, 829022689338851389, 1181630796759564358]
+
 footer_testo = data["footer_embed"]
 stalkid = 1045020366751404172
 errorchannel = 1046796347870826496
@@ -97,26 +91,33 @@ statuschannel = 1129639048735117342
 
 
 
+is_me = commands.check(lambda ctx: ctx.author.id in my_id )
+is_beta = commands.check(lambda ctx: ctx.author.id in beta_list )
+
+
+
+
+
+#-----------Events--------------#
 
 @client.event
 async def on_ready():
 	try:
 		change_status.cancel()
 	except:
-		return
+		pass
 	print(f"Bot logged into {client.user}.")
 	channel = client.get_channel(statuschannel)
 	embed = discord.Embed(title=f"**Bot Online 🟢 - Start d'avvio**", color=discord.Color.green())
 	await channel.send(embed=embed)
 	#slash_sync = await client.tree.sync()
 	#print(f"Synced app command (tree) {len(slash_sync)}.")
-	token_json = data["discord_token"]
-	client.togetherControl = await DiscordTogether(token_json) #activity command - old 
-	await asyncio.sleep(20)
+	#token_json = data["discord_token"]
+	#client.togetherControl = await DiscordTogether(token_json) #activity command - old 
+	await asyncio.sleep(10)
 	change_status.start()
 
 
-#-----------Events--------------#
 
 @client.event
 async def on_voice_state_update(member, before, after):
@@ -338,60 +339,16 @@ async def on_guild_role_create(role):
 #----------Commands--------#
 
 
+
+@commands.cooldown(1, 5, commands.BucketType.user)
 @client.command()
 @commands.guild_only()
-@commands.cooldown(1, 5, commands.BucketType.user)
-async def userinfo(ctx, *, user: discord.Member = None):
-	voice_state = None if not user.voice else user.voice.channel
-	#role = user.top_role.name
-	role = user.top_role.name
-	acc_created = user.created_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
-	server_join = user.joined_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
-	if role == "@everyone":
-		role = None
-	embed = discord.Embed(title=f"**User Info**", color=discord.Colour.blue())
-	embed.add_field(name=':id: - User ID', value=f"`{user.id}`", inline=True)
-	embed.add_field(name=":bust_in_silhouette: - Displayed Server Name", value=user.mention, inline=True)
-	embed.add_field(name=':bust_in_silhouette: - User Name', value=f"`{user.name}`", inline=True)
-	#embed.add_field(name=':video_game: - User Game', value=f"**{user.activity}**", inline=False)
-	embed.add_field(name=':robot: - Robot?', value=f"`{user.bot}`", inline=True)
-	embed.add_field(name=':loud_sound:  - Is in voice', value=f"**In:** `{voice_state}`", inline=True)
-	embed.add_field(name=':radio_button:  - Highest Role', value=f"`{role}`", inline=True)
-	embed.add_field(name=':calendar: - Account Created', value=f"`{acc_created}`", inline=True)
-	embed.add_field(name=':calendar: - Join Server Date', value=f"`{server_join}`", inline=True)
-	embed.set_thumbnail(url=user.avatar)
+async def help(ctx):
+	embed = discord.Embed(title="`?help` has been disabled\nTry using </help:1094994368445816934>", color=discord.Color.greyple())
 	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed)
+	await ctx.send(embed=embed, delete_after=10)
 
-
-
-
-
-
-@client.command()
-@commands.guild_only()
-@commands.cooldown(1, 5, commands.BucketType.user)
-@commands.has_permissions(manage_channels = True)
-async def lockdown(ctx):
-	await ctx.message.delete()
-	for role in ctx.guild.roles:
-		if role.permissions.manage_channels:
-			await ctx.channel.set_permissions(role, attach_files=True, send_messages=True, read_messages=True, read_message_history=True, add_reactions=True)
-	await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=False, view_channel=False)
-	embed = discord.Embed(title=f"***{ctx.channel.mention} is now in lockdown.*** :lock:", color=discord.Color.yellow())
-	await ctx.send(embed=embed, delete_after=5)
-
-@client.command()
-@commands.guild_only()
-@commands.cooldown(1, 5, commands.BucketType.user)
-@commands.has_permissions(manage_channels=True)
-async def unlock(ctx):
-	await ctx.message.delete()
-	await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=True, view_channel=True)
-	embed = discord.Embed(title=f"***{ctx.channel.mention} has been unlocked.*** :unlock:", color=discord.Color.yellow())
-	await ctx.send(embed=embed, delete_after=5)
-
-
+#--Mod command
 
 
 @client.command()
@@ -418,96 +375,156 @@ async def nuke(ctx, amount: int = 50):
 
 
 
-
 @client.command()
 @commands.guild_only()
-@commands.cooldown(1, 5, commands.BucketType.user)
-async def serverinfo(ctx):
-	guild_create = ctx.guild.created_at.strftime("%d-%m-%Y")
-	check_text = discord.utils.get(ctx.guild.text_channels)
-	check_voice = discord.utils.get(ctx.guild.voice_channels)
-	check_category = discord.utils.get(ctx.guild.categories)
-	
-	voice_state = None if not user.voice else user.voice.channel
-	#role = user.top_role.name
-	role = user.top_role.name
-	acc_created = user.created_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
-	server_join = user.joined_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
-	if role == "@everyone":
-		role = None
-	embed = discord.Embed(title=f"***{ctx.guild.name}*** - Info", color=discord.Colour.blue())
-	embed.add_field(name=':page_facing_up: - Nome del Server', value=f'**`{str(ctx.guild.name)}`**', inline=True)
-	embed.add_field(name=':bookmark_tabs: -  Descrizione del Server', value=f'**`{str(ctx.guild.description)}`**', inline=True)
-	embed.add_field(name=':id: - ID del Server', value=f"`{ctx.guild.id}`", inline=True)
-	embed.add_field(name=':busts_in_silhouette: - Membri', value=f'**`{ctx.guild.member_count}` Membri**', inline=True)
-	embed.add_field(name=':crown: - Creatore del Server', value=f"<@{ctx.guild.owner_id}>", inline=True)
-	embed.add_field(name=':bust_in_silhouette: - Numero Ruoli', value=f'**`{len(ctx.guild.roles)}` Ruoli**', inline=True)
-	#if check_forum is not None:
-	#	embed.add_field(name=f':speech_left: - Forum {len(ctx.guild.forum_channels)}', inline=False)
-	if check_text is not None:
-		embed.add_field(name=f':speech_balloon: - Canali Testuali ', value=f'**`{len(ctx.guild.text_channels)}`**', inline=True)
-	if check_voice is not None:
-		embed.add_field(name=f':speaker: - Canali Vocali ', value=f'**`{len(ctx.guild.voice_channels)}`**', inline=True)
-	if check_category is not None:
-		embed.add_field(name=':open_file_folder: - Categorie ', value=f'**`{len(ctx.guild.categories)}`**', inline=True)
-	embed.add_field(name=':calendar: - Server creato il:', value=f"**`{guild_create}`**", inline=False)
-	embed.set_thumbnail(url=user.avatar)
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed)
-
- 
-
-@client.command()
-@commands.guild_only()
-@commands.cooldown(1, 5, commands.BucketType.user)
-async def meme(ctx):
-		link_list = [
-			"https://www.reddit.com/r/memes/new.json",
-			"https://www.reddit.com/r/dankmemes/new.json",
-			"https://www.reddit.com/r/meme/new.json",
-		]
-		link = random.choice(link_list)
-		embed = discord.Embed(title="Meme", color=discord.Colour.green())
-		async with aiohttp.ClientSession() as cs:
-			async with cs.get(link) as r:
-				res = await r.json()
-				embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
+@has_permissions(kick_members=True)
+async def kick(ctx, member : discord.Member, *, reason = None):
+	try:
+		if member == None:
+			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)  
+			await ctx.send(embed=embed)
+		elif reason == None:
+			if member == None:
+				embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
 				embed.set_footer(text=footer_testo)  
 				await ctx.send(embed=embed)
+			else:
+				#embed2 = discord.Embed(title=f"You have been kicked from the server: {ctx.guild.name}", color=discord.Color.red())
+				#embed2.set_footer(text=footer_testo)
+				#await member.send(embed2)
+				#await member.send(f"You have been kicked from the server: {ctx.guild.name}")
+				embed = discord.Embed(title=":warning: Member was kicked :warning:", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)  
+				await ctx.send(embed=embed)
+				await member.kick(reason=f"You have been banned from the server: {ctx.guild.name}")
+		else:
+			#embed2 = discord.Embed(title=f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'", color=discord.Color.red())
+			#embed2.set_footer(text=footer_testo)
+			#await member.send(embed2)
+			#await member.send(f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'")
+			embed = discord.Embed(title=":warning: Member was kicked :warning:", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)  
+			await ctx.send(embed=embed)
+			await member.kick(reason=f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'")
+	except Exception as e:
+		if 'error code: 50013' in str(e):
+			embed = discord.Embed(title="Error: I don't have permission to kick this user", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+			raise e
 
 
 
 
 @client.command()
 @commands.guild_only()
-@commands.cooldown(1, 5, commands.BucketType.user)
-@commands.has_permissions(moderate_members=True)
-async def unmute(ctx, user: discord.Member = None):
+@has_permissions(ban_members=True)
+async def ban(ctx, member : discord.Member, *, reason = None):
 	try:
-			if user == None:
-				embed = discord.Embed(title="Please send the user id", color=discord.Color.red())
-				embed.set_footer(text=footer_testo)
+		if member == None:
+			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)  
+			await ctx.send(embed=embed)
+		elif reason == None:
+			if member == None:
+				embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)  
 				await ctx.send(embed=embed)
 			else:
-				role = discord.utils.get(ctx.guild.roles, name="mute")
-				await user.remove_roles(role)
-				check_voice_member = ctx.guild.get_member(int(user.id))
-				if check_voice_member and check_voice_member.voice:
-					await check_voice_member.move_to(None)
-				else:
-					return
-				embed = discord.Embed(title = 'I unmuted', description = f'{user}', color=discord.Color.blue())
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed)
+				#embed2 = discord.Embed(title=f"You have been banned from the server: {ctx.guild.name}", color=discord.Color.red())
+				#embed2.set_footer(text=footer_testo)
+				#await member.send(embed2)
+				#await member.send(f"You have been banned from the server: {ctx.guild.name}")
+				await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}")
+				embed = discord.Embed(title=":warning: Member was banned :warning:", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)  
+				await ctx.send(embed=embed,delete_after=10)
+		else:
+			#embed2 = discord.Embed(title=f"You have been banned from the server: {ctx.guild.name}/nFor: '{reason}'", color=discord.Color.red())
+			#embed2.set_footer(text=footer_testo)
+			#await member.send(embed2)
+			#await member.send(f"You have been banned from the server: {ctx.guild.name}/nFor: '{reason}'")
+			await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}, For: '{reason}'")
+			embed = discord.Embed(title=":warning: Member was banned :warning:", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)  
+			await ctx.send(embed=embed,delete_after=10)
 	except Exception as e:
-			if "target parameter must be either Member or Role" in str(e):
-				embed = discord.Embed(title="Error: You need to ping the user to mute it", color=discord.Color.red())
-				embed.set_footer(text=footer_testo)
-				await ctx.send(embed=embed, delete_after=4)
-			else:
-				channel = client.get_channel(errorchannel)
-				await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(e)}```")
-				raise e
+		if 'error code: 50013' in str(e):
+			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+			raise e
+
+
+
+
+
+@client.command()
+@commands.guild_only()
+@has_permissions(ban_members=True)
+async def unban(ctx, user: discord.User):
+	try:
+		if user == None:
+			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)  
+			await ctx.send(embed=embed)
+		else:
+			await ctx.guild.unban(user)
+			embed = discord.Embed(title=f":warning: `{user}` has been unbanned :warning:", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)  
+			await ctx.send(embed=embed)
+	except Exception as e:
+		if 'error code: 50013' in str(e):
+			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
+			raise e
+
+
+
+@client.command()
+@commands.guild_only()
+@has_permissions(administrator = True)
+@commands.cooldown(1, 60, commands.BucketType.user)
+async def delchannel(ctx):
+    for c in ctx.guild.channels: # iterating through each guild channel
+        await c.delete()
+
+
+
+@client.command()
+@commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
+@commands.has_permissions(manage_channels = True)
+async def lockdown(ctx):
+	await ctx.message.delete()
+	for role in ctx.guild.roles:
+		if role.permissions.manage_channels:
+			await ctx.channel.set_permissions(role, attach_files=True, send_messages=True, read_messages=True, read_message_history=True, add_reactions=True)
+	await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=False, view_channel=False)
+	embed = discord.Embed(title=f"***{ctx.channel.mention} is now in lockdown.*** :lock:", color=discord.Color.yellow())
+	await ctx.send(embed=embed, delete_after=5)
+
+@client.command()
+@commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
+@commands.has_permissions(manage_channels=True)
+async def unlock(ctx):
+	await ctx.message.delete()
+	await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=True, view_channel=True)
+	embed = discord.Embed(title=f"***{ctx.channel.mention} has been unlocked.*** :unlock:", color=discord.Color.yellow())
+	await ctx.send(embed=embed, delete_after=5)
+
 
 
 @client.command()
@@ -613,114 +630,39 @@ async def mute(ctx, user: discord.Member = None, reason = None):
 				await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(e)}```")
 				raise e
 
-
 @client.command()
 @commands.guild_only()
-@has_permissions(kick_members=True)
-async def kick(ctx, member : discord.Member, *, reason = None):
+@commands.cooldown(1, 5, commands.BucketType.user)
+@commands.has_permissions(moderate_members=True)
+async def unmute(ctx, user: discord.Member = None):
 	try:
-		if member == None:
-			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)  
-			await ctx.send(embed=embed)
-		elif reason == None:
-			if member == None:
-				embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
-				embed.set_footer(text=footer_testo)  
+			if user == None:
+				embed = discord.Embed(title="Please send the user id", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
 				await ctx.send(embed=embed)
 			else:
-				#embed2 = discord.Embed(title=f"You have been kicked from the server: {ctx.guild.name}", color=discord.Color.red())
-				#embed2.set_footer(text=footer_testo)
-				#await member.send(embed2)
-				#await member.send(f"You have been kicked from the server: {ctx.guild.name}")
-				embed = discord.Embed(title=":warning: Member was kicked :warning:", color=discord.Color.red())
-				embed.set_footer(text=footer_testo)  
+				role = discord.utils.get(ctx.guild.roles, name="mute")
+				await user.remove_roles(role)
+				check_voice_member = ctx.guild.get_member(int(user.id))
+				if check_voice_member and check_voice_member.voice:
+					await check_voice_member.move_to(None)
+				else:
+					return
+				embed = discord.Embed(title = 'I unmuted', description = f'{user}', color=discord.Color.blue())
+				embed.set_footer(text=footer_testo)
 				await ctx.send(embed=embed)
-				await member.kick(reason=f"You have been banned from the server: {ctx.guild.name}")
-		else:
-			#embed2 = discord.Embed(title=f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'", color=discord.Color.red())
-			#embed2.set_footer(text=footer_testo)
-			#await member.send(embed2)
-			#await member.send(f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'")
-			embed = discord.Embed(title=":warning: Member was kicked :warning:", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)  
-			await ctx.send(embed=embed)
-			await member.kick(reason=f"You have been kicked from the server: {ctx.guild.name}, For: '{reason}'")
 	except Exception as e:
-		if 'error code: 50013' in str(e):
-			embed = discord.Embed(title="Error: I don't have permission to kick this user", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed, delete_after=4)
-		else:
-			channel = client.get_channel(errorchannel)
-			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
-			raise e
-
-@client.command()
-@commands.guild_only()
-@has_permissions(ban_members=True)
-async def ban(ctx, member : discord.Member, *, reason = None):
-	try:
-		if member == None:
-			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)  
-			await ctx.send(embed=embed)
-		elif reason == None:
-			if member == None:
-				embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
-				embed.set_footer(text=footer_testo)  
-				await ctx.send(embed=embed)
+			if "target parameter must be either Member or Role" in str(e):
+				embed = discord.Embed(title="Error: You need to ping the user to mute it", color=discord.Color.red())
+				embed.set_footer(text=footer_testo)
+				await ctx.send(embed=embed, delete_after=4)
 			else:
-				#embed2 = discord.Embed(title=f"You have been banned from the server: {ctx.guild.name}", color=discord.Color.red())
-				#embed2.set_footer(text=footer_testo)
-				#await member.send(embed2)
-				#await member.send(f"You have been banned from the server: {ctx.guild.name}")
-				await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}")
-				embed = discord.Embed(title=":warning: Member was banned :warning:", color=discord.Color.red())
-				embed.set_footer(text=footer_testo)  
-				await ctx.send(embed=embed,delete_after=10)
-		else:
-			#embed2 = discord.Embed(title=f"You have been banned from the server: {ctx.guild.name}/nFor: '{reason}'", color=discord.Color.red())
-			#embed2.set_footer(text=footer_testo)
-			#await member.send(embed2)
-			#await member.send(f"You have been banned from the server: {ctx.guild.name}/nFor: '{reason}'")
-			await member.ban(reason=f"You have been banned from the server: {ctx.guild.name}, For: '{reason}'")
-			embed = discord.Embed(title=":warning: Member was banned :warning:", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)  
-			await ctx.send(embed=embed,delete_after=10)
-	except Exception as e:
-		if 'error code: 50013' in str(e):
-			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed, delete_after=4)
-		else:
-			channel = client.get_channel(errorchannel)
-			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
-			raise e
+				channel = client.get_channel(errorchannel)
+				await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(e)}```")
+				raise e
 
-@client.command()
-@commands.guild_only()
-@has_permissions(ban_members=True)
-async def unban(ctx, user: discord.User):
-	try:
-		if user == None:
-			embed = discord.Embed(title=":warning: Please write the member's ID :warning:", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)  
-			await ctx.send(embed=embed)
-		else:
-			await ctx.guild.unban(user)
-			embed = discord.Embed(title=f":warning: `{user}` has been unbanned :warning:", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)  
-			await ctx.send(embed=embed)
-	except Exception as e:
-		if 'error code: 50013' in str(e):
-			embed = discord.Embed(title="Error: I don't have permission to ban this user", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await ctx.send(embed=embed, delete_after=4)
-		else:
-			channel = client.get_channel(errorchannel)
-			await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
-			raise e
+
+
 
 @client.command()
 @commands.guild_only()
@@ -731,6 +673,106 @@ async def slowmode(ctx, seconds: int):
 	slowmode_embed = discord.Embed(title="Slowmode", description="A slowmode was set for this channel", colour=discord.Colour.green())
 	slowmode_embed.set_footer(text=footer_testo)
 	await ctx.send(embed=slowmode_embed, delete_after=10)
+
+
+
+
+@client.command()
+@commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def userinfo(ctx, *, user: discord.Member = None):
+	voice_state = None if not user.voice else user.voice.channel
+	#role = user.top_role.name
+	role = user.top_role.name
+	acc_created = user.created_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
+	server_join = user.joined_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
+	if role == "@everyone":
+		role = None
+	embed = discord.Embed(title=f"**User Info**", color=discord.Colour.blue())
+	embed.add_field(name=':id: - User ID', value=f"`{user.id}`", inline=True)
+	embed.add_field(name=":bust_in_silhouette: - Displayed Server Name", value=user.mention, inline=True)
+	embed.add_field(name=':bust_in_silhouette: - User Name', value=f"`{user.name}`", inline=True)
+	#embed.add_field(name=':video_game: - User Game', value=f"**{user.activity}**", inline=False)
+	embed.add_field(name=':robot: - Robot?', value=f"`{user.bot}`", inline=True)
+	embed.add_field(name=':loud_sound:  - Is in voice', value=f"**In:** `{voice_state}`", inline=True)
+	embed.add_field(name=':radio_button:  - Highest Role', value=f"`{role}`", inline=True)
+	embed.add_field(name=':calendar: - Account Created', value=f"`{acc_created}`", inline=True)
+	embed.add_field(name=':calendar: - Join Server Date', value=f"`{server_join}`", inline=True)
+	embed.set_thumbnail(url=user.avatar)
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@client.command()
+@commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def serverinfo(ctx):
+	guild_create = ctx.guild.created_at.strftime("%d-%m-%Y")
+	check_text = discord.utils.get(ctx.guild.text_channels)
+	check_voice = discord.utils.get(ctx.guild.voice_channels)
+	check_category = discord.utils.get(ctx.guild.categories)
+	
+	voice_state = None if not user.voice else user.voice.channel
+	#role = user.top_role.name
+	role = user.top_role.name
+	acc_created = user.created_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
+	server_join = user.joined_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
+	if role == "@everyone":
+		role = None
+	embed = discord.Embed(title=f"***{ctx.guild.name}*** - Info", color=discord.Colour.blue())
+	embed.add_field(name=':page_facing_up: - Nome del Server', value=f'**`{str(ctx.guild.name)}`**', inline=True)
+	embed.add_field(name=':bookmark_tabs: -  Descrizione del Server', value=f'**`{str(ctx.guild.description)}`**', inline=True)
+	embed.add_field(name=':id: - ID del Server', value=f"`{ctx.guild.id}`", inline=True)
+	embed.add_field(name=':busts_in_silhouette: - Membri', value=f'**`{ctx.guild.member_count}` Membri**', inline=True)
+	embed.add_field(name=':crown: - Creatore del Server', value=f"<@{ctx.guild.owner_id}>", inline=True)
+	embed.add_field(name=':bust_in_silhouette: - Numero Ruoli', value=f'**`{len(ctx.guild.roles)}` Ruoli**', inline=True)
+	#if check_forum is not None:
+	#	embed.add_field(name=f':speech_left: - Forum {len(ctx.guild.forum_channels)}', inline=False)
+	if check_text is not None:
+		embed.add_field(name=f':speech_balloon: - Canali Testuali ', value=f'**`{len(ctx.guild.text_channels)}`**', inline=True)
+	if check_voice is not None:
+		embed.add_field(name=f':speaker: - Canali Vocali ', value=f'**`{len(ctx.guild.voice_channels)}`**', inline=True)
+	if check_category is not None:
+		embed.add_field(name=':open_file_folder: - Categorie ', value=f'**`{len(ctx.guild.categories)}`**', inline=True)
+	embed.add_field(name=':calendar: - Server creato il:', value=f"**`{guild_create}`**", inline=False)
+	embed.set_thumbnail(url=user.avatar)
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed)
+
+ 
+
+@client.command()
+@commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def meme(ctx):
+		link_list = [
+			"https://www.reddit.com/r/memes/new.json",
+			"https://www.reddit.com/r/dankmemes/new.json",
+			"https://www.reddit.com/r/meme/new.json",
+		]
+		link = random.choice(link_list)
+		embed = discord.Embed(title="Meme", color=discord.Colour.green())
+		async with aiohttp.ClientSession() as cs:
+			async with cs.get(link) as r:
+				res = await r.json()
+				embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
+				embed.set_footer(text=footer_testo)  
+				await ctx.send(embed=embed)
+
+
+
 
 
 
@@ -765,13 +807,6 @@ async def translate(ctx, language, *, request):
 
 
 
-@client.command()
-@commands.guild_only()
-@has_permissions(administrator = True)
-@commands.cooldown(1, 60, commands.BucketType.user)
-async def delchannel(ctx):
-    for c in ctx.guild.channels: # iterating through each guild channel
-        await c.delete()
 
 
 @client.command()
@@ -2218,14 +2253,13 @@ async def volume(interaction: discord.Interaction, volume: float):
 
 
 '''
-@client.command()
+@client.command() #meme old
 async def meme(ctx):
     data = requests.get('https://meme-api.herokuapp.com/gimme').json()
     meme = discord.Embed(title=f"{data['title']}", Color = discord.Colour.green().set_image(url=f"{data['url']}"))
     await ctx.send(embed=meme)
-'''
-'''
-@client.event
+
+@client.event #verify old test
 async def on_reaction_add(reaction, user):
 	ctx = reaction
 	if reaction.emoji == "<:checkmark_2714fe0f:1073342463995023433>":
@@ -2248,12 +2282,8 @@ async def on_reaction_add(reaction, user):
 			await reaction.user.add_roles(role)
 	else:
 		print("errore")
-'''
 
-
-
-'''
-@client.command()
+@client.command() #help command old
 @commands.guild_only()
 async def help(ctx):
 	prefix = data["command_prefix"]
@@ -2291,11 +2321,7 @@ async def help(ctx):
 		admin_embed.add_field(name=f"{prefix}slash_sync", value="Sync tree command", inline=True)
 		admin_embed.set_footer(text=footer_testo)
 		await ctx.send(embed=admin_embed)
-'''	
 
-		
-
-'''
 
 @is_beta
 @client.command()
@@ -2492,9 +2518,7 @@ async def volume(ctx, volume: float):
 		embed = discord.Embed(title='No songs playing at the moment', color=discord.Colour.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed)
-'''
 
-'''
     @commands.command(name="testautomod")
     async def automod(self, ctx: commands.Context):
         auto_mod_trigger = discord.AutoModTrigger(
@@ -2504,10 +2528,7 @@ async def volume(ctx, volume: float):
         actions_list = [a_single_object_for_this]
         auto_mod_event = discord.AutoModRuleEventType.message_send
         await ctx.guild.create_automod_rule(name="Profanity Filter By Me lol", trigger=auto_mod_trigger, actions=actions_list, event_type=auto_mod_event)
-'''
 
-
-'''
 @client.command()
 @commands.guild_only()
 async def generate_image(ctx,):
@@ -2558,10 +2579,10 @@ async def generate_image(ctx, *, request):
 					channel = client.get_channel(errorchannel)
 					await channel.send(f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```")
 					print(e)
- 
-'''
 
-'''
+
+ #bard ai
+
 from bard import Bard
 bard = Bard()
 
@@ -2574,12 +2595,10 @@ async def chat(ctx, *, request):
 		embed = discord.Embed(title=f"Request: ```{request}```", colour=discord.Color.blue())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, content=f"```{response}```")	
-'''
+
+#CHAT GPT command
 
 
-'''CHAT GPT command
-
-#
 import openai
 
 openai.api_key = data["access_token"]
@@ -2604,13 +2623,6 @@ async def chat(ctx):
 
 
 
-@commands.cooldown(1, 5, commands.BucketType.user)
-@client.command()
-@commands.guild_only()
-async def help(ctx):
-	embed = discord.Embed(title="`?help` has been disabled\nTry using </help:1094994368445816934>", color=discord.Color.greyple())
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed, delete_after=10)
 
 
 #----------Admin---------------#
