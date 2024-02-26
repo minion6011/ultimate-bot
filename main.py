@@ -674,44 +674,25 @@ async def slowmode(ctx, seconds: int):
 	slowmode_embed.set_footer(text=footer_testo)
 	await ctx.send(embed=slowmode_embed, delete_after=10)
 
-#--
+
+
+
+#--Utilty
 
 
 @client.command()
 @commands.guild_only()
 @commands.cooldown(1, 5, commands.BucketType.user)
-async def userinfo(ctx, *, user: discord.Member = None):
-	voice_state = None if not user.voice else user.voice.channel
-	#role = user.top_role.name
-	role = user.top_role.name
-	acc_created = user.created_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
-	server_join = user.joined_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
-	if role == "@everyone":
-		role = None
-	embed = discord.Embed(title=f"**User Info**", color=discord.Colour.blue())
-	embed.add_field(name=':id: - User ID', value=f"`{user.id}`", inline=True)
-	embed.add_field(name=":bust_in_silhouette: - Displayed Server Name", value=user.mention, inline=True)
-	embed.add_field(name=':bust_in_silhouette: - User Name', value=f"`{user.name}`", inline=True)
-	#embed.add_field(name=':video_game: - User Game', value=f"**{user.activity}**", inline=False)
-	embed.add_field(name=':robot: - Robot?', value=f"`{user.bot}`", inline=True)
-	embed.add_field(name=':loud_sound:  - Is in voice', value=f"**In:** `{voice_state}`", inline=True)
-	embed.add_field(name=':radio_button:  - Highest Role', value=f"`{role}`", inline=True)
-	embed.add_field(name=':calendar: - Account Created', value=f"`{acc_created}`", inline=True)
-	embed.add_field(name=':calendar: - Join Server Date', value=f"`{server_join}`", inline=True)
-	embed.set_thumbnail(url=user.avatar)
+async def infobot(ctx):
+	time_boot = datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("**Date: `%Y-%m-%d`  Time: `%H:%M:%S`**")
+	embed = discord.Embed(title = 'System Resource Usage', description = 'See CPU and memory usage of the system.', color=discord.Color.blue())
+	embed.add_field(name = ':computer: **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
+	embed.add_field(name = ':floppy_disk: **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
+	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
+	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
+	embed.add_field(name = ':timer: **Last Boot**', value =time_boot)
 	embed.set_footer(text=footer_testo)
-	await ctx.send(embed=embed)
-
-
-
-
-
-
-
-
-
-
-
+	await ctx.send(embed = embed)
 
 
 
@@ -751,29 +732,32 @@ async def serverinfo(ctx):
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed)
 
- 
+
 
 @client.command()
 @commands.guild_only()
 @commands.cooldown(1, 5, commands.BucketType.user)
-async def meme(ctx):
-		link_list = [
-			"https://www.reddit.com/r/memes/new.json",
-			"https://www.reddit.com/r/dankmemes/new.json",
-			"https://www.reddit.com/r/meme/new.json",
-		]
-		link = random.choice(link_list)
-		embed = discord.Embed(title="Meme", color=discord.Colour.green())
-		async with aiohttp.ClientSession() as cs:
-			async with cs.get(link) as r:
-				res = await r.json()
-				embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-				embed.set_footer(text=footer_testo)  
-				await ctx.send(embed=embed)
-
-
-
-
+async def userinfo(ctx, *, user: discord.Member = None):
+	voice_state = None if not user.voice else user.voice.channel
+	#role = user.top_role.name
+	role = user.top_role.name
+	acc_created = user.created_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
+	server_join = user.joined_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
+	if role == "@everyone":
+		role = None
+	embed = discord.Embed(title=f"**User Info**", color=discord.Colour.blue())
+	embed.add_field(name=':id: - User ID', value=f"`{user.id}`", inline=True)
+	embed.add_field(name=":bust_in_silhouette: - Displayed Server Name", value=user.mention, inline=True)
+	embed.add_field(name=':bust_in_silhouette: - User Name', value=f"`{user.name}`", inline=True)
+	#embed.add_field(name=':video_game: - User Game', value=f"**{user.activity}**", inline=False)
+	embed.add_field(name=':robot: - Robot?', value=f"`{user.bot}`", inline=True)
+	embed.add_field(name=':loud_sound:  - Is in voice', value=f"**In:** `{voice_state}`", inline=True)
+	embed.add_field(name=':radio_button:  - Highest Role', value=f"`{role}`", inline=True)
+	embed.add_field(name=':calendar: - Account Created', value=f"`{acc_created}`", inline=True)
+	embed.add_field(name=':calendar: - Join Server Date', value=f"`{server_join}`", inline=True)
+	embed.set_thumbnail(url=user.avatar)
+	embed.set_footer(text=footer_testo)
+	await ctx.send(embed=embed)
 
 
 
@@ -806,60 +790,57 @@ async def translate(ctx, language, *, request):
 		await ctx.send(embed=embed, view=TraslateButton())
 
 
-
-
-
 @client.command()
 @commands.guild_only()
 @commands.cooldown(1, 5, commands.BucketType.user)
-async def casual(ctx):
-	list1 = ["yes", "no"]
-	r = random.choice(list1)
-	embed = discord.Embed(title=f"{r}", color=discord.Color.blue())
-	embed.set_footer(text=footer_testo)  
-	await ctx.send(embed=embed)
-
-@client.command()
-@commands.guild_only()
-@commands.cooldown(1, 5, commands.BucketType.user)
-async def coinflip(ctx):
-	coin = ['heads  :coin:','tails  :coin:']
-	r = random.choice(coin)
-	link = 'https://i.pinimg.com/originals/d7/49/06/d74906d39a1964e7d07555e7601b06ad.gif'
-	#link = 'https://cdn-icons-png.flaticon.com/512/1540/1540515.png'
-	embed = discord.Embed(title=f"It came up {r}", color=discord.Color.gold())
-	embed.set_image(url=link)
-	embed.set_footer(text=footer_testo)  
-	await ctx.send(embed=embed)
-
-@client.command()
-@commands.guild_only()
-@commands.cooldown(1, 5, commands.BucketType.user)
-async def num_extractor(ctx):
-	number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-	r = random.choice(number)
-	embed = discord.Embed(title=f"Is out", color=discord.Color.blue())
-	embed.add_field(name = 'Number', value = f'{r}')
-	embed.set_footer(text=footer_testo)  
-	await ctx.send(embed=embed)
-
-@client.command()
-@commands.guild_only()
-@commands.cooldown(1, 25, commands.BucketType.user)
-async def infobot(ctx):
-	time_boot = datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("**Date: `%Y-%m-%d`  Time: `%H:%M:%S`**")
-	embed = discord.Embed(title = 'System Resource Usage', description = 'See CPU and memory usage of the system.', color=discord.Color.blue())
-	embed.add_field(name = ':computer: **CPU Usage**', value = f'{psutil.cpu_percent()}%', inline = False)
-	embed.add_field(name = ':floppy_disk: **Memory Usage**', value = f'{psutil.virtual_memory().percent}%', inline = False)
-	embed.add_field(name = ':floppy_disk: **Available Memory**', value = f'{psutil.virtual_memory().available * 100 / psutil.virtual_memory().total}%', inline = False)
-	embed.add_field(name = ':globe_with_meridians: **Ping**', value = f'{round(client.latency * 1000)}ms')
-	embed.add_field(name = ':timer: **Last Boot**', value =time_boot)
-	embed.set_footer(text=footer_testo)
-	await ctx.send(embed = embed)
-
+async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
+	try:
+		if not emoji:
+			embed = discord.Embed(title="Error\nPlease send a valid emoji", colour=discord.Colour.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed)
+		else:
+			response_emoji = await emoji.guild.fetch_emoji(emoji.id)
+			
+			is_managed = "Yes" if response_emoji.managed else "No" 
+			is_animated = "Yes" if response_emoji.animated else "No"
+			requires_colons = "Yes" if response_emoji.require_colons else "No"
+			creation_time = response_emoji.created_at.strftime("%b %d %Y")
+			can_use_emoji = "Everyone" if not response_emoji.roles else "".join(role.name for role in response_emoji.roles)
+			name = response_emoji.name
+			id_emoji = response_emoji.id
 	
+			embed = discord.Embed(title="Emoji - Info", colour=discord.Colour.blue())
+			embed.add_field(name=":scroll: Name", value=f"`{name}`", inline=True)
+			embed.add_field(name=":id: Id", value=f"`{id_emoji}`", inline=True)
+			embed.add_field(name=":camera: Url", value=f"[Emoji Url]({response_emoji.url})", inline=True)
+	
+			embed.add_field(name=":page_facing_up: Guild name", value=f"`{response_emoji.guild.name}`", inline=True)
+			embed.add_field(name=":busts_in_silhouette: Author", value=f"`{response_emoji.user.name}`", inline=True)
+			embed.add_field(name=":calendar: Time Created", value=f"`{creation_time}`", inline=True)
+	
+			embed.add_field(name="Animated", value=f"`{is_animated}`", inline=True)
+			embed.add_field(name="Managed", value=f"`{is_managed}`", inline=True)
+			embed.add_field(name="Requires colons", value=f"`{requires_colons}`", inline=True)
+	
+			embed.add_field(name=":busts_in_silhouette: Usable by", value=f"`{can_use_emoji}`", inline=False)
+	
+			embed.set_footer(text=footer_testo)
+			embed.set_thumbnail(url=response_emoji.url)
+			await ctx.send(embed=embed)
+	except Exception as e:
+		if 'not found.' in str(e):
+			embed = discord.Embed(title="Error: Emoji not found", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+		else:
+			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await ctx.send(embed=embed, delete_after=4)
+			#error-chat
+			channel = client.get_channel(errorchannel)
+			await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")      
 
-		
 
 @client.command()
 @commands.guild_only()
@@ -891,45 +872,65 @@ async def dictionary(ctx, term):
 
 
 
+#--Fun
+
 
 @client.command()
 @commands.guild_only()
 @commands.cooldown(1, 5, commands.BucketType.user)
-async def custom_emoji_info(ctx, emoji: discord.Emoji = None):
-	if not emoji:
-		embed = discord.Embed(title="Error\nPlease send a valid emoji", colour=discord.Colour.red())
-		embed.set_footer(text=footer_testo)
-		await ctx.send(embed=embed)
-	else:
-		response_emoji = await emoji.guild.fetch_emoji(emoji.id)
-		
-		is_managed = "Yes" if response_emoji.managed else "No" 
-		is_animated = "Yes" if response_emoji.animated else "No"
-		requires_colons = "Yes" if response_emoji.require_colons else "No"
-		creation_time = response_emoji.created_at.strftime("%b %d %Y")
-		can_use_emoji = "Everyone" if not response_emoji.roles else "".join(role.name for role in response_emoji.roles)
-		name = response_emoji.name
-		id_emoji = response_emoji.id
+async def meme(ctx):
+		link_list = [
+			"https://www.reddit.com/r/memes/new.json",
+			"https://www.reddit.com/r/dankmemes/new.json",
+			"https://www.reddit.com/r/meme/new.json",
+		]
+		link = random.choice(link_list)
+		embed = discord.Embed(title="Meme", color=discord.Colour.green())
+		async with aiohttp.ClientSession() as cs:
+			async with cs.get(link) as r:
+				res = await r.json()
+				embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
+				embed.set_footer(text=footer_testo)  
+				await ctx.send(embed=embed)
 
-		embed = discord.Embed(title="Emoji - Info", colour=discord.Colour.blue())
-		embed.add_field(name=":scroll: Name", value=f"`{name}`", inline=True)
-		embed.add_field(name=":id: Id", value=f"`{id_emoji}`", inline=True)
-		embed.add_field(name=":camera: Url", value=f"[Emoji Url]({response_emoji.url})", inline=True)
 
-		embed.add_field(name=":page_facing_up: Guild name", value=f"`{response_emoji.guild.name}`", inline=True)
-		embed.add_field(name=":busts_in_silhouette: Author", value=f"`{response_emoji.user.name}`", inline=True)
-		embed.add_field(name=":calendar: Time Created", value=f"`{creation_time}`", inline=True)
 
-		embed.add_field(name="Animated", value=f"`{is_animated}`", inline=True)
-		embed.add_field(name="Managed", value=f"`{is_managed}`", inline=True)
-		embed.add_field(name="Requires colons", value=f"`{requires_colons}`", inline=True)
+@client.command()
+@commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def casual(ctx):
+	list1 = ["yes", "no"]
+	r = random.choice(list1)
+	embed = discord.Embed(title=f"{r}", color=discord.Color.blue())
+	embed.set_footer(text=footer_testo)  
+	await ctx.send(embed=embed)
 
-		embed.add_field(name=":busts_in_silhouette: Usable by", value=f"`{can_use_emoji}`", inline=False)
+@client.command()
+@commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def coinflip(ctx):
+	coin = ['heads  :coin:','tails  :coin:']
+	r = random.choice(coin)
+	link = 'https://i.pinimg.com/originals/d7/49/06/d74906d39a1964e7d07555e7601b06ad.gif'
+	#link = 'https://cdn-icons-png.flaticon.com/512/1540/1540515.png'
+	embed = discord.Embed(title=f"It came up {r}", color=discord.Color.gold())
+	embed.set_image(url=link)
+	embed.set_footer(text=footer_testo)  
+	await ctx.send(embed=embed)
 
-		embed.set_footer(text=footer_testo)
-		embed.set_thumbnail(url=response_emoji.url)
-		await ctx.send(embed=embed)
-		
+
+
+@client.command()
+@commands.guild_only()
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def num_extractor(ctx):
+	number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+	r = random.choice(number)
+	embed = discord.Embed(title=f"Is out", color=discord.Color.blue())
+	embed.add_field(name = 'Number', value = f'{r}')
+	embed.set_footer(text=footer_testo)  
+	await ctx.send(embed=embed)
+
 
 @commands.cooldown(1, 20, commands.BucketType.user)
 @commands.guild_only()
@@ -976,6 +977,7 @@ async def generate_image(ctx, *, request: str):
 				embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{e}```\nerror: ```{str(e)}```\nText: {response_text}", color=discord.Color.red())
 				await channel.send(embed=embed)
 
+#--Slash
 
 #------------Verify-------#
 
@@ -1213,7 +1215,7 @@ class SuggestionModal(ui.Modal, title='Suggest a command'):
         await interaction.response.send_message(embeds=[embed1], ephemeral=True)
 
 
-#-Help-
+#-Help
 		
 class HelpDropdownView(discord.ui.View):
 	def __init__(self):
@@ -2999,7 +3001,7 @@ async def on_command_error(ctx, error):
 		await ctx.send(embed=embed, delete_after=4)
 	else:
 		if 'not found.' in str(error):
-			embed = discord.Embed(title="Error: Member not found", color=discord.Color.red())
+			embed = discord.Embed(title="Error: Not found", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed, delete_after=4)
 			#error-chat
