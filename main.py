@@ -674,7 +674,7 @@ async def slowmode(ctx, seconds: int):
 	slowmode_embed.set_footer(text=footer_testo)
 	await ctx.send(embed=slowmode_embed, delete_after=10)
 
-
+#--
 
 
 @client.command()
