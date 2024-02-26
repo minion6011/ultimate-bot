@@ -116,7 +116,14 @@ async def on_ready():
 	change_status.start()
 
 
-#-----------Stalker--------------#
+#-----------Events--------------#
+
+@client.event
+async def on_voice_state_update(member, before, after):
+	voice_client = member.guild.voice_client
+	if member.display_name == client.user:
+		if voice_client.is_playing():
+			voice_client.stop()   	
 
 
 @client.event
@@ -130,6 +137,9 @@ async def on_message_edit(before, after):
 
 
 '''
+
+#-----------Stalker_old--------------#
+
 @client.event
 async def on_message(message):
 	if message.author.bot:
@@ -227,31 +237,6 @@ async def on_message_edit(before, after):
 		embed.add_field(name = 'Canale:', value=f"<#{after.channel.id}>", inline = True)
 		await channel.send(embed=embed)
 
-'''
-
-@client.event
-async def on_member_ban(guild, user):
-	await asyncio.sleep(20)
-	channel = client.get_channel(stalkid)
-	embed = discord.Embed(title=f"**[Stalker]**\nUtente bannato\nUtente: `{user.display_name}#{user.discriminator}`\n Server: `{guild.name}`", color=discord.Color.red())
-
-
-@client.event
-async def on_member_unban(guild, user):
-	await asyncio.sleep(20)
-	channel = client.get_channel(stalkid)
-	embed = discord.Embed(title=f"**[Stalker]**\nUtente sbannato\nUtente: `{user.display_name}#{user.discriminator}`\n Server: `{guild.name}`", color=discord.Color.red())
-
-
-
-@client.event
-async def on_member_remove(member):
-	await asyncio.sleep(20)
-	guild = member.guild
-	channel = client.get_channel(stalkid)
-	embed = discord.Embed(title=f"**[Stalker]**\nMembro rimosso / quit\nUtente: `{member.display_name}#{member.discriminator}`\n Server: `{member.guild.name}`", color=discord.Color.red())
-	await channel.send(embed=embed)
-
 @client.event
 async def on_member_join(member):
 	try:
@@ -269,11 +254,27 @@ async def on_member_join(member):
 		embed = discord.Embed(title=f"**[Errore]**\nOn_Member_Join error (private user)", color=discord.Color.red())
 		await channel.send(embed=embed)
 	
-	
+@client.event
+async def on_member_ban(guild, user):
+	await asyncio.sleep(20)
+	channel = client.get_channel(stalkid)
+	embed = discord.Embed(title=f"**[Stalker]**\nUtente bannato\nUtente: `{user.display_name}#{user.discriminator}`\n Server: `{guild.name}`", color=discord.Color.red())
 
 
+@client.event
+async def on_member_unban(guild, user):
+	await asyncio.sleep(20)
+	channel = client.get_channel(stalkid)
+	embed = discord.Embed(title=f"**[Stalker]**\nUtente sbannato\nUtente: `{user.display_name}#{user.discriminator}`\n Server: `{guild.name}`", color=discord.Color.red())
 
-'''
+@client.event
+async def on_member_remove(member):
+	await asyncio.sleep(20)
+	guild = member.guild
+	channel = client.get_channel(stalkid)
+	embed = discord.Embed(title=f"**[Stalker]**\nMembro rimosso / quit\nUtente: `{member.display_name}#{member.discriminator}`\n Server: `{member.guild.name}`", color=discord.Color.red())
+	await channel.send(embed=embed)
+
 @client.event
 async def on_member_update(before, after):
 	await asyncio.sleep(20)
@@ -285,9 +286,6 @@ async def on_member_update(before, after):
 	embed.add_field(name = 'Attività:', value=f"Prima: `{before.activity}`, Dopo: `{after.activity}`", inline = False)
 	embed.add_field(name = 'Avvertenza:', value=f":warning: se Alcune informazioni non cambiano :warning:\n:warning: Significa che sono le stesse :warning:", inline = False)
 	await channel.send(embed=embed)
-'''
-
-
 
 @client.event
 async def on_voice_state_update(member, before, after):
@@ -307,7 +305,6 @@ async def on_voice_state_update(member, before, after):
 		embed = discord.Embed(title=f"**[Stalker]**\nUtente uscito dalla Chat vocale\nUtente: `{member.display_name}#{member.discriminator}`\nServer: `{member.guild.name}`", color=discord.Color.red())
 		embed.add_field(name = 'Canale:', value=f"<#{before.channel}>", inline = True)
 		await channel.send(embed=embed)
-	
 
 #ruoli
 
@@ -317,7 +314,7 @@ async def on_guild_role_delete(role):
 	channel = client.get_channel(stalkid)
 	embed = discord.Embed(title=f"**[Stalker]**\nRuolo eliminato\nServer: `{role.guild.name}`", color=discord.Color.red())
 	embed.add_field(name = 'Nome:', value=f"`{role.name}`", inline = True)
-'''
+ 
 @client.event
 async def on_guild_role_update(before, after):
 	await asyncio.sleep(20)
@@ -326,7 +323,6 @@ async def on_guild_role_update(before, after):
 	embed.add_field(name = 'Nome:', value=f"Prima: `{before.name}` Dopo:  `{after.name}`", inline = False)
 	embed.add_field(name = 'Avvertenza:', value=f":warning: se il nome non cambio sono i permessi :warning:\n:warning: per mancata voglia non sono stati inseriti :warning:", inline = True)
 	await channel.send(embed=embed)
-'''
 
 @client.event
 async def on_guild_role_create(role):
@@ -335,6 +331,9 @@ async def on_guild_role_create(role):
 	embed = discord.Embed(title=f"**[Stalker]**\nRuolo creato\nServer: `{role.guild.name}`", color=discord.Color.green())
 	embed.add_field(name = 'Nome:', value=f"`{role.name}`", inline = True)
 	await channel.send(embed=embed)
+'''
+
+
 
 #----------Commands--------#
 
@@ -422,29 +421,38 @@ async def nuke(ctx, amount: int = 50):
 
 @client.command()
 @commands.guild_only()
-@commands.cooldown(1, 10, commands.BucketType.user)
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def serverinfo(ctx):
-	#check_forum = discord.utils.get(ctx.guild.forum_channels)
+	guild_create = ctx.guild.created_at.strftime("%d-%m-%Y")
 	check_text = discord.utils.get(ctx.guild.text_channels)
 	check_voice = discord.utils.get(ctx.guild.voice_channels)
 	check_category = discord.utils.get(ctx.guild.categories)
-	embed = discord.Embed(title=f"***{ctx.guild.name}*** - Info", description="Information of this Server", color=discord.Colour.blue())
-	embed.add_field(name=':page_facing_up: - Server Name', value=f'`{str(ctx.guild.name)}`', inline=True)
-	embed.add_field(name=':bookmark_tabs: -  Server Description', value=f'`{str(ctx.guild.description)}`', inline=True)
-	embed.add_field(name=':id: - Server ID', value=f"`{ctx.guild.id}`", inline=True)
-	embed.add_field(name=':busts_in_silhouette: - Members', value=f'{ctx.guild.member_count} Members', inline=True)
-	embed.add_field(name=':crown: - Owner', value=f"<@{ctx.guild.owner_id}>", inline=True)
-	embed.add_field(name=':bust_in_silhouette: - Role', value=f'{len(ctx.guild.roles)} Role count', inline=True)
+	
+	voice_state = None if not user.voice else user.voice.channel
+	#role = user.top_role.name
+	role = user.top_role.name
+	acc_created = user.created_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
+	server_join = user.joined_at.__format__('Date: %A, %d. %B %Y Time: %H:%M:%S')
+	if role == "@everyone":
+		role = None
+	embed = discord.Embed(title=f"***{ctx.guild.name}*** - Info", color=discord.Colour.blue())
+	embed.add_field(name=':page_facing_up: - Nome del Server', value=f'**`{str(ctx.guild.name)}`**', inline=True)
+	embed.add_field(name=':bookmark_tabs: -  Descrizione del Server', value=f'**`{str(ctx.guild.description)}`**', inline=True)
+	embed.add_field(name=':id: - ID del Server', value=f"`{ctx.guild.id}`", inline=True)
+	embed.add_field(name=':busts_in_silhouette: - Membri', value=f'**`{ctx.guild.member_count}` Membri**', inline=True)
+	embed.add_field(name=':crown: - Creatore del Server', value=f"<@{ctx.guild.owner_id}>", inline=True)
+	embed.add_field(name=':bust_in_silhouette: - Numero Ruoli', value=f'**`{len(ctx.guild.roles)}` Ruoli**', inline=True)
 	#if check_forum is not None:
 	#	embed.add_field(name=f':speech_left: - Forum {len(ctx.guild.forum_channels)}', inline=False)
 	if check_text is not None:
-		embed.add_field(name=f':speech_balloon: - Text ', value=f'{len(ctx.guild.text_channels)}', inline=True)
+		embed.add_field(name=f':speech_balloon: - Canali Testuali ', value=f'**`{len(ctx.guild.text_channels)}`**', inline=True)
 	if check_voice is not None:
-		embed.add_field(name=f':speaker: - Voice ', value=f'{len(ctx.guild.voice_channels)}', inline=True)
+		embed.add_field(name=f':speaker: - Canali Vocali ', value=f'**`{len(ctx.guild.voice_channels)}`**', inline=True)
 	if check_category is not None:
-		embed.add_field(name=':open_file_folder: - Category', value=f'{len(ctx.guild.categories)}', inline=True)
-	embed.add_field(name=':calendar: - Created On', value=ctx.guild.created_at.strftime("%b %d %Y"), inline=False)
-	embed.set_footer(text=footer_testo)    
+		embed.add_field(name=':open_file_folder: - Categorie ', value=f'**`{len(ctx.guild.categories)}`**', inline=True)
+	embed.add_field(name=':calendar: - Server creato il:', value=f"**`{guild_create}`**", inline=False)
+	embed.set_thumbnail(url=user.avatar)
+	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed)
 
  
@@ -2929,7 +2937,6 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.ext.commands.errors.MemberNotFound):
-		await ctx.message.delete()
 		embed = discord.Embed(title="Error: Member not found", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
@@ -2938,7 +2945,6 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.ext.commands.errors.UserNotFound):
-		await ctx.message.delete()
 		embed = discord.Embed(title="Error: User not found", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
@@ -2947,7 +2953,6 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-		await ctx.message.delete()
 		embed = discord.Embed(title="Error: Missing required argument", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
@@ -2964,7 +2969,6 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title=f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```", color=discord.Color.red())
 		await channel.send(embed=embed)
 	elif isinstance(error, discord.errors.HTTPException):
-		await ctx.message.delete()
 		embed = discord.Embed(title="Error HTTP", color=discord.Color.red())
 		embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 		embed.set_footer(text=footer_testo)
@@ -2973,19 +2977,16 @@ async def on_command_error(ctx, error):
 		channel = client.get_channel(errorchannel)
 		await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")
 	elif isinstance(error, discord.NotFound):
-		await ctx.message.delete()
 		embed = discord.Embed(title="Error\nNo emoji founded", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
 	elif isinstance(error, commands.CommandOnCooldown):
 		await asyncio.sleep(5)
-		await ctx.message.delete()
 		embed = discord.Embed(title="Error", color=discord.Color.red())
 		embed.add_field(name=f'You cannot use this command for', value=f'**{error.retry_after:.2f} seconds**', inline=False)
 		await ctx.send(embed=embed, delete_after=4)
 	else:
 		if 'not found.' in str(error):
-			await ctx.message.delete()
 			embed = discord.Embed(title="Error: Member not found", color=discord.Color.red())
 			embed.set_footer(text=footer_testo)
 			await ctx.send(embed=embed, delete_after=4)
@@ -2993,7 +2994,6 @@ async def on_command_error(ctx, error):
 			channel = client.get_channel(errorchannel)
 			await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")      
 		else:
-			await ctx.message.delete()
 			embed = discord.Embed(title="Error: Unknown", color=discord.Color.red())
 			embed.add_field(name="Please report the bug using:", value="</reportbug:1093483925533368361>", inline=True)
 			embed.set_footer(text=footer_testo)
