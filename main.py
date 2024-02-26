@@ -40,6 +40,9 @@ import base64
 from io import BytesIO
 import io
 
+#wifi crash/error
+from datetime import datetime
+
 #verifydelete - captcha - setupverify
 import random #captcha-image-text
 from PIL import Image, ImageDraw, ImageFont #captcha-image
@@ -1279,39 +1282,6 @@ class HelpDropdown(discord.ui.Select):
 			await interaction.response.send_message(embed=embed, ephemeral=True)
 
 		
-
-#-Manutenzione
-		
-class Admin_Button_View(discord.ui.View):
-	def __init__(self):
-		super().__init__()
-		self.value = None
-
-	@discord.ui.button(label="Off", style=discord.ButtonStyle.red)
-	async def Off_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
-		if interaction.user.id in my_id:
-			change_status.start()
-			embed = discord.Embed(title="Maintenance Mod Off", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-		else:
-			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-			
-	@discord.ui.button(label="On", style=discord.ButtonStyle.green)
-	async def On_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
-		if interaction.user.id in my_id:
-			change_status.cancel()
-			await asyncio.sleep(2)
-			await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name=f"maintenance"))
-			embed = discord.Embed(title="Maintenance Mod On", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
-		else:
-			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
-			embed.set_footer(text=footer_testo)
-			await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
 #-Traslate	
@@ -2618,16 +2588,78 @@ async def chat(ctx):
 	embed.set_footer(text=footer_testo)
 	await ctx.send(embed=embed, delete_after=20)
 
+
+
+#-activity
+
+
+
+
+@is_beta
+@client.command()
+@commands.guild_only()
+async def activity(ctx, id=None):
+	utilmax = 5
+	embed = discord.Embed(title="Activity List", color=discord.Color.gold())
+	embed.add_field(name="Boosted activity", value="\n7 = dev = iframe-playground\n8 = Chef Showdown\n9 = Bobble Land: Scrappies\n10 = Guestbook\n11 = Ask Away\n12 = Know what I Meme\n 13 = Project K(Known as Krunker)\n14 = Bash Out")
+	embed.set_footer(text=footer_testo)    
+	if ctx.author.voice is None:
+		await ctx.send("Please enter in a voice channel to use this command")
+	else:
+		if id == "7":
+			link7 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '880559245471408169', max_uses = utilmax)
+			await ctx.send(f"**dev - iframe-playground** - {link7}")
+		if id == "8":
+			link8 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1037680572660727838')
+			await ctx.send(f"**Chef Showdown** - {link8}")
+		if id == "9":
+			link9 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1000100849122553977')
+			await ctx.send(f"**Bobble Land: Scrappies** - {link9}")
+		if id == "10":
+			link10 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1001529884625088563')
+			await ctx.send(f"**Guestbook** - {link10}")
+		if id == "11":
+			link11 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
+			await ctx.send(f"**Ask Away** - {link11}")
+		if id == "12":
+			link12 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
+			await ctx.send(f"**Know what I Meme** - {link12}")
+		if id == "13":
+			link13 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1011683823555199066')
+			await ctx.send(f"**Project K(Known as Krunker)** - {link13}")
+		if id == "14":
+			link14 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1006584476094177371')
+			await ctx.send(f"**Bash Out** - {link14}")
+		elif id == None: 
+			await ctx.send(embed=embed)
+		else:
+			await ctx.send(embed=embed)
+
+
+#-server list
+
+
+@is_me
+@client.command()
+@commands.guild_only()
+async def servers(ctx):
+	try:
+		message = "I server in cui sono stato invitato sono:\n\n"
+		for guild in client.guilds:
+			channel = guild.text_channels[0]
+			#invite = await channel.create_invite()
+			#message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: ***[Url]({invite.url}) \n\n"
+			message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n  ***"
+			await ctx.send(message)
+	except:
+		message = "I server in cui sono stato invitato sono:\n\n"
+		for guild in client.guilds:
+			message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n\n"
+		await ctx.send(message)
+
+
 '''
-
-
 #--------Working-Progress--------#
-
-
-
-
-
-#----------Admin---------------#
 
 
 @is_beta
@@ -2778,51 +2810,51 @@ async def download(ctx,type:str, name: str):
 
 
 
-@is_beta
-@client.command()
-@commands.guild_only()
-async def activity(ctx, id=None):
-	utilmax = 5
-	embed = discord.Embed(title="Activity List", color=discord.Color.gold())
-	embed.add_field(name="Boosted activity", value="\n7 = dev = iframe-playground\n8 = Chef Showdown\n9 = Bobble Land: Scrappies\n10 = Guestbook\n11 = Ask Away\n12 = Know what I Meme\n 13 = Project K(Known as Krunker)\n14 = Bash Out")
-	embed.set_footer(text=footer_testo)    
-	if ctx.author.voice is None:
-		await ctx.send("Please enter in a voice channel to use this command")
-	else:
-		if id == "7":
-			link7 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '880559245471408169', max_uses = utilmax)
-			await ctx.send(f"**dev - iframe-playground** - {link7}")
-		if id == "8":
-			link8 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1037680572660727838')
-			await ctx.send(f"**Chef Showdown** - {link8}")
-		if id == "9":
-			link9 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1000100849122553977')
-			await ctx.send(f"**Bobble Land: Scrappies** - {link9}")
-		if id == "10":
-			link10 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1001529884625088563')
-			await ctx.send(f"**Guestbook** - {link10}")
-		if id == "11":
-			link11 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
-			await ctx.send(f"**Ask Away** - {link11}")
-		if id == "12":
-			link12 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
-			await ctx.send(f"**Know what I Meme** - {link12}")
-		if id == "13":
-			link13 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1011683823555199066')
-			await ctx.send(f"**Project K(Known as Krunker)** - {link13}")
-		if id == "14":
-			link14 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1006584476094177371')
-			await ctx.send(f"**Bash Out** - {link14}")
-		elif id == None: 
-			await ctx.send(embed=embed)
+
+#----------Admin---------------#
+
+#--Admin Ui
+
+
+#-Manutenzione
+		
+class Admin_Button_View(discord.ui.View):
+	def __init__(self):
+		super().__init__()
+		self.value = None
+
+	@discord.ui.button(label="Off", style=discord.ButtonStyle.red)
+	async def Off_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
+		if interaction.user.id in my_id:
+			change_status.start()
+			embed = discord.Embed(title="Maintenance Mod Off", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 		else:
-			await ctx.send(embed=embed)
+			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+			
+	@discord.ui.button(label="On", style=discord.ButtonStyle.green)
+	async def On_Amin_Button(self, interaction: discord.Interaction, button: discord.ui.Button):
+		if interaction.user.id in my_id:
+			change_status.cancel()
+			await asyncio.sleep(2)
+			await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name=f"maintenance"))
+			embed = discord.Embed(title="Maintenance Mod On", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
+		else:
+			embed = discord.Embed(title=f"Error\nYou are not Admin", color=discord.Color.red())
+			embed.set_footer(text=footer_testo)
+			await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
+#--Admin Command
 
 @is_me
 @client.command()
-async def server2(ctx):
+async def server(ctx):
   guilds = client.guilds
   server_list = ""
   for guild in guilds:
@@ -2835,25 +2867,6 @@ async def server2(ctx):
 
     await ctx.send(part1)
     await ctx.send(part2)
-
-
-@is_me
-@client.command()
-@commands.guild_only()
-async def servers(ctx):
-	try:
-		message = "I server in cui sono stato invitato sono:\n\n"
-		for guild in client.guilds:
-			channel = guild.text_channels[0]
-			#invite = await channel.create_invite()
-			#message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n Link invito: ***[Url]({invite.url}) \n\n"
-			message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n  ***"
-			await ctx.send(message)
-	except:
-		message = "I server in cui sono stato invitato sono:\n\n"
-		for guild in client.guilds:
-			message += f"*** `{guild.name}` (id: `{guild.id}`) membri: `{guild.member_count}`\n\n"
-		await ctx.send(message)
 
 @client.command()
 @commands.guild_only()
@@ -2882,7 +2895,7 @@ async def update(ctx):
 	await ctx.send(embed=embed, delete_after=4)
 	await asyncio.sleep(5)
 	channel = client.get_channel(statuschannel)
-	embed = discord.Embed(title=f"**Bot Online 🔴 - Spegnimento Update**", color=discord.Color.green())
+	embed = discord.Embed(title=f"**Bot in Manutenzione 🟡 - Riavvio Update**", color=discord.Color.gold())
 	await channel.send(embed=embed)
 	exit(1)
 
@@ -2901,9 +2914,18 @@ async def manutenzione(ctx):
 #return await ctx.invoke(client.bot_get_command("help"), entity="commandname")
 
 
-#--------Staus------------#
+#--------Task-Loop------------#
 
-@tasks.loop(seconds=18)
+@tasks.loop(seconds=40)
+async def wifi_check(time_v):
+	if requests.get("https://www.google.com").status_code == 200:
+		channel = client.get_channel(statuschannel)
+		embed = discord.Embed(title=f"**Bot Offline 🔴 - Errore di rete\n\nSi è verificato alle ore: `{time_v}`**", color=discord.Color.red())
+		await channel.send(embed=embed)
+		wifi_check.cancel()
+		
+
+@tasks.loop(seconds=20)
 async def change_status():
 	stbot1 = data["status-1"]
 	stbot2 = data["status-2"]
@@ -2999,6 +3021,12 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title="Error", color=discord.Color.red())
 		embed.add_field(name=f'You cannot use this command for', value=f'**{error.retry_after:.2f} seconds**', inline=False)
 		await ctx.send(embed=embed, delete_after=4)
+	elif isinstance(error, aiohttp.client_exceptions.ClientConnectorError):
+		if "Cannot connect to host" in str(error):
+			m_error = datetime.now()
+			t_e = now.strftime("Date: %A, %d. %B %Y Time: %H:%M:%S")
+			t_v = str(t_e)
+			change_status.start(t_v)
 	else:
 		if 'not found.' in str(error):
 			embed = discord.Embed(title="Error: Not found", color=discord.Color.red())
