@@ -40,8 +40,7 @@ import base64
 from io import BytesIO
 import io
 
-#wifi crash/error
-from datetime import datetime
+
 
 #verifydelete - captcha - setupverify
 import random #captcha-image-text
@@ -2922,9 +2921,7 @@ async def on_disconnect():
 	try:
 		if not requests.get("https://www.google.com").status_code == 200:
 			t_e_i = datetime.now()
-			t_e = t_e_i.strftime("Date: %A, %d. %B %Y Time: %H:%M:%S")
-			t_v = str(t_e)
-			wifi_check.start(t_v)
+			wifi_check.start(t_e_i)
 	except:
 		pass
 
