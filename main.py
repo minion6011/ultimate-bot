@@ -2932,7 +2932,7 @@ async def on_disconnect():
 
 
 
-@tasks.loop(seconds=10)
+@tasks.loop(seconds=40)
 async def wifi_check(time_v):
 	try:
 		if requests.get("https://www.google.com").status_code == 200:
