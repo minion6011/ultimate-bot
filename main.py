@@ -2916,13 +2916,33 @@ async def manutenzione(ctx):
 
 #--------Task-Loop------------#
 
-@tasks.loop(seconds=40)
+
+@client.event
+async def on_disconnect():
+	try:
+		if not requests.get("https://www.google.com").status_code == 200:
+			t_e_i = datetime.now()
+			t_e = t_e_i.strftime("Date: %A, %d. %B %Y Time: %H:%M:%S")
+			t_v = str(t_e)
+			wifi_check.start(t_v)
+	except:
+		pass
+
+
+
+
+
+@tasks.loop(seconds=10)
 async def wifi_check(time_v):
-	if requests.get("https://www.google.com").status_code == 200:
-		channel = client.get_channel(statuschannel)
-		embed = discord.Embed(title=f"**Bot Offline 🔴 - Errore di rete\n\nSi è verificato alle ore: `{time_v}`**", color=discord.Color.red())
-		await channel.send(embed=embed)
-		wifi_check.cancel()
+	try:
+		if requests.get("https://www.google.com").status_code == 200:
+			channel = client.get_channel(statuschannel)
+			embed = discord.Embed(title=f"**Bot Offline 🔴 - Errore di rete\n\nSi è verificato alle ore: `{time_v}`**", color=discord.Color.red())
+			await channel.send(embed=embed)
+			wifi_check.cancel()
+	except:
+		pass
+
 		
 
 @tasks.loop(seconds=20)
@@ -3021,12 +3041,6 @@ async def on_command_error(ctx, error):
 		embed = discord.Embed(title="Error", color=discord.Color.red())
 		embed.add_field(name=f'You cannot use this command for', value=f'**{error.retry_after:.2f} seconds**', inline=False)
 		await ctx.send(embed=embed, delete_after=4)
-	elif isinstance(error, aiohttp.client_exceptions.ClientConnectorError):
-		if "Cannot connect to host" in str(error):
-			m_error = datetime.now()
-			t_e = now.strftime("Date: %A, %d. %B %Y Time: %H:%M:%S")
-			t_v = str(t_e)
-			change_status.start(t_v)
 	else:
 		if 'not found.' in str(error):
 			embed = discord.Embed(title="Error: Not found", color=discord.Color.red())
