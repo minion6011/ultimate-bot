@@ -2915,31 +2915,6 @@ async def manutenzione(ctx):
 
 #--------Task-Loop------------#
 
-
-@client.event
-async def on_disconnect():
-	try:
-		if not requests.get("https://www.google.com").status_code == 200:
-			t_e_i = datetime.now()
-			wifi_check.start(t_e_i)
-	except:
-		pass
-
-
-
-
-
-@tasks.loop(seconds=40)
-async def wifi_check(time_v):
-	try:
-		if requests.get("https://www.google.com").status_code == 200:
-			channel = client.get_channel(statuschannel)
-			embed = discord.Embed(title=f"**Bot Offline 🔴 - Errore di rete\n\nSi è verificato alle ore: `{time_v}`**", color=discord.Color.red())
-			await channel.send(embed=embed)
-			wifi_check.cancel()
-	except:
-		pass
-
 		
 
 @tasks.loop(seconds=20)
