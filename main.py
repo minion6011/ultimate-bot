@@ -3005,7 +3005,7 @@ async def on_command_error(ctx, error):
 		channel = client.get_channel(errorchannel)
 		await channel.send(f"**[Errore]** \nisinstance: ```{isinstance}```\nerror: ```{str(error)}```")
 	elif isinstance(error, discord.NotFound):
-		embed = discord.Embed(title="Error\nNo emoji founded", color=discord.Color.red())
+		embed = discord.Embed(title="Error\nNot founded", color=discord.Color.red())
 		embed.set_footer(text=footer_testo)
 		await ctx.send(embed=embed, delete_after=4)
 	elif isinstance(error, commands.CommandOnCooldown):
