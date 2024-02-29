@@ -2869,6 +2869,16 @@ async def server(ctx):
 
 @client.command()
 @commands.guild_only()
+@is_me
+async def system_c(ctx,*,comando:str=None):
+	if comando == None:
+		await ctx.send("inserisci un imput da eseguire")
+	else:
+		r = os.system(comando)
+		await ctx.send(f"Comando eseguito: `{comando}`\n\nRisposta: \n```{r}```")
+
+@client.command()
+@commands.guild_only()
 @is_me #solo se è il mio id
 async def slash_sync(ctx):
 	slash = await client.tree.sync()
