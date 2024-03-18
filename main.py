@@ -2613,45 +2613,6 @@ async def chat(ctx):
 
 
 
-@is_beta
-@client.command()
-@commands.guild_only()
-async def activity(ctx, id=None):
-	utilmax = 5
-	embed = discord.Embed(title="Activity List", color=discord.Color.gold())
-	embed.add_field(name="Boosted activity", value="\n7 = dev = iframe-playground\n8 = Chef Showdown\n9 = Bobble Land: Scrappies\n10 = Guestbook\n11 = Ask Away\n12 = Know what I Meme\n 13 = Project K(Known as Krunker)\n14 = Bash Out")
-	embed.set_footer(text=footer_testo)    
-	if ctx.author.voice is None:
-		await ctx.send("Please enter in a voice channel to use this command")
-	else:
-		if id == "7":
-			link7 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '880559245471408169', max_uses = utilmax)
-			await ctx.send(f"**dev - iframe-playground** - {link7}")
-		if id == "8":
-			link8 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1037680572660727838')
-			await ctx.send(f"**Chef Showdown** - {link8}")
-		if id == "9":
-			link9 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1000100849122553977')
-			await ctx.send(f"**Bobble Land: Scrappies** - {link9}")
-		if id == "10":
-			link10 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1001529884625088563')
-			await ctx.send(f"**Guestbook** - {link10}")
-		if id == "11":
-			link11 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
-			await ctx.send(f"**Ask Away** - {link11}")
-		if id == "12":
-			link12 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
-			await ctx.send(f"**Know what I Meme** - {link12}")
-		if id == "13":
-			link13 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1011683823555199066')
-			await ctx.send(f"**Project K(Known as Krunker)** - {link13}")
-		if id == "14":
-			link14 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1006584476094177371')
-			await ctx.send(f"**Bash Out** - {link14}")
-		elif id == None: 
-			await ctx.send(embed=embed)
-		else:
-			await ctx.send(embed=embed)
 
 
 #-server list
@@ -2678,6 +2639,47 @@ async def servers(ctx):
 
 '''
 #--------Working-Progress--------#
+
+
+@is_beta
+@client.command()
+@commands.guild_only()
+async def activity(ctx, id=None):
+	utilmax = 5
+	embed = discord.Embed(title="Activity List", color=discord.Color.gold())
+	embed.add_field(name="Boosted activity", value="\n7 = dev = iframe-playground\n8 = Ces\n9 = Bobble Land: Scrappies\n10 = Guestbook\n11 = Ask Away\n12 = Know what I Meme\n 13 = Project K(Known as Krunker)\n14 = Bash Out")
+	embed.set_footer(text=footer_testo)    
+	if ctx.author.voice is None:
+		await ctx.send("Please enter in a voice channel to use this command")
+	else:
+		if id == "7":
+			link7 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '880559245471408169', max_uses = utilmax)
+			await ctx.send(f"**dev - iframe-playground** - {link7}")
+		if id == "8":
+			link8 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1194351737264406548/')
+			await ctx.send(f"**Ces** - {link8}")
+		if id == "9":
+			link9 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1000100849122553977')
+			await ctx.send(f"**Bobble Land: Scrappies** - {link9}")
+		if id == "10":
+			link10 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1001529884625088563')
+			await ctx.send(f"**Guestbook** - {link10}")
+		if id == "11":
+			link11 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
+			await ctx.send(f"**Ask Away** - {link11}")
+		if id == "12":
+			link12 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '976052223358406656')
+			await ctx.send(f"**Know what I Meme** - {link12}")
+		if id == "13":
+			link13 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1011683823555199066')
+			await ctx.send(f"**Project K(Known as Krunker)** - {link13}")
+		if id == "14":
+			link14 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1006584476094177371')
+			await ctx.send(f"**Bash Out** - {link14}")
+		elif id == None: 
+			await ctx.send(embed=embed)
+		else:
+			await ctx.send(embed=embed)
 
 
 @is_beta
