@@ -114,8 +114,8 @@ async def on_ready():
 	await channel.send(embed=embed)
 	#slash_sync = await client.tree.sync()
 	#print(f"Synced app command (tree) {len(slash_sync)}.")
-	#token_json = data["discord_token"]
-	#client.togetherControl = await DiscordTogether(token_json) #activity command - old 
+	token_json = data["discord_token"]
+	client.togetherControl = await DiscordTogether(token_json) #activity command - old 
 	await asyncio.sleep(10)
 	change_status.start()
 
