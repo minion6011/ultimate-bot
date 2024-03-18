@@ -2656,7 +2656,7 @@ async def activity(ctx, id=None):
 			link7 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '880559245471408169', max_uses = utilmax)
 			await ctx.send(f"**dev - iframe-playground** - {link7}")
 		if id == "8":
-			link8 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1194351737264406548/')
+			link8 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1194351737264406548')
 			await ctx.send(f"**Ces** - {link8}")
 		if id == "9":
 			link9 = await client.togetherControl.create_link(ctx.author.voice.channel.id, '1000100849122553977')
