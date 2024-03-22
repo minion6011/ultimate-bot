@@ -93,8 +93,8 @@ statuschannel = 1129639048735117342
 
 
 
-is_me = commands.check(lambda ctx: ctx.author.id in my_id )
-is_beta = commands.check(lambda ctx: ctx.author.id in beta_list )
+is_me = commands.check(lambda ctx: ctx.author.id in my_id else ctx.send(embed=discord.Embed(title="You don't have the permission to use this command"))
+is_beta = commands.check(lambda ctx: ctx.author.id in beta_list else ctx.send(embed=discord.Embed(title="You don't have the permission to use this command"))
 
 
 
