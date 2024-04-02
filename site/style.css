@@ -4,7 +4,13 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	background-color: #fff;
 	color: #333;
+	margin: 0;
+	padding:0;
 }
+
+::-webkit-scrollbar {
+	display: none;
+  }
 
 .container {
 	max-width: 1200px;
